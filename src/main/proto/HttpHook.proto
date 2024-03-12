@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package org.m2sec.rpc;
+
+message Target {
+  bool secure = 1;
+  string host = 2;
+  int32 port = 3;
+}
+
+message Header {
+  string name = 1;
+  string value = 2;
+}
+
+message Request {
+  Target target = 1;
+  string httpVersion = 2;
+  string method = 3;
+  string path = 4;
+  string queryStr = 5;
+  repeated Header header = 6;
+  bytes content = 7;
+}
+
+message Response {
+  string httpVersion = 1;
+  int32 statusCode = 2;
+  string reason = 3;
+  repeated Header header = 4;
+  bytes content = 5;
+}
+
+service HttpHookService {
+  rpc hookRequestToBurp(Request) returns (Request);
+  rpc hookRequestToServer(Request) returns (Request);
+  rpc hookResponseToBurp(Response) returns (Response);
+  rpc hookResponseToClient(Response) returns (Response);
+}
