@@ -19,7 +19,7 @@
 
 该项目UI仅提供一个按钮`reload`，用于reload `config.yaml` 中的配置，故而每次修改`config.yaml`都需要reload
 
-`config.yaml`中的配置能力见 `配置解读` 部分
+`config.yaml`中的配置解释见 [配置解读](#配置解读) 部分
 
 # 功能梳理
 
@@ -51,7 +51,7 @@
 
 测试代码见[PyGRpcServer](https://github.com/outlaws-bai/PyGRpcServer)，
 
-[服务端代码](https://github.com/outlaws-bai/PyGRpcServer/blob/main/server_fast.py) `/getUserInfo` 会获取加密请求，解密后查询，再返回加密响应给前端
+[服务端代码](https://github.com/outlaws-bai/PyGRpcServer/blob/main/server_fast.py)  `/getUserInfo` 接口 会获取加密请求，解密后查询，再返回加密响应给前端
 
 [RPC服务代码](https://github.com/outlaws-bai/PyGRpcServer/blob/main/server_rpc.py)来做自动化加解密
 
@@ -63,7 +63,7 @@
 
 ![image-20240607164152020](images/image19.png)
 
-修改Burp Galaxy配置如下，并启动两个测试服务
+修改部分配置如下，并启动两个测试服务
 
 ```yaml
 httpTrafficAutoModificationConfig:
@@ -96,6 +96,8 @@ httpTrafficAutoModificationConfig:
 
 **示例**
 
+修改部分配置如下
+
 ```yaml
 httpTrafficAutoModificationConfig:
   decorateConfig:
@@ -125,6 +127,8 @@ httpTrafficAutoModificationConfig:
 根据最终的score设置颜色，分数越高流量颜色约醒目
 
 **示例**
+
+修改部分配置如下
 
 ```yaml
 httpTrafficAutoModificationConfig:
