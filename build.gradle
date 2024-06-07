@@ -1,0 +1,83 @@
+// from https://github.com/grpc/grpc-java/blob/master/examples/build.gradle
+
+plugins {
+    id 'java'
+    id 'com.google.protobuf' version '0.9.4'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+group = 'org.m2sec'
+version = '1.0-SNAPSHOT'
+def grpcVersion = '1.54.1'
+def protobufVersion = '3.24.0'
+def protocVersion = protobufVersion
+
+repositories {
+//    mavenCentral()
+    maven { url 'https://maven.aliyun.com/repository/public' }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_19
+    targetCompatibility = JavaVersion.VERSION_19
+}
+
+dependencies {
+    annotationProcessor 'org.projectlombok:lombok:1.18.26'
+    // burp
+    compileOnly 'net.portswigger.burp.extensions:montoya-api:2023.12.1'
+    // yaml
+    implementation 'org.yaml:snakeyaml:2.2'
+    // grpc
+    compileOnly "org.apache.tomcat:annotations-api:6.0.53"
+    runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
+    implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+    implementation "io.grpc:grpc-services:${grpcVersion}"
+    implementation "io.grpc:grpc-stub:${grpcVersion}"
+    implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+    // string format
+    implementation 'org.apache.commons:commons-text:1.12.0'
+    // express
+    implementation 'org.mvel:mvel2:2.5.2.Final'
+    // annotations
+    compileOnly 'org.projectlombok:lombok:1.18.26'
+    // test
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'net.portswigger.burp.extensions:montoya-api:2023.12.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+protobuf {
+    protoc { artifact = "com.google.protobuf:protoc:${protocVersion}" }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
+    }
+    generateProtoTasks {
+        all()*.plugins { grpc {} }
+    }
+}
+
+// Inform IDEs like IntelliJ IDEA, Eclipse or NetBeans about the generated code.
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+shadowJar {
+    mergeServiceFiles()
+}
