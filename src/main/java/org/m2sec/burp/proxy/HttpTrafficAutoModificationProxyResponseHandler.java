@@ -12,7 +12,7 @@ import org.m2sec.GalaxyMain;
  * @date: 2024/3/10 15:05
  * @description:
  */
-public class HttpHookProxyResponseHandler implements ProxyResponseHandler {
+public class HttpTrafficAutoModificationProxyResponseHandler implements ProxyResponseHandler {
 
     @Override
     public ProxyResponseReceivedAction handleResponseReceived(

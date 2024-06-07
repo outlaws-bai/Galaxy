@@ -14,7 +14,7 @@ import org.m2sec.modules.traffic.decorate.DecorateService;
  * @date: 2024/3/10 15:05
  * @description:
  */
-public class HttpHookProxyRequestHandler implements ProxyRequestHandler {
+public class HttpTrafficAutoModificationProxyRequestHandler implements ProxyRequestHandler {
 
     /** 在客户端请求到达Burp时被调用 */
     @Override

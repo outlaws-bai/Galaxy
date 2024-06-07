@@ -15,7 +15,7 @@ import org.m2sec.modules.traffic.match.SpecialRuleMatchService;
  * @date: 2024/3/10 15:05
  * @description:
  */
-public class HttpHookHttpHandler implements HttpHandler {
+public class HttpTrafficAutoModificationHttpHandler implements HttpHandler {
 
     /** 请求从Burp发送到服务端时被调用 */
     @Override

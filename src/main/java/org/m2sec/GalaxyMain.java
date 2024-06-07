@@ -2,10 +2,10 @@ package org.m2sec;
 
 import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
-import org.m2sec.burp.http.HttpHookHttpHandler;
+import org.m2sec.burp.http.HttpTrafficAutoModificationHttpHandler;
 import org.m2sec.burp.menu.MasterContextMenuItemsProvider;
-import org.m2sec.burp.proxy.HttpHookProxyRequestHandler;
-import org.m2sec.burp.proxy.HttpHookProxyResponseHandler;
+import org.m2sec.burp.proxy.HttpTrafficAutoModificationProxyRequestHandler;
+import org.m2sec.burp.proxy.HttpTrafficAutoModificationProxyResponseHandler;
 import org.m2sec.common.Constants;
 import org.m2sec.common.Log;
 import org.m2sec.common.config.Config;
@@ -130,9 +130,9 @@ public class GalaxyMain implements BurpExtension {
         // 注册unloading hook
         burpApi.extension().registerUnloadingHandler(this::destroy);
         // 注册http hook
-        burpApi.http().registerHttpHandler(new HttpHookHttpHandler());
-        burpApi.proxy().registerRequestHandler(new HttpHookProxyRequestHandler());
-        burpApi.proxy().registerResponseHandler(new HttpHookProxyResponseHandler());
+        burpApi.http().registerHttpHandler(new HttpTrafficAutoModificationHttpHandler());
+        burpApi.proxy().registerRequestHandler(new HttpTrafficAutoModificationProxyRequestHandler());
+        burpApi.proxy().registerResponseHandler(new HttpTrafficAutoModificationProxyResponseHandler());
         // 注册payload生成器
         burpApi.intruder()
                 .registerPayloadGeneratorProvider(new BypassUrlGeneratorProviderProvider());
