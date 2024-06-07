@@ -20,18 +20,18 @@ public abstract class AbstractMenu extends JMenu {
 
     public boolean isDisplay(ContextMenuEvent event) {
         boolean displayFlag = false;
-        List<AbstractMenu> menuClazzs = this.getSubMenus();
-        List<AbstractMenuItem> itemClazzs = this.getSubMenuItems();
-        if (menuClazzs != null) {
-            for (AbstractMenu menu : menuClazzs) {
+        List<AbstractMenu> menus = this.getSubMenus();
+        List<AbstractMenuItem> menuItems = this.getSubMenuItems();
+        if (menus != null) {
+            for (AbstractMenu menu : menus) {
                 if (menu.isDisplay(event)) {
                     add(menu);
                     displayFlag = true;
                 }
             }
         }
-        if (itemClazzs != null) {
-            for (AbstractMenuItem menuItem : itemClazzs) {
+        if (menuItems != null) {
+            for (AbstractMenuItem menuItem : menuItems) {
                 if (menuItem.isDisplay(event)) {
                     add(menuItem);
                     menuItem.addActionListener(e -> menuItem.safeAction(event));
