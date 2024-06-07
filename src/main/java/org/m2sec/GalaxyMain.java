@@ -66,36 +66,32 @@ public class GalaxyMain implements BurpExtension {
     }
 
     private void init() {
-        try {
-            Log.logLevel = LogLevel.DEBUG;
-            env = OperatingEnv.BURP;
-            if (Files.exists(Paths.get(Constants.WORK_DIR))) {
-                loadConfig();
-                log.debug("config.yaml is exist. %s", config);
-            } else {
-                // 创建必要的文件路径
-                FileUtil.createDirs(
-                        Constants.WORK_DIR, // 插件工作根路径
-                        Constants.TMP_FILE_DIR, // 临时文件路径
-                        Constants.EXTRACT_INFO_FILE_DIR, // 提取文件路径
-                        Constants.DICT_FILE_DIR // 字典路径
-                        );
-                // 创建必要的文件
-                FileUtil.createFiles(
-                        Constants.CONFIG_FILE_PATH,
-                        Constants.BYPASS_URL_DICT_FILE_PATH,
-                        Constants.FUZZ_SENSITIVE_PATH_DICT_FILE_PATH);
-                log.debug("config.yaml is not exist. use default and write");
-                config = Config.getDefault();
-                FileUtil.writeToFileIfEmpty(
-                        Constants.CONFIG_FILE_PATH, YamlParser.toYamlStr(config));
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        Log.logLevel = LogLevel.DEBUG;
+        env = OperatingEnv.BURP;
+        if (Files.exists(Paths.get(Constants.WORK_DIR))) {
+            loadConfig();
+            log.debug("config.yaml is exist. %s", config);
+        } else {
+            // 创建必要的文件路径
+            FileUtil.createDirs(
+                    Constants.WORK_DIR, // 插件工作根路径
+                    Constants.TMP_FILE_DIR, // 临时文件路径
+                    Constants.EXTRACT_INFO_FILE_DIR, // 提取文件路径
+                    Constants.DICT_FILE_DIR // 字典路径
+            );
+            // 创建必要的文件
+            FileUtil.createFiles(
+                    Constants.CONFIG_FILE_PATH,
+                    Constants.BYPASS_URL_DICT_FILE_PATH,
+                    Constants.FUZZ_SENSITIVE_PATH_DICT_FILE_PATH);
+            log.debug("config.yaml is not exist. use default and write");
+            config = Config.getDefault();
+            FileUtil.writeToFileIfEmpty(
+                    Constants.CONFIG_FILE_PATH, YamlParser.toYamlStr(config));
         }
     }
 
-    private void loadConfig() throws IOException {
+    private void loadConfig() {
         config =
                 YamlParser.fromYamlStr(
                         FileUtil.readFileAsString(Constants.CONFIG_FILE_PATH), Config.class);
