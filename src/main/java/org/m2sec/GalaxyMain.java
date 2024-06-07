@@ -24,7 +24,6 @@ import org.m2sec.modules.traffic.hook.RpcService;
 
 import javax.swing.*;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
