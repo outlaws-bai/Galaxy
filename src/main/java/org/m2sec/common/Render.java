@@ -1,40 +1,60 @@
 package org.m2sec.common;
 
-import org.apache.commons.text.StringSubstitutor;
-import org.apache.commons.text.lookup.DefaultStringLookup;
+import org.m2sec.common.utils.FileUtil;
 import org.mvel2.MVEL;
+import org.mvel2.integration.impl.MapVariableResolverFactory;
+import org.mvel2.templates.TemplateRuntime;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author: outlaws-bai
- * @date: 2024/6/5 17:42
+ * @date: 2024/6/5 19:42
  * @description:
  */
 public class Render {
 
-    private static final String EL_PREFIX = "mv:";
+    public static String renderTemplate(
+            String template, Map<String, Object> env, Class<?>... classes) {
+        patchEnv(env, classes);
+        return (String) TemplateRuntime.eval(template, env);
+    }
 
-    public static String renderStr(String template, Map<String, Object> env) {
-        return new StringSubstitutor(
-                        key -> {
-                            if (key.startsWith(EL_PREFIX)) {
-                                return (String)
-                                        MVEL.eval(key.substring(EL_PREFIX.length()).trim(), env);
-                            }
-                            if (key.contains(":")) {
-                                for (DefaultStringLookup lookup : DefaultStringLookup.values()) {
-                                    String lookupKey = lookup.getKey();
-                                    if (key.startsWith(lookupKey + ":")) {
-                                        return lookup.getStringLookup()
-                                                .lookup(
-                                                        key.substring(lookupKey.length() + 1)
-                                                                .trim());
-                                    }
-                                }
-                            }
-                            return null;
-                        })
-                .replace(template);
+    public static Object renderExpression(
+            String expression, Map<String, Object> env, Class<?>... classes) {
+        patchEnv(env, classes);
+        return MVEL.eval(expression, env);
+    }
+
+    public static MapVariableResolverFactory compileScript(String scriptPath, Class<?>... classes) {
+        HashMap<String, Object> env = new HashMap<>();
+        patchEnv(env, classes);
+        MapVariableResolverFactory factory = new MapVariableResolverFactory(env);
+        MVEL.eval(FileUtil.readFileAsString(scriptPath), factory);
+        return factory;
+    }
+
+    public static Object callScriptFunction(
+            String expression,
+            MapVariableResolverFactory factory,
+            Map<String, Object> env,
+            Class<?>... classes) {
+        patchEnv(env, classes);
+        return MVEL.eval(expression, env, factory);
+    }
+
+    public static Object compileScriptAndCallFunction(
+            String scriptPath, String expression, Map<String, Object> env, Class<?>... classes) {
+        patchEnv(env, classes);
+        MapVariableResolverFactory factory = new MapVariableResolverFactory(env);
+        MVEL.eval(FileUtil.readFileAsString(scriptPath), factory);
+        return MVEL.eval(expression, factory);
+    }
+
+    private static void patchEnv(Map<String, Object> env, Class<?>... classes) {
+        for (Class<?> clz : classes) {
+            env.put(clz.getSimpleName(), clz);
+        }
     }
 }

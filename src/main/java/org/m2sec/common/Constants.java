@@ -40,4 +40,6 @@ public class Constants {
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0 M2Sec/1.0";
 
     public static final String HTTP_HOOK_HEADER_KEY = "x-galaxy-http-hook";
+
+    public static final String CRYPTO_PROVIDER_BC = "BC";
 }

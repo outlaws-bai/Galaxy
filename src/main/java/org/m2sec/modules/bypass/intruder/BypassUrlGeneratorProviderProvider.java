@@ -44,7 +44,7 @@ public class BypassUrlGeneratorProviderProvider extends AbstractPayloadGenerator
                                         httpService.port())));
                 env.put("evilUrl", new URL(selectUrl));
                 return FileUtil.readFileAsStringArray(Constants.BYPASS_URL_DICT_FILE_PATH).stream()
-                        .map(x -> Render.renderStr(x, env))
+                        .map(x -> Render.renderTemplate(x, env))
                         .collect(Collectors.toSet());
             } else {
                 throw new RuntimeException("please input target.");

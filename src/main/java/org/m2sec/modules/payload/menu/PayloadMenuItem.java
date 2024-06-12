@@ -42,9 +42,9 @@ public class PayloadMenuItem extends AbstractMenuItem {
         return event.isFromTool(ToolType.REPEATER)
                 && event.messageEditorRequestResponse().isPresent()
                 && event.messageEditorRequestResponse()
-                        .get()
-                        .selectionContext()
-                        .equals(MessageEditorHttpRequestResponse.SelectionContext.REQUEST);
+                .get()
+                .selectionContext()
+                .equals(MessageEditorHttpRequestResponse.SelectionContext.REQUEST);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class PayloadMenuItem extends AbstractMenuItem {
         MessageEditorHttpRequestResponse messageEditorHttpRequestResponse =
                 event.messageEditorRequestResponse().get();
         // 处理payload中的某些变量
-        String finalValue = Render.renderStr(value, env);
+        String finalValue = Render.renderTemplate(value, env);
         HttpRequest httpRequest;
         if (messageEditorHttpRequestResponse.selectionOffsets().isPresent()) {
             Range selectRange = messageEditorHttpRequestResponse.selectionOffsets().get();

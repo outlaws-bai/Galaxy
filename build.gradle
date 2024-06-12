@@ -25,6 +25,7 @@ java {
 dependencies {
     // annotation
     annotationProcessor 'org.projectlombok:lombok:1.18.26'
+    compileOnly 'org.projectlombok:lombok:1.18.26'
     compileOnly "org.apache.tomcat:annotations-api:6.0.53"
     // burp
     compileOnly 'net.portswigger.burp.extensions:montoya-api:2023.12.1'
@@ -36,12 +37,10 @@ dependencies {
     implementation "io.grpc:grpc-services:${grpcVersion}"
     implementation "io.grpc:grpc-stub:${grpcVersion}"
     implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
-    // string format
-    implementation 'org.apache.commons:commons-text:1.12.0'
+    // crypto
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.78.1'
     // express
     implementation 'org.mvel:mvel2:2.5.2.Final'
-    // annotations
-    compileOnly 'org.projectlombok:lombok:1.18.26'
     // test
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
