@@ -432,7 +432,7 @@ String res = Render.renderExpression(template, env);
 
 ## 字符串渲染
 
-> 引擎会将${expression}或@{expression}中的expression当作表达式执行再渲染，当$或@需要作为其本身使用时，需要双写转义，如 [6.1 单个插入](#6.1 单个插入) 中的log4j2 的payload
+引擎会将${expression}或@{expression}中的expression当作表达式执行再渲染，当$或@需要作为其本身使用时，需要双写转义，如 [6.1 单个插入](#6.1 单个插入) 中的log4j2 的payload
 
 ```java
 URL originUrl = new URL("https://www.baidu.com");
