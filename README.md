@@ -86,7 +86,7 @@ httpTrafficAutoModificationConfig:
     scriptPath: 'C:\\Users\\outlaws\\.galaxy\\hook.mvel'
 ```
 
-![image-20240612223023823](E:\install\Typora\images\image-20240612223023823.png)
+![image-20240612223023823](images/image24.png)
 
 **效果**
 
