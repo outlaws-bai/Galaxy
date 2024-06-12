@@ -94,20 +94,6 @@ httpTrafficAutoModificationConfig:
 
 ![image-20240607164152020](images/image19.png)
 
-修改部分配置如下，并启动两个测试服务
-
-```yaml
-httpTrafficAutoModificationConfig:
-  hookConfig:
-    hookRequestToBurp: true
-    hookRequestToServer: true
-    hookResponseToBurp: true
-    hookResponseToClient: true
-    requestMatcher: 'true'
-    rpcConn: 127.0.0.1:8443
-    service: RPC
-```
-
 使用后，请求及响应被修改为明文，Repeater中也可以使用
 
 ![image-20240607164238704](images/image20.png)
