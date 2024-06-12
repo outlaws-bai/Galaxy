@@ -341,7 +341,7 @@ ${originUrl.protocol}://${evilUrl.host}[@@${originUrl.host}
 
 存储常用的payload, 在repeater中使用
 
-### 6.1 单个插入
+### 单个插入
 
 ```yaml
 payloadConfig: 
@@ -357,7 +357,7 @@ payloadConfig:
 
 ![image-20240607161408275](images/image14.png)
 
-### 6.2 批量插入
+### 批量插入
 
 将payload插入请求的每一个参数后(query、form、json的每一级)，常用与对所有参数进行批量测试，提升速度
 
@@ -432,7 +432,7 @@ String res = Render.renderExpression(template, env);
 
 ## 字符串渲染
 
-引擎会将${expression}或@{expression}中的expression当作表达式执行再渲染，当$或@需要作为其本身使用时，需要双写转义，如 [点击](#6.1 单个插入) 中的log4j2 的payload
+引擎会将${expression}或@{expression}中的expression当作表达式执行再渲染，当$或@需要作为其本身使用时，需要双写转义，如 [点击](单个插入) 中的log4j2 的payload
 
 ```java
 URL originUrl = new URL("https://www.baidu.com");
