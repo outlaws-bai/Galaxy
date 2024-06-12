@@ -15,7 +15,7 @@ public class Constants {
             "Welcome to Galaxy\nAuthor -> outlaws-bai\nGithub -> https://github.com/outlaws-bai/Galaxy\n";
 
     public static final String WORK_DIR =
-            System.getProperty("user.dir") + File.separator + ".galaxy";
+            System.getProperty("user.home") + File.separator + ".galaxy";
 
     public static final String TMP_FILE_DIR = WORK_DIR + File.separator + "tmp";
 
