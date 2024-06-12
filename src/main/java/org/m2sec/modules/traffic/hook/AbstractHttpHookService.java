@@ -38,12 +38,12 @@ public abstract class AbstractHttpHookService {
         try {
             if (HttpUtil.isCorrectUrl(httpRequest.url()) && hookConfig.isHookRequestToBurp()) {
                 Request request = Request.of(httpRequest).normalize();
-                if (hookConfig.getResponseMatcher() != null
+                if (hookConfig.getRequestMatcher() != null
                         && !hookConfig.getRequestMatcher().isEmpty()
                         && (Boolean)
-                                MVEL.eval(
-                                        hookConfig.getRequestMatcher(),
-                                        new HashMap<>(Map.of("request", request)))) {
+                        MVEL.eval(
+                                hookConfig.getRequestMatcher(),
+                                new HashMap<>(Map.of("request", request)))) {
                     // 添加标记头
                     request.getHeaders().put(Constants.HTTP_HOOK_HEADER_KEY, "HttpHook");
                     log.debug(
@@ -58,7 +58,9 @@ public abstract class AbstractHttpHookService {
         return httpRequest;
     }
 
-    /** 该函数在请求从Burp发送到服务端时被调用 */
+    /**
+     * 该函数在请求从Burp发送到服务端时被调用
+     */
     public HttpRequest tryHookRequestToServer(
             HttpRequestToBeSent httpRequest, HttpTrafficAutoModificationConfig.HookConfig hookConfig) {
         log.debug("exec method: tryHookRequestToServer");
@@ -82,7 +84,9 @@ public abstract class AbstractHttpHookService {
         return httpRequest;
     }
 
-    /** 该函数在响应从服务端刚到达Burp时被调用 */
+    /**
+     * 该函数在响应从服务端刚到达Burp时被调用
+     */
     public HttpResponse tryHookResponseToBurp(
             HttpResponseReceived httpResponse, HttpTrafficAutoModificationConfig.HookConfig hookConfig) {
         log.debug("exec method: tryHookResponseToBurp");
@@ -90,18 +94,11 @@ public abstract class AbstractHttpHookService {
             if (hookConfig.isHookResponseToBurp() && hookedIds.contains(httpResponse.messageId())) {
                 hookedIds.remove(httpResponse.messageId());
                 Response response = Response.of(httpResponse);
-                if (hookConfig.getResponseMatcher() != null
-                        && !hookConfig.getResponseMatcher().isEmpty()
-                        && (Boolean)
-                                MVEL.eval(
-                                        hookConfig.getResponseMatcher(),
-                                        new HashMap<>(Map.of("response", response)))) {
-                    response.getHeaders().put(Constants.HTTP_HOOK_HEADER_KEY, "HttpHook");
-                    log.debug(
-                            "exec method: hookResponseToBurp with "
-                                    + this.getClass().getSimpleName());
-                    return hookResponseToBurp(response).toBurp();
-                }
+                response.getHeaders().put(Constants.HTTP_HOOK_HEADER_KEY, "HttpHook");
+                log.debug(
+                        "exec method: hookResponseToBurp with "
+                                + this.getClass().getSimpleName());
+                return hookResponseToBurp(response).toBurp();
             }
 
         } catch (Exception e) {
@@ -110,7 +107,9 @@ public abstract class AbstractHttpHookService {
         return httpResponse;
     }
 
-    /** 该函数在响应从Burp发送到客户端时被调用 */
+    /**
+     * 该函数在响应从Burp发送到客户端时被调用
+     */
     public HttpResponse tryHookResponseToClient(
             InterceptedResponse httpResponse, HttpTrafficAutoModificationConfig.HookConfig hookConfig) {
         log.debug("exec method: tryHookResponseToClient");
@@ -130,15 +129,23 @@ public abstract class AbstractHttpHookService {
         return httpResponse;
     }
 
-    /** 该函数在客户端请求到达Burp时被调用 */
+    /**
+     * 该函数在客户端请求到达Burp时被调用
+     */
     public abstract Request hookRequestToBurp(Request request);
 
-    /** 该函数在请求从Burp发送到服务端时被调用 */
+    /**
+     * 该函数在请求从Burp发送到服务端时被调用
+     */
     public abstract Request hookRequestToServer(Request request);
 
-    /** 该函数在响应从服务端刚到达Burp时被调用 */
+    /**
+     * 该函数在响应从服务端刚到达Burp时被调用
+     */
     public abstract Response hookResponseToBurp(Response response);
 
-    /** 该函数在响应从Burp发送到客户端时被调用 */
+    /**
+     * 该函数在响应从Burp发送到客户端时被调用
+     */
     public abstract Response hookResponseToClient(Response httpResponse);
 }

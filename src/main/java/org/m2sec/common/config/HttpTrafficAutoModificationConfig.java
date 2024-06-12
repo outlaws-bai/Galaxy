@@ -53,13 +53,12 @@ public class HttpTrafficAutoModificationConfig {
         private boolean hookResponseToBurp;
         private boolean hookResponseToClient;
         private String requestMatcher;
-        private String responseMatcher;
         private HttpHookService service;
         private String rpcConn;
 
         public static HookConfig getDefault() {
             return new HookConfig(
-                    false, false, false, false, "", "", HttpHookService.RPC, "127.0.0.1:8443");
+                    false, false, false, false, "", HttpHookService.RPC, "127.0.0.1:8443");
         }
 
         public boolean isStart() {
