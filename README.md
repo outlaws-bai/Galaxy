@@ -6,59 +6,17 @@
 
 # 注意事项
 
-在第一次导入Jar包时，会在用户目录下生成`.galaxy`文件夹，并创建项目所需要的文件/路径，`.galaxy`文件夹的结构如下
+1. 在第一次导入Jar包时，会在用户目录下生成`.galaxy`文件夹，并创建项目所需要的文件/路径，[简介](#工作路径简介)
 
-```
-+ dict // 字典，可copy 项目下的同名字典
-  | bypassUrlDict.txt // 用于 2.1. Bypass Url 的字典, 可使用 2.1. Bypass Url 中示例的字典
-  | fuzzSensitivePathDict.txt // 用于 2.2. Bypass Path 的字典，可参考dirsearch
-+ extract // 存放该项目提取出的文件
-+ tmp // 存放临时文件，会在burp关闭时自动删除
-| config.yaml // 配置文件
-```
+2. 该项目UI仅提供一个按钮`reload`，每次修改`config.yaml`都需要reload,  [简介](#配置简介)
 
-该项目UI仅提供一个按钮`reload`，用于reload `config.yaml` 中的配置，故而每次修改`config.yaml`都需要reload
-
-`config.yaml`中的配置解释见 [配置解读](#配置解读) 部分
-
-# 基础能力
-
-> 该项目倾向于写一些表达式来代替繁琐的配置，因此以下两项渲染能力几乎贯穿所有功能。
-
-## 表达式渲染
-
-```java
-Request request = Request.of("https://www.baidu.com");
-String template = "request.host";
-
-HashMap<String, Object> env = new HashMap<>();
-env.put("request", request);
-
-String res = Render.renderExpression(template, env);
-// www.baidu.com
-```
-
-## 字符串渲染
-
-> 引擎会将${expression}或${expression}中的expression当作表达式执行再渲染，当$或@需要作为其本身使用时，需要双写转义，如 [6.1 单个插入](#6.1 单个插入) 中的log4j2 的payload
-
-```java
-URL originUrl = new URL("https://www.baidu.com");
-URL evilUrl = new URL("https://www.evil.com");
-String template = "${request.protocol}://${evilUrl.host}%ff.${request.host}";
-
-HashMap<String, Object> env = new HashMap<>();
-env.put("originUrl", originUrl);
-env.put("evilUrl", originUrl);
-
-String res = Render.renderTemplate("${request.protocol}://${evilUrl.host}%ff.${request.host}", env);
-// https://www.evil.com%ff.www.baidu.com
-```
+3. 该项目倾向于写一些表达式来代替繁琐的配置，表达式相关的基础能力介绍见[简介](#基础能力)。
 
 
 # 功能梳理
 
-标题带*为待实现
+> 标题带*为待实现
+>
 
 ## 1. HTTP Traffic Auto Modification
 
@@ -84,15 +42,53 @@ String res = Render.renderTemplate("${request.protocol}://${evilUrl.host}%ff.${r
 
 **示例**
 
-测试代码见[PyGRpcServer](https://github.com/outlaws-bai/PyGRpcServer)，
-
-[服务端代码](https://github.com/outlaws-bai/PyGRpcServer/blob/main/server_fast.py)  `/getUserInfo` 接口 会获取加密请求，解密后查询，再返回加密响应给前端
-
-[RPC服务代码](https://github.com/outlaws-bai/PyGRpcServer/blob/main/server_rpc.py)来做自动化加解密
+[服务端代码](https://github.com/outlaws-bai/PyGRpcServer/blob/main/server_fast.py)  `/getUserInfo` 接口会获取加密请求，解密后查询，再返回加密响应给前端
 
 ![image-20240607172027987](images/image22.png)
 
+#### 1.1.1. Rpc
+
+代码见[PyGRpcServer](https://github.com/outlaws-bai/PyGRpcServer)
+
+[RPC服务代码](https://github.com/outlaws-bai/PyGRpcServer/blob/main/server_rpc.py)来做自动化加解密
+
 ![image-20240607173855766](images/image23.png)
+
+修改部分配置如下，并启动两个测试服务
+
+```yaml
+httpTrafficAutoModificationConfig:
+  hookConfig:
+    hookRequestToBurp: true
+    hookRequestToServer: true
+    hookResponseToBurp: true
+    hookResponseToClient: true
+    requestMatcher: ''request.host=="172.22.39.254"''
+    rpcConn: 127.0.0.1:8443
+    service: RPC
+    scriptPath: 'C:\\Users\\outlaws\\.galaxy\\hook.mvel'
+```
+
+#### 1.1.2. Script
+
+修改scriptPath的文件内容，修改部分配置，启动用于测试的服务端
+
+```yaml
+httpTrafficAutoModificationConfig:
+  hookConfig:
+    hookRequestToBurp: true
+    hookRequestToServer: true
+    hookResponseToBurp: true
+    hookResponseToClient: true
+    requestMatcher: ''request.host=="172.22.39.254"''
+    rpcConn: 127.0.0.1:8443
+    service: SCRIPT
+    scriptPath: 'C:\\Users\\outlaws\\.galaxy\\hook.mvel'
+```
+
+![image-20240612223023823](E:\install\Typora\images\image-20240612223023823.png)
+
+**效果**
 
 正常情况下，请求&响应被加密
 
@@ -108,7 +104,6 @@ httpTrafficAutoModificationConfig:
     hookResponseToBurp: true
     hookResponseToClient: true
     requestMatcher: 'true'
-    responseMatcher: 'true'
     rpcConn: 127.0.0.1:8443
     service: RPC
 ```
@@ -388,8 +383,19 @@ payloadConfig:
 
 ![image-20240607161730235](images/image16.png)
 
+# 工作路径简介
 
-# 配置解读
+```
++ dict // 字典，可copy 项目下的同名字典
+  | bypassUrlDict.txt // 用于 2.1. Bypass Url 的字典, 可使用 2.1. Bypass Url 中示例的字典
+  | fuzzSensitivePathDict.txt // 用于 2.2. Bypass Path 的字典，可参考dirsearch
++ extract // 存放该项目提取出的文件
++ tmp // 存放临时文件，会在burp关闭时自动删除
+| config.yaml // 配置文件
+| hook.mvel // 用于Http Hook Script服务的脚本存放
+```
+
+# 配置简介
 
 ```yaml
 httpTrafficAutoModificationConfig: # 功能梳理 - 1 HTTP流量自动修改相关的配置
@@ -402,9 +408,9 @@ httpTrafficAutoModificationConfig: # 功能梳理 - 1 HTTP流量自动修改相�
     hookResponseToBurp: false
     hookResponseToClient: false
     requestMatcher: '' # 表达式，用于判断当前请求是否要进行Hook
-    responseMatcher: '' # 表达式，用于判断当前响应是否要进行Hook
-    rpcConn: 127.0.0.1:8443
-    service: RPC # 暂时仅支持RPC，后续考虑引入本地代码（python/js）执行hook的能力
+    service: RPC # hook所使用的sevice, 暂时有RPC、Script
+    rpcConn: 127.0.0.1:8443 # 当service为RPC，RPC Server的连接串
+    scriptPath: 'C:\\Users\\outlaws\\.galaxy\\hook.mvel' # 当service为SCRIPT，脚本路径
   specialRuleMatchConfig: # 功能梳理 - 1.3 使用不同的匹配规则计算score
     requestParamMatches: {}
     responseContentMatches: {}
@@ -423,16 +429,42 @@ cloudConfig: # 功能梳理 - 4 不同云的配置
 payloadConfig: {} # payload, Map<String, Object>, Object可以是String, List, Map，会自动逐级生成Menu和MenuItem
 ```
 
+# 基础能力
+
+## 表达式渲染
+
+```java
+Request request = Request.of("https://www.baidu.com");
+String template = "request.host";
+
+HashMap<String, Object> env = new HashMap<>();
+env.put("request", request);
+
+String res = Render.renderExpression(template, env);
+// www.baidu.com
+```
+
+## 字符串渲染
+
+> 引擎会将${expression}或${expression}中的expression当作表达式执行再渲染，当$或@需要作为其本身使用时，需要双写转义，如 [6.1 单个插入](#6.1 单个插入) 中的log4j2 的payload
+
+```java
+URL originUrl = new URL("https://www.baidu.com");
+URL evilUrl = new URL("https://www.evil.com");
+String template = "${request.protocol}://${evilUrl.host}%ff.${request.host}";
+
+HashMap<String, Object> env = new HashMap<>();
+env.put("originUrl", originUrl);
+env.put("evilUrl", originUrl);
+
+String res = Render.renderTemplate("${request.protocol}://${evilUrl.host}%ff.${request.host}", env);
+// https://www.evil.com%ff.www.baidu.com
+```
+
 # 参考文档
 
-javadoc
+[burp javadoc](https://portswigger.github.io/burp-extensions-montoya-api/javadoc/burp/api/montoya/MontoyaApi.html)
 
-https://portswigger.github.io/burp-extensions-montoya-api/javadoc/burp/api/montoya/MontoyaApi.html
+[burp ext examples](https://github.com/PortSwigger/burp-extensions-montoya-api-examples)
 
-examples
-
-https://github.com/PortSwigger/burp-extensions-montoya-api-examples
-
-express - MVEL
-
-http://mvel.documentnode.com/
+[express](http://mvel.documentnode.com/)

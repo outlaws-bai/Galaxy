@@ -4,6 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author: outlaws-bai
  * @date: 2024/3/10 15:05
@@ -22,5 +25,9 @@ public class JsonParser {
 
     public static <T> T fromJsonStr(String jsonStr, Class<T> clazz) {
         return gson.fromJson(jsonStr, clazz);
+    }
+
+    public static Map<?, ?> jsonStrToMap(String jsonStr) {
+        return fromJsonStr(jsonStr, HashMap.class);
     }
 }

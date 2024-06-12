@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.m2sec.common.Constants;
 import org.m2sec.common.enums.HttpHookService;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,10 +55,18 @@ public class HttpTrafficAutoModificationConfig {
         private String requestMatcher;
         private HttpHookService service;
         private String rpcConn;
+        private String scriptPath;
 
         public static HookConfig getDefault() {
             return new HookConfig(
-                    false, false, false, false, "", HttpHookService.RPC, "127.0.0.1:8443");
+                    false,
+                    false,
+                    false,
+                    false,
+                    "",
+                    HttpHookService.RPC,
+                    "127.0.0.1:8443",
+                    Constants.HTTP_HOOK_SCRIPT_FILE_PATH);
         }
 
         public boolean isStart() {

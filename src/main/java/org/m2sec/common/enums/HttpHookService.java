@@ -6,5 +6,5 @@ package org.m2sec.common.enums;
  * @description:
  */
 public enum HttpHookService {
-    RPC,
+    RPC, SCRIPT
 }

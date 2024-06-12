@@ -1,6 +1,5 @@
 package org.m2sec.common.crypto;
 
-import org.m2sec.common.Constants;
 import org.m2sec.common.enums.SymmetricKeyMode;
 
 import javax.annotation.Nullable;
@@ -69,13 +68,13 @@ public class CryptoUtil {
         try {
             String finalTransformation = transformation != null ? transformation : ALGORITHM_RSA;
             PublicKey pubKey =
-                    KeyFactory.getInstance(ALGORITHM_RSA, Constants.CRYPTO_PROVIDER_BC)
+                    KeyFactory.getInstance(ALGORITHM_RSA)
                             .generatePublic(new X509EncodedKeySpec(publicKey));
-            Cipher cipher = Cipher.getInstance(finalTransformation, Constants.CRYPTO_PROVIDER_BC);
+            Cipher cipher = Cipher.getInstance(finalTransformation);
             cipher.init(Cipher.ENCRYPT_MODE, pubKey);
             return cipher.doFinal(data);
         } catch (InvalidKeySpecException | NoSuchPaddingException | NoSuchAlgorithmException |
-                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException | NoSuchProviderException e) {
+                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException e) {
             throw new RuntimeException(e);
         }
     }
@@ -86,13 +85,13 @@ public class CryptoUtil {
         try {
             String finalTransformation = transformation != null ? transformation : ALGORITHM_RSA;
             PrivateKey priKey =
-                    KeyFactory.getInstance(ALGORITHM_RSA, Constants.CRYPTO_PROVIDER_BC)
+                    KeyFactory.getInstance(ALGORITHM_RSA)
                             .generatePrivate(new PKCS8EncodedKeySpec(privateKey));
-            Cipher cipher = Cipher.getInstance(finalTransformation, Constants.CRYPTO_PROVIDER_BC);
+            Cipher cipher = Cipher.getInstance(finalTransformation);
             cipher.init(Cipher.DECRYPT_MODE, priKey);
             return cipher.doFinal(data);
         } catch (InvalidKeySpecException | NoSuchPaddingException | NoSuchAlgorithmException |
-                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException | NoSuchProviderException e) {
+                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException e) {
             throw new RuntimeException(e);
         }
     }
@@ -101,13 +100,13 @@ public class CryptoUtil {
     public static byte[] sm2Encrypt(byte[] data, byte[] publicKey) {
         try {
             PublicKey pubKey =
-                    KeyFactory.getInstance(ALGORITHM_EC, Constants.CRYPTO_PROVIDER_BC)
+                    KeyFactory.getInstance(ALGORITHM_EC)
                             .generatePublic(new X509EncodedKeySpec(publicKey));
-            Cipher cipher = Cipher.getInstance(ALGORITHM_SM2, Constants.CRYPTO_PROVIDER_BC);
+            Cipher cipher = Cipher.getInstance(ALGORITHM_SM2);
             cipher.init(Cipher.ENCRYPT_MODE, pubKey);
             return cipher.doFinal(data);
         } catch (InvalidKeySpecException | NoSuchPaddingException | NoSuchAlgorithmException |
-                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException | NoSuchProviderException e) {
+                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException e) {
             throw new RuntimeException(e);
         }
     }
@@ -116,13 +115,13 @@ public class CryptoUtil {
     public static byte[] sm2Decrypt(byte[] cipherText, byte[] privateKey) {
         try {
             PrivateKey priKey =
-                    KeyFactory.getInstance(ALGORITHM_EC, Constants.CRYPTO_PROVIDER_BC)
+                    KeyFactory.getInstance(ALGORITHM_EC)
                             .generatePrivate(new PKCS8EncodedKeySpec(privateKey));
-            Cipher cipher = Cipher.getInstance(ALGORITHM_SM2, Constants.CRYPTO_PROVIDER_BC);
+            Cipher cipher = Cipher.getInstance(ALGORITHM_SM2);
             cipher.init(Cipher.DECRYPT_MODE, priKey);
             return cipher.doFinal(cipherText);
         } catch (InvalidKeySpecException | NoSuchPaddingException | NoSuchAlgorithmException |
-                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException | NoSuchProviderException e) {
+                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException e) {
             throw new RuntimeException(e);
         }
     }
@@ -168,14 +167,14 @@ public class CryptoUtil {
         try {
             String finalTransformation =
                     transformation != null ? transformation : algorithmDefaultTransformation;
-            Cipher cipher = Cipher.getInstance(finalTransformation, Constants.CRYPTO_PROVIDER_BC);
+            Cipher cipher = Cipher.getInstance(finalTransformation);
             SecretKeySpec keySpec = new SecretKeySpec(secret, algorithm);
             AlgorithmParameterSpec paramSpec =
                     getSymmetricKeyEncryptParameterSpec(finalTransformation, params);
             cipher.init(Cipher.ENCRYPT_MODE, keySpec, paramSpec);
             return cipher.doFinal(data);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidAlgorithmParameterException |
-                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException | NoSuchProviderException e) {
+                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException e) {
             throw new RuntimeException(e);
         }
     }
@@ -190,14 +189,14 @@ public class CryptoUtil {
         try {
             String finalTransformation =
                     transformation != null ? transformation : algorithmDefaultTransformation;
-            Cipher cipher = Cipher.getInstance(finalTransformation, Constants.CRYPTO_PROVIDER_BC);
+            Cipher cipher = Cipher.getInstance(finalTransformation);
             SecretKeySpec keySpec = new SecretKeySpec(secret, algorithm);
             AlgorithmParameterSpec paramSpec =
                     getSymmetricKeyEncryptParameterSpec(finalTransformation, params);
             cipher.init(Cipher.DECRYPT_MODE, keySpec, paramSpec);
             return cipher.doFinal(data);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidAlgorithmParameterException |
-                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException | NoSuchProviderException e) {
+                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException e) {
             throw new RuntimeException(e);
         }
     }
@@ -221,9 +220,7 @@ public class CryptoUtil {
 
     private static byte[] getSymmetricKeyEncryptIv(Map<String, Object> params) {
         Object iv = params.get("iv");
-        if (iv instanceof ByteArray ivByteArray) {
-            return ivByteArray.getData();
-        } else if (iv instanceof byte[] ivBytes) {
+        if (iv instanceof byte[] ivBytes) {
             return ivBytes;
         } else if (iv instanceof String ivString) {
             return ivString.getBytes();

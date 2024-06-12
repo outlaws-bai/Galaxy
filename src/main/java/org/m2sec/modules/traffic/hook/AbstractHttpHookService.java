@@ -26,7 +26,7 @@ import java.util.Map;
 public abstract class AbstractHttpHookService {
     static final HashSet<Integer> hookedIds = new HashSet<>();
 
-    private static final Log log = new Log(AbstractHttpHookService.class);
+    protected static final Log log = new Log(AbstractHttpHookService.class);
 
     public abstract void init();
 
@@ -35,6 +35,7 @@ public abstract class AbstractHttpHookService {
     public HttpRequest tryHookRequestToBurp(
             InterceptedRequest httpRequest, HttpTrafficAutoModificationConfig.HookConfig hookConfig) {
         log.debug("exec method: tryHookRequestToBurp");
+        HttpRequest retVal = httpRequest;
         try {
             if (HttpUtil.isCorrectUrl(httpRequest.url()) && hookConfig.isHookRequestToBurp()) {
                 Request request = Request.of(httpRequest).normalize();
@@ -44,18 +45,19 @@ public abstract class AbstractHttpHookService {
                         MVEL.eval(
                                 hookConfig.getRequestMatcher(),
                                 new HashMap<>(Map.of("request", request)))) {
-                    // 添加标记头
-                    request.getHeaders().put(Constants.HTTP_HOOK_HEADER_KEY, "HttpHook");
                     log.debug(
                             "exec method: hookRequestToBurp with "
                                     + this.getClass().getSimpleName());
-                    return hookRequestToBurp(request).toBurp();
+                    request = hookRequestToBurp(request);
+                    // 添加标记头
+                    request.getHeaders().put(Constants.HTTP_HOOK_HEADER_KEY, "HttpHook");
+                    retVal = request.toBurp();
                 }
             }
         } catch (Exception e) {
             log.exception(e, "hookRequestToBurp execute error.");
         }
-        return httpRequest;
+        return retVal;
     }
 
     /**
@@ -63,25 +65,27 @@ public abstract class AbstractHttpHookService {
      */
     public HttpRequest tryHookRequestToServer(
             HttpRequestToBeSent httpRequest, HttpTrafficAutoModificationConfig.HookConfig hookConfig) {
+        HttpRequest retVal = httpRequest;
         log.debug("exec method: tryHookRequestToServer");
         try {
             if (HttpUtil.isCorrectUrl(httpRequest.url())
                     && hookConfig.isHookRequestToServer()
                     && httpRequest.hasHeader(Constants.HTTP_HOOK_HEADER_KEY)) {
                 Request request = Request.of(httpRequest).normalize();
-                // 移除标记头
                 request.getHeaders().remove(Constants.HTTP_HOOK_HEADER_KEY);
+                log.debug(
+                        "exec method: hookRequestToServer with " + this.getClass().getSimpleName());
+                request = hookRequestToServer(request);
+                // 移除标记头
                 if (hookConfig.isHookResponseToBurp()) {
                     hookedIds.add(httpRequest.messageId());
                 }
-                log.debug(
-                        "exec method: hookRequestToServer with " + this.getClass().getSimpleName());
-                return hookRequestToServer(request).toBurp();
+                retVal = request.toBurp();
             }
         } catch (Exception e) {
             log.exception(e, "hookRequestToServer execute error.");
         }
-        return httpRequest;
+        return retVal;
     }
 
     /**

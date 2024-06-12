@@ -2,6 +2,7 @@ package org.m2sec;
 
 import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.m2sec.burp.http.HttpTrafficAutoModificationHttpHandler;
 import org.m2sec.burp.menu.MasterContextMenuItemsProvider;
 import org.m2sec.burp.proxy.HttpTrafficAutoModificationProxyRequestHandler;
@@ -21,11 +22,13 @@ import org.m2sec.modules.fuzz.intruder.FuzzSensitivePathAndBypassGeneratorProvid
 import org.m2sec.modules.fuzz.intruder.FuzzSensitivePathGeneratorProviderProvider;
 import org.m2sec.modules.traffic.hook.AbstractHttpHookService;
 import org.m2sec.modules.traffic.hook.RpcService;
+import org.m2sec.modules.traffic.hook.ScriptService;
 
 import javax.swing.*;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.Security;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,9 +53,14 @@ public class GalaxyMain implements BurpExtension {
     public static ExecutorService workExecutor = Executors.newFixedThreadPool(5);
 
     public static Map<HttpHookService, AbstractHttpHookService> httpHookServiceMap =
-            new HashMap<>(Map.of(HttpHookService.RPC, new RpcService()));
+            new HashMap<>(
+                    Map.of(
+                            HttpHookService.RPC,
+                            new RpcService(),
+                            HttpHookService.SCRIPT,
+                            new ScriptService()));
 
-    private static final Log log = new Log(GalaxyMain.class);
+    public static final Log log = new Log(GalaxyMain.class);
 
     @Override
     public void initialize(MontoyaApi montoyaApi) {
@@ -65,6 +73,7 @@ public class GalaxyMain implements BurpExtension {
     }
 
     private void init() {
+        Security.addProvider(new BouncyCastleProvider());
         Log.logLevel = LogLevel.DEBUG;
         env = OperatingEnv.BURP;
         if (Files.exists(Paths.get(Constants.WORK_DIR))) {
@@ -77,16 +86,16 @@ public class GalaxyMain implements BurpExtension {
                     Constants.TMP_FILE_DIR, // 临时文件路径
                     Constants.EXTRACT_INFO_FILE_DIR, // 提取文件路径
                     Constants.DICT_FILE_DIR // 字典路径
-            );
+                    );
             // 创建必要的文件
             FileUtil.createFiles(
                     Constants.CONFIG_FILE_PATH,
                     Constants.BYPASS_URL_DICT_FILE_PATH,
-                    Constants.FUZZ_SENSITIVE_PATH_DICT_FILE_PATH);
+                    Constants.FUZZ_SENSITIVE_PATH_DICT_FILE_PATH,
+                    Constants.HTTP_HOOK_SCRIPT_FILE_PATH);
             log.debug("config.yaml is not exist. use default and write");
             config = Config.getDefault();
-            FileUtil.writeToFileIfEmpty(
-                    Constants.CONFIG_FILE_PATH, YamlParser.toYamlStr(config));
+            FileUtil.writeToFileIfEmpty(Constants.CONFIG_FILE_PATH, YamlParser.toYamlStr(config));
         }
     }
 
@@ -131,8 +140,10 @@ public class GalaxyMain implements BurpExtension {
         burpApi.extension().registerUnloadingHandler(this::destroy);
         // 注册http hook
         burpApi.http().registerHttpHandler(new HttpTrafficAutoModificationHttpHandler());
-        burpApi.proxy().registerRequestHandler(new HttpTrafficAutoModificationProxyRequestHandler());
-        burpApi.proxy().registerResponseHandler(new HttpTrafficAutoModificationProxyResponseHandler());
+        burpApi.proxy()
+                .registerRequestHandler(new HttpTrafficAutoModificationProxyRequestHandler());
+        burpApi.proxy()
+                .registerResponseHandler(new HttpTrafficAutoModificationProxyResponseHandler());
         // 注册payload生成器
         burpApi.intruder()
                 .registerPayloadGeneratorProvider(new BypassUrlGeneratorProviderProvider());
