@@ -13,7 +13,7 @@ public class HttpHookTest {
     @Test
     public void testJavaFile() {
         JavaFileService service = new JavaFileService();
-        service.init(".\\src\\test\\java\\files\\Hook.java");
+        service.init(".\\src\\test\\java\\Hook.java");
         Request request = Request.of("https://www.baidu,com", Method.POST);
         request.setContent(
                 "{\"data\": \"0gXNBPtsCJ903KCjvXD6rQEod3XJ69SFCpN8QHuRQPw=\"}".getBytes());
@@ -27,7 +27,7 @@ public class HttpHookTest {
     @Test
     public void testScript() {
         ScriptService service = new ScriptService();
-        service.init(".\\src\\test\\java\\files\\hook.mvel");
+        service.init(".\\src\\test\\java\\hook.mvel");
         Request request = Request.of("https://www.baidu,com", Method.POST);
         request.setContent(
                 "{\"data\": \"0gXNBPtsCJ903KCjvXD6rQEod3XJ69SFCpN8QHuRQPw=\"}".getBytes());

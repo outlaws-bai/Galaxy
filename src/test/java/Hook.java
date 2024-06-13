@@ -1,5 +1,3 @@
-package files;
-
 import org.m2sec.common.crypto.CryptoUtil;
 import org.m2sec.common.models.Request;
 import org.m2sec.common.models.Response;
