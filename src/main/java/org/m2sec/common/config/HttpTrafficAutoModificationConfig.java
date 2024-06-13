@@ -56,6 +56,7 @@ public class HttpTrafficAutoModificationConfig {
         private HttpHookService service;
         private String rpcConn;
         private String scriptPath;
+        private String javaFilePath;
 
         public static HookConfig getDefault() {
             return new HookConfig(
@@ -66,7 +67,8 @@ public class HttpTrafficAutoModificationConfig {
                     "",
                     HttpHookService.RPC,
                     "127.0.0.1:8443",
-                    Constants.HTTP_HOOK_SCRIPT_FILE_PATH);
+                    Constants.HTTP_HOOK_SCRIPT_FILE_PATH,
+                    Constants.HTTP_HOOK_JAVA_FILE_PATH);
         }
 
         public boolean isStart() {

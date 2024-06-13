@@ -44,4 +44,5 @@ public class Constants {
     public static final String CRYPTO_PROVIDER_BC = "BC";
 
     public static final String HTTP_HOOK_SCRIPT_FILE_PATH = Constants.WORK_DIR + File.separator + "hook.mvel";
+    public static final String HTTP_HOOK_JAVA_FILE_PATH = Constants.WORK_DIR + File.separator + "Hook.java";
 }

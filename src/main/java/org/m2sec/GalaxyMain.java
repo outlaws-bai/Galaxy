@@ -21,6 +21,7 @@ import org.m2sec.modules.bypass.intruder.BypassUrlGeneratorProviderProvider;
 import org.m2sec.modules.fuzz.intruder.FuzzSensitivePathAndBypassGeneratorProviderProvider;
 import org.m2sec.modules.fuzz.intruder.FuzzSensitivePathGeneratorProviderProvider;
 import org.m2sec.modules.traffic.hook.AbstractHttpHookService;
+import org.m2sec.modules.traffic.hook.JavaFileService;
 import org.m2sec.modules.traffic.hook.RpcService;
 import org.m2sec.modules.traffic.hook.ScriptService;
 
@@ -58,7 +59,9 @@ public class GalaxyMain implements BurpExtension {
                             HttpHookService.RPC,
                             new RpcService(),
                             HttpHookService.SCRIPT,
-                            new ScriptService()));
+                            new ScriptService(),
+                            HttpHookService.JAVA_FILE,
+                            new JavaFileService()));
 
     public static final Log log = new Log(GalaxyMain.class);
 
@@ -109,8 +112,8 @@ public class GalaxyMain implements BurpExtension {
             httpHookService = httpHookServiceMap.get(hookConfig.getService());
             httpHookService.init();
             log.debug("httpHookService: " + httpHookService.getClass().getSimpleName());
-        } else if (httpHookService != null) {
-            httpHookService.destroy();
+        } else {
+            if (httpHookService != null) httpHookService.destroy();
             httpHookService = null;
         }
     }

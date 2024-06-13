@@ -1,4 +1,5 @@
 import org.junit.jupiter.api.Test;
+import org.m2sec.common.Log;
 
 /**
  * @author: outlaws-bai
@@ -7,7 +8,12 @@ import org.junit.jupiter.api.Test;
  */
 public class TempTest {
 
+    Log log = new Log(TempTest.class);
+
     @Test
     public void test() {
+
     }
+
+
 }

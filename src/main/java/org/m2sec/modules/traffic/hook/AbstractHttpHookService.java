@@ -151,5 +151,5 @@ public abstract class AbstractHttpHookService {
     /**
      * 该函数在响应从Burp发送到客户端时被调用
      */
-    public abstract Response hookResponseToClient(Response httpResponse);
+    public abstract Response hookResponseToClient(Response response);
 }

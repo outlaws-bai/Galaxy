@@ -26,12 +26,17 @@ public class ScriptService extends AbstractHttpHookService {
 
     @Override
     public void init() {
+        init(
+                GalaxyMain.config
+                        .getHttpTrafficAutoModificationConfig()
+                        .getHookConfig()
+                        .getScriptPath());
+    }
+
+    public void init(String scriptPath) {
         factory =
                 Render.compileScript(
-                        GalaxyMain.config
-                                .getHttpTrafficAutoModificationConfig()
-                                .getHookConfig()
-                                .getScriptPath(),
+                        scriptPath,
                         CryptoUtil.class,
                         HashUtil.class,
                         MacUtil.class,
