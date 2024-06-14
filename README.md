@@ -402,7 +402,8 @@ payloadConfig:
 + extract // 存放该项目提取出的文件
 + tmp // 存放临时文件，会在burp关闭时自动删除
 | config.yaml // 配置文件
-| hook.mvel // 用于Http Hook Script服务的脚本存放
+| hook.mvel // 用于HTTP Traffic Hook SCRIPT Service的脚本存放
+| Hook.java // 用于HTTP Traffic Hook JAVA_FILE Service的代码存放
 ```
 
 # 配置简介
