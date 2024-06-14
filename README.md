@@ -63,7 +63,7 @@ httpTrafficAutoModificationConfig:
     hookRequestToServer: true
     hookResponseToBurp: true
     hookResponseToClient: true
-    requestMatcher: ''request.host=="172.22.39.254"''
+    requestMatcher: 'request.host=="172.22.39.254"'
     rpcConn: 127.0.0.1:8443
     service: RPC
     scriptPath: 'C:\\Users\\outlaws\\.galaxy\\hook.mvel'
@@ -81,7 +81,7 @@ httpTrafficAutoModificationConfig:
     hookRequestToServer: true
     hookResponseToBurp: true
     hookResponseToClient: true
-    requestMatcher: ''request.host=="172.22.39.254"''
+    requestMatcher: 'request.host=="172.22.39.254"'
     rpcConn: 127.0.0.1:8443
     service: SCRIPT
     scriptPath: 'C:\\Users\\outlaws\\.galaxy\\hook.mvel'
@@ -103,7 +103,7 @@ httpTrafficAutoModificationConfig:
     hookRequestToServer: true
     hookResponseToBurp: true
     hookResponseToClient: true
-    requestMatcher: ''request.host=="172.22.39.254"''
+    requestMatcher: 'request.host=="172.22.39.254"'
     rpcConn: 127.0.0.1:8443
     service: JAVA_FILE
     javaFilePath: 'C:\\Users\\outlaws\\.galaxy\\Hook.java'
