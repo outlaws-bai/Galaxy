@@ -12,10 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Locale;
-import java.util.StringJoiner;
+import java.util.*;
 
 /**
  * @author: outlaws-bai
@@ -28,7 +25,7 @@ public class JavaFileService extends AbstractHttpHookService {
 
     @Override
     public void init() {
-        loadJavaFile(
+        init(
                 GalaxyMain.config
                         .getHttpTrafficAutoModificationConfig()
                         .getHookConfig()
@@ -36,7 +33,9 @@ public class JavaFileService extends AbstractHttpHookService {
     }
 
     public void init(String javaFilePath) {
-        loadJavaFile(javaFilePath);
+        if (javaFilePath.endsWith(".java")) loadJavaFile(javaFilePath);
+        else if (javaFilePath.endsWith(".class")) loadJavaClass(javaFilePath);
+        else throw new IllegalArgumentException("javaFilePath suffix error!");
     }
 
     @Override
@@ -67,7 +66,7 @@ public class JavaFileService extends AbstractHttpHookService {
     @Override
     public Response hookResponseToBurp(Response response) {
         try {
-            Method method = clazz.getMethod("hookRequestToServer", Response.class);
+            Method method = clazz.getMethod("hookResponseToBurp", Response.class);
             return (Response) method.invoke(null, response);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
@@ -77,7 +76,7 @@ public class JavaFileService extends AbstractHttpHookService {
     @Override
     public Response hookResponseToClient(Response response) {
         try {
-            Method method = clazz.getMethod("hookRequestToServer", Response.class);
+            Method method = clazz.getMethod("hookResponseToClient", Response.class);
             return (Response) method.invoke(null, response);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
@@ -87,6 +86,7 @@ public class JavaFileService extends AbstractHttpHookService {
     private void loadJavaFile(String javaFilePath) {
         try {
             JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+            File javaFile = new File(javaFilePath);
 
             if (compiler == null) {
                 throw new IllegalStateException(
@@ -96,9 +96,14 @@ public class JavaFileService extends AbstractHttpHookService {
 
             // Set up the file manager
             StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
-            fileManager.setLocation(
-                    StandardLocation.CLASS_OUTPUT,
-                    Collections.singletonList(new File(Constants.TMP_FILE_DIR)));
+            // 设置类路径，包含所有依赖的 JAR 文件
+            List<String> optionList = new ArrayList<>();
+            optionList.add("-classpath");
+            optionList.add(GalaxyMain.burpApi.extension().filename());
+
+            // 设置输出目录
+            optionList.add("-d");
+            optionList.add(Constants.TMP_FILE_DIR);
 
             // Get the compilation unit from the Java file
             Iterable<? extends JavaFileObject> compilationUnits =
@@ -122,7 +127,7 @@ public class JavaFileService extends AbstractHttpHookService {
                                                 + diagnostic.getMessage(Locale.ENGLISH);
                                 errorMessages.add(errorMessage);
                             },
-                            null,
+                            optionList,
                             null,
                             compilationUnits);
 
@@ -133,15 +138,28 @@ public class JavaFileService extends AbstractHttpHookService {
                 throw new RuntimeException("Compilation failed:\n" + errorMessages);
             }
 
-            // Load the class
-            File javaFile = new File(javaFilePath);
-            String className = javaFile.getName().replace(".java", "");
+            String classFilePath =
+                    Constants.TMP_FILE_DIR
+                            + File.separator
+                            + javaFile.getName().replace(".java", ".class");
+            loadJavaClass(classFilePath);
 
-            URL[] urls = new URL[] {new File(Constants.TMP_FILE_DIR).toURI().toURL()};
-            try (URLClassLoader classLoader = new URLClassLoader(urls)) {
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void loadJavaClass(String javaClassFilePath) {
+        try {
+            File javaFile = new File(javaClassFilePath);
+            String className = javaFile.getName().replace(".class", "");
+
+            URL[] urls = new URL[] {new File(javaFile.getParent()).toURI().toURL()};
+            try (URLClassLoader classLoader =
+                    new URLClassLoader(urls, this.getClass().getClassLoader())) {
                 clazz = classLoader.loadClass(className);
             }
-        } catch (ClassNotFoundException | IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

@@ -67,6 +67,7 @@ httpTrafficAutoModificationConfig:
     rpcConn: 127.0.0.1:8443
     service: RPC
     scriptPath: 'C:\\Users\\outlaws\\.galaxy\\hook.mvel'
+    javaFilePath: 'C:\\Users\\outlaws\\.galaxy\\Hook.java'
 ```
 
 #### 1.1.2. Script
@@ -84,9 +85,32 @@ httpTrafficAutoModificationConfig:
     rpcConn: 127.0.0.1:8443
     service: SCRIPT
     scriptPath: 'C:\\Users\\outlaws\\.galaxy\\hook.mvel'
+    javaFilePath: 'C:\\Users\\outlaws\\.galaxy\\Hook.java'
 ```
 
 ![image-20240612223023823](images/image24.png)
+
+#### 1.1.3 Java File
+
+修改javaFilePath的文件内容，修改部分配置，启动用于测试的服务端
+
+> javaFilePath使用Java或已编译的Class均可以。不过如果使用Java文件，不能删除本插件的jar包，因为需要用于编译Java文件
+
+```yaml
+httpTrafficAutoModificationConfig:
+  hookConfig:
+    hookRequestToBurp: true
+    hookRequestToServer: true
+    hookResponseToBurp: true
+    hookResponseToClient: true
+    requestMatcher: ''request.host=="172.22.39.254"''
+    rpcConn: 127.0.0.1:8443
+    service: JAVA_FILE
+    javaFilePath: 'C:\\Users\\outlaws\\.galaxy\\Hook.java'
+    scriptPath: 'C:\\Users\\outlaws\\.galaxy\\hook.mvel'
+```
+
+![image-20240615003237939](images/image25.png)
 
 **效果**
 
@@ -394,9 +418,10 @@ httpTrafficAutoModificationConfig: # 功能梳理 - 1 HTTP流量自动修改相�
     hookResponseToBurp: false
     hookResponseToClient: false
     requestMatcher: '' # 表达式，用于判断当前请求是否要进行Hook
-    service: RPC # hook所使用的sevice, 暂时有RPC、Script
+    service: RPC # hook所使用的sevice, 有RPC、SCRIPT、JAVA_FILE
     rpcConn: 127.0.0.1:8443 # 当service为RPC，RPC Server的连接串
     scriptPath: 'C:\\Users\\outlaws\\.galaxy\\hook.mvel' # 当service为SCRIPT，脚本路径
+    javaFilePath: 'C:\\Users\\outlaws\\.galaxy\\Hook.java' # 当service为JAVA_FILE时的java或class文件
   specialRuleMatchConfig: # 功能梳理 - 1.3 使用不同的匹配规则计算score
     requestParamMatches: {}
     responseContentMatches: {}

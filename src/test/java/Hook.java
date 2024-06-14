@@ -17,12 +17,7 @@ public class Hook {
     private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
     private static final byte[] secret = "32byteslongsecretkeyforaes256!aa".getBytes();
     private static final byte[] iv = "16byteslongiv456".getBytes();
-    private static Map<String, Object> paramMap;
-
-    static {
-        paramMap = new HashMap<>();
-        paramMap.put("iv", iv);
-    }
+    private static final Map<String, Object> paramMap = new HashMap<>(Map.of("iv", iv));
 
     private static byte[] getData(byte[] content) {
         return Base64.getDecoder()
