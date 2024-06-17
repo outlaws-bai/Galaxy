@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.m2sec.common.Constants;
 import org.m2sec.rpc.HttpHook;
 
 import java.io.ByteArrayOutputStream;
@@ -90,8 +91,13 @@ public class Response {
         return new Response(httpVersion, statusCode, reason, headers, content);
     }
 
+    public Response updateContentLength() {
+        headers.put(Constants.HTTP_HEADER_CONTENT_LENGTH, String.valueOf(this.content.length));
+        return this;
+    }
+
     public HttpResponse toBurp() {
-        return HttpResponse.httpResponse(ByteArray.byteArray(this.toRaw()));
+        return HttpResponse.httpResponse(ByteArray.byteArray(updateContentLength().toRaw()));
     }
 
     public HttpHook.Response toRpc() {
