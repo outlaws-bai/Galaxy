@@ -63,7 +63,7 @@ httpTrafficAutoModificationConfig:
     hookRequestToServer: true
     hookResponseToBurp: true
     hookResponseToClient: true
-    requestMatcher: ''request.host=="172.22.39.254"''
+    requestMatcher: 'request.host=="172.22.39.254"'
     rpcConn: 127.0.0.1:8443
     service: RPC
     scriptPath: 'C:\\Users\\outlaws\\.galaxy\\hook.mvel'
@@ -81,7 +81,7 @@ httpTrafficAutoModificationConfig:
     hookRequestToServer: true
     hookResponseToBurp: true
     hookResponseToClient: true
-    requestMatcher: ''request.host=="172.22.39.254"''
+    requestMatcher: 'request.host=="172.22.39.254"'
     rpcConn: 127.0.0.1:8443
     service: SCRIPT
     scriptPath: 'C:\\Users\\outlaws\\.galaxy\\hook.mvel'
@@ -103,7 +103,7 @@ httpTrafficAutoModificationConfig:
     hookRequestToServer: true
     hookResponseToBurp: true
     hookResponseToClient: true
-    requestMatcher: ''request.host=="172.22.39.254"''
+    requestMatcher: 'request.host=="172.22.39.254"'
     rpcConn: 127.0.0.1:8443
     service: JAVA_FILE
     javaFilePath: 'C:\\Users\\outlaws\\.galaxy\\Hook.java'
@@ -402,7 +402,8 @@ payloadConfig:
 + extract // 存放该项目提取出的文件
 + tmp // 存放临时文件，会在burp关闭时自动删除
 | config.yaml // 配置文件
-| hook.mvel // 用于Http Hook Script服务的脚本存放
+| hook.mvel // 用于HTTP Traffic Hook SCRIPT Service的脚本存放
+| Hook.java // 用于HTTP Traffic Hook JAVA_FILE Service的代码存放
 ```
 
 # 配置简介
