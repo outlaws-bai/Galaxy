@@ -2,6 +2,7 @@ package org.m2sec.modules.traffic.hook;
 
 import org.m2sec.GalaxyMain;
 import org.m2sec.common.Constants;
+import org.m2sec.common.enums.OperatingEnv;
 import org.m2sec.common.models.Request;
 import org.m2sec.common.models.Response;
 
@@ -98,8 +99,10 @@ public class JavaFileService extends AbstractHttpHookService {
             StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
             // 设置类路径，包含所有依赖的 JAR 文件
             List<String> optionList = new ArrayList<>();
-            optionList.add("-classpath");
-            optionList.add(GalaxyMain.burpApi.extension().filename());
+            if (GalaxyMain.env.equals(OperatingEnv.BURP)) {
+                optionList.add("-classpath");
+                optionList.add(GalaxyMain.burpApi.extension().filename());
+            }
 
             // 设置输出目录
             optionList.add("-d");

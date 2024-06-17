@@ -22,7 +22,7 @@ public class HttpTrafficAutoModificationConfig {
 
     private HookConfig hookConfig;
     private DecorateConfig decorateConfig;
-    private MatchConfig specialRuleMatchConfig;
+    private MatchConfig ruleMatchConfig;
 
     public static HttpTrafficAutoModificationConfig getDefault() {
         return new HttpTrafficAutoModificationConfig(
@@ -34,8 +34,8 @@ public class HttpTrafficAutoModificationConfig {
     @ToString
     @AllArgsConstructor
     public static class DecorateConfig {
-        private String requestDecorate;
-        private String responseDecorate;
+        private String requestModifyExpression;
+        private String responseModifyExpression;
 
         public static DecorateConfig getDefault() {
             return new DecorateConfig("", "");
@@ -48,34 +48,26 @@ public class HttpTrafficAutoModificationConfig {
     @AllArgsConstructor
     public static class HookConfig {
 
-        private boolean hookRequestToBurp;
-        private boolean hookRequestToServer;
-        private boolean hookResponseToBurp;
-        private boolean hookResponseToClient;
-        private String requestMatcher;
-        private HttpHookService service;
+        private boolean requestIsNeedHook;
+        private boolean responseIsNeedHook;
+        private String requestMatchExpression;
+        private HttpHookService hookService;
         private String rpcConn;
-        private String scriptPath;
         private String javaFilePath;
 
         public static HookConfig getDefault() {
             return new HookConfig(
                     false,
                     false,
-                    false,
-                    false,
                     "",
                     HttpHookService.RPC,
                     "127.0.0.1:8443",
-                    Constants.HTTP_HOOK_SCRIPT_FILE_PATH,
                     Constants.HTTP_HOOK_JAVA_FILE_PATH);
         }
 
         public boolean isStart() {
-            return hookRequestToServer
-                    || hookRequestToBurp
-                    || hookResponseToBurp
-                    || hookResponseToClient;
+            return requestIsNeedHook
+                    || responseIsNeedHook;
         }
     }
 

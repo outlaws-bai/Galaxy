@@ -1,12 +1,12 @@
 package org.m2sec.common;
 
-import org.m2sec.common.utils.FileUtil;
-import org.mvel2.MVEL;
-import org.mvel2.integration.impl.MapVariableResolverFactory;
-import org.mvel2.templates.TemplateRuntime;
+import org.apache.commons.text.StringSubstitutor;
+import org.codehaus.commons.compiler.CompileException;
+import org.codehaus.janino.ExpressionEvaluator;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.annotation.Nullable;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 /**
  * @author: outlaws-bai
@@ -16,45 +16,37 @@ import java.util.Map;
 public class Render {
 
     public static String renderTemplate(
-            String template, Map<String, Object> env, Class<?>... classes) {
-        patchEnv(env, classes);
-        return (String) TemplateRuntime.eval(template, env);
+            String template, @Nullable Map<String, Object> env, Class<?>... classes) {
+        StringSubstitutor stringSubstitutor =
+                new StringSubstitutor(key -> (String) renderExpression(key, env, classes));
+        return stringSubstitutor.replace(template);
     }
 
     public static Object renderExpression(
-            String expression, Map<String, Object> env, Class<?>... classes) {
-        patchEnv(env, classes);
-        return MVEL.eval(expression, env);
-    }
-
-    public static MapVariableResolverFactory compileScript(String scriptPath, Class<?>... classes) {
-        HashMap<String, Object> env = new HashMap<>();
-        patchEnv(env, classes);
-        MapVariableResolverFactory factory = new MapVariableResolverFactory(env);
-        MVEL.eval(FileUtil.readFileAsString(scriptPath), factory);
-        return factory;
-    }
-
-    public static Object callScriptFunction(
-            String expression,
-            MapVariableResolverFactory factory,
-            Map<String, Object> env,
-            Class<?>... classes) {
-        patchEnv(env, classes);
-        return MVEL.eval(expression, env, factory);
-    }
-
-    public static Object compileScriptAndCallFunction(
-            String scriptPath, String expression, Map<String, Object> env, Class<?>... classes) {
-        patchEnv(env, classes);
-        MapVariableResolverFactory factory = new MapVariableResolverFactory(env);
-        MVEL.eval(FileUtil.readFileAsString(scriptPath), factory);
-        return MVEL.eval(expression, factory);
-    }
-
-    private static void patchEnv(Map<String, Object> env, Class<?>... classes) {
-        for (Class<?> clz : classes) {
-            env.put(clz.getSimpleName(), clz);
+            String expression, @Nullable Map<String, Object> env, Class<?>... classes) {
+        try {
+            ExpressionEvaluator evaluator = new ExpressionEvaluator();
+            evaluator.setParentClassLoader(Render.class.getClassLoader());
+            evaluator.setDefaultImports(
+                    Arrays.stream(classes).map(Class::getName).toArray(String[]::new));
+            if (env == null) {
+                evaluator.cook(expression);
+                return evaluator.evaluate();
+            }
+            List<String> keyList = new ArrayList<>();
+            List<Object> valueList = new ArrayList<>();
+            List<Class<?>> valueClassList = new ArrayList<>();
+            for (Map.Entry<String, Object> entry : env.entrySet()) {
+                keyList.add(entry.getKey());
+                valueList.add(entry.getValue());
+                valueClassList.add(entry.getValue().getClass());
+            }
+            evaluator.setParameters(
+                    keyList.toArray(new String[0]), valueClassList.toArray(new Class<?>[0]));
+            evaluator.cook(expression);
+            return evaluator.evaluate(valueList.toArray());
+        } catch (InvocationTargetException | CompileException e) {
+            throw new RuntimeException(e);
         }
     }
 }

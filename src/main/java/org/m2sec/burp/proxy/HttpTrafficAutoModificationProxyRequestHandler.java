@@ -34,7 +34,7 @@ public class HttpTrafficAutoModificationProxyRequestHandler implements ProxyRequ
                 GalaxyMain.config
                         .getHttpTrafficAutoModificationConfig()
                         .getDecorateConfig()
-                        .getRequestDecorate();
+                        .getRequestModifyExpression();
         if (!decorateConfig.isBlank())
             request = DecorateService.decorateRequest(Request.of(request), decorateConfig).toBurp();
         return ProxyRequestReceivedAction.continueWith(request);

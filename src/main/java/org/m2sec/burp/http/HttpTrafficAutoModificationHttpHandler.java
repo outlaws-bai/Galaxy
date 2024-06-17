@@ -37,7 +37,7 @@ public class HttpTrafficAutoModificationHttpHandler implements HttpHandler {
                 httpRequestToBeSent.messageId(),
                 GalaxyMain.config
                         .getHttpTrafficAutoModificationConfig()
-                        .getSpecialRuleMatchConfig());
+                        .getRuleMatchConfig());
         return RequestToBeSentAction.continueWith(request);
     }
 
@@ -62,13 +62,13 @@ public class HttpTrafficAutoModificationHttpHandler implements HttpHandler {
                         httpResponseReceived.messageId(),
                         GalaxyMain.config
                                 .getHttpTrafficAutoModificationConfig()
-                                .getSpecialRuleMatchConfig());
+                                .getRuleMatchConfig());
         // 处理Decorate
         String decorateConfig =
                 GalaxyMain.config
                         .getHttpTrafficAutoModificationConfig()
                         .getDecorateConfig()
-                        .getRequestDecorate();
+                        .getRequestModifyExpression();
         if (!decorateConfig.isBlank())
             response =
                     DecorateService.decorateResponse(Response.of(response), decorateConfig)

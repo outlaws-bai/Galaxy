@@ -23,10 +23,10 @@ import org.m2sec.modules.fuzz.intruder.FuzzSensitivePathGeneratorProviderProvide
 import org.m2sec.modules.traffic.hook.AbstractHttpHookService;
 import org.m2sec.modules.traffic.hook.JavaFileService;
 import org.m2sec.modules.traffic.hook.RpcService;
-import org.m2sec.modules.traffic.hook.ScriptService;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.Security;
@@ -58,9 +58,7 @@ public class GalaxyMain implements BurpExtension {
                     Map.of(
                             HttpHookService.RPC,
                             new RpcService(),
-                            HttpHookService.SCRIPT,
-                            new ScriptService(),
-                            HttpHookService.JAVA_FILE,
+                            HttpHookService.JAVA,
                             new JavaFileService()));
 
     public static final Log log = new Log(GalaxyMain.class);
@@ -75,30 +73,57 @@ public class GalaxyMain implements BurpExtension {
         registerAbility();
     }
 
+    @SuppressWarnings("DataFlowIssue")
     private void init() {
-        Security.addProvider(new BouncyCastleProvider());
-        Log.logLevel = LogLevel.DEBUG;
-        env = OperatingEnv.BURP;
-        if (Files.exists(Paths.get(Constants.WORK_DIR))) {
-            loadConfig();
-            log.debug("config.yaml is exist. %s", config);
-        } else {
-            // 创建必要的文件路径
-            FileUtil.createDirs(
-                    Constants.WORK_DIR, // 插件工作根路径
-                    Constants.TMP_FILE_DIR, // 临时文件路径
-                    Constants.EXTRACT_INFO_FILE_DIR, // 提取文件路径
-                    Constants.DICT_FILE_DIR // 字典路径
-                    );
-            // 创建必要的文件
-            FileUtil.createFiles(
-                    Constants.CONFIG_FILE_PATH,
-                    Constants.BYPASS_URL_DICT_FILE_PATH,
-                    Constants.FUZZ_SENSITIVE_PATH_DICT_FILE_PATH,
-                    Constants.HTTP_HOOK_SCRIPT_FILE_PATH);
-            log.debug("config.yaml is not exist. use default and write");
-            config = Config.getDefault();
-            FileUtil.writeToFileIfEmpty(Constants.CONFIG_FILE_PATH, YamlParser.toYamlStr(config));
+        try {
+
+            Security.addProvider(new BouncyCastleProvider());
+            Log.logLevel = LogLevel.DEBUG;
+            env = OperatingEnv.BURP;
+            if (Files.exists(Paths.get(Constants.WORK_DIR))) {
+                loadConfig();
+                log.debug("config.yaml is exist. %s", config);
+            } else { // 第一次使用
+                // 创建必要的文件路径
+                FileUtil.createDirs(
+                        Constants.WORK_DIR, // 插件工作根路径
+                        Constants.TMP_FILE_DIR, // 临时文件路径
+                        Constants.EXTRACT_INFO_FILE_DIR, // 提取文件路径
+                        Constants.DICT_FILE_DIR // 字典路径
+                        );
+                // 创建必要的文件
+                FileUtil.createFiles(
+                        Constants.CONFIG_FILE_PATH,
+                        Constants.BYPASS_URL_DICT_FILE_PATH,
+                        Constants.FUZZ_SENSITIVE_PATH_DICT_FILE_PATH,
+                        Constants.HTTP_HOOK_JAVA_FILE_PATH);
+                log.debug("config.yaml is not exist. use default and write");
+                config = Config.getDefault();
+                FileUtil.writeToFileIfEmpty(
+                        Constants.CONFIG_FILE_PATH, YamlParser.toYamlStr(config));
+                ClassLoader classLoader = this.getClass().getClassLoader();
+                FileUtil.writeToFileIfEmpty(
+                        Constants.BYPASS_URL_DICT_FILE_PATH,
+                        classLoader
+                                .getResourceAsStream(
+                                        new File(Constants.BYPASS_URL_DICT_FILE_PATH).getName())
+                                .readAllBytes());
+                FileUtil.writeToFileIfEmpty(
+                        Constants.FUZZ_SENSITIVE_PATH_DICT_FILE_PATH,
+                        classLoader
+                                .getResourceAsStream(
+                                        new File(Constants.FUZZ_SENSITIVE_PATH_DICT_FILE_PATH)
+                                                .getName())
+                                .readAllBytes());
+                FileUtil.writeToFileIfEmpty(
+                        Constants.HTTP_HOOK_JAVA_FILE_PATH,
+                        classLoader
+                                .getResourceAsStream(
+                                        new File(Constants.HTTP_HOOK_JAVA_FILE_PATH).getName())
+                                .readAllBytes());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -108,8 +133,8 @@ public class GalaxyMain implements BurpExtension {
                         FileUtil.readFileAsString(Constants.CONFIG_FILE_PATH), Config.class);
         HttpTrafficAutoModificationConfig.HookConfig hookConfig =
                 config.getHttpTrafficAutoModificationConfig().getHookConfig();
-        if (hookConfig.isStart() && hookConfig.getService() != null) {
-            httpHookService = httpHookServiceMap.get(hookConfig.getService());
+        if (hookConfig.isStart() && hookConfig.getHookService() != null) {
+            httpHookService = httpHookServiceMap.get(hookConfig.getHookService());
             httpHookService.init();
             log.debug("httpHookService: " + httpHookService.getClass().getSimpleName());
         } else {

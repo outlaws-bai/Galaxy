@@ -35,7 +35,7 @@ public class Hook {
         byte[] encryptedData = getData(request.getContent());
         // 调用内置函数解密
         byte[] data = CryptoUtil.aesDecrypt(ALGORITHM, encryptedData, secret, paramMap);
-        // 更新body为已加密的数据
+        // 更新body为已解密的数据
         request.setContent(data);
         return request;
     }
@@ -67,8 +67,7 @@ public class Hook {
         byte[] data = response.getContent();
         // 调用内置函数加密回去
         byte[] encryptedData = CryptoUtil.aesEncrypt(ALGORITHM, data, secret, paramMap);
-        // 更新body
-        // 将已加密的数据转换为Server可识别的格式
+        // 将已加密的数据转换为Client可识别的格式
         byte[] body = toData(encryptedData);
         // 更新body
         response.setContent(body);

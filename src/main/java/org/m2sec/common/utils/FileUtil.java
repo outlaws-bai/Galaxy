@@ -60,15 +60,17 @@ public class FileUtil {
     }
 
     public static void writeToFileIfEmpty(String filePath, String content) {
+        writeToFileIfEmpty(filePath, content.getBytes());
+    }
+
+    public static void writeToFileIfEmpty(String filePath, byte[] content) {
         Path path = Paths.get(filePath);
         try {
             if (Files.size(path) == 0) {
-                Files.write(path, content.getBytes());
+                Files.write(path, content);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 }
-
-
