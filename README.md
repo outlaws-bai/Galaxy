@@ -10,7 +10,7 @@
 
 ## 1. HTTP Traffic Auto Modification
 
-主要做HTTP流量自动修改，下方有一个简单的介绍，详情查看 [HTTP流量自动修改](https://github.com/outlaws-bai/Galaxy/docs/HTTP流量自动修改.md)
+主要做HTTP流量自动修改，下方有一个简单的介绍，详情查看 [HTTP流量自动修改](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HTTP%E6%B5%81%E9%87%8F%E8%87%AA%E5%8A%A8%E4%BF%AE%E6%94%B9.md)
 
 ### 1.1. HTTP Traffic Hook
 
@@ -72,7 +72,7 @@ request.getHeaders().put("X-Request-Id", java.util.UUID.randomUUID().toString())
 
 ## 2. Bypass
 
-主要做Bypass相关的功能，下方有一个简单的介绍，详情查看 [Bypass](https://github.com/outlaws-bai/Galaxy/docs/Bypass.md)
+主要做Bypass相关的功能，下方有一个简单的介绍，详情查看 [Bypass](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Bypass.md)
 
 ### 2.1 Bypass Url
 
@@ -110,7 +110,7 @@ ${originUrl.getProtocol()}://${evilUrl.getHost()}/${originUrl.getHost()}
 
 ## 3. Fuzz
 
-主要做Fuzz相关的功能，下方有一个简单的介绍，详情查看 [Fuzz](https://github.com/outlaws-bai/Galaxy/docs/Fuzz.md)
+主要做Fuzz相关的功能，下方有一个简单的介绍，详情查看 [Fuzz](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Fuzz.md)
 
 ### 3.1. Fuzz Sensitive Path
 
@@ -152,13 +152,13 @@ ${originUrl.getProtocol()}://${evilUrl.getHost()}/${originUrl.getHost()}
 
 ## 4. Payload
 
-存储常用的payload，便于在repeater中利用，详情查看 [Bypass](https://github.com/outlaws-bai/Galaxy/docs/Bypass.md)
+存储常用的payload，便于在repeater中利用，详情查看 [Bypass](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Bypass.md)
 
 > 支持payload模板渲染，例如在fastjson的测试中，可以通过模板配置表达式，模板渲染时通过表达式调用Burp的Collaborator生成dns domain，再组装成payload
 
 ## 5. Cloud(*)
 
-想做云安全相关的功能，待开发及完善，详情查看 [Cloud](https://github.com/outlaws-bai/Galaxy/docs/Cloud.md)
+想做云安全相关的功能，待开发及完善，详情查看 [Cloud](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Cloud.md)
 
 ### 5.1. Cloud Singer
 
@@ -166,7 +166,7 @@ ${originUrl.getProtocol()}://${evilUrl.getHost()}/${originUrl.getHost()}
 
 ## 6. Mixed
 
-一些混杂的功能配置，详情查看 [Mixed](https://github.com/outlaws-bai/Galaxy/docs/Mixed.md)
+一些混杂的功能配置，详情查看 [Mixed](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Mixed.md)
 
 ### 6.1. Json To Query
 
@@ -184,18 +184,15 @@ ${originUrl.getProtocol()}://${evilUrl.getHost()}/${originUrl.getHost()}
 
 在任意Request or Response编辑器选中Url,  会将Url转为请求报文并发送至Repeater
 
-# 注意事项
+# 环境版本
 
-1. 在第一次导入Jar包时，会在用户目录下生成`.galaxy`文件夹，并创建项目所需要的文件/路径，[简介](#工作路径简介)
+Burp运行及插件编译JAVA版本：19
 
-2. 该项目UI仅提供一个按钮`reload`，每次修改`config.yaml`都需要reload,  [简介](#配置简介)
+Burp版本：V2023.10.3.7
 
-3. 该项目倾向于写一些表达式来代替繁琐的配置，表达式相关的基础能力介绍见[简介](#基础能力)。
+Python版本：3.11
 
-
-# 功能梳理
-
-参考文档
+# 参考文档
 
 [burp javadoc](https://portswigger.github.io/burp-extensions-montoya-api/javadoc/burp/api/montoya/MontoyaApi.html)
 
