@@ -1,0 +1,15 @@
+${originUrl.getProtocol()}://${evilUrl.getHost()}
+//${evilUrl.getHost()}
+${originUrl.getProtocol()}://${originUrl.getHost()}.${evilUrl.getHost()}
+${originUrl.getProtocol()}://${evilUrl.getHost()}?${originUrl.getHost()}
+${originUrl.getProtocol()}://${evilUrl.getHost()}/${originUrl.getHost()}
+${originUrl.getProtocol()}://${evilUrl.getHost()}%ff@${originUrl.getHost()}
+${originUrl.getProtocol()}://${evilUrl.getHost()}%ff.${originUrl.getHost()}
+${originUrl.getProtocol()}://${originUrl.getHost()}%25253F@${evilUrl.getHost()}
+${originUrl.getProtocol()}://${originUrl.getHost()}%253F@${evilUrl.getHost()}
+${originUrl.getProtocol()}://${originUrl.getHost()}%3F@${evilUrl.getHost()}
+${originUrl.getProtocol()}://${originUrl.getHost()}@${evilUrl.getHost()}
+${originUrl.getProtocol()}://foo@${evilUrl.getHost()}:80@${originUrl.getHost()}
+${originUrl.getProtocol()}://foo@${evilUrl.getHost()}%20@${originUrl.getHost()}
+${originUrl.getProtocol()}://foo@${evilUrl.getHost()}%09@${originUrl.getHost()}
+${originUrl.getProtocol()}://${evilUrl.getHost()}[@${originUrl.getHost()}
