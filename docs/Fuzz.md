@@ -4,7 +4,7 @@ Fuzz相关的功能
 
 ## Fuzz Sensitive Path
 
-该功能位于Burp Suite Intruder模块，是一个Payload生成器。
+该功能位于Burp Suite Intruder模块，是一个Payload生成器。同时在 `SiteMap` 页面有有该功能，当你选中多个请求，就可以看到该名称的按钮。
 
 ### 场景
 
