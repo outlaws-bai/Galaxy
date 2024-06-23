@@ -64,7 +64,7 @@ BypassTools.generateBypassPathPayloads(path).forEach(System.out::println);
 
 ## Fuzz Sensitive Path
 
-**需求**: 当你发现某个Path `/api/user/getUserInfo`，想要分别对`/`，`/api/`，`/api/user/`，进行目录扫描，如果你使用常规的目录扫描器，需要运行三次
+**需求**: 当你发现某个Path `/api/user/getUserInfo`，想要分别对`/`，`/api/`，`/api/user/`，进行目录扫描，如果你使用常规的目录扫描器，需要运行三次。或者当你获取到了某个目标几百个请求，想要对每个请求都进行这样的扫描。
 
 **实现**：获取Path中每一层的目录，并且追加上内置的字典(可自定义)，作为最终的测试路径。
 
