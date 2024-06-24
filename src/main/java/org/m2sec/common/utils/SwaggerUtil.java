@@ -3,6 +3,7 @@ package org.m2sec.common.utils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.m2sec.common.Constants;
 import org.m2sec.common.Log;
 import org.m2sec.common.enums.ContentType;
 import org.m2sec.common.enums.Method;
@@ -296,7 +297,7 @@ public class SwaggerUtil {
                 return now.format(formatter);
             }
             case "file" -> {
-                return new UploadFile("a.jpg", new Headers(new HashMap<>(Map.of("content-type",
+                return new UploadFile("a.jpg", new Headers(new HashMap<>(Map.of(Constants.HTTP_HEADER_CONTENT_TYPE,
                     new ArrayList<>(List.of("image/jpg"))))), new byte[]{0x61});
             }
             default -> { // "string"

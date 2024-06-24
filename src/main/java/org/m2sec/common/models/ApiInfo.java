@@ -101,7 +101,7 @@ public class ApiInfo {
             content = new byte[]{};
         }
         if (!cookies.isEmpty()) {
-            headers.put("cookie", cookies.toRawString());
+            headers.put(Constants.HTTP_HEADER_COOKIE, cookies.toRawString());
         }
         return new Request(secure, host, port, request.getVersion(), method.toString(), newPath, query, headers,
             content);

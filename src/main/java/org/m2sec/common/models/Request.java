@@ -57,8 +57,8 @@ public class Request {
 
     public Request(boolean secure, String host, int port, String version, String method, String path, Query query,
                    Headers headers, byte[] content) {
-        if (!headers.containsKey("host")) {
-            headers.put("host", HttpUtil.getFullHost(secure, host, port));
+        if (!headers.containsKey(Constants.HTTP_HEADER_HOST)) {
+            headers.put(Constants.HTTP_HEADER_HOST, HttpUtil.getFullHost(secure, host, port));
         }
         if (!headers.containsKey(Constants.HTTP_HEADER_USER_AGENT)) {
             headers.put(Constants.HTTP_HEADER_USER_AGENT, Constants.DEFAULT_USER_AGENT);
@@ -139,7 +139,7 @@ public class Request {
         Tuple<String, String> tuple = HttpUtil.parseFullPath(fullPath);
 
         if (host == null) {
-            host = headers.getFirst("host");
+            host = headers.getFirst(Constants.HTTP_HEADER_HOST);
             assert host != null;
         }
 
@@ -210,13 +210,13 @@ public class Request {
     }
 
     public ContentType getContentType() {
-        String value = headers.getFirst("content-type");
+        String value = headers.getFirst(Constants.HTTP_HEADER_CONTENT_TYPE);
         return HttpUtil.getContentType(method, value);
     }
 
     @Nullable
     public Cookies getCookies() {
-        String cookieHeader = headers.getFirst("cookie");
+        String cookieHeader = headers.getFirst(Constants.HTTP_HEADER_COOKIE);
         if (cookieHeader == null) return null;
         else return Cookies.of(cookieHeader);
     }

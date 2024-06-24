@@ -32,10 +32,16 @@ public class Constants {
     public static final String FUZZ_SENSITIVE_PATH_DICT_FILE_PATH = Constants.DICT_FILE_DIR + File.separator +
         "fuzzSensitivePathDict.txt";
 
-    public static final String HTTP_HEADER_CONTENT_LENGTH = "content-length";
-    public static final String HTTP_HEADER_CONTENT_TYPE = "content-type";
+    public static final String HTTP_HEADER_CONTENT_LENGTH = "Content-Length";
+    public static final String HTTP_HEADER_CONTENT_TYPE = "Content-Type";
 
-    public static final String HTTP_HEADER_USER_AGENT = "user-agent";
+    public static final String HTTP_HEADER_USER_AGENT = "User-Agent";
+
+    public static final String HTTP_HEADER_HOOK_HEADER_KEY = "X-Galaxy-Http-Hook";
+
+    public static final String HTTP_HEADER_HOST = "Host";
+
+    public static final String HTTP_HEADER_COOKIE = "Cookie";
 
     public static final String DEFAULT_HTTP_VERSION = "HTTP/1.1";
 
@@ -43,7 +49,6 @@ public class Constants {
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " + "(KHTML, like Gecko) Chrome/120.0.0.0 " +
             "Safari/537" + ".36 Edg/120.0.0.0 M2Sec/1.0";
 
-    public static final String HTTP_HOOK_HEADER_KEY = "x-galaxy-http-hook";
 
     public static final String CRYPTO_PROVIDER_BC = "BC";
 

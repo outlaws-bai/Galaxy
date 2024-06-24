@@ -81,7 +81,7 @@ public class CloudUtil {
         ArrayList<String> headerFullStrings = new ArrayList<>();
         ArrayList<String> headerNames = new ArrayList<>();
         for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
-            if (!SIGNED_HEADERS_BLACKLIST.contains(entry.getKey())) {
+            if (!SIGNED_HEADERS_BLACKLIST.contains(entry.getKey().toLowerCase())) {
                 for (String value : entry.getValue()) {
                     headerNames.add(entry.getKey());
                     headerFullStrings.add(entry.getKey() + ":" + value.trim());

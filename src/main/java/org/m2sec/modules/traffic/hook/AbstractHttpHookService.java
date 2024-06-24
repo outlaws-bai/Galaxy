@@ -43,7 +43,7 @@ public abstract class AbstractHttpHookService {
                     log.debug("exec method: hookRequestToBurp with " + this.getClass().getSimpleName());
                     request = hookRequestToBurp(request);
                     // 添加标记头
-                    request.getHeaders().put(Constants.HTTP_HOOK_HEADER_KEY, "HttpHook");
+                    request.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "HttpHook");
                     retVal = request.toBurp();
                 }
             }
@@ -61,9 +61,9 @@ public abstract class AbstractHttpHookService {
         HttpRequest retVal = httpRequest;
         log.debug("exec method: tryHookRequestToServer");
         try {
-            if (HttpUtil.isCorrectUrl(httpRequest.url()) && httpRequest.hasHeader(Constants.HTTP_HOOK_HEADER_KEY)) {
+            if (HttpUtil.isCorrectUrl(httpRequest.url()) && httpRequest.hasHeader(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
                 Request request = Request.of(httpRequest).normalize();
-                request.getHeaders().remove(Constants.HTTP_HOOK_HEADER_KEY);
+                request.getHeaders().remove(Constants.HTTP_HEADER_HOOK_HEADER_KEY);
                 log.debug("exec method: hookRequestToServer with " + this.getClass().getSimpleName());
                 request = hookRequestToServer(request);
                 // 移除标记头
@@ -88,7 +88,7 @@ public abstract class AbstractHttpHookService {
             if (hookConfig.isResponseIsNeedHook() && hookedIds.contains(httpResponse.messageId())) {
                 hookedIds.remove(httpResponse.messageId());
                 Response response = Response.of(httpResponse);
-                response.getHeaders().put(Constants.HTTP_HOOK_HEADER_KEY, "HttpHook");
+                response.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "HttpHook");
                 log.debug("exec method: hookResponseToBurp with " + this.getClass().getSimpleName());
                 return hookResponseToBurp(response).toBurp();
             }
@@ -106,9 +106,9 @@ public abstract class AbstractHttpHookService {
                                                 HttpTrafficAutoModificationConfig.HookConfig hookConfig) {
         log.debug("exec method: tryHookResponseToClient");
         try {
-            if (httpResponse.hasHeader(Constants.HTTP_HOOK_HEADER_KEY)) {
+            if (httpResponse.hasHeader(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
                 Response response = Response.of(httpResponse);
-                response.getHeaders().remove(Constants.HTTP_HOOK_HEADER_KEY);
+                response.getHeaders().remove(Constants.HTTP_HEADER_HOOK_HEADER_KEY);
                 log.debug("exec method: hookResponseToClient with " + this.getClass().getSimpleName());
                 return hookResponseToClient(response).toBurp();
             }
