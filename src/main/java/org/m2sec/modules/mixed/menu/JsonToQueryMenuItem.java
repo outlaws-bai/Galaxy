@@ -39,8 +39,10 @@ public class JsonToQueryMenuItem extends AbstractMenuItem {
     public void action(ContextMenuEvent event) {
         MessageEditorHttpRequestResponse messageEditorHttpRequestResponse = event.messageEditorRequestResponse().get();
         Request request = Request.of(messageEditorHttpRequestResponse.requestResponse().request());
-        Map<String, Object> a = JsonParser.fromJsonStr(new String(request.getContent()), Map.class);
-        request.getQuery().merge(new Query(CompatUtil.mapToMultiMap(a)));
+        Map<String, Object> bodyMap = JsonParser.fromJsonStr(new String(request.getContent()), Map.class);
+        Query query = new Query();
+        query.putAll(CompatUtil.mapToMultiMap(bodyMap));
+        request.getQuery().merge(query);
         request.setMethod(Method.GET.toString()).setContent(new byte[]{});
         request.getHeaders().remove(Constants.HTTP_HEADER_CONTENT_LENGTH);
         request.getHeaders().remove(Constants.HTTP_HEADER_CONTENT_TYPE);

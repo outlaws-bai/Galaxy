@@ -14,9 +14,6 @@ import java.util.Map;
 @NoArgsConstructor
 public class Cookies extends Parameters<String> {
 
-    public Cookies(Map<String, List<String>> map) {
-        super(map);
-    }
 
     public static Cookies of(String str) {
         return HttpUtil.strToParameters(str, ";[ ]+", "=", Cookies.class);

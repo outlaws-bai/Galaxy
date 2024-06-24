@@ -115,7 +115,7 @@ public class HttpUtil {
         extends T> clazz) {
         try {
             T retVal = clazz.getDeclaredConstructor().newInstance();
-            if (!str.isEmpty()) {
+            if (str != null && !str.isEmpty()) {
                 String[] pairs = str.split(sep);
                 for (String pair : pairs) {
                     String[] keyValue = pair.split(conn, 2);
@@ -199,7 +199,7 @@ public class HttpUtil {
                 for (UploadFile uploadFile : entry.getValue()) {
                     writer.append("--").append(boundary).append("\r\n").append("Content-Disposition: form-data; " +
                         "name=\"").append(name).append("\"; filename=\"").append(uploadFile.getFilename()).append(
-                            "\"").append("\r\n").flush();
+                        "\"").append("\r\n").flush();
                     // 处理 file header
                     for (Map.Entry<String, List<String>> header : uploadFile.getHeaders().entrySet()) {
                         for (String value : header.getValue()) {

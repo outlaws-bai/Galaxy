@@ -47,13 +47,13 @@ public class MultiPayloadMenuItem extends AbstractMenuItem {
     public void action(ContextMenuEvent event) {
         MessageEditorHttpRequestResponse messageEditorHttpRequestResponse = event.messageEditorRequestResponse().get();
         Request request = Request.of(messageEditorHttpRequestResponse.requestResponse().request());
-        Query newQuery = new Query((Map<String, List<String>>) HttpUtil.updateJsonValuesByMap(request.getQuery(),
-            payload));
+        Query newQuery = new Query();
+        newQuery.putAll((Map<String, List<String>>) HttpUtil.updateJsonValuesByMap(request.getQuery(), payload));
         request.setQuery(newQuery);
         ContentType contentType = request.getContentType();
         if (contentType == ContentType.FORM) {
-            Form newForm =
-                new Form((Map<String, List<String>>) HttpUtil.updateJsonValuesByMap(Form.of(new String(request.getContent())), payload));
+            Form newForm = new Form();
+            newForm.putAll((Map<String, List<String>>) HttpUtil.updateJsonValuesByMap(Form.of(new String(request.getContent())), payload));
             request.setContent(newForm.toRawString().getBytes());
         } else if (contentType == ContentType.JSON) {
             JsonElement jsonElement = JsonParser.fromJsonStr(new String(request.getContent()), JsonElement.class);

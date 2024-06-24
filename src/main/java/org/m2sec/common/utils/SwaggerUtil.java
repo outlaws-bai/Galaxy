@@ -297,8 +297,10 @@ public class SwaggerUtil {
                 return now.format(formatter);
             }
             case "file" -> {
-                return new UploadFile("a.jpg", new Headers(new HashMap<>(Map.of(Constants.HTTP_HEADER_CONTENT_TYPE,
-                    new ArrayList<>(List.of("image/jpg"))))), new byte[]{0x61});
+                Headers headers = new Headers();
+                headers.putAll(new HashMap<>(Map.of(Constants.HTTP_HEADER_CONTENT_TYPE,
+                    new ArrayList<>(List.of("image/jpg")))));
+                return new UploadFile("a.jpg", headers, new byte[]{0x61});
             }
             default -> { // "string"
                 return "1";

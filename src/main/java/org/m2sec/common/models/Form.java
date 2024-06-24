@@ -14,9 +14,6 @@ import java.util.Map;
 @NoArgsConstructor
 public class Form extends Parameters<String> {
 
-    public Form(Map<String, List<String>> map) {
-        super(map);
-    }
 
     public static Form of(String str) {
         return HttpUtil.strToParameters(str, "&", "=", Form.class);

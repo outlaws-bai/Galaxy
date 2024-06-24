@@ -2,8 +2,6 @@ package org.m2sec.common.models;
 
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author: outlaws-bai
@@ -12,7 +10,4 @@ import java.util.Map;
  */
 @NoArgsConstructor
 public class FormDatas<T> extends Parameters<T> {
-    public FormDatas(Map<String, List<T>> map) {
-        super(map);
-    }
 }

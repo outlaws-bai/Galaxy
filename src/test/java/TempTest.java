@@ -23,5 +23,6 @@ public class TempTest {
         System.out.println("192.168.1.4".equals(request.getHost()));
         System.out.println(Render.renderExpression("request.getHeaders().put(\"X-Request-Id\",java.util.UUID" +
             ".randomUUID().toString())", new HashMap<>(Map.of("request", request))));
+        System.out.println(request);
     }
 }

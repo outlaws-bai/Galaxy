@@ -11,10 +11,12 @@ import java.util.*;
  * @description:
  */
 @NoArgsConstructor
-public class Parameters<T> extends LinkedHashMap<String, List<T>> {
+public class Parameters<T> extends TreeMap<String, List<T>> {
 
-    public Parameters(Map<String, List<T>> map) {
-        super(map);
+
+    @SuppressWarnings("unchecked")
+    public Parameters(Comparator comparator) {
+        super(comparator);
     }
 
     public Parameters<T> put(String key, T value) {
@@ -22,24 +24,18 @@ public class Parameters<T> extends LinkedHashMap<String, List<T>> {
         return this;
     }
 
-    public Parameters<T> add(String key, T value) {
-        this.add(key, value, true, false);
-        return this;
-    }
 
-    public Parameters<T> add(String key, T value, boolean allowDuplicate, boolean keyLowerCase) {
-        if (keyLowerCase) {
-            key = key.toLowerCase();
-        }
+    public Parameters<T> add(String key, T value) {
         List<T> values = super.get(key);
         if (values == null) {
             this.put(key, new ArrayList<>(List.of(value)));
-        } else if (allowDuplicate && !values.contains(value)) {
+        } else {
             values.add(value);
         }
         return this;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public Parameters<T> merge(Parameters<T> p) {
         for (Map.Entry<String, List<T>> entry : p.entrySet()) {
             for (T value : entry.getValue()) {

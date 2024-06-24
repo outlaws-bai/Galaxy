@@ -15,12 +15,9 @@ import java.util.Map;
  */
 @NoArgsConstructor
 public class Query extends Parameters<String> {
-    public Query(Map<String, List<String>> map) {
-        super(map);
-    }
 
     public static Query of(String str) {
-        return HttpUtil.strToParameters(str == null ? "" : str, "&", "=", Query.class);
+        return HttpUtil.strToParameters(str, "&", "=", Query.class);
     }
 
     public static Query of(Map<String, HttpHook.StringList> map) {

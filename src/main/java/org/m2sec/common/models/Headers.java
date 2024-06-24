@@ -14,29 +14,12 @@ import java.util.Map;
  * @date: 2024/6/21 20:23
  * @description:
  */
-@NoArgsConstructor
 public class Headers extends Parameters<String> {
-    public Headers(Map<String, List<String>> map) {
-        super(map);
+
+    public Headers() {
+        super(String.CASE_INSENSITIVE_ORDER);
     }
 
-    @Override
-    public Headers put(String key, String value) {
-        key = key.toLowerCase();
-        super.put(key, value);
-        return this;
-    }
-
-    @Override
-    public Headers add(String key, String value) {
-        this.add(key, value, true, true);
-        return this;
-    }
-
-    public Headers add(String key, String value, boolean allowDuplicate) {
-        this.add(key, value, allowDuplicate, true);
-        return this;
-    }
 
     public static Headers of(String str) {
         return HttpUtil.strToParameters(str, "\r\n\r\n", ":[ ]+", Headers.class);
