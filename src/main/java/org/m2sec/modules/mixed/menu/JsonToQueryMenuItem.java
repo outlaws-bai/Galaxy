@@ -11,9 +11,6 @@ import org.m2sec.common.models.Query;
 import org.m2sec.common.models.Request;
 import org.m2sec.common.parsers.JsonParser;
 import org.m2sec.common.utils.CompatUtil;
-
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

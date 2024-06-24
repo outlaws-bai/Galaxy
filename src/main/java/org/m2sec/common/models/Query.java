@@ -4,8 +4,6 @@ import lombok.NoArgsConstructor;
 import org.m2sec.common.utils.CompatUtil;
 import org.m2sec.common.utils.HttpUtil;
 import org.m2sec.rpc.HttpHook;
-
-import java.util.List;
 import java.util.Map;
 
 /**

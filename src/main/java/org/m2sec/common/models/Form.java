@@ -3,9 +3,6 @@ package org.m2sec.common.models;
 import lombok.NoArgsConstructor;
 import org.m2sec.common.utils.HttpUtil;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author: outlaws-bai
  * @date: 2024/6/21 20:23

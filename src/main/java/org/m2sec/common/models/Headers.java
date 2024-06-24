@@ -1,7 +1,6 @@
 package org.m2sec.common.models;
 
 import burp.api.montoya.http.message.HttpHeader;
-import lombok.NoArgsConstructor;
 import org.m2sec.common.utils.CompatUtil;
 import org.m2sec.common.utils.HttpUtil;
 import org.m2sec.rpc.HttpHook;
