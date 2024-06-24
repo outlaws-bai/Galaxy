@@ -38,6 +38,10 @@ public class Response {
             Headers.of(response.getHeadersMap()), response.getContent().toByteArray());
     }
 
+    public static Response of(String str) {
+        return of(str.getBytes());
+    }
+
     @SuppressWarnings("DuplicatedCode")
     public static Response of(byte[] raw) {
         int index = 0;
@@ -74,10 +78,12 @@ public class Response {
         index += 2; // 跳过换行符
 
         // 解析内容
-        byte[] content = null;
+        byte[] content;
         if (index < raw.length) {
             content = new byte[raw.length - index];
             System.arraycopy(raw, index, content, 0, content.length);
+        } else {
+            content = new byte[]{};
         }
 
         return new Response(httpVersion, statusCode, reason, headers, content);
@@ -101,7 +107,7 @@ public class Response {
         // 处理响应行
         String responseLine = String.format("%s %s %s\r\n", version, statusCode, reason);
         // 处理响应头
-        String responseHeader = headers.toRaw();
+        String responseHeader = headers.toRawString();
         // write响应行
         retVal.writeBytes(responseLine.getBytes());
         // write响应头
@@ -111,5 +117,10 @@ public class Response {
         // write content
         retVal.writeBytes(content);
         return retVal.toByteArray();
+    }
+
+    @Override
+    public String toString() {
+        return new String(toRaw());
     }
 }

@@ -22,7 +22,7 @@ public class Cookies extends Parameters<String> {
         return HttpUtil.strToParameters(str, ";[ ]+", "=", Cookies.class);
     }
 
-    public String toRaw() {
+    public String toRawString() {
         return HttpUtil.parametersToStr(this, "; ", "=", true);
     }
 }

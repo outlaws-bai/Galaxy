@@ -37,7 +37,7 @@ public class Query extends Parameters<String> {
         return CompatUtil.parametersToRpc(this);
     }
 
-    public String toRaw() {
+    public String toRawString() {
         return HttpUtil.parametersToStr(this, "&", "=", true);
     }
 }

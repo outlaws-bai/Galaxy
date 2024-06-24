@@ -155,8 +155,10 @@ public class Request {
         return Request.of(raw, false, null, 0);
     }
 
-    public static Request of(String urlStr) {
-        return of(urlStr, Method.GET);
+
+    public static Request of(String str) {
+        if (str.startsWith("http")) return of(str, Method.GET);
+        else return of(str.getBytes());
     }
 
     public static Request of(String urlStr, Method method) {
@@ -176,10 +178,10 @@ public class Request {
     public byte[] toRaw() {
         ByteArrayOutputStream retVal = new ByteArrayOutputStream();
         // 处理请求行
-        String fullPath = HttpUtil.toFullPath(path, query.toRaw());
+        String fullPath = HttpUtil.toFullPath(path, query.toRawString());
         String requestLine = String.format("%s %s %s\r\n", method, !fullPath.isEmpty() ? fullPath : "/", version);
         // 处理请求头
-        String requestHeader = headers.toRaw();
+        String requestHeader = headers.toRawString();
         // write请求行
         retVal.writeBytes(requestLine.getBytes());
         // write请求头
@@ -231,4 +233,10 @@ public class Request {
     public String getUrl() {
         return HttpUtil.getDomainUrl(secure, host, port) + path;
     }
+
+    @Override
+    public String toString() {
+        return new String(toRaw());
+    }
+
 }

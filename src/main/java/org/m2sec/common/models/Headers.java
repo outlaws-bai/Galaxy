@@ -64,7 +64,7 @@ public class Headers extends Parameters<String> {
         return CompatUtil.parametersToRpc(this);
     }
 
-    public String toRaw() {
+    public String toRawString() {
         return HttpUtil.parametersToStr(this, "\r\n", ": ", false);
     }
 }

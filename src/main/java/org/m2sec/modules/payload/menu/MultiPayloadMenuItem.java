@@ -54,7 +54,7 @@ public class MultiPayloadMenuItem extends AbstractMenuItem {
         if (contentType == ContentType.FORM) {
             Form newForm =
                 new Form((Map<String, List<String>>) HttpUtil.updateJsonValuesByMap(Form.of(new String(request.getContent())), payload));
-            request.setContent(newForm.toRaw().getBytes());
+            request.setContent(newForm.toRawString().getBytes());
         } else if (contentType == ContentType.JSON) {
             JsonElement jsonElement = JsonParser.fromJsonStr(new String(request.getContent()), JsonElement.class);
             HttpUtil.updateJsonValuesByJson(jsonElement, payload);

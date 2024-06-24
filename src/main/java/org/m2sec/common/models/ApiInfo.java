@@ -91,7 +91,7 @@ public class ApiInfo {
             }
         } else if (contentType == ContentType.FORM) {
             headers.put(Constants.HTTP_HEADER_CONTENT_TYPE, ContentType.FORM.toString());
-            content = form.toRaw().getBytes();
+            content = form.toRawString().getBytes();
         } else if (contentType == ContentType.FORM_DATA) {
             String boundary = HttpUtil.generateBoundary();
             headers.put(Constants.HTTP_HEADER_CONTENT_TYPE, ContentType.FORM_DATA + "; boundary=" + boundary);
@@ -101,7 +101,7 @@ public class ApiInfo {
             content = new byte[]{};
         }
         if (!cookies.isEmpty()) {
-            headers.put("cookie", cookies.toRaw());
+            headers.put("cookie", cookies.toRawString());
         }
         return new Request(secure, host, port, request.getVersion(), method.toString(), newPath, query, headers,
             content);

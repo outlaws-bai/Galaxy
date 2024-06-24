@@ -22,7 +22,7 @@ public class Form extends Parameters<String> {
         return HttpUtil.strToParameters(str, "&", "=", Form.class);
     }
 
-    public String toRaw() {
+    public String toRawString() {
         return HttpUtil.parametersToStr(this, "&", "=", true);
     }
 }
