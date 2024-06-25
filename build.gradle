@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'org.m2sec'
-version = '1.5-SNAPSHOT'
+version = '1.6-SNAPSHOT'
 def grpcVersion = '1.54.1'
 def protobufVersion = '3.24.0'
 def protocVersion = protobufVersion
