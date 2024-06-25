@@ -1,8 +1,10 @@
 package org.m2sec.common.models;
 
 import burp.api.montoya.http.message.HttpHeader;
-import org.m2sec.common.utils.CompatUtil;
 import org.m2sec.common.utils.HttpUtil;
+import org.m2sec.rpc.HttpHook;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +14,6 @@ import java.util.Map;
  * @description:
  */
 public class Headers extends Parameters<String> {
-
 
     public static Headers of(String str) {
         return HttpUtil.strToParameters(str, "\r\n\r\n", ":[ ]+", Headers.class);
@@ -26,12 +27,10 @@ public class Headers extends Parameters<String> {
         return retVal;
     }
 
-    public static Headers of(Map<String, HttpHook.StringList> map) {
+    public static Headers ofRpc(List<HttpHook.Header> rpcHeaders) {
         Headers retVal = new Headers();
-        for (Map.Entry<String, HttpHook.StringList> entry : map.entrySet()) {
-            for (String str : entry.getValue().getValuesList()) {
-                retVal.add(entry.getKey(), str);
-            }
+        for (HttpHook.Header rpcHeader : rpcHeaders) {
+            retVal.add(rpcHeader.getKey(), rpcHeader.getValue());
         }
         return retVal;
     }
@@ -42,6 +41,7 @@ public class Headers extends Parameters<String> {
         }
         return null;
     }
+
     public String getFirstIgnoreCase(String key) {
         List<String> values = getIgnoreCase(key);
         if (values == null) {
@@ -57,8 +57,14 @@ public class Headers extends Parameters<String> {
         return this;
     }
 
-    public Map<String, HttpHook.StringList> toRpc() {
-        return CompatUtil.parametersToRpc(this);
+    public List<HttpHook.Header> toRpc() {
+        List<HttpHook.Header> retVal = new ArrayList<>();
+        for (Map.Entry<String, List<String>> entry : entrySet()) {
+            for (String part : entry.getValue()) {
+                retVal.add(HttpHook.Header.newBuilder().setKey(entry.getKey()).setValue(part).build());
+            }
+        }
+        return retVal;
     }
 
     public String toRawString() {

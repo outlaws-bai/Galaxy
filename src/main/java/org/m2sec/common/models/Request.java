@@ -75,9 +75,11 @@ public class Request {
     }
 
     public static Request of(HttpHook.Request request) {
+        String fullPath = request.getFullPath();
+        Tuple<String, String> temp = HttpUtil.parseFullPath(fullPath);
         return new Request(request.getSecure(), request.getHost(), request.getPort(), request.getVersion(),
-            request.getMethod(), request.getPath(), Query.of(request.getQueryMap()),
-            Headers.of(request.getHeadersMap()), request.getContent().toByteArray());
+            request.getMethod(), temp.getFirst(), Query.of(temp.getSecond()),
+            Headers.ofRpc(request.getHeadersList()), request.getContent().toByteArray());
     }
 
     public static Request of(HttpRequest request) {
@@ -201,7 +203,8 @@ public class Request {
     }
 
     public HttpHook.Request toRpc() {
-        return HttpHook.Request.newBuilder().setSecure(secure).setHost(host).setPort(port).setVersion(version).setMethod(method).setPath(path).putAllQuery(query.toRpc()).putAllHeaders(headers.toRpc()).setContent(ByteString.copyFrom(content)).build();
+
+        return HttpHook.Request.newBuilder().setSecure(secure).setHost(host).setPort(port).setVersion(version).setMethod(method).setFullPath(getFullPath()).addAllHeaders(headers.toRpc()).setContent(ByteString.copyFrom(content)).build();
     }
 
     public Request normalize() {
@@ -233,6 +236,10 @@ public class Request {
 
     public String getUrl() {
         return HttpUtil.getDomainUrl(secure, host, port) + path;
+    }
+
+    public String getFullPath() {
+        return HttpUtil.toFullPath(path, query.toRawString());
     }
 
     @Override

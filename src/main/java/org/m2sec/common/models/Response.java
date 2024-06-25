@@ -35,7 +35,7 @@ public class Response {
 
     public static Response of(HttpHook.Response response) {
         return new Response(response.getVersion(), response.getStatusCode(), response.getReason(),
-            Headers.of(response.getHeadersMap()), response.getContent().toByteArray());
+            Headers.ofRpc(response.getHeadersList()), response.getContent().toByteArray());
     }
 
     public static Response of(String str) {
@@ -100,7 +100,7 @@ public class Response {
     }
 
     public HttpHook.Response toRpc() {
-        return HttpHook.Response.newBuilder().setVersion(version).setStatusCode(statusCode).setReason(reason).putAllHeaders(headers.toRpc()).setContent(ByteString.copyFrom(content)).build();
+        return HttpHook.Response.newBuilder().setVersion(version).setStatusCode(statusCode).setReason(reason).addAllHeaders(headers.toRpc()).setContent(ByteString.copyFrom(content)).build();
     }
 
     public byte[] toRaw() {

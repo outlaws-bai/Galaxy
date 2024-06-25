@@ -1,9 +1,7 @@
 package org.m2sec.common.utils;
 
 import org.m2sec.common.Log;
-import org.m2sec.common.models.Parameters;
 import org.m2sec.common.parsers.JsonParser;
-import org.m2sec.rpc.HttpHook;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -25,15 +23,6 @@ public class CompatUtil {
 
     private static final Log log = new Log(CompatUtil.class);
 
-    public static <T extends Parameters<String>> Map<String, HttpHook.StringList> parametersToRpc(T parameters) {
-        Map<String, HttpHook.StringList> retVal = new LinkedHashMap<>();
-        for (Map.Entry<String, List<String>> entry : parameters.entrySet()) {
-            HttpHook.StringList.Builder listBuilder = HttpHook.StringList.newBuilder();
-            listBuilder.addAllValues(entry.getValue());
-            retVal.put(entry.getKey(), listBuilder.build());
-        }
-        return retVal;
-    }
 
     public static Map<String, List<String>> mapToMultiMap(Map<String, Object> map) {
         HashMap<String, List<String>> retVal = new HashMap<>();
