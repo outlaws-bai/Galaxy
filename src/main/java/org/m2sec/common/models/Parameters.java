@@ -11,13 +11,8 @@ import java.util.*;
  * @description:
  */
 @NoArgsConstructor
-public class Parameters<T> extends TreeMap<String, List<T>> {
+public class Parameters<T> extends LinkedHashMap<String, List<T>> {
 
-
-    @SuppressWarnings("unchecked")
-    public Parameters(Comparator comparator) {
-        super(comparator);
-    }
 
     public Parameters<T> put(String key, T value) {
         this.put(key, new ArrayList<>(List.of(value)));

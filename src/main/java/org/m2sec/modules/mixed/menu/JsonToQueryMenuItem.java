@@ -41,8 +41,8 @@ public class JsonToQueryMenuItem extends AbstractMenuItem {
         query.putAll(CompatUtil.mapToMultiMap(bodyMap));
         request.getQuery().merge(query);
         request.setMethod(Method.GET.toString()).setContent(new byte[]{});
-        request.getHeaders().remove(Constants.HTTP_HEADER_CONTENT_LENGTH);
-        request.getHeaders().remove(Constants.HTTP_HEADER_CONTENT_TYPE);
+        request.getHeaders().removeIgnoreCase(Constants.HTTP_HEADER_CONTENT_LENGTH);
+        request.getHeaders().removeIgnoreCase(Constants.HTTP_HEADER_CONTENT_TYPE);
         messageEditorHttpRequestResponse.setRequest(request.toBurp());
     }
 }

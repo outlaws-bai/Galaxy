@@ -1,5 +1,6 @@
 package org.m2sec.common.utils;
 
+import org.m2sec.common.Log;
 import org.m2sec.common.models.Parameters;
 import org.m2sec.common.parsers.JsonParser;
 import org.m2sec.rpc.HttpHook;
@@ -7,6 +8,7 @@ import org.m2sec.rpc.HttpHook;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,6 +21,9 @@ import java.util.List;
  * @description:
  */
 public class CompatUtil {
+
+
+    private static final Log log = new Log(CompatUtil.class);
 
     public static <T extends Parameters<String>> Map<String, HttpHook.StringList> parametersToRpc(T parameters) {
         Map<String, HttpHook.StringList> retVal = new LinkedHashMap<>();
@@ -58,6 +63,21 @@ public class CompatUtil {
             desktop.browse(new URI(url));
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void openFileManager(String filePath) {
+        File folder = new File(filePath);
+        try {
+            // 检查桌面功能是否可用
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.OPEN)) {
+                // 打开文件夹
+                Desktop.getDesktop().open(folder);
+            } else {
+                log.error("Failed to open file manager or does not support desktop related features.");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Open file manager failed： " + e.getMessage());
         }
     }
 }

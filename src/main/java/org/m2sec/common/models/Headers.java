@@ -3,8 +3,6 @@ package org.m2sec.common.models;
 import burp.api.montoya.http.message.HttpHeader;
 import org.m2sec.common.utils.CompatUtil;
 import org.m2sec.common.utils.HttpUtil;
-import org.m2sec.rpc.HttpHook;
-
 import java.util.List;
 import java.util.Map;
 
@@ -14,10 +12,6 @@ import java.util.Map;
  * @description:
  */
 public class Headers extends Parameters<String> {
-
-    public Headers() {
-        super(String.CASE_INSENSITIVE_ORDER);
-    }
 
 
     public static Headers of(String str) {
@@ -40,6 +34,27 @@ public class Headers extends Parameters<String> {
             }
         }
         return retVal;
+    }
+
+    public List<String> getIgnoreCase(String key) {
+        for (Map.Entry<String, List<String>> entry : entrySet()) {
+            if (key.equalsIgnoreCase(entry.getKey())) return entry.getValue();
+        }
+        return null;
+    }
+    public String getFirstIgnoreCase(String key) {
+        List<String> values = getIgnoreCase(key);
+        if (values == null) {
+            return null;
+        } else {
+            return values.get(0);
+        }
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    public Headers removeIgnoreCase(String key) {
+        keySet().removeIf(key::equalsIgnoreCase);
+        return this;
     }
 
     public Map<String, HttpHook.StringList> toRpc() {

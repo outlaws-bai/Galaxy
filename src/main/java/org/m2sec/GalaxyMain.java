@@ -15,6 +15,7 @@ import org.m2sec.common.enums.HttpHookService;
 import org.m2sec.common.enums.LogLevel;
 import org.m2sec.common.enums.OperatingEnv;
 import org.m2sec.common.parsers.YamlParser;
+import org.m2sec.common.utils.CompatUtil;
 import org.m2sec.common.utils.FileUtil;
 import org.m2sec.modules.bypass.intruder.BypassPathGeneratorProviderProvider;
 import org.m2sec.modules.bypass.intruder.BypassUrlGeneratorProviderProvider;
@@ -121,13 +122,22 @@ public class GalaxyMain implements BurpExtension {
 
     private void registerUI() {
         JPanel ui = new JPanel();
-        JButton reloadButton = new JButton("reload config");
-        ui.add(reloadButton);
-        reloadButton.addActionListener(l -> {
+        JButton reloadConfigButton = new JButton("ReloadConfig");
+        JButton openWorkDirButton = new JButton("OpenWorkDir");
+        ui.add(reloadConfigButton);
+        ui.add(openWorkDirButton);
+        reloadConfigButton.addActionListener(e -> {
             try {
                 loadConfig();
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception exc) {
+                JOptionPane.showMessageDialog(null, exc.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        openWorkDirButton.addActionListener(e -> {
+            try {
+                CompatUtil.openFileManager(Constants.WORK_DIR);
+            } catch (Exception exc) {
+                JOptionPane.showMessageDialog(null, exc.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
         burpApi.userInterface().registerSuiteTab(Constants.BURP_SUITE_EXT_NAME, ui);
