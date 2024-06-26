@@ -13,20 +13,20 @@ import java.util.Map;
  * @date: 2024/6/21 20:23
  * @description:
  */
-public class Hook {
+public class AesGcm {
 
-    private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
+    private static final String ALGORITHM = "AES/GCM/NoPadding";
     private static final byte[] secret = "32byteslongsecretkeyforaes256!aa".getBytes();
     private static final byte[] iv = "16byteslongiv456".getBytes();
-    private static final Map<String, Object> paramMap = new HashMap<>(Map.of("iv", iv));
+    private static final Map<String, Object> paramMap = new HashMap<>(Map.of("iv", iv, "tLen", 128));
 
-    private static byte[] getData(byte[] content) {
-        return Base64.getDecoder().decode((String) JsonParser.jsonStrToMap(new String(content)).get("data"));
+    private static byte[] getData(byte[] content, String key) {
+        return Base64.getDecoder().decode((String) JsonParser.jsonStrToMap(new String(content)).get(key));
     }
 
-    private static byte[] toData(byte[] content) {
+    private static byte[] toData(byte[] content, String key) {
         HashMap<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put("data", Base64.getEncoder().encodeToString(content));
+        jsonBody.put(key, Base64.getEncoder().encodeToString(content));
         return JsonParser.toJsonStr(jsonBody).getBytes();
     }
 
@@ -39,7 +39,7 @@ public class Hook {
     @Nullable
     public static Request hookRequestToBurp(Request request) {
         // 获取需要解密的数据
-        byte[] encryptedData = getData(request.getContent());
+        byte[] encryptedData = getData(request.getContent(), "request");
         // 调用内置函数解密
         byte[] data = CryptoUtil.aesDecrypt(ALGORITHM, encryptedData, secret, paramMap);
         // 更新body为已加密的数据
@@ -60,7 +60,7 @@ public class Hook {
         // 调用内置函数加密回去
         byte[] encryptedData = CryptoUtil.aesEncrypt(ALGORITHM, data, secret, paramMap);
         // 将已加密的数据转换为Server可识别的格式
-        byte[] body = toData(encryptedData);
+        byte[] body = toData(encryptedData, "request");
         // 更新body
         request.setContent(body);
         return request;
@@ -75,7 +75,7 @@ public class Hook {
     @Nullable
     public static Response hookResponseToBurp(Response response) {
         // 获取需要解密的数据
-        byte[] encryptedData = getData(response.getContent());
+        byte[] encryptedData = getData(response.getContent(), "response");
         // 调用内置函数解密
         byte[] data = CryptoUtil.aesDecrypt(ALGORITHM, encryptedData, secret, paramMap);
         // 更新body
@@ -97,7 +97,7 @@ public class Hook {
         byte[] encryptedData = CryptoUtil.aesEncrypt(ALGORITHM, data, secret, paramMap);
         // 更新body
         // 将已加密的数据转换为Server可识别的格式
-        byte[] body = toData(encryptedData);
+        byte[] body = toData(encryptedData, "response");
         // 更新body
         response.setContent(body);
         return response;

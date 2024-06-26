@@ -13,7 +13,7 @@ import java.util.Map;
  * @date: 2024/6/21 20:23
  * @description:
  */
-public class Hook {
+public class AesCbc {
 
     private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
     private static final byte[] secret = "32byteslongsecretkeyforaes256!aa".getBytes();

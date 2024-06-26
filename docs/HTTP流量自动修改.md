@@ -57,7 +57,8 @@ httpTrafficAutoModificationConfig: # HTTP Traffic Auto Modification 模块的功
 
 > 这里并非要完整编写加解密的逻辑，该插件已经内置了一些加解密、加签算法，用户只需要在对应的函数调用，将流程串起来即可
 
-如：[Hook.java](https://github.com/outlaws-bai/Galaxy/blob/main/src/main/resources/Hook.java)，这里同样简单实现了一个对AES加解密的demo
+如：[Hook.java](https://github.com/outlaws-bai/Galaxy/blob/main/src/main/resources/Hook.java)，这里同样简单实现了一个对AES加解密的demo, 
+还有更多示例可以参考 [examples](https://github.com/outlaws-bai/Galaxy/tree/main/examples)
 
 使用时，需要将部分配置修改如下，并在 `javaFilePath` 文件中编写四个阶段的处理代码
 

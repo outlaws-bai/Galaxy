@@ -42,6 +42,9 @@ public abstract class AbstractHttpHookService {
                 if (hookConfig.getRequestMatchExpression() != null && !hookConfig.getRequestMatchExpression().isEmpty() && (Boolean) Render.renderExpression(hookConfig.getRequestMatchExpression(), new HashMap<>(Map.of("request", request)))) {
                     log.debug("exec method: hookRequestToBurp with " + this.getClass().getSimpleName());
                     request = hookRequestToBurp(request);
+                    if (request == null) {
+                        return retVal;
+                    }
                     // 添加标记头
                     request.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "HttpHook");
                     retVal = request.toBurp();
@@ -70,6 +73,9 @@ public abstract class AbstractHttpHookService {
                 if (hookConfig.isResponseIsNeedHook()) {
                     hookedIds.add(httpRequest.messageId());
                 }
+                if (request == null) {
+                    return retVal;
+                }
                 retVal = request.toBurp();
             }
         } catch (Exception e) {
@@ -90,7 +96,11 @@ public abstract class AbstractHttpHookService {
                 Response response = Response.of(httpResponse);
                 response.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "HttpHook");
                 log.debug("exec method: hookResponseToBurp with " + this.getClass().getSimpleName());
-                return hookResponseToBurp(response).toBurp();
+                Response result = hookResponseToBurp(response);
+                if (result == null) {
+                    return httpResponse;
+                }
+                return result.toBurp();
             }
 
         } catch (Exception e) {
@@ -110,7 +120,11 @@ public abstract class AbstractHttpHookService {
                 Response response = Response.of(httpResponse);
                 response.getHeaders().remove(Constants.HTTP_HEADER_HOOK_HEADER_KEY);
                 log.debug("exec method: hookResponseToClient with " + this.getClass().getSimpleName());
-                return hookResponseToClient(response).toBurp();
+                Response result = hookResponseToClient(response);
+                if (result == null) {
+                    return httpResponse;
+                }
+                return result.toBurp();
             }
         } catch (Exception e) {
             log.exception(e, "hookResponseToClient execute error.");
