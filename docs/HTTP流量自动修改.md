@@ -42,7 +42,7 @@ HTTP流量自动修改
 用户可以修改`server_rpc.py`文件中的代码来修改对应的请求&响应对象。
 
 还有:  [Java GRPC Server](https://github.com/outlaws-bai/Galaxy/blob/main/src/test/java/org/m2sec/modules/traffic/hook/HttpHookRpcServer.java)
-有一个Java实现的Grpc服务端，它的处理逻辑在 [Impl](https://github.com/outlaws-bai/Galaxy/blob/main/src/test/java/org/m2sec/modules/traffic/hook/RpcServiceImpl.java)
+有一个Java实现的GRPC服务端，同样实现了一个对AES加解密的demo。
 
 使用时，需要将部分配置修改如下，并在 `rpcConn` 配置的地址上启动RPC服务
 
