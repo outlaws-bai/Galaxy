@@ -1,13 +1,11 @@
 package org.m2sec.common.crypto;
 
-import org.m2sec.common.Constants;
 import org.m2sec.common.utils.ByteUtil;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.util.Base64;
 
 /**

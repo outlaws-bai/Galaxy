@@ -1,6 +1,5 @@
 package org.m2sec.common.utils;
 
-import burp.api.montoya.utilities.DigestAlgorithm;
 import org.m2sec.common.Constants;
 import org.m2sec.common.Log;
 import org.m2sec.common.config.CloudConfig;
@@ -72,7 +71,7 @@ public class CloudUtil {
         // 处理query string
         List<String> queryParamNames = new ArrayList<>();
         for (Map.Entry<String, List<String>> entry : query.entrySet()) {
-            for (String name : entry.getValue()) {
+            for (@SuppressWarnings("unused") String name : entry.getValue()) {
                 queryParamNames.add(entry.getKey() + "=");
             }
         }

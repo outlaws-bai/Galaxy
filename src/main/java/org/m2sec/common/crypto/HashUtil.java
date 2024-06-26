@@ -1,11 +1,9 @@
 package org.m2sec.common.crypto;
 
-import org.m2sec.common.Constants;
 import org.m2sec.common.utils.ByteUtil;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.util.Base64;
 
 /**
