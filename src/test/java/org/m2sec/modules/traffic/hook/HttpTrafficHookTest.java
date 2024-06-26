@@ -21,7 +21,7 @@ public class HttpTrafficHookTest {
         System.out.println(request);
         Request request1 = service.hookRequestToBurp(request);
         System.out.println(request1);
-        Request request2 = service.hookRequestToServer(request);
+        Request request2 = service.hookRequestToServer(request1);
         System.out.println(request2);
     }
 
@@ -46,7 +46,7 @@ public class HttpTrafficHookTest {
         System.out.println(request);
         Request request1 = service.hookRequestToBurp(request);
         System.out.println(request1);
-        Request request2 = service.hookRequestToServer(request);
+        Request request2 = service.hookRequestToServer(request1);
         System.out.println(request2);
     }
 
