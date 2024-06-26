@@ -4,11 +4,13 @@ import burp.api.montoya.utilities.DigestAlgorithm;
 import org.m2sec.common.Constants;
 import org.m2sec.common.Log;
 import org.m2sec.common.config.CloudConfig;
+import org.m2sec.common.crypto.MacUtil;
 import org.m2sec.common.enums.ContentType;
 import org.m2sec.common.enums.Method;
 import org.m2sec.common.models.Headers;
 import org.m2sec.common.models.Query;
 import org.m2sec.common.models.Request;
+import org.m2sec.common.crypto.HashUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -46,13 +48,13 @@ public class CloudUtil {
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         String amzDate = dateFormat.format(new Date());
         // calc content sha256 and md5
-        String contentSha256 = HashUtil.calcHashToHex(request.getContent(), DigestAlgorithm.SHA_256);
+        String contentSha256 = HashUtil.calcToHex(request.getContent(), HashUtil.SHA_256);
         // calc authorization
         headers.add("x-amz-date", amzDate).add("x-amz-content-sha256", contentSha256);
         // add some header
         String method = request.getMethod();
         if (!(method.equals(Method.GET.name()) || method.equals(Method.OPTIONS.name()) || method.equals(Method.HEAD.name()))) {
-            headers.put("content-md5", HashUtil.calcHashToBase64(request.getContent(), DigestAlgorithm.MD5));
+            headers.put("content-md5", HashUtil.calcToBase64(request.getContent(), HashUtil.MD_5));
             headers.put(Constants.HTTP_HEADER_CONTENT_TYPE, ContentType.FORM.getHeaderValuePrefix());
         }
         if (awsConfig.getToken() != null && !awsConfig.getToken().isBlank())
@@ -101,14 +103,14 @@ public class CloudUtil {
         String scopeString = amzDate.substring(0, 8) + "/" + awsConfig.getRegion() + "/" + awsConfig.getService() +
             "/" + AWS_4_REQUEST;
         String stringToSign =
-            "AWS4-HMAC-SHA256\n" + amzDate + "\n" + scopeString + "\n" + HashUtil.calcHashToHex(canonicalRequest.getBytes(), DigestAlgorithm.SHA_256);
+            "AWS4-HMAC-SHA256\n" + amzDate + "\n" + scopeString + "\n" + HashUtil.calcToHex(canonicalRequest.getBytes(), "SHA256");
         log.debug("stringToSign: %s", stringToSign);
         byte[] kSecret = ("AWS4" + awsConfig.getSk()).getBytes();
-        byte[] kDate = HashUtil.calcHmac(kSecret, DigestAlgorithm.SHA_256, dayStamp.getBytes());
-        byte[] kRegion = HashUtil.calcHmac(kDate, DigestAlgorithm.SHA_256, awsConfig.getRegion().getBytes());
-        byte[] kService = HashUtil.calcHmac(kRegion, DigestAlgorithm.SHA_256, awsConfig.getService().getBytes());
-        byte[] kSignature = HashUtil.calcHmac(kService, DigestAlgorithm.SHA_256, AWS_4_REQUEST.getBytes());
-        String signature = HashUtil.calcHmacToHex(kSignature, DigestAlgorithm.SHA_256, stringToSign.getBytes());
+        byte[] kDate = MacUtil.calc(dayStamp.getBytes(), kSecret, MacUtil.HMAC_SHA_256);
+        byte[] kRegion = MacUtil.calc(awsConfig.getRegion().getBytes(), kDate, MacUtil.HMAC_SHA_256);
+        byte[] kService = MacUtil.calc(awsConfig.getService().getBytes(), kRegion, MacUtil.HMAC_SHA_256);
+        byte[] kSignature = MacUtil.calc(AWS_4_REQUEST.getBytes(), kService, MacUtil.HMAC_SHA_256);
+        String signature = MacUtil.calcToHex(stringToSign.getBytes(), kSignature, MacUtil.HMAC_SHA_256);
         // calc authorization
         return String.format("AWS4-HMAC-SHA256 Credential=%s, SignedHeaders=%s, Signature=%s", awsConfig.getAk() +
             "/" + scopeString, signedHeaderNames, signature);

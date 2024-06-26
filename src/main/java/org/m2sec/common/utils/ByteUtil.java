@@ -1,6 +1,9 @@
 package org.m2sec.common.utils;
 
+import org.bouncycastle.util.encoders.Hex;
+
 import java.util.Arrays;
+import java.util.Base64;
 
 /**
  * @author: outlaws-bai
@@ -102,5 +105,14 @@ public class ByteUtil {
         }
         // 使用Arrays.copyOfRange方法截取指定范围的byte数组
         return Arrays.copyOfRange(originalArray, startIndex, endIndex);
+    }
+
+
+    public static String toHexString(byte[] data) {
+        return Hex.toHexString(data);
+    }
+
+    public static String toBase64String(byte[] data) {
+        return Base64.getEncoder().encodeToString(data);
     }
 }
