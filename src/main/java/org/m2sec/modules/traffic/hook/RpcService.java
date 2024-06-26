@@ -20,6 +20,11 @@ public class RpcService extends AbstractHttpHookService {
             new RpcClient(GalaxyMain.config.getHttpTrafficAutoModificationConfig().getHookConfig().getRpcConn());
     }
 
+    public void init(String rpcConn) {
+        this.client =
+            new RpcClient(rpcConn);
+    }
+
     @Override
     public void destroy() {
         this.client.shutdown();

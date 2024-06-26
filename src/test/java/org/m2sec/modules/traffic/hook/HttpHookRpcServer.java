@@ -1,4 +1,4 @@
-package org.m2sec.common.rpc;
+package org.m2sec.modules.traffic.hook;
 
 import io.grpc.Grpc;
 import io.grpc.InsecureServerCredentials;
@@ -11,15 +11,15 @@ import java.io.IOException;
  * @date: 2024/6/21 20:23
  * @description:
  */
-public class RpcServerMain {
+public class HttpHookRpcServer {
     private Server server;
     private final int port;
 
-    public RpcServerMain(int port) {
+    public HttpHookRpcServer(int port) {
         this.port = port;
     }
 
-    private void start() throws IOException {
+    public void start() throws IOException {
         System.err.println("*** running");
         server =
             Grpc.newServerBuilderForPort(port, InsecureServerCredentials.create()).addService(new RpcServiceImpl()).build().start();
@@ -28,7 +28,7 @@ public class RpcServerMain {
             // JVM
             // shutdown hook.
             System.err.println("*** shutting down gRPC server since JVM is shutting down");
-            RpcServerMain.this.stop();
+            HttpHookRpcServer.this.stop();
             System.err.println("*** server shut down");
         }));
     }
@@ -47,13 +47,11 @@ public class RpcServerMain {
     /**
      * Main launches the server from the command line.
      */
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws Exception {
 
         // The port on which the server should run
         int port = 8443; // default
-        if (args.length > 0) port = Integer.parseInt(args[0]);
-
-        final RpcServerMain server = new RpcServerMain(port);
+        final HttpHookRpcServer server = new HttpHookRpcServer(port);
         server.start();
         server.blockUntilShutdown();
     }
