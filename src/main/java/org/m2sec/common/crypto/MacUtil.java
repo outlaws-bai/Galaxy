@@ -22,11 +22,11 @@ public class MacUtil {
 
     public static byte[] calc(byte[] data, byte[] secret, String algorithm) {
         try {
-            Mac mac = Mac.getInstance(algorithm, Constants.CRYPTO_PROVIDER_BC);
+            Mac mac = Mac.getInstance(algorithm);
             SecretKeySpec keySpec = new SecretKeySpec(secret, algorithm);
             mac.init(keySpec);
             return mac.doFinal(data);
-        } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidKeyException e) {
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             throw new RuntimeException(e);
         }
     }

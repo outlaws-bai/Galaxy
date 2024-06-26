@@ -23,9 +23,9 @@ public class HashUtil {
 
     public static byte[] calc(byte[] data, String algorithm) {
         try {
-            MessageDigest md = MessageDigest.getInstance(algorithm, Constants.CRYPTO_PROVIDER_BC);
+            MessageDigest md = MessageDigest.getInstance(algorithm);
             return md.digest(data);
-        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
+        } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }
