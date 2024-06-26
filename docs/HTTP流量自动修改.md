@@ -6,9 +6,11 @@ HTTP流量自动修改
 
 ### 场景
 
-很多网站都有HTTP请求&响应加解密/加签，这导致想要修改请求或响应的原始报文变得不便，该功旨在通过写少量代码的方式，在Burp展示已解密后的请求&响应，并在用户修改后自动加密给到server/client。**并且同时支持Intruder、Repeater等模块**。
+很多网站都有HTTP请求&响应加解密/加签，这导致想要修改请求或响应的原始报文变得不便，该功旨在通过写少量代码的方式，在Burp展示已解密后的请求&响应，并在用户修改后自动加密给到server/client。
+**并且同时支持Intruder、Repeater等模块**。
 
-> 目前大多同功能插件通过用户选择繁琐的页面配置后，调用对应加解密的函数，对流量进行处理，这样只能满足既定情况。再复杂一点的情况，比如加密&加签同时存在、自定义算法的情况下并不适用，而本功能会将请求&响应流量的对象给到用户，用户可以通过简单的代码自行完成对请求&响应流量的处理。
+>
+目前大多同功能插件通过用户选择繁琐的页面配置后，调用对应加解密的函数，对流量进行处理，这样只能满足既定情况。再复杂一点的情况，比如加密&加签同时存在、自定义算法的情况下并不适用，而本功能会将请求&响应流量的对象给到用户，用户可以通过简单的代码自行完成对请求&响应流量的处理。
 >
 > 门槛相对提高一些，但更灵活、适用的场景更多，因此如果想要使用该功能，需要一些Java或其它编程语言的基础。
 
@@ -36,7 +38,11 @@ HTTP流量自动修改
 
 用户可以通过其他任何语言编写一个GRpc的服务端，该插件会在上述四个生命周期调用GRpc服务端的同名函数，来达到目的。
 
-如：[Python GRPC Server](https://github.com/outlaws-bai/PyGRpcServer)，这里简单实现了一个对AES加解密的demo， 用户可以修改`server_rpc.py`文件中的代码来修改对应的请求&响应对象。
+如：[Python GRPC Server](https://github.com/outlaws-bai/PyGRpcServer)，这里简单实现了一个对AES加解密的demo，
+用户可以修改`server_rpc.py`文件中的代码来修改对应的请求&响应对象。
+
+还有:  [Java GRPC Server](https://github.com/outlaws-bai/Galaxy/blob/main/src/test/java/org/m2sec/modules/traffic/hook/HttpHookRpcServer.java)
+有一个Java实现的Grpc服务端，它的处理逻辑在 [Impl](https://github.com/outlaws-bai/Galaxy/blob/main/src/test/java/org/m2sec/modules/traffic/hook/RpcServiceImpl.java)
 
 使用时，需要将部分配置修改如下，并在 `rpcConn` 配置的地址上启动RPC服务
 
@@ -53,12 +59,13 @@ httpTrafficAutoModificationConfig: # HTTP Traffic Auto Modification 模块的功
 
 ### 方式二 JAVA
 
-用户可以编写一个Java的`.class`文件，分别实现与上述生命周期同名的静态函数，该插件会自动编译指定的`.class`文件，再在四个生命周期调用其对应的函数，来达到目的。
+用户可以编写一个Java的`.class`文件，分别实现与上述生命周期同名的静态函数，该插件会自动编译指定的`.class`
+文件，再在四个生命周期调用其对应的函数，来达到目的。
 
 > 这里并非要完整编写加解密的逻辑，该插件已经内置了一些加解密、加签算法，用户只需要在对应的函数调用，将流程串起来即可
 
-如：[Hook.java](https://github.com/outlaws-bai/Galaxy/blob/main/src/main/resources/Hook.java)，这里同样简单实现了一个对AES加解密的demo, 
-还有更多示例可以参考 [examples](https://github.com/outlaws-bai/Galaxy/tree/main/examples)
+如：[Hook.java](https://github.com/outlaws-bai/Galaxy/blob/main/src/main/resources/Hook.java)，这里同样简单实现了一个对AES加解密的demo,
+还有更多示例可以参考 [examples](https://github.com/outlaws-bai/Galaxy/tree/main/examples)，不过我更建议你可以clone代码本地构建调试好再使用。
 
 使用时，需要将部分配置修改如下，并在 `javaFilePath` 文件中编写四个阶段的处理代码
 
@@ -136,7 +143,7 @@ httpTrafficAutoModificationConfig: # HTTP Traffic Auto Modification 模块的功
 
 该功能需要修改配置文件，相应的简介见
 
-[项目配置简介](https://github.com/outlaws-bai/Galaxy/blob/main/docs/使用须知.md#配置简介) 
+[项目配置简介](https://github.com/outlaws-bai/Galaxy/blob/main/docs/使用须知.md#配置简介)
 
 ### 使用
 
@@ -146,11 +153,11 @@ httpTrafficAutoModificationConfig: # HTTP Traffic Auto Modification 模块的功
 httpTrafficAutoModificationConfig: # HTTP Traffic Auto Modification 模块的功能配置
   ruleMatchConfig: # HTTP Traffic Special Rule Match 功能的配置, value为权重或者说等级，可选择1-5
     requestParamMatches: # 对请求参数进行匹配的配置
-      url: 3 
-      fileUrl: 3 
+      url: 3
+      fileUrl: 3
     responseHeaderMatches: # 对响应头进行匹配的配置, 
       x-powered-by: 3
-    responseContentMatches:  # 对响应内容进行匹配的配置, 
+    responseContentMatches: # 对响应内容进行匹配的配置, 
       password: 3
 ```
 
