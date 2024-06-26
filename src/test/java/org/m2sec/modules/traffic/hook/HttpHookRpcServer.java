@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author: outlaws-bai
@@ -23,6 +25,9 @@ import java.util.Map;
 public class HttpHookRpcServer {
     private Server server;
     private final int port;
+
+    // 创建线程池
+    private static final ExecutorService executor = Executors.newFixedThreadPool(10);
 
     public HttpHookRpcServer(int port) {
         this.port = port;
@@ -43,7 +48,7 @@ public class HttpHookRpcServer {
     public void start() throws IOException {
         System.err.println("*** running");
         server =
-            Grpc.newServerBuilderForPort(port, InsecureServerCredentials.create()).addService(new RpcServiceImpl()).build().start();
+            Grpc.newServerBuilderForPort(port, InsecureServerCredentials.create()).executor(executor).addService(new RpcServiceImpl()).build().start();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             // Use stderr here since the logger may have been reset by its
             // JVM
