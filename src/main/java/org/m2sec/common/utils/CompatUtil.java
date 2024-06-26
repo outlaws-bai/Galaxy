@@ -69,4 +69,8 @@ public class CompatUtil {
             throw new RuntimeException("Open file manager failed： " + e.getMessage());
         }
     }
+
+    public static int getCPUCount() {
+        return Runtime.getRuntime().availableProcessors();
+    }
 }
