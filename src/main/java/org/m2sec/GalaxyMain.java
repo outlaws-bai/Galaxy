@@ -9,6 +9,7 @@ import org.m2sec.burp.proxy.HttpTrafficAutoModificationProxyRequestHandler;
 import org.m2sec.burp.proxy.HttpTrafficAutoModificationProxyResponseHandler;
 import org.m2sec.common.Constants;
 import org.m2sec.common.Log;
+import org.m2sec.common.WorkExecutor;
 import org.m2sec.common.config.Config;
 import org.m2sec.common.config.HttpTrafficAutoModificationConfig;
 import org.m2sec.common.enums.HttpHookService;
@@ -52,8 +53,6 @@ public class GalaxyMain implements BurpExtension {
 
     public static OperatingEnv env = OperatingEnv.LOCAL;
 
-    public static ExecutorService workExecutor = Executors.newFixedThreadPool(5);
-
     public static Map<HttpHookService, AbstractHttpHookService> httpHookServiceMap =
         new HashMap<>(Map.of(HttpHookService.RPC, new RpcService(), HttpHookService.JAVA, new JavaFileService()));
 
@@ -87,13 +86,16 @@ public class GalaxyMain implements BurpExtension {
                 );
                 // 创建必要的文件
                 FileUtil.createFiles(Constants.CONFIG_FILE_PATH, Constants.BYPASS_URL_DICT_FILE_PATH,
-                    Constants.FUZZ_SENSITIVE_PATH_DICT_FILE_PATH, Constants.HTTP_HOOK_JAVA_FILE_PATH);
+                    Constants.FUZZ_SENSITIVE_PATH_DICT_FILE_PATH, Constants.STATIC_EXTENSION_DICT_FILE_PATH,
+                    Constants.HTTP_HOOK_JAVA_FILE_PATH);
                 log.debug("config.yaml is not exist. use default and write");
                 ClassLoader classLoader = this.getClass().getClassLoader();
                 FileUtil.writeToFileIfEmpty(Constants.BYPASS_URL_DICT_FILE_PATH,
                     classLoader.getResourceAsStream(new File(Constants.BYPASS_URL_DICT_FILE_PATH).getName()).readAllBytes());
                 FileUtil.writeToFileIfEmpty(Constants.FUZZ_SENSITIVE_PATH_DICT_FILE_PATH,
                     classLoader.getResourceAsStream(new File(Constants.FUZZ_SENSITIVE_PATH_DICT_FILE_PATH).getName()).readAllBytes());
+                FileUtil.writeToFileIfEmpty(Constants.STATIC_EXTENSION_DICT_FILE_PATH,
+                    classLoader.getResourceAsStream(new File(Constants.STATIC_EXTENSION_DICT_FILE_PATH).getName()).readAllBytes());
                 FileUtil.writeToFileIfEmpty(Constants.HTTP_HOOK_JAVA_FILE_PATH,
                     classLoader.getResourceAsStream(new File(Constants.HTTP_HOOK_JAVA_FILE_PATH).getName()).readAllBytes());
                 FileUtil.writeToFileIfEmpty(Constants.CONFIG_FILE_PATH, classLoader.getResourceAsStream("config" +
@@ -169,7 +171,7 @@ public class GalaxyMain implements BurpExtension {
             // 遍历删除文件
             if (files != null) Arrays.stream(files).filter(File::isFile).forEach(File::delete);
         }
-        workExecutor.shutdown();
+        WorkExecutor.INSTANCE.shutdown();
         log.info("Unloading Galaxy. See you later...");
     }
 }

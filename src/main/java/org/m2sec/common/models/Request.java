@@ -11,12 +11,14 @@ import org.m2sec.common.Constants;
 import org.m2sec.common.Tuple;
 import org.m2sec.common.enums.ContentType;
 import org.m2sec.common.enums.Method;
+import org.m2sec.common.utils.FileUtil;
 import org.m2sec.common.utils.HttpUtil;
 import org.m2sec.rpc.HttpHook;
 
 import javax.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
+import java.util.stream.Stream;
 
 /**
  * @author: outlaws-bai
@@ -240,6 +242,14 @@ public class Request {
 
     public String getFullPath() {
         return HttpUtil.toFullPath(path, query.toRawString());
+    }
+
+    public boolean isStaticExtension() {
+        return isStaticExtension(FileUtil.readFileAsStringArray(Constants.STATIC_EXTENSION_DICT_FILE_PATH).toArray(String[]::new));
+    }
+
+    public boolean isStaticExtension(String... staticExtensions) {
+        return Stream.of(staticExtensions).anyMatch(getPath()::endsWith);
     }
 
     @Override

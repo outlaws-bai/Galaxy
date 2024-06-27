@@ -9,10 +9,10 @@ import burp.api.montoya.ui.contextmenu.MessageEditorHttpRequestResponse;
 import org.m2sec.GalaxyMain;
 import org.m2sec.burp.menu.AbstractMenuItem;
 import org.m2sec.common.Log;
+import org.m2sec.common.WorkExecutor;
 import org.m2sec.common.models.ApiInfo;
 import org.m2sec.common.models.Request;
 import org.m2sec.common.models.Response;
-import org.m2sec.common.utils.AsyncExecuteUtil;
 import org.m2sec.common.utils.SwaggerUtil;
 
 import javax.swing.*;
@@ -34,9 +34,7 @@ public class FuzzSwaggerDocsMenuItem extends AbstractMenuItem {
 
     @Override
     public boolean isDisplay(ContextMenuEvent event) {
-        return event.invocationType().containsHttpMessage()
-            && event.messageEditorRequestResponse().isPresent()
-            && event.messageEditorRequestResponse().get().selectionContext() == MessageEditorHttpRequestResponse.SelectionContext.RESPONSE;
+        return event.invocationType().containsHttpMessage() && event.messageEditorRequestResponse().isPresent() && event.messageEditorRequestResponse().get().selectionContext() == MessageEditorHttpRequestResponse.SelectionContext.RESPONSE;
     }
 
     @Override
@@ -53,7 +51,6 @@ public class FuzzSwaggerDocsMenuItem extends AbstractMenuItem {
             return;
         }
         List<ApiInfo> apiInfoList = SwaggerUtil.extractApiInfoFromSwagger(new String(originResponse.getContent()));
-        log.infoEvent("%s get %d url. Please wait for execution.", displayName(), apiInfoList.size());
         List<Runnable> workRunnables = apiInfoList.stream().map(apiInfo -> (Runnable) () -> {
             Request request = apiInfo.generateRequest(originRequest, userInput);
             HttpRequest httpRequest = request.toBurp();
@@ -72,6 +69,9 @@ public class FuzzSwaggerDocsMenuItem extends AbstractMenuItem {
                 log.exception(e, "send request fail. request: %s, " + "message: " + "%s", request, e.getMessage());
             }
         }).toList();
-        AsyncExecuteUtil.execute(workRunnables, () -> log.infoEvent("Fuzz " + "Swagger Docs execute complete" + "."));
+        WorkExecutor.INSTANCE.beyondBatchExecute(
+            () -> log.infoEvent("%s get %d url. Please wait for execution.", displayName(), apiInfoList.size()),
+            () -> log.infoEvent("Fuzz " + "Swagger Docs execute complete."),
+            workRunnables.toArray(Runnable[]::new));
     }
 }

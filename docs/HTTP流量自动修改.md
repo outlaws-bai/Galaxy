@@ -52,7 +52,7 @@ httpTrafficAutoModificationConfig: # HTTP Traffic Auto Modification 模块的功
     hookService: RPC # enum. 指定以哪种方式启用hook功能，可选：RPC、JAVA
     requestIsNeedHook: false # bool. 请求是否需要hook，开启时hookRequestToBurp、hookRequestToServer才会被执行
     responseIsNeedHook: false # bool. 响应是否需要hook，开启时hookResponseToBurp、hookResponseToClient才会被执行
-    requestMatchExpression: 'request.getHost().equals("192.168.1.4")' # expression. 匹配请求的表达式；用来判断哪些请求需要被hook，例如这里判断请求的host必须是192.168.1.4
+    requestMatchExpression: 'request.getHost().equals("192.168.1.4") && !request.isStaticExtension()' # expression. 匹配请求的表达式；用来判断哪些请求需要被hook，例如这里判断请求的host必须是192.168.1.4、并且不是静态扩展
     rpcConn: 127.0.0.1:8443 # String. 当hookService为RPC时，RPC服务端的连接串
     javaFilePath: C:\Users\outlaws\.galaxy\Hook.java # String. 当hookService为JAVA时，Java的文件路径
 ```

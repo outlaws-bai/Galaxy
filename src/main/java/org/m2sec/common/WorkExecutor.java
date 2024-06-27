@@ -17,6 +17,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class WorkExecutor extends ThreadPoolExecutor {
 
+    public static final WorkExecutor INSTANCE = new WorkExecutor();
+
     public WorkExecutor() {
         this(0, CompatUtil.getCPUCount() * 2 - 1,
             60L, TimeUnit.SECONDS,
@@ -32,6 +34,14 @@ public class WorkExecutor extends ThreadPoolExecutor {
         for (Runnable runnable : runnables) {
             this.execute(runnable);
         }
+    }
+
+    public void beforeBatchExecute(Runnable beforeRunnable, Runnable... runnables) {
+        beyondBatchExecute(beforeRunnable, null, runnables);
+    }
+
+    public void afterBatchExecute(Runnable afterRunnable, Runnable... runnables) {
+        beyondBatchExecute(null, afterRunnable, runnables);
     }
 
     public void beyondBatchExecute(@Nullable Runnable beforeRunnable, @Nullable Runnable afterRunnable,

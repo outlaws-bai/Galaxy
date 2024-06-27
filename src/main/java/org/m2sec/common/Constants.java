@@ -29,8 +29,13 @@ public class Constants {
     public static final String BYPASS_URL_DICT_FILE_PATH =
         Constants.DICT_FILE_DIR + File.separator + "bypassUrlDict" + ".txt";
 
+    public static final String STATIC_EXTENSION_DICT_FILE_PATH =
+        Constants.DICT_FILE_DIR + File.separator + "staticExtensionDict" + ".txt";
+
+
     public static final String FUZZ_SENSITIVE_PATH_DICT_FILE_PATH = Constants.DICT_FILE_DIR + File.separator +
         "fuzzSensitivePathDict.txt";
+    public static final String HTTP_HOOK_JAVA_FILE_PATH = Constants.WORK_DIR + File.separator + "Hook.java";
 
     public static final String HTTP_HEADER_CONTENT_LENGTH = "Content-Length";
     public static final String HTTP_HEADER_CONTENT_TYPE = "Content-Type";
@@ -52,5 +57,5 @@ public class Constants {
 
     public static final String CRYPTO_PROVIDER_BC = "BC";
 
-    public static final String HTTP_HOOK_JAVA_FILE_PATH = Constants.WORK_DIR + File.separator + "Hook.java";
+
 }

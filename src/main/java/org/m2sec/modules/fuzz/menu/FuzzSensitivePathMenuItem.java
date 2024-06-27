@@ -7,7 +7,7 @@ import burp.api.montoya.ui.contextmenu.InvocationType;
 import org.m2sec.GalaxyMain;
 import org.m2sec.burp.menu.AbstractMenuItem;
 import org.m2sec.common.Log;
-import org.m2sec.common.utils.AsyncExecuteUtil;
+import org.m2sec.common.WorkExecutor;
 import org.m2sec.common.utils.HttpUtil;
 import org.m2sec.modules.fuzz.intruder.FuzzSensitivePathGeneratorProviderProvider;
 
@@ -44,7 +44,6 @@ public class FuzzSensitivePathMenuItem extends AbstractMenuItem {
         if (!requestResponses.isEmpty()) {
             String domainUrl = HttpUtil.getDomainUrl(requestResponses.get(0).httpService());
             Set<String> evilPathSet = getEvilPathSet(requestResponses);
-            log.infoEvent("%s get %d url. Please wait for execution.", displayName(), evilPathSet.size());
             List<Runnable> workRunnables = evilPathSet.stream().map(path -> (Runnable) () -> {
                 String url = domainUrl + path;
                 HttpRequest request = HttpRequest.httpRequestFromUrl(url);
@@ -55,7 +54,11 @@ public class FuzzSensitivePathMenuItem extends AbstractMenuItem {
                     log.exception(e, "send request fail. request: %s, message: %s", request, e.getMessage());
                 }
             }).toList();
-            AsyncExecuteUtil.execute(workRunnables, () -> log.infoEvent("Fuzz Sensitive Path execute complete."));
+            WorkExecutor.INSTANCE.beyondBatchExecute(
+                () -> log.infoEvent("%s get %d url. Please wait for execution.", displayName(), evilPathSet.size()),
+                () -> log.infoEvent("Fuzz Sensitive Path execute complete."),
+                workRunnables.toArray(Runnable[]::new)
+            );
         }
     }
 
