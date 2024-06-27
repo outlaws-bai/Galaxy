@@ -97,6 +97,10 @@ BypassTools.generateBypassPathPayloads(path).forEach(System.out::println);
 
 [Mixed](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Mixed.md)
 
+# Next
+
+各大云平台对象存储匿名操作检测
+
 # 环境
 
 Burp运行及插件编译JAVA版本：19
