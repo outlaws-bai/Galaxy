@@ -2,7 +2,6 @@ package org.m2sec.common.config;
 
 import lombok.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -15,6 +14,7 @@ import java.util.Map;
 @ToString
 @AllArgsConstructor
 public class Config {
+    private String logLevel;
     private HttpTrafficAutoModificationConfig httpTrafficAutoModificationConfig;
     private CloudConfig cloudConfig;
     private MixedConfig mixedConfig;

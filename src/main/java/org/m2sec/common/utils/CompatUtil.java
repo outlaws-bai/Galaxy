@@ -1,6 +1,6 @@
 package org.m2sec.common.utils;
 
-import org.m2sec.common.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.m2sec.common.parsers.JsonParser;
 
 import java.awt.*;
@@ -18,10 +18,10 @@ import java.util.List;
  * @date: 2024/6/21 20:23
  * @description:
  */
+@Slf4j
 public class CompatUtil {
 
 
-    private static final Log log = new Log(CompatUtil.class);
 
 
     public static Map<String, List<String>> mapToMultiMap(Map<String, Object> map) {

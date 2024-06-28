@@ -25,6 +25,7 @@ public class Constants {
     public static final String EXTRACT_INFO_FILE_DIR = WORK_DIR + File.separator + "extractInfo";
 
     public static final String CONFIG_FILE_PATH = WORK_DIR + File.separator + "config.yaml";
+    public static final String LOG_FILE_PATH = WORK_DIR + File.separator + "run.log";
 
     public static final String BYPASS_URL_DICT_FILE_PATH =
         Constants.DICT_FILE_DIR + File.separator + "bypassUrlDict" + ".txt";
@@ -36,6 +37,7 @@ public class Constants {
     public static final String FUZZ_SENSITIVE_PATH_DICT_FILE_PATH = Constants.DICT_FILE_DIR + File.separator +
         "fuzzSensitivePathDict.txt";
     public static final String HTTP_HOOK_JAVA_FILE_PATH = Constants.WORK_DIR + File.separator + "Hook.java";
+
 
     public static final String HTTP_HEADER_CONTENT_LENGTH = "Content-Length";
     public static final String HTTP_HEADER_CONTENT_TYPE = "Content-Type";

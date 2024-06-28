@@ -3,9 +3,9 @@ package org.m2sec.modules.fuzz.menu;
 import burp.api.montoya.http.message.HttpRequestResponse;
 import burp.api.montoya.ui.contextmenu.ContextMenuEvent;
 import burp.api.montoya.ui.contextmenu.InvocationType;
+import lombok.extern.slf4j.Slf4j;
 import org.m2sec.burp.menu.AbstractMenuItem;
 import org.m2sec.common.Constants;
-import org.m2sec.common.Log;
 import org.m2sec.common.Tuple;
 import org.m2sec.common.models.*;
 import org.m2sec.common.parsers.YamlParser;
@@ -22,9 +22,9 @@ import java.util.List;
  * @date: 2024/6/21 20:23
  * @description:
  */
+@Slf4j
 public class ExtractInfoDictMenuItem extends AbstractMenuItem {
 
-    private static final Log log = new Log(ExtractInfoDictMenuItem.class);
 
     @Override
     public String displayName() {

@@ -6,9 +6,9 @@ import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.http.message.responses.HttpResponse;
 import burp.api.montoya.ui.contextmenu.ContextMenuEvent;
 import burp.api.montoya.ui.contextmenu.MessageEditorHttpRequestResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.m2sec.GalaxyMain;
 import org.m2sec.burp.menu.AbstractMenuItem;
-import org.m2sec.common.Log;
 import org.m2sec.common.WorkExecutor;
 import org.m2sec.common.models.ApiInfo;
 import org.m2sec.common.models.Request;
@@ -23,9 +23,9 @@ import java.util.List;
  * @date: 2024/6/21 20:23
  * @description:
  */
+@Slf4j
 public class FuzzSwaggerDocsMenuItem extends AbstractMenuItem {
 
-    private static final Log log = new Log(FuzzSwaggerDocsMenuItem.class);
 
     @Override
     public String displayName() {
@@ -66,12 +66,13 @@ public class FuzzSwaggerDocsMenuItem extends AbstractMenuItem {
                 }
                 GalaxyMain.burpApi.organizer().sendToOrganizer(requestResponse);
             } catch (Exception e) {
-                log.exception(e, "send request fail. request: %s, " + "message: " + "%s", request, e.getMessage());
+                log.error("send request fail. request: {}, message: {}", request, e.getMessage(), e);
             }
         }).toList();
         WorkExecutor.INSTANCE.beyondBatchExecute(
-            () -> log.infoEvent("%s get %d url. Please wait for execution.", displayName(), apiInfoList.size()),
-            () -> log.infoEvent("Fuzz " + "Swagger Docs execute complete."),
+            () -> GalaxyMain.burpApi.logging().raiseInfoEvent(String.format("%s get %d url. Please wait for execution" +
+                ".", displayName(), apiInfoList.size())),
+            () -> GalaxyMain.burpApi.logging().raiseInfoEvent("Fuzz Swagger Docs execute complete."),
             workRunnables.toArray(Runnable[]::new));
     }
 }

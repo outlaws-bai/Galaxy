@@ -8,6 +8,7 @@ import burp.api.montoya.proxy.http.ProxyRequestToBeSentAction;
 import org.m2sec.GalaxyMain;
 import org.m2sec.common.models.Request;
 import org.m2sec.modules.traffic.decorate.DecorateService;
+import org.m2sec.modules.traffic.hook.AbstractHttpHookService;
 
 /**
  * @author: outlaws-bai
@@ -23,8 +24,8 @@ public class HttpTrafficAutoModificationProxyRequestHandler implements ProxyRequ
     public ProxyRequestReceivedAction handleRequestReceived(InterceptedRequest interceptedRequest) {
         HttpRequest request;
         // 处理Http Hook
-        if (GalaxyMain.httpHookService != null)
-            request = GalaxyMain.httpHookService.tryHookRequestToBurp(interceptedRequest,
+        if (AbstractHttpHookService.hookService != null)
+            request = AbstractHttpHookService.hookService.tryHookRequestToBurp(interceptedRequest,
                 GalaxyMain.config.getHttpTrafficAutoModificationConfig().getHookConfig());
         else request = interceptedRequest;
         // 处理Decorate

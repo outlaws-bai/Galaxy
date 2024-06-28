@@ -1,7 +1,7 @@
 package org.m2sec.common.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.m2sec.common.Constants;
-import org.m2sec.common.Log;
 import org.m2sec.common.config.CloudConfig;
 import org.m2sec.common.crypto.MacUtil;
 import org.m2sec.common.enums.ContentType;
@@ -19,6 +19,7 @@ import java.util.*;
  * @date: 2024/6/21 20:23
  * @description:
  */
+@Slf4j
 public class CloudUtil {
 
     private static final String AUTHORIZATION = "authorization";
@@ -28,7 +29,6 @@ public class CloudUtil {
     private static final List<String> SIGNED_HEADERS_BLACKLIST = new ArrayList<>(List.of("expect", "user-agent",
         "connection"));
 
-    private static final Log log = new Log(CloudUtil.class);
 
     public static void signAws(Request request, CloudConfig.AwsConfig awsConfig) {
         // remove aws headers
@@ -65,7 +65,7 @@ public class CloudUtil {
 
     private static String calcAwsAuthorization(CloudConfig.AwsConfig awsConfig, String amzDate, String contentSha256,
                                                Query query, Headers headers, String method, String path) {
-        log.debug("amzDate: %s", amzDate);
+        log.debug("amzDate: {}", amzDate);
         // 生成日期字符串
         String dayStamp = amzDate.substring(0, 8);
         // 处理query string
@@ -77,7 +77,7 @@ public class CloudUtil {
         }
         Collections.sort(queryParamNames);
         String canonicalQueryString = String.join("&", queryParamNames);
-        log.debug("canonicalQueryString: %s", canonicalQueryString);
+        log.debug("canonicalQueryString: {}", canonicalQueryString);
         // 处理header
         ArrayList<String> headerFullStrings = new ArrayList<>();
         ArrayList<String> headerNames = new ArrayList<>();
@@ -93,17 +93,17 @@ public class CloudUtil {
         Collections.sort(headerNames);
         String canonicalHeaderString = String.join("\n", headerFullStrings);
         String signedHeaderNames = String.join(";", headerNames);
-        log.debug("canonicalHeaderString: %s", canonicalHeaderString);
-        log.debug("signedHeaderNames: %s", signedHeaderNames);
+        log.debug("canonicalHeaderString: {}", canonicalHeaderString);
+        log.debug("signedHeaderNames: {}", signedHeaderNames);
         String canonicalRequest =
             method + "\n" + path + "\n" + canonicalQueryString + "\n" + canonicalHeaderString + "\n\n" + signedHeaderNames + "\n" + contentSha256;
-        log.debug("canonicalRequest: %s", canonicalRequest);
+        log.debug("canonicalRequest: {}", canonicalRequest);
         // calc signature
         String scopeString = amzDate.substring(0, 8) + "/" + awsConfig.getRegion() + "/" + awsConfig.getService() +
             "/" + AWS_4_REQUEST;
         String stringToSign =
             "AWS4-HMAC-SHA256\n" + amzDate + "\n" + scopeString + "\n" + HashUtil.calcToHex(canonicalRequest.getBytes(), "SHA256");
-        log.debug("stringToSign: %s", stringToSign);
+        log.debug("stringToSign: {}", stringToSign);
         byte[] kSecret = ("AWS4" + awsConfig.getSk()).getBytes();
         byte[] kDate = MacUtil.calc(dayStamp.getBytes(), kSecret, MacUtil.HMAC_SHA_256);
         byte[] kRegion = MacUtil.calc(awsConfig.getRegion().getBytes(), kDate, MacUtil.HMAC_SHA_256);

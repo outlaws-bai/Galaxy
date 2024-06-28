@@ -6,10 +6,12 @@ import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.http.message.responses.HttpResponse;
 import burp.api.montoya.proxy.http.InterceptedRequest;
 import burp.api.montoya.proxy.http.InterceptedResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.m2sec.GalaxyMain;
 import org.m2sec.common.Constants;
-import org.m2sec.common.Log;
 import org.m2sec.common.Render;
 import org.m2sec.common.config.HttpTrafficAutoModificationConfig;
+import org.m2sec.common.enums.HttpHookService;
 import org.m2sec.common.models.Request;
 import org.m2sec.common.models.Response;
 import org.m2sec.common.utils.HttpUtil;
@@ -23,14 +25,35 @@ import java.util.Map;
  * @date: 2024/6/21 20:23
  * @description:
  */
+@Slf4j
 public abstract class AbstractHttpHookService {
     static final HashSet<Integer> hookedIds = new HashSet<>();
 
-    protected static final Log log = new Log(AbstractHttpHookService.class);
+    public static AbstractHttpHookService hookService;
 
     public abstract void init();
 
     public abstract void destroy();
+
+    public static void trySetService() {
+        trySetService(GalaxyMain.config.getHttpTrafficAutoModificationConfig().getHookConfig());
+    }
+
+    public static void trySetService(HttpTrafficAutoModificationConfig.HookConfig hookConfig) {
+        if (hookConfig.isStart() && hookConfig.getHookService() != null) {
+            if (HttpHookService.RPC.equals(hookConfig.getHookService())) {
+                hookService = new RpcService();
+            } else if (HttpHookService.JAVA.equals(hookConfig.getHookService())) {
+                hookService = new JavaFileService();
+            } else {
+                throw new RuntimeException("hookService is error! please choose RPC or JAVA");
+            }
+            hookService.init();
+        } else {
+            if (hookService != null) hookService.destroy();
+            hookService = null;
+        }
+    }
 
     public HttpRequest tryHookRequestToBurp(InterceptedRequest httpRequest,
                                             HttpTrafficAutoModificationConfig.HookConfig hookConfig) {
@@ -51,7 +74,7 @@ public abstract class AbstractHttpHookService {
                 }
             }
         } catch (Exception e) {
-            log.exception(e, "hookRequestToBurp execute error.");
+            log.error("hookRequestToBurp execute error.", e);
         }
         return retVal;
     }
@@ -79,7 +102,7 @@ public abstract class AbstractHttpHookService {
                 retVal = request.toBurp();
             }
         } catch (Exception e) {
-            log.exception(e, "hookRequestToServer execute error.");
+            log.error("hookRequestToServer execute error.", e);
         }
         return retVal;
     }
@@ -104,7 +127,7 @@ public abstract class AbstractHttpHookService {
             }
 
         } catch (Exception e) {
-            log.exception(e, "hookResponseToBurp execute error.");
+            log.error("hookResponseToBurp execute error.", e);
         }
         return httpResponse;
     }
@@ -127,7 +150,7 @@ public abstract class AbstractHttpHookService {
                 return result.toBurp();
             }
         } catch (Exception e) {
-            log.exception(e, "hookResponseToClient execute error.");
+            log.error("hookResponseToClient execute error.", e);
         }
         return httpResponse;
     }

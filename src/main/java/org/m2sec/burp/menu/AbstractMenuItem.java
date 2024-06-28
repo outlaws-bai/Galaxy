@@ -1,7 +1,7 @@
 package org.m2sec.burp.menu;
 
 import burp.api.montoya.ui.contextmenu.ContextMenuEvent;
-import org.m2sec.common.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 
@@ -10,10 +10,9 @@ import javax.swing.*;
  * @date: 2024/6/21 20:23
  * @description:
  */
-
+@Slf4j
 public abstract class AbstractMenuItem extends JMenuItem {
 
-    private static final Log log = new Log(AbstractMenuItem.class);
 
     public AbstractMenuItem() {
         this.setText(displayName());
@@ -27,7 +26,7 @@ public abstract class AbstractMenuItem extends JMenuItem {
         try {
             this.action(event);
         } catch (Exception exc) {
-            log.exception(exc, "action execute error.");
+            log.error("action execute error. {} .", exc.getMessage(), exc);
             JOptionPane.showMessageDialog(null, exc.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

@@ -8,6 +8,7 @@ import org.m2sec.GalaxyMain;
 import org.m2sec.common.models.Request;
 import org.m2sec.common.models.Response;
 import org.m2sec.modules.traffic.decorate.DecorateService;
+import org.m2sec.modules.traffic.hook.AbstractHttpHookService;
 import org.m2sec.modules.traffic.match.SpecialRuleMatchService;
 
 /**
@@ -24,8 +25,8 @@ public class HttpTrafficAutoModificationHttpHandler implements HttpHandler {
     public RequestToBeSentAction handleHttpRequestToBeSent(HttpRequestToBeSent httpRequestToBeSent) {
         HttpRequest request;
         // 处理Http Hook
-        if (GalaxyMain.httpHookService != null)
-            request = GalaxyMain.httpHookService.tryHookRequestToServer(httpRequestToBeSent,
+        if (AbstractHttpHookService.hookService != null)
+            request = AbstractHttpHookService.hookService.tryHookRequestToServer(httpRequestToBeSent,
                 GalaxyMain.config.getHttpTrafficAutoModificationConfig().getHookConfig());
         else request = httpRequestToBeSent;
         // 处理Rule Match
@@ -41,8 +42,8 @@ public class HttpTrafficAutoModificationHttpHandler implements HttpHandler {
     public ResponseReceivedAction handleHttpResponseReceived(HttpResponseReceived httpResponseReceived) {
         HttpResponse response;
         // 处理Http Hook
-        if (GalaxyMain.httpHookService != null)
-            response = GalaxyMain.httpHookService.tryHookResponseToBurp(httpResponseReceived,
+        if (AbstractHttpHookService.hookService != null)
+            response = AbstractHttpHookService.hookService.tryHookResponseToBurp(httpResponseReceived,
                 GalaxyMain.config.getHttpTrafficAutoModificationConfig().getHookConfig());
         else response = httpResponseReceived;
         // 处理Rule Match

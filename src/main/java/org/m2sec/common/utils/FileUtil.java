@@ -1,9 +1,11 @@
 package org.m2sec.common.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -71,6 +73,18 @@ public class FileUtil {
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void deleteFileIfExist(String... filePaths) {
+        deleteFileIfExist(Stream.of(filePaths).map(File::new).toArray(File[]::new));
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static void deleteFileIfExist(File... files) {
+        if (files==null) return;
+        for (File file : files) {
+            file.delete();
         }
     }
 }

@@ -1,3 +1,4 @@
+logLevel: INFO # 日志等级. 日志路径 {work.dir}/run.log, 每次重启Burp或重新加载插件都会清空日志。
 httpTrafficAutoModificationConfig: # HTTP Traffic Auto Modification 模块的功能配置
   hookConfig: # HTTP Traffic Hook 功能的配置
     hookService: RPC # 指定以哪种方式启用hook功能，可选：RPC、JAVA

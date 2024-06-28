@@ -4,9 +4,9 @@ import burp.api.montoya.http.message.HttpRequestResponse;
 import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.ui.contextmenu.ContextMenuEvent;
 import burp.api.montoya.ui.contextmenu.InvocationType;
+import lombok.extern.slf4j.Slf4j;
 import org.m2sec.GalaxyMain;
 import org.m2sec.burp.menu.AbstractMenuItem;
-import org.m2sec.common.Log;
 import org.m2sec.common.WorkExecutor;
 import org.m2sec.common.utils.HttpUtil;
 import org.m2sec.modules.fuzz.intruder.FuzzSensitivePathGeneratorProviderProvider;
@@ -21,12 +21,12 @@ import java.util.Set;
  * @date: 2024/6/21 20:23
  * @description:
  */
+@Slf4j
 public class FuzzSensitivePathMenuItem extends AbstractMenuItem {
 
     public static final String[] STATIC_FILE_SUFFIX_ARRAY = new String[]{".js", ".css", ".html", ".jpg", ".png",
         ".pdf", ".docx"};
 
-    private static final Log log = new Log(FuzzSensitivePathMenuItem.class);
 
     @Override
     public String displayName() {
@@ -51,12 +51,14 @@ public class FuzzSensitivePathMenuItem extends AbstractMenuItem {
                     HttpRequestResponse requestResponse = GalaxyMain.burpApi.http().sendRequest(request);
                     GalaxyMain.burpApi.organizer().sendToOrganizer(requestResponse);
                 } catch (Exception e) {
-                    log.exception(e, "send request fail. request: %s, message: %s", request, e.getMessage());
+                    log.error("send request fail. request: {}, message: {}", request, e.getMessage(), e);
                 }
             }).toList();
             WorkExecutor.INSTANCE.beyondBatchExecute(
-                () -> log.infoEvent("%s get %d url. Please wait for execution.", displayName(), evilPathSet.size()),
-                () -> log.infoEvent("Fuzz Sensitive Path execute complete."),
+                () -> GalaxyMain.burpApi.logging().raiseInfoEvent(String.format("%s get %d url. Please wait for " +
+                        "execution.", displayName(),
+                    evilPathSet.size())),
+                () -> GalaxyMain.burpApi.logging().raiseInfoEvent("Fuzz Sensitive Path execute complete."),
                 workRunnables.toArray(Runnable[]::new)
             );
         }

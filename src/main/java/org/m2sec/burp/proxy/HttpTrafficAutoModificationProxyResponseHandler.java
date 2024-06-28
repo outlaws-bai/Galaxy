@@ -6,6 +6,7 @@ import burp.api.montoya.proxy.http.ProxyResponseHandler;
 import burp.api.montoya.proxy.http.ProxyResponseReceivedAction;
 import burp.api.montoya.proxy.http.ProxyResponseToBeSentAction;
 import org.m2sec.GalaxyMain;
+import org.m2sec.modules.traffic.hook.AbstractHttpHookService;
 
 /**
  * @author: outlaws-bai
@@ -26,8 +27,8 @@ public class HttpTrafficAutoModificationProxyResponseHandler implements ProxyRes
     public ProxyResponseToBeSentAction handleResponseToBeSent(InterceptedResponse interceptedResponse) {
         HttpResponse response;
         // 处理Http Hook
-        if (GalaxyMain.httpHookService != null)
-            response = GalaxyMain.httpHookService.tryHookResponseToClient(interceptedResponse,
+        if (AbstractHttpHookService.hookService != null)
+            response = AbstractHttpHookService.hookService.tryHookResponseToClient(interceptedResponse,
                 GalaxyMain.config.getHttpTrafficAutoModificationConfig().getHookConfig());
         else response = interceptedResponse;
         return ProxyResponseToBeSentAction.continueWith(response);

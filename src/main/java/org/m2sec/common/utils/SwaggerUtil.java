@@ -3,8 +3,8 @@ package org.m2sec.common.utils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import lombok.extern.slf4j.Slf4j;
 import org.m2sec.common.Constants;
-import org.m2sec.common.Log;
 import org.m2sec.common.enums.ContentType;
 import org.m2sec.common.enums.Method;
 import org.m2sec.common.models.ApiInfo;
@@ -22,8 +22,8 @@ import java.util.*;
  * @date: 2024/6/21 20:23
  * @description:
  */
+@Slf4j
 public class SwaggerUtil {
-    private static final Log log = new Log(SwaggerUtil.class);
 
     public static List<ApiInfo> extractApiInfoFromSwagger(String docs) {
         JsonObject jsonObject = JsonParser.fromJsonStr(docs, JsonObject.class);
