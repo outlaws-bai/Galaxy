@@ -111,7 +111,7 @@ BypassTools.generateBypassPathPayloads(path).forEach(System.out::println);
 
 # 环境
 
-Burp运行及插件编译JAVA版本：19
+Burp运行及插件编译JDK版本：21
 
 Burp版本：V2023.10.3.7
 
@@ -122,3 +122,5 @@ Python版本：3.11
 [burp javadoc](https://portswigger.github.io/burp-extensions-montoya-api/javadoc/burp/api/montoya/MontoyaApi.html)
 
 [burp ext examples](https://github.com/PortSwigger/burp-extensions-montoya-api-examples)
+
+[jdk 21 download](https://docs.aws.amazon.com/corretto/latest/corretto-21-ug/downloads-list.html)
