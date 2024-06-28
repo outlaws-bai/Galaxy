@@ -101,6 +101,14 @@ BypassTools.generateBypassPathPayloads(path).forEach(System.out::println);
 
 各大云平台对象存储匿名操作检测
 
+# 交流
+
+扫码添加下方wx交流群
+
+[交流](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/Snipaste_2024-06-28_09-59-03.png)
+
+链接失效请添加wx号outlaws_bai，并备注Galaxy交流。
+
 # 环境
 
 Burp运行及插件编译JAVA版本：19
