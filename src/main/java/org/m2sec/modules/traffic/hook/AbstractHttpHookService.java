@@ -48,6 +48,7 @@ public abstract class AbstractHttpHookService {
             } else {
                 throw new RuntimeException("hookService is error! please choose RPC or JAVA");
             }
+            log.info("HTTP Traffic Hook - {} start. ", hookConfig.getHookService());
             hookService.init();
         } else {
             if (hookService != null) hookService.destroy();
