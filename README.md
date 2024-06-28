@@ -105,7 +105,7 @@ BypassTools.generateBypassPathPayloads(path).forEach(System.out::println);
 
 扫码添加下方wx交流群
 
-[交流](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/Snipaste_2024-06-28_09-59-03.png)
+![交流](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/Snipaste_2024-06-28_09-59-03.png)
 
 链接失效请添加wx号outlaws_bai，并备注Galaxy交流。
 
