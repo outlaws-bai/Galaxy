@@ -103,7 +103,7 @@ BypassTools.generateBypassPathPayloads(path).forEach(System.out::println);
 
 # 交流
 
-扫码添加下方wx交流群
+如果你有发现BUG或有更好的建立，可提交Issue或扫码添加下方wx交流群
 
 ![交流](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/Snipaste_2024-06-28_09-59-03.png)
 
