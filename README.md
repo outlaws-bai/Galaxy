@@ -8,6 +8,8 @@
 
 导入：Extensions -> Add -> Select File(Type: java)
 
+自行打包：build.gradle -> shadowJar
+
 # 核心功能
 
 ## HTTP Traffic Hook
