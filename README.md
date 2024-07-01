@@ -105,6 +105,8 @@ BypassTools.generateBypassPathPayloads(path).forEach(System.out::println);
 
 # 交流
 
+> 期待你的star，如果该项目对你有帮助的话 ~
+
 如果你发现BUG、有建议或有好的点子，可以提交Issue或扫码添加下方wx交流群沟通
 
 ![交流](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/Snipaste_2024-06-28_09-59-03.png)
