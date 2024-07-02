@@ -224,7 +224,16 @@ public class SwaggerUtil {
                 JsonArray enums = property.has("enum") ? property.get("enum").getAsJsonArray() : null;
                 String description = property.has("description") ? property.get("description").getAsString() : null;
                 String subType = property.has("type") ? property.get("type").getAsString() : null;
-                String example = property.has("example") ? property.get("example").getAsString() : null;
+                Object example = null;
+                if (property.has("example")) {
+                    if (property.get("example").isJsonPrimitive()) {
+                        example = property.get("example").getAsString();
+                    } else if (property.get("example").isJsonArray()) {
+                        example = property.getAsJsonArray("example");
+                    } else if (property.get("example").isJsonObject()) {
+                        example = property.getAsJsonObject("example");
+                    }
+                }
                 if (description != null)
                     apiInfo.getNotes().put("model-description-body-" + key + "-" + subType, description);
                 if (enums != null) {

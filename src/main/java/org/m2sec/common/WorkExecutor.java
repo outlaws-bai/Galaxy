@@ -3,10 +3,7 @@ package org.m2sec.common;
 import org.m2sec.common.utils.CompatUtil;
 
 import javax.annotation.Nullable;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -22,7 +19,7 @@ public class WorkExecutor extends ThreadPoolExecutor {
     public WorkExecutor() {
         this(0, CompatUtil.getCPUCount() * 2 - 1,
             60L, TimeUnit.SECONDS,
-            new SynchronousQueue<Runnable>());
+            new LinkedBlockingQueue<>());
     }
 
     public WorkExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit,
