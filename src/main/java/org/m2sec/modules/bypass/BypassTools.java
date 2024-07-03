@@ -13,12 +13,13 @@ import java.util.Set;
  */
 public class BypassTools {
     public static Set<String> generateBypassPathPayloads(String path) {
+        // 正常化处理下path
+        path = HttpUtil.normalizePath(path);
+
         Set<String> payloads = new HashSet<>();
         if (path.isEmpty()) return payloads;
         String[] pathParts = path.split("/");
         if (pathParts.length == 0) return payloads;
-        // 正常化处理下path
-        path = HttpUtil.normalizePath(path);
 
         // 1. 在请求的每个/中间插入干扰字符，一般为getRequestUri引起.
         // 假设原始请求路径为/api/test，绕过字符为;，经过处理后应该生成如下路径/;/api/;/test
