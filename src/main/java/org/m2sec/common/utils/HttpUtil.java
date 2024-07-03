@@ -93,6 +93,8 @@ public class HttpUtil {
     public static String normalizePath(String path) {
         if (path.isEmpty()) return "/";
         String[] pathParts = path.split("/");
+        if (pathParts.length == 0) return "/";
+        String suffix = path.endsWith("/") ? "/" : ""; // spring在3.0后，声明为/a/b/c/使用/a/b/c访问无法匹配，该后缀做兼容
         ArrayList<String> normalizedPathParts = new ArrayList<>();
         for (String part : pathParts) {
             if ("".equals(part)) {
@@ -108,7 +110,7 @@ public class HttpUtil {
                 normalizedPathParts.add(part);
             }
         }
-        return "/" + String.join("/", normalizedPathParts);
+        return "/" + String.join("/", normalizedPathParts) + suffix;
     }
 
     public static <T extends Parameters<String>> T strToParameters(String str, String sep, String conn, Class<?
