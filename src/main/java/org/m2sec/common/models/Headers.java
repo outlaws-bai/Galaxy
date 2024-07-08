@@ -57,6 +57,22 @@ public class Headers extends Parameters<String> {
         return this;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
+    public Headers replaceIgnoreCase(String key, String value) {
+        String oldKey = null;
+        List<String> oldValues = null;
+        for (Map.Entry<String, List<String>> entry : entrySet()) {
+            if (key.equalsIgnoreCase(entry.getKey())) {
+                oldKey = entry.getKey();
+                oldValues = entry.getValue();
+            }
+        }
+        if (oldKey != null) {
+            replace(oldKey, oldValues, new ArrayList<>(List.of(value)));
+        }
+        return this;
+    }
+
     public List<HttpHook.Header> toRpc() {
         List<HttpHook.Header> retVal = new ArrayList<>();
         for (Map.Entry<String, List<String>> entry : entrySet()) {

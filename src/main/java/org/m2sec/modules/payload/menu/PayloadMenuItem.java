@@ -48,7 +48,7 @@ public class PayloadMenuItem extends AbstractMenuItem {
         // 已check，因此不用关心是否以判断preset
         MessageEditorHttpRequestResponse messageEditorHttpRequestResponse = event.messageEditorRequestResponse().get();
         // 处理payload中的某些变量
-        String finalValue = Render.renderTemplate(value, env);
+        String finalValue = Render.renderTemplate(value, env, BurpUtil.class);
         HttpRequest httpRequest;
         if (messageEditorHttpRequestResponse.selectionOffsets().isPresent()) {
             Range selectRange = messageEditorHttpRequestResponse.selectionOffsets().get();

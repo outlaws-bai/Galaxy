@@ -227,8 +227,7 @@ public class Request {
     }
 
     public Request updateContentLength() {
-        headers.removeIgnoreCase(Constants.HTTP_HEADER_CONTENT_LENGTH);
-        headers.put(Constants.HTTP_HEADER_CONTENT_LENGTH, String.valueOf(this.content.length));
+        headers.replaceIgnoreCase(Constants.HTTP_HEADER_CONTENT_LENGTH, String.valueOf(this.content.length));
         return this;
     }
 
