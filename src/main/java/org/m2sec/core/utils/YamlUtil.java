@@ -1,6 +1,5 @@
 package org.m2sec.core.utils;
 
-import org.m2sec.core.utils.JsonUtil;
 import org.yaml.snakeyaml.Yaml;
 
 import java.lang.reflect.Type;

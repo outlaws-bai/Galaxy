@@ -7,7 +7,6 @@ import com.google.protobuf.ByteString;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.m2sec.Galaxy;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Tuple;
 import org.m2sec.core.enums.ContentType;

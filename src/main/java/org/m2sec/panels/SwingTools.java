@@ -2,8 +2,6 @@ package org.m2sec.panels;
 
 
 import burp.api.montoya.MontoyaApi;
-import burp.api.montoya.ui.Theme;
-import org.fife.ui.rtextarea.RTextScrollPane;
 import org.m2sec.Galaxy;
 
 import javax.swing.*;

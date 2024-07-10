@@ -1,6 +1,5 @@
 package org.m2sec.core.httphook;
 
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.Galaxy;
 import org.m2sec.core.common.Config;
