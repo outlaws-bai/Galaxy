@@ -9,6 +9,7 @@ import org.m2sec.core.enums.Method;
 import org.m2sec.core.models.Headers;
 import org.m2sec.core.models.UploadFile;
 import org.m2sec.core.utils.HttpUtil;
+import org.m2sec.core.utils.JsonUtil;
 
 import javax.annotation.Nullable;
 import java.time.LocalDateTime;
@@ -27,7 +28,7 @@ import java.util.Map;
 public class SwaggerParser {
 
     public static List<ApiInfo> parseSwaggerDoc(String docs) {
-        JsonObject jsonObject = JsonParser.fromJsonStr(docs, JsonObject.class);
+        JsonObject jsonObject = JsonUtil.fromJsonStr(docs, JsonObject.class);
         String swaggerVersion = jsonObject.has("swagger") ? jsonObject.get("swagger").getAsString() : null;
         String openApiVersion = jsonObject.has("openapi") ? jsonObject.get("openapi").getAsString() : null;
         if (swaggerVersion != null) {

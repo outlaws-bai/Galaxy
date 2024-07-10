@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.m2sec.core.common.JsonParser;
+import org.m2sec.core.utils.JsonUtil;
 import org.m2sec.core.common.Tuple;
 import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.utils.HttpUtil;
@@ -89,7 +89,7 @@ public class FuzzDict {
             if (contentType == ContentType.FORM) {
                 extractParamNamesFromMap(params, Form.of(new String(request.getContent())));
             } else if (contentType == ContentType.JSON) {
-                JsonObject bodyJsonObject = JsonParser.fromJsonStr(new String(request.getContent()), JsonObject.class);
+                JsonObject bodyJsonObject = JsonUtil.fromJsonStr(new String(request.getContent()), JsonObject.class);
                 extractParamNamesFromJson(params, bodyJsonObject);
             }
         } catch (Exception e) {
@@ -97,7 +97,7 @@ public class FuzzDict {
         }
         try {
             if (response != null) {
-                JsonObject bodyJsonObject = JsonParser.fromJsonStr(new String(response.getContent()), JsonObject.class);
+                JsonObject bodyJsonObject = JsonUtil.fromJsonStr(new String(response.getContent()), JsonObject.class);
                 extractParamNamesFromJson(params, bodyJsonObject);
             }
         } catch (Exception e) {
@@ -107,7 +107,7 @@ public class FuzzDict {
     }
 
     public static void extractParamNamesFromMap(Set<String> params, Map<?, ?> map) {
-        extractParamNamesFromJson(params, JsonParser.toJsonElement(map));
+        extractParamNamesFromJson(params, JsonUtil.toJsonElement(map));
     }
 
     public static void extractParamNamesFromJson(Set<String> params, JsonElement jsonElement) {

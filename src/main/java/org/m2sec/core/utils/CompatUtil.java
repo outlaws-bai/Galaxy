@@ -1,7 +1,6 @@
 package org.m2sec.core.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.m2sec.core.common.JsonParser;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -28,7 +27,7 @@ public class CompatUtil {
         HashMap<String, List<String>> retVal = new HashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             if (entry.getValue() instanceof Map<?, ?> || entry.getValue() instanceof List<?>)
-                retVal.put(entry.getKey(), new ArrayList<>(List.of(JsonParser.toJsonStr(entry.getValue()))));
+                retVal.put(entry.getKey(), new ArrayList<>(List.of(JsonUtil.toJsonStr(entry.getValue()))));
             else retVal.put(entry.getKey(), new ArrayList<>(List.of(entry.getValue().toString())));
         }
         return retVal;

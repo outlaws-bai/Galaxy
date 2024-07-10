@@ -2,7 +2,6 @@ package org.m2sec.core.common;
 
 import org.m2sec.core.utils.FileUtil;
 
-import javax.swing.plaf.PanelUI;
 import java.io.File;
 
 /**
@@ -53,6 +52,9 @@ public class Constants {
 
     public static final String DEFAULT_HTTP_VERSION = "HTTP/1.1";
 
+    public static String STATIC_EXTENSIONS = ".css|.js|.jpg|.jpeg|.png|.gif|.bmp|.svg|.ico|.html|.htm|" +
+        ".xml|.txt|.pdf|.zip|.rar|.tar|.gz|.7z|.mp3|.mp4|.avi|.webm|.mov|.ogg|.wav|.swf|.woff|.ttf|.eot|.otf|.webp|" +
+        ".m4a|.m4v|.flv|.wmv|.doc|.docx|.xls|.xlsx|.ppt|.pptx|.csv|.rtf";
     public static final String DEFAULT_USER_AGENT =
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " + "(KHTML, like Gecko) Chrome/120.0.0.0 " +
             "Safari/537" + ".36 Edg/120.0.0.0 M2Sec/1.0";

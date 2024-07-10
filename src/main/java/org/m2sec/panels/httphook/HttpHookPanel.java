@@ -1,10 +1,15 @@
 package org.m2sec.panels.httphook;
 
 import burp.api.montoya.MontoyaApi;
+import lombok.extern.slf4j.Slf4j;
 import org.m2sec.Galaxy;
+import org.m2sec.abilities.MasterHttpHandler;
+import org.m2sec.abilities.MaterProxyHandler;
 import org.m2sec.core.common.CacheInfo;
+import org.m2sec.core.common.Config;
 import org.m2sec.core.enums.HttpHookWay;
 import org.m2sec.core.enums.RunStatus;
+import org.m2sec.core.httphook.AbstractHttpHooker;
 import org.m2sec.panels.SwingTools;
 
 import javax.swing.*;
@@ -18,13 +23,16 @@ import java.util.Map;
  * @date: 2024/7/9 21:04
  * @description:
  */
-
+@Slf4j
 public class HttpHookPanel extends JPanel {
+
+    private final Config config;
     private final CacheInfo cache;
     private final MontoyaApi api;
 
-    public HttpHookPanel(CacheInfo cache, MontoyaApi api) {
-        this.cache = cache;
+    public HttpHookPanel(Config config, MontoyaApi api) {
+        this.config = config;
+        this.cache = config.getCacheOption();
         this.api = api;
         setName("HttpHook");
         initPanel();
@@ -113,23 +121,32 @@ public class HttpHookPanel extends JPanel {
         });
         // 设置 switchButton 的事件监听器, 开关HttpHook功能
         switchButton.addActionListener(e -> {
-            boolean target = !switchButton.getText().equalsIgnoreCase(RunStatus.START.name().toLowerCase());
-            String text = target ? RunStatus.START.name() : RunStatus.STOP.name();
+            boolean isStop = switchButton.getText().equalsIgnoreCase(RunStatus.STOP.name().toLowerCase());
+            String text = isStop ? RunStatus.START.name() : RunStatus.STOP.name();
             switchButton.setText(SwingTools.capitalizeFirstLetter(text));
             //noinspection SuspiciousMethodCalls
-            SwingTools.changePanelStatus(panelMap.get(comboBox.getSelectedItem()), target);
-            SwingTools.changePanelStatus(requestCheckPanel, target);
-            SwingTools.changePanelStatus(comboBox, target);
-            SwingTools.changePanelStatus(hookRequestCheckBox, target);
-            SwingTools.changePanelStatus(hookResponseCheckBox, target);
+            SwingTools.changePanelStatus(panelMap.get(comboBox.getSelectedItem()), isStop);
+            SwingTools.changePanelStatus(requestCheckPanel, isStop);
+            SwingTools.changeComponentStatus(comboBox, isStop);
+            SwingTools.changeComponentStatus(hookRequestCheckBox, isStop);
+            SwingTools.changeComponentStatus(hookResponseCheckBox, isStop);
 
-            if (!target) {
+            if (!isStop) {
                 cache.setHookWay(HttpHookWay.valueOf((String) comboBox.getSelectedItem()))
                     .setRequestCheckExpression(checkELTextField.getText())
                     .setHookRequest(hookRequestCheckBox.isSelected())
                     .setHookResponse(hookResponseCheckBox.isSelected())
-                    .setRpcConn(rpcPanel.getData())
-                    .setJavaSelectItem(javaJPanel.getData());
+                    .setGrpcConn(rpcPanel.getData())
+                    .setJavaSelectItem(javaJPanel.getData()).setHookStart(true);
+                AbstractHttpHooker hooker = AbstractHttpHooker.getHooker(config);
+                MaterProxyHandler.hooker = hooker;
+                MasterHttpHandler.hooker = hooker;
+                log.info("Hook start - {}", hooker.getClass().getSimpleName());
+            } else {
+                MaterProxyHandler.hooker.destroy();
+                MaterProxyHandler.hooker = null;
+                cache.setHookStart(false);
+                log.info("Hook stop");
             }
         });
 

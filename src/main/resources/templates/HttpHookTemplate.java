@@ -1,10 +1,14 @@
-import org.m2sec.common.crypto.CryptoUtil;
-import org.m2sec.common.models.Request;
-import org.m2sec.common.models.Response;
-import org.m2sec.common.parsers.JsonParser;
-
+import org.m2sec.core.utils.*;
+import org.m2sec.core.models.*;
 import javax.annotation.Nullable;
 
+/**
+ * The available classes are as follows...
+ * models：可能用到的DataObject
+ * https://github.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/models
+ * utils：可能用到的工具类
+ * https://github.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/utils
+ */
 public class ${filename} {
 
 

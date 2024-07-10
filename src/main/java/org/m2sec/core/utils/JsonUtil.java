@@ -1,4 +1,4 @@
-package org.m2sec.core.common;
+package org.m2sec.core.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,7 +15,7 @@ import java.util.Map;
  * @date: 2024/6/21 20:23
  * @description:
  */
-public class JsonParser {
+public class JsonUtil {
     private static final Gson gson = new GsonBuilder().create();
 
     public static String toJsonStr(Object obj) {

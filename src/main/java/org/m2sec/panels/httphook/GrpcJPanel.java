@@ -42,7 +42,7 @@ public class GrpcJPanel extends JPanel {
     }
 
     private void setData() {
-        grpcConnTextField.setText(cache.getRpcConn());
+        grpcConnTextField.setText(cache.getGrpcConn());
     }
 
     public String getData() {

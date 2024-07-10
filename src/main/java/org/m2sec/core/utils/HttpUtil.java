@@ -5,7 +5,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import org.m2sec.core.common.JsonParser;
 import org.m2sec.core.common.Tuple;
 import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.enums.Method;
@@ -232,9 +231,9 @@ public class HttpUtil {
     }
 
     public static Map<?, ?> updateJsonValuesByMap(Map<?, ?> map, String suffix) {
-        JsonElement jsonElement = JsonParser.toJsonElement(map);
+        JsonElement jsonElement = JsonUtil.toJsonElement(map);
         updateJsonValuesByJson(jsonElement, suffix);
-        return JsonParser.fromJsonStr(jsonElement.toString(), Map.class);
+        return JsonUtil.fromJsonStr(jsonElement.toString(), Map.class);
     }
 
     public static void updateJsonValuesByJson(JsonElement jsonElement, String suffix) {

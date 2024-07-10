@@ -1,14 +1,12 @@
 package org.m2sec.core.common;
 
-import com.google.gson.reflect.TypeToken;
+import burp.api.montoya.MontoyaApi;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.m2sec.core.utils.FileUtil;
-
-import java.lang.reflect.Type;
-import java.util.HashMap;
+import org.m2sec.core.utils.YamlUtil;
 
 /**
  * @author: outlaws-bai
@@ -29,20 +27,26 @@ public class Config {
      */
     private CacheInfo cacheOption;
 
+    private String jarFilePath;
 
-    public static Config ofWorkDir() {
-        return ofWorkDir(Constants.CACHE_OPTION_FILE_PATH, Constants.SETTING_FILE_PATH);
+    public Config(MontoyaApi api){
+        jarFilePath = api.extension().filename();
     }
 
-    public static Config ofWorkDir(String cacheFilePath, String settingFilePath) {
-        Setting setting = YamlParser.fromYamlStr(FileUtil.readFileAsString(settingFilePath), Setting.class);
-        CacheInfo cache = YamlParser.fromYamlStr(FileUtil.readFileAsString(cacheFilePath), CacheInfo.class);
+    public void patchFromWorkDir() {
+        patchFromWorkDir(Constants.CACHE_OPTION_FILE_PATH, Constants.SETTING_FILE_PATH);
+    }
 
-        return new Config(setting, cache);
+    public void patchFromWorkDir(String cacheFilePath, String settingFilePath) {
+        Setting setting = YamlUtil.fromYamlStr(FileUtil.readFileAsString(settingFilePath), Setting.class);
+        CacheInfo cacheOption = YamlUtil.fromYamlStr(FileUtil.readFileAsString(cacheFilePath), CacheInfo.class);
+        this.setting = setting;
+        this.cacheOption = cacheOption;
+        Constants.STATIC_EXTENSIONS = setting.getStaticExtensions();
     }
 
     public void dumpCache() {
-        FileUtil.writeFile(Constants.CACHE_OPTION_FILE_PATH, YamlParser.toYamlStr(setting));
+        FileUtil.writeFile(Constants.CACHE_OPTION_FILE_PATH, YamlUtil.toYamlStr(setting));
     }
 
     public void dumpSetting() {

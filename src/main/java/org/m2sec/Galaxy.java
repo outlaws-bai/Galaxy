@@ -11,11 +11,11 @@ import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.FileAppender;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.checkerframework.checker.units.qual.C;
 import org.m2sec.abilities.MasterHttpHandler;
 import org.m2sec.abilities.MaterProxyHandler;
 import org.m2sec.core.common.Config;
 import org.m2sec.core.common.WorkExecutor;
-import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.enums.RuntimeEnv;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.utils.FileUtil;
@@ -39,8 +39,6 @@ public class Galaxy implements BurpExtension {
 
     private static RuntimeEnv env = RuntimeEnv.LOCAL;
 
-    public static Config config;
-
     @Override
     public void initialize(MontoyaApi api) {
         env = RuntimeEnv.BURP;
@@ -49,14 +47,15 @@ public class Galaxy implements BurpExtension {
         // 初始化
         init();
         // 加载配置
-        config = Config.ofWorkDir();
-        log.debug("load config success! {}", config);
+        Config config = new Config(api);
+        config.patchFromWorkDir();
         // init log
         initLogger(Constants.LOG_FILE_PATH, config.getSetting().getLogLevel().name());
+        log.debug("load config success! {}", config);
         // 注册UI
         api.userInterface().registerSuiteTab(Constants.BURP_SUITE_EXT_NAME, getMainPanel(config, api));
         // 注册插件能力
-        registerAbility(api);
+        registerAbility(api, config);
         // 注册销毁事件
         api.extension().registerUnloadingHandler(() -> this.destroy(config));
     }
@@ -81,7 +80,7 @@ public class Galaxy implements BurpExtension {
     }
 
     public static MainPanel getMainPanel(Config config, MontoyaApi api) {
-        HttpHookPanel httpHookPanel = new HttpHookPanel(config.getCacheOption(), api);
+        HttpHookPanel httpHookPanel = new HttpHookPanel(config, api);
         SettingPanel settingPanel = new SettingPanel(config.getSetting(), api);
         AboutPanel aboutPanel = new AboutPanel(api);
         MainPanel mainPanel = new MainPanel(httpHookPanel, settingPanel, aboutPanel);
@@ -92,16 +91,16 @@ public class Galaxy implements BurpExtension {
         return mainPanel;
     }
 
-    private void registerAbility(MontoyaApi api) {
+    private void registerAbility(MontoyaApi api, Config config) {
         // 注册menu item
 //        burp.userInterface().registerContextMenuItemsProvider(new MasterContextMenuItemsProvider());
         // 注册unloading hook
 //        burp.extension().registerUnloadingHandler(this::destroy);
         // 注册http hook 能力
-        api.http().registerHttpHandler(new MasterHttpHandler(api));
-        MaterProxyHandler materProxyHandler = new MaterProxyHandler(api);
-        api.proxy().registerRequestHandler(materProxyHandler);
-        api.proxy().registerResponseHandler(materProxyHandler);
+        api.http().registerHttpHandler(new MasterHttpHandler());
+        MaterProxyHandler materProxyHandler = new MaterProxyHandler();
+        api.proxy().registerRequestHandler(new MaterProxyHandler());
+        api.proxy().registerResponseHandler(new MaterProxyHandler());
         // 注册payload生成器
 //        burp.intruder().registerPayloadGeneratorProvider(new BypassUrlGeneratorProviderProvider());
 //        burp.intruder().registerPayloadGeneratorProvider(new BypassPathGeneratorProviderProvider());

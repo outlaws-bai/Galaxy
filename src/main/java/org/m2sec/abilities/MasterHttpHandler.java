@@ -1,7 +1,9 @@
 package org.m2sec.abilities;
 
-import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.http.handler.*;
+import burp.api.montoya.http.message.requests.HttpRequest;
+import burp.api.montoya.http.message.responses.HttpResponse;
+import org.m2sec.core.httphook.AbstractHttpHooker;
 
 /**
  * @author: outlaws-bai
@@ -11,18 +13,22 @@ import burp.api.montoya.http.handler.*;
 
 public class MasterHttpHandler implements HttpHandler {
 
-    private final MontoyaApi api;
 
-    public MasterHttpHandler(MontoyaApi api) {
-        this.api = api;
-    }
+    public static AbstractHttpHooker hooker;
+
 
     /**
      * 请求从Burp发送到服务端时被调用
      */
     @Override
     public RequestToBeSentAction handleHttpRequestToBeSent(HttpRequestToBeSent requestToBeSent) {
-        return null;
+        HttpRequest request;
+        if (hooker != null) {
+            request = hooker.tryHookRequestToServer(requestToBeSent);
+        } else {
+            request = requestToBeSent;
+        }
+        return RequestToBeSentAction.continueWith(request, requestToBeSent.annotations());
     }
 
     /**
@@ -30,6 +36,12 @@ public class MasterHttpHandler implements HttpHandler {
      */
     @Override
     public ResponseReceivedAction handleHttpResponseReceived(HttpResponseReceived responseReceived) {
-        return null;
+        HttpResponse response;
+        if (hooker != null) {
+            response = hooker.tryHookResponseToBurp(responseReceived);
+        } else {
+            response = responseReceived;
+        }
+        return ResponseReceivedAction.continueWith(response, responseReceived.annotations());
     }
 }

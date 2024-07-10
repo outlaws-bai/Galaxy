@@ -226,6 +226,7 @@ public class Request {
         else return Cookies.of(cookieHeader);
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public Request updateContentLength() {
         headers.replaceIgnoreCase(Constants.HTTP_HEADER_CONTENT_LENGTH, String.valueOf(this.content.length));
         return this;
@@ -244,7 +245,7 @@ public class Request {
     }
 
     public boolean isStaticExtension() {
-        return isStaticExtension(Galaxy.config.getSetting().getStaticExtensions());
+        return isStaticExtension(Constants.STATIC_EXTENSIONS.split("\\|"));
     }
 
     public boolean isStaticExtension(String... staticExtensions) {

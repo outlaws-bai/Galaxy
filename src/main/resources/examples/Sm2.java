@@ -1,6 +1,5 @@
 package examples;
 
-import org.m2sec.core.common.*;
 import org.m2sec.core.utils.*;
 import org.m2sec.core.models.*;
 import javax.annotation.Nullable;
@@ -8,9 +7,11 @@ import java.util.Base64;
 import java.util.HashMap;
 
 /**
- * @author: outlaws-bai
- * @date: 2024/6/21 20:23
- * @description:
+ * The available classes are as follows...
+ * models：可能用到的DataObject
+ * https://github.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/models
+ * utils：可能用到的工具类
+ * https://github.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/utils
  */
 public class Sm2 {
 
@@ -30,19 +31,19 @@ public class Sm2 {
     private static final byte[] privateKey = Base64.getDecoder().decode(privateKeyBase64);
 
     private static byte[] getData(byte[] content, String key) {
-        return Base64.getDecoder().decode((String) JsonParser.jsonStrToMap(new String(content)).get(key));
+        return Base64.getDecoder().decode((String) JsonUtil.jsonStrToMap(new String(content)).get(key));
     }
 
     private static byte[] toData(byte[] content, String key) {
         HashMap<String, Object> jsonBody = new HashMap<>();
         jsonBody.put(key, Base64.getEncoder().encodeToString(content));
-        return JsonParser.toJsonStr(jsonBody).getBytes();
+        return JsonUtil.toJsonStr(jsonBody).getBytes();
     }
 
     /**
      * HTTP请求从客户端到达Burp时被调用。在此处完成请求解密的代码就可以在Burp中看到明文的请求报文。
      *
-     * @param request org.m2sec.common.models.Request 请求对象
+     * @param request Request 请求对象
      * @return 经过处理后的request对象，返回null代表不需要处理
      */
     @Nullable
@@ -59,7 +60,7 @@ public class Sm2 {
     /**
      * HTTP请求从Burp将要发送到Server时被调用。在此处完成请求加密的代码就可以将加密后的请求报文发送到Server。
      *
-     * @param request org.m2sec.common.models.Request 请求对象
+     * @param request Request 请求对象
      * @return 经过处理后的request对象，返回null代表不需要处理
      */
     @Nullable
@@ -78,7 +79,7 @@ public class Sm2 {
     /**
      * HTTP请求从Server到达Burp时被调用。在此处完成响应解密的代码就可以在Burp中看到明文的响应报文。
      *
-     * @param response org.m2sec.common.models.Response 响应对象
+     * @param response Response 响应对象
      * @return 经过处理后的response对象，返回null代表不需要处理
      */
     @Nullable
@@ -95,7 +96,7 @@ public class Sm2 {
     /**
      * HTTP请求从Burp将要发送到Client时被调用。在此处完成响应加密的代码就可以将加密后的响应报文返回给Client。
      *
-     * @param response org.m2sec.common.models.Response 响应对象
+     * @param response Response 响应对象
      * @return 经过处理后的response对象，返回null代表不需要处理
      */
     @Nullable

@@ -1,7 +1,10 @@
 package org.m2sec.abilities;
 
-import burp.api.montoya.MontoyaApi;
+import burp.api.montoya.http.message.requests.HttpRequest;
+import burp.api.montoya.http.message.responses.HttpResponse;
 import burp.api.montoya.proxy.http.*;
+import org.m2sec.core.httphook.AbstractHttpHooker;
+
 
 /**
  * @author: outlaws-bai
@@ -10,18 +13,22 @@ import burp.api.montoya.proxy.http.*;
  */
 
 public class MaterProxyHandler implements ProxyRequestHandler, ProxyResponseHandler {
-    private final MontoyaApi api;
 
-    public MaterProxyHandler(MontoyaApi api) {
-        this.api = api;
-    }
+    public static AbstractHttpHooker hooker;
+
 
     /**
      * 在客户端请求到达Burp时被调用
      */
     @Override
     public ProxyRequestReceivedAction handleRequestReceived(InterceptedRequest interceptedRequest) {
-        return null;
+        HttpRequest request;
+        if (hooker != null) {
+            request = hooker.tryHookRequestToBurp(interceptedRequest);
+        } else {
+            request = interceptedRequest;
+        }
+        return ProxyRequestReceivedAction.continueWith(request, interceptedRequest.annotations());
     }
 
     /**
@@ -29,7 +36,13 @@ public class MaterProxyHandler implements ProxyRequestHandler, ProxyResponseHand
      */
     @Override
     public ProxyResponseToBeSentAction handleResponseToBeSent(InterceptedResponse interceptedResponse) {
-        return null;
+        HttpResponse response;
+        if (hooker != null) {
+            response = hooker.tryHookResponseToClient(interceptedResponse);
+        } else {
+            response = interceptedResponse;
+        }
+        return ProxyResponseToBeSentAction.continueWith(response, interceptedResponse.annotations());
     }
 
     @Override

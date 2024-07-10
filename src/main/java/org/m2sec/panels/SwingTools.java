@@ -38,7 +38,7 @@ public class SwingTools {
         }
     }
 
-    public static void changePanelStatus(Component component, boolean target) {
+    public static void changeComponentStatus(Component component, boolean target) {
         component.setEnabled(target);
     }
 

@@ -15,7 +15,7 @@ public class TestSwing {
         JFrame frame = new JFrame("Java Syntax Highlighting");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
-        Config config = Config.ofWorkDir();
+        Config config = new Config();
         frame.add(Galaxy.getMainPanel(config, null));
 
         // 窗体可见

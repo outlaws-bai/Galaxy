@@ -7,6 +7,8 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.m2sec.core.enums.HttpHookWay;
 
+import java.io.File;
+
 /**
  * @author: outlaws-bai
  * @date: 2024/7/10 13:45
@@ -22,6 +24,11 @@ public class CacheInfo {
     private String requestCheckExpression;
     private boolean hookRequest;
     private boolean hookResponse;
-    private String rpcConn;
+    private String grpcConn;
     private String javaSelectItem;
+    private boolean hookStart;
+
+    public String getScriptPath(String item, String suffix) {
+        return Constants.HTTP_HOOK_EXAMPLES_FILE_DIR + File.separator + item + suffix;
+    }
 }

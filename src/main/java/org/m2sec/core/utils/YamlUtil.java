@@ -1,5 +1,6 @@
-package org.m2sec.core.common;
+package org.m2sec.core.utils;
 
+import org.m2sec.core.utils.JsonUtil;
 import org.yaml.snakeyaml.Yaml;
 
 import java.lang.reflect.Type;
@@ -10,7 +11,7 @@ import java.util.Map;
  * @date: 2024/6/21 20:23
  * @description:
  */
-public class YamlParser {
+public class YamlUtil {
 
     private static final Yaml yaml = new Yaml();
 
@@ -19,10 +20,10 @@ public class YamlParser {
     }
 
     public static <T> T fromYamlStr(String yamlStr, Class<T> clazz) {
-        return JsonParser.fromJsonStr(JsonParser.toJsonStr(yaml.loadAs(yamlStr, Map.class)), clazz);
+        return JsonUtil.fromJsonStr(JsonUtil.toJsonStr(yaml.loadAs(yamlStr, Map.class)), clazz);
     }
 
     public static <T> T fromYamlStr(String yamlStr, Type type) {
-        return JsonParser.fromJsonStr(JsonParser.toJsonStr(yaml.loadAs(yamlStr, Map.class)), type);
+        return JsonUtil.fromJsonStr(JsonUtil.toJsonStr(yaml.loadAs(yamlStr, Map.class)), type);
     }
 }

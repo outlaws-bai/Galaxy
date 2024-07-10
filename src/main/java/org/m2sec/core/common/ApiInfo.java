@@ -9,6 +9,7 @@ import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.models.*;
 import org.m2sec.core.utils.HttpUtil;
+import org.m2sec.core.utils.JsonUtil;
 
 import java.net.URL;
 import java.util.*;
@@ -82,9 +83,9 @@ public class ApiInfo {
         if (contentType == ContentType.JSON) {
             headers.put(Constants.HTTP_HEADER_CONTENT_TYPE, ContentType.JSON.toString());
             if (!requestBody.isEmpty()) {
-                content = JsonParser.toJsonStr(requestBody).getBytes();
+                content = JsonUtil.toJsonStr(requestBody).getBytes();
             } else if (!requestBody2.isEmpty()) {
-                content = JsonParser.toJsonStr(requestBody2).getBytes();
+                content = JsonUtil.toJsonStr(requestBody2).getBytes();
             } else {
                 content = "{}".getBytes();
             }
