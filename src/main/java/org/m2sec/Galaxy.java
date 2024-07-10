@@ -9,18 +9,16 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.FileAppender;
-import com.sun.tools.javac.Main;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.m2sec.abilities.httphook.HttpHookHttpHandler;
-import org.m2sec.abilities.httphook.HttpHookProxyRequestHandler;
-import org.m2sec.abilities.httphook.HttpHookProxyResponseHandler;
+import org.m2sec.abilities.MasterHttpHandler;
+import org.m2sec.abilities.MaterProxyHandler;
 import org.m2sec.core.common.Config;
 import org.m2sec.core.common.WorkExecutor;
+import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.enums.RuntimeEnv;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.utils.FileUtil;
-import org.m2sec.panels.SwingTools;
 import org.m2sec.panels.about.AboutPanel;
 import org.m2sec.panels.httphook.HttpHookPanel;
 import org.m2sec.panels.MainPanel;
@@ -29,7 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.security.Security;
-import java.util.MissingFormatArgumentException;
 
 /**
  * @author: outlaws-bai
@@ -42,6 +39,8 @@ public class Galaxy implements BurpExtension {
 
     private static RuntimeEnv env = RuntimeEnv.LOCAL;
 
+    public static Config config;
+
     @Override
     public void initialize(MontoyaApi api) {
         env = RuntimeEnv.BURP;
@@ -50,7 +49,7 @@ public class Galaxy implements BurpExtension {
         // 初始化
         init();
         // 加载配置
-        Config config = Config.ofWorkDir();
+        config = Config.ofWorkDir();
         log.debug("load config success! {}", config);
         // init log
         initLogger(Constants.LOG_FILE_PATH, config.getSetting().getLogLevel().name());
@@ -99,9 +98,10 @@ public class Galaxy implements BurpExtension {
         // 注册unloading hook
 //        burp.extension().registerUnloadingHandler(this::destroy);
         // 注册http hook 能力
-        api.http().registerHttpHandler(new HttpHookHttpHandler());
-        api.proxy().registerRequestHandler(new HttpHookProxyRequestHandler());
-        api.proxy().registerResponseHandler(new HttpHookProxyResponseHandler());
+        api.http().registerHttpHandler(new MasterHttpHandler(api));
+        MaterProxyHandler materProxyHandler = new MaterProxyHandler(api);
+        api.proxy().registerRequestHandler(materProxyHandler);
+        api.proxy().registerResponseHandler(materProxyHandler);
         // 注册payload生成器
 //        burp.intruder().registerPayloadGeneratorProvider(new BypassUrlGeneratorProviderProvider());
 //        burp.intruder().registerPayloadGeneratorProvider(new BypassPathGeneratorProviderProvider());

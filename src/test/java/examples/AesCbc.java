@@ -1,17 +1,17 @@
-import org.m2sec.common.crypto.CryptoUtil;
-import org.m2sec.common.models.Request;
-import org.m2sec.common.models.Response;
-import org.m2sec.common.parsers.JsonParser;
+package examples;
+
+import org.m2sec.core.common.*;
+import org.m2sec.core.utils.*;
+import org.m2sec.core.models.*;
 
 import javax.annotation.Nullable;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author: outlaws-bai
- * @date: 2024/6/21 20:23
- * @description:
+ * The available classes are as follows...
+ * Request：https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Request.class
+ * Response: https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Response.class
  */
 public class AesCbc {
 
@@ -21,19 +21,19 @@ public class AesCbc {
     private static final Map<String, Object> paramMap = new HashMap<>(Map.of("iv", iv));
 
     private static byte[] getData(byte[] content) {
-        return Base64.getDecoder().decode((String) JsonParser.jsonStrToMap(new String(content)).get("data"));
+        return CodeUtil.b64decode((String) JsonParser.jsonStrToMap(new String(content)).get("data"));
     }
 
     private static byte[] toData(byte[] content) {
         HashMap<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put("data", Base64.getEncoder().encodeToString(content));
+        jsonBody.put("data", CodeUtil.b64encodeToString(content));
         return JsonParser.toJsonStr(jsonBody).getBytes();
     }
 
     /**
      * HTTP请求从客户端到达Burp时被调用。在此处完成请求解密的代码就可以在Burp中看到明文的请求报文。
      *
-     * @param request org.m2sec.common.models.Request 请求对象
+     * @param request Request 请求对象
      * @return 经过处理后的request对象，返回null代表不需要处理
      */
     @Nullable
