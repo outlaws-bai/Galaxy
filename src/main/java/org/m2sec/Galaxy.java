@@ -98,8 +98,8 @@ public class Galaxy implements BurpExtension {
         // 注册http hook 能力
         api.http().registerHttpHandler(new MasterHttpHandler());
         MaterProxyHandler materProxyHandler = new MaterProxyHandler();
-        api.proxy().registerRequestHandler(new MaterProxyHandler());
-        api.proxy().registerResponseHandler(new MaterProxyHandler());
+        api.proxy().registerRequestHandler(materProxyHandler);
+        api.proxy().registerResponseHandler(materProxyHandler);
         // 注册payload生成器
 //        burp.intruder().registerPayloadGeneratorProvider(new BypassUrlGeneratorProviderProvider());
 //        burp.intruder().registerPayloadGeneratorProvider(new BypassPathGeneratorProviderProvider());
