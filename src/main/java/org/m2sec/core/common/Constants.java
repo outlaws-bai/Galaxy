@@ -21,8 +21,8 @@ public class Constants {
         Github -> https://github.com/outlaws-bai/Galaxy
         """;
 
-    public static final String HTTP_HOOK_GRPC_DEF = "You need to start a GRPC server and enter its address below.";
-    public static final String HTTP_HOOK_JAVA_DEF = "You need to select the appropriate JAVA file and modify it until" +
+    public static final String HTTP_HOOK_GRPC_DEF = "Please start a GRPC server and enter its address below.";
+    public static final String HTTP_HOOK_JAVA_DEF = "Please select the appropriate JAVA file and modify it until" +
         " it meets your needs.";
 
     public static final String WORK_DIR = System.getProperty("user.home") + File.separator + ".galaxy";

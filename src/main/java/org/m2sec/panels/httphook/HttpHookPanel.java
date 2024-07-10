@@ -1,7 +1,7 @@
 package org.m2sec.panels.httphook;
 
+import burp.api.montoya.MontoyaApi;
 import org.m2sec.core.common.CacheInfo;
-import org.m2sec.core.common.Constants;
 import org.m2sec.core.enums.HttpHookWay;
 import org.m2sec.core.enums.RunStatus;
 import org.m2sec.panels.Tools;
@@ -20,9 +20,11 @@ import java.util.Map;
 
 public class HttpHookPanel extends JPanel {
     private final CacheInfo cache;
+    private final MontoyaApi api;
 
-    public HttpHookPanel(CacheInfo cache) {
+    public HttpHookPanel(CacheInfo cache, MontoyaApi api) {
         this.cache = cache;
+        this.api = api;
         setName("HttpHook");
 
         initPanel();
@@ -34,8 +36,8 @@ public class HttpHookPanel extends JPanel {
 
         // 存放几种hook方式
         Map<String, JPanel> panelMap = new LinkedHashMap<>();
-        GrpcJPanel rpcPanel = new GrpcJPanel(cache);
-        JavaJPanel javaJPanel = new JavaJPanel(cache);
+        GrpcJPanel rpcPanel = new GrpcJPanel(cache,api);
+        JavaJPanel javaJPanel = new JavaJPanel(cache,api);
         panelMap.put("...", new JPanel());
         panelMap.put(HttpHookWay.GRPC.name(), rpcPanel);
         panelMap.put(HttpHookWay.JAVA.name(), javaJPanel);
@@ -58,24 +60,22 @@ public class HttpHookPanel extends JPanel {
         // 创建一个控制面板，放置启动开关、检查表达式，checkboxes
         JPanel nextControlPanel = new JPanel(new BorderLayout());
         nextControlPanel.setVisible(false);
-        nextControlPanel.setBackground(Color.CYAN);
-        Box switchAndCheckBox = Box.createHorizontalBox();
+        JPanel switchAndCheckBoxPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        switchAndCheckBoxPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
         JButton switchButton = new JButton(RunStatus.START.name().toLowerCase());
         JCheckBox hookRequestCheckBox = new JCheckBox("HookRequest");
         JCheckBox hookResponseCheckBox = new JCheckBox("HookResponse");
-        switchAndCheckBox.add(hookRequestCheckBox);
-        switchAndCheckBox.add(hookResponseCheckBox);
-        switchAndCheckBox.add(switchButton);
+        switchAndCheckBoxPanel.add(hookRequestCheckBox);
+        switchAndCheckBoxPanel.add(hookResponseCheckBox);
+        switchAndCheckBoxPanel.add(switchButton);
         JPanel wayDescAndSwitchAndCheckBox = new JPanel(new BorderLayout());
         wayDescAndSwitchAndCheckBox.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        wayDescAndSwitchAndCheckBox.setBackground(Color.green);
-        wayDescAndSwitchAndCheckBox.add(switchAndCheckBox, BorderLayout.EAST);
+        wayDescAndSwitchAndCheckBox.add(switchAndCheckBoxPanel, BorderLayout.EAST);
         nextControlPanel.add(wayDescAndSwitchAndCheckBox, BorderLayout.NORTH);
 
 
         // 创建面板，用于输入检查当前请求是否需要被Hook的表达式
         JPanel requestCheckPanel = new JPanel(new BorderLayout());
-        requestCheckPanel.setBackground(Color.gray);
         requestCheckPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
         JLabel elDescLabel = new JLabel("Please enter an expression that will be used to " +
             "determine which requests need to be processed.");
@@ -94,7 +94,6 @@ public class HttpHookPanel extends JPanel {
         JPanel blendPanel = new JPanel(new BorderLayout());
         blendPanel.add(wayPanelContainer, BorderLayout.CENTER);
 
-//        wayControlPanel.setBackground(Color.green);
         JPanel wayAndNextPanel = new JPanel(new BorderLayout());
         wayAndNextPanel.add(wayControlPanel, BorderLayout.NORTH);
         wayAndNextPanel.add(nextControlPanel, BorderLayout.CENTER);
@@ -136,6 +135,11 @@ public class HttpHookPanel extends JPanel {
         if (cache.getHookWay() != null) {
             comboBox.setSelectedItem(cache.getHookWay().name());
         }
+
+//        nextControlPanel.setBackground(Color.CYAN);
+//        wayDescAndSwitchAndCheckBox.setBackground(Color.green);
+//        requestCheckPanel.setBackground(Color.gray);
+//        wayControlPanel.setBackground(Color.green);
 
     }
 

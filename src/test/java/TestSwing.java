@@ -2,7 +2,6 @@ import org.m2sec.Galaxy;
 import org.m2sec.core.common.Config;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * @author: outlaws-bai
@@ -17,7 +16,7 @@ public class TestSwing {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
         Config config = Config.ofWorkDir();
-        frame.add(Galaxy.getMainPanel(config));
+        frame.add(Galaxy.getMainPanel(config, null));
 
         // 窗体可见
         frame.setVisible(true);

@@ -42,6 +42,7 @@ public class Config {
     }
 
     public void dumpCache() {
+        FileUtil.writeFile(Constants.CACHE_OPTION_FILE_PATH, YamlParser.toYamlStr(setting));
     }
 
     public void dumpSetting() {

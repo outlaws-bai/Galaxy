@@ -53,7 +53,7 @@ public class Galaxy implements BurpExtension {
         // init log
         initLogger(Constants.LOG_FILE_PATH, config.getSetting().getLogLevel().name());
         // 注册UI
-        api.userInterface().registerSuiteTab(Constants.BURP_SUITE_EXT_NAME, getMainPanel(config));
+        api.userInterface().registerSuiteTab(Constants.BURP_SUITE_EXT_NAME, getMainPanel(config, api));
         // 注册插件能力
         registerAbility(api);
         // 注册销毁事件
@@ -79,12 +79,11 @@ public class Galaxy implements BurpExtension {
         FileUtil.copyResourceDirToTargetDir("templates", Constants.TEMPLATE_FILE_DIR);
     }
 
-    public static MainPanel getMainPanel(Config config) {
-        HttpHookPanel httpHookPanel = new HttpHookPanel(config.getCacheOption());
-        SettingPanel settingPanel = new SettingPanel(config.getSetting());
-        AboutPanel aboutPanel = new AboutPanel();
-        MainPanel mainPanel = new MainPanel(httpHookPanel, settingPanel, aboutPanel);
-        return mainPanel;
+    public static MainPanel getMainPanel(Config config, MontoyaApi api) {
+        HttpHookPanel httpHookPanel = new HttpHookPanel(config.getCacheOption(), api);
+        SettingPanel settingPanel = new SettingPanel(config.getSetting(), api);
+        AboutPanel aboutPanel = new AboutPanel(api);
+        return new MainPanel(httpHookPanel, settingPanel, aboutPanel);
     }
 
     private void registerAbility(MontoyaApi api) {
@@ -127,7 +126,7 @@ public class Galaxy implements BurpExtension {
     }
 
 
-    public boolean isInBurp() {
+    public static boolean isInBurp() {
         return env.equals(RuntimeEnv.BURP);
     }
 

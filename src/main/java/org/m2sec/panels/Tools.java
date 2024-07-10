@@ -1,7 +1,5 @@
 package org.m2sec.panels;
 
-import lombok.extern.java.Log;
-import org.m2sec.core.common.Constants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,13 +12,6 @@ import java.awt.*;
 
 public class Tools {
 
-    public static void enablePanel(JPanel panel) {
-        changePanelStatus(panel, true);
-    }
-
-    public static void disablePanel(JPanel panel) {
-        changePanelStatus(panel, false);
-    }
 
     public static void changePanelStatus(Container panel, boolean target) {
         Component[] components = panel.getComponents();
@@ -38,5 +29,8 @@ public class Tools {
             }
         }
     }
+
+
+
 
 }

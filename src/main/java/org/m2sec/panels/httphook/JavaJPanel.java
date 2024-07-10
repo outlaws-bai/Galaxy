@@ -1,18 +1,22 @@
 package org.m2sec.panels.httphook;
 
+import burp.api.montoya.MontoyaApi;
+import burp.api.montoya.ui.Theme;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
+import org.m2sec.Galaxy;
 import org.m2sec.core.common.CacheInfo;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Render;
 import org.m2sec.core.utils.FileUtil;
-import org.m2sec.panels.Tools;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,23 +29,30 @@ import java.util.Map;
 
 public class JavaJPanel extends JPanel {
     private final CacheInfo cache;
+    private final MontoyaApi api;
 
     private static final String javaFileSuffix = ".java";
 
     private final JComboBox<String> codeCombo = new JComboBox<>();
 
-    public JavaJPanel(CacheInfo cache) {
+    public JavaJPanel(CacheInfo cache, MontoyaApi api) {
         this.cache = cache;
+        this.api = api;
         initPanel();
     }
 
     private void initPanel() {
-        setBackground(Color.red);
-        setBorder(BorderFactory.createEmptyBorder(20,0,0,0));
+        JTextComponent.removeKeymap("RTextAreaKeymap");
+        UIManager.put("RTextAreaUI.inputMap", null);
+        UIManager.put("RTextAreaUI.actionMap", null);
+        UIManager.put("RSyntaxTextAreaUI.inputMap", null);
+        UIManager.put("RSyntaxTextAreaUI.actionMap", null);
+//        setBackground(Color.red);
+        setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         setLayout(new BorderLayout());
         // 创建顶部下拉框的面板
         JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBorder(BorderFactory.createEmptyBorder(10,10,5,10));
+        topPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 10));
         JLabel descLabel = new JLabel(Constants.HTTP_HOOK_JAVA_DEF);
         JLabel selectLabel = new JLabel("Select JAVA File: ");
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -68,6 +79,15 @@ public class JavaJPanel extends JPanel {
         codeTextArea.setCodeFoldingEnabled(true);
         codeTextArea.setTabsEmulated(true);
         codeTextArea.setHighlightCurrentLine(true);
+        if (Galaxy.isInBurp() && api.userInterface().currentTheme().equals(Theme.DARK)) {
+            try {
+                org.fife.ui.rsyntaxtextarea.Theme.load(getClass().getResourceAsStream("/org/fife/ui" +
+                    "/rsyntaxtextarea/themes/dark.xml")).apply(codeTextArea);
+                codeTextArea.setFont(api.userInterface().currentEditorFont());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         // 创建 RTextScrollPane 并添加到 JFrame
         RTextScrollPane scrollPane = new RTextScrollPane(codeTextArea);
@@ -80,6 +100,7 @@ public class JavaJPanel extends JPanel {
         codeCombo.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 codeTextArea.setText(FileUtil.readFileAsString(getFilePath((String) e.getItem())));
+                codeTextArea.setCaretPosition(0);
             }
         });
 

@@ -1,5 +1,7 @@
 package org.m2sec.panels.about;
 
+import burp.api.montoya.MontoyaApi;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,7 +12,7 @@ import java.awt.*;
  */
 
 public class AboutPanel extends JPanel {
-    public AboutPanel() {
+    public AboutPanel(MontoyaApi api) {
         setName("About");
     }
 }

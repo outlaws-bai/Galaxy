@@ -1,8 +1,8 @@
 package org.m2sec.panels.httphook;
 
+import burp.api.montoya.MontoyaApi;
 import org.m2sec.core.common.CacheInfo;
 import org.m2sec.core.common.Constants;
-import org.m2sec.panels.Tools;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,16 +16,19 @@ import java.awt.*;
 public class GrpcJPanel extends JPanel {
     private final CacheInfo cache;
 
+    private final MontoyaApi api;
+
     private final JTextField grpcConnTextField = new JTextField(20);
 
 
-    public GrpcJPanel(CacheInfo cache) {
+    public GrpcJPanel(CacheInfo cache, MontoyaApi api) {
         this.cache = cache;
+        this.api = api;
         initPanel();
     }
 
     private void initPanel() {
-        setBackground(Color.red);
+//        setBackground(Color.red);
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         setLayout(new BorderLayout());
         JPanel grpcConnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
