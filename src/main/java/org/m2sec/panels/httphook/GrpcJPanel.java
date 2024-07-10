@@ -1,8 +1,11 @@
 package org.m2sec.panels.httphook;
 
+import org.m2sec.core.common.CacheInfo;
+import org.m2sec.core.common.Constants;
+import org.m2sec.panels.Tools;
+
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
 
 /**
  * @author: outlaws-bai
@@ -11,23 +14,38 @@ import java.util.HashMap;
  */
 
 public class GrpcJPanel extends JPanel {
-    private final HashMap<String, Object> cache;
+    private final CacheInfo cache;
 
-    public GrpcJPanel(HashMap<String, Object> cache) {
+    private final JTextField grpcConnTextField = new JTextField(20);
+
+
+    public GrpcJPanel(CacheInfo cache) {
         this.cache = cache;
         initPanel();
     }
 
     private void initPanel() {
+        setBackground(Color.red);
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         setLayout(new BorderLayout());
         JPanel grpcConnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel descPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel descLabel = new JLabel(Constants.HTTP_HOOK_GRPC_DEF);
+        descPanel.add(descLabel);
         JLabel label = new JLabel("GRPC Conn: ");
-        JTextField grpcConnTextField = new JTextField(20);
         grpcConnPanel.add(label);
         grpcConnPanel.add(grpcConnTextField);
 
-        add(new JLabel("This is GRPC"), BorderLayout.NORTH);
+        add(descPanel, BorderLayout.NORTH);
         add(grpcConnPanel, BorderLayout.CENTER);
-//        setBackground(Color.blue);
+        setData();
+    }
+
+    private void setData() {
+        grpcConnTextField.setText(cache.getRpcConn());
+    }
+
+    public String getData() {
+        return grpcConnTextField.getText();
     }
 }

@@ -1,15 +1,16 @@
 package org.m2sec.panels.httphook;
 
+import org.m2sec.core.common.CacheInfo;
+import org.m2sec.core.common.Constants;
+import org.m2sec.core.enums.HttpHookWay;
 import org.m2sec.core.enums.RunStatus;
 import org.m2sec.panels.Tools;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author: outlaws-bai
@@ -18,9 +19,9 @@ import java.util.Objects;
  */
 
 public class HttpHookPanel extends JPanel {
-    private final HashMap<String, Object> cache;
+    private final CacheInfo cache;
 
-    public HttpHookPanel(HashMap<String, Object> cache) {
+    public HttpHookPanel(CacheInfo cache) {
         this.cache = cache;
         setName("HttpHook");
 
@@ -33,50 +34,71 @@ public class HttpHookPanel extends JPanel {
 
         // 存放几种hook方式
         Map<String, JPanel> panelMap = new LinkedHashMap<>();
-        panelMap.put("", new JPanel());
-        panelMap.put("GRPC", new GrpcJPanel(cache));
-        panelMap.put("JAVA", new JavaJPanel(cache));
+        GrpcJPanel rpcPanel = new GrpcJPanel(cache);
+        JavaJPanel javaJPanel = new JavaJPanel(cache);
+        panelMap.put("...", new JPanel());
+        panelMap.put(HttpHookWay.GRPC.name(), rpcPanel);
+        panelMap.put(HttpHookWay.JAVA.name(), javaJPanel);
 
         // 创建一个容器(卡片)用于放置不同方式的JPanel
         JPanel wayPanelContainer = new JPanel(new CardLayout());
         panelMap.forEach((k, v) -> wayPanelContainer.add(v, k));
 
-        // 创建一个控制面板，放置 JComboBox 和按钮
-        JPanel controlPanel = new JPanel(new BorderLayout());
+        // 创建一个控制面板，放置选择哪种方式Hook的JComboBox
+        JPanel wayControlPanel = new JPanel(new BorderLayout());
+        JPanel descAndComboBox = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel selectDesc = new JLabel("Select Way: ");
         JComboBox<String> comboBox = new JComboBox<>(panelMap.keySet().toArray(String[]::new));
-        JButton switchButton = new JButton(RunStatus.START.name().toLowerCase());
-        switchButton.setVisible(false);
-        controlPanel.add(comboBox, BorderLayout.WEST);
-        controlPanel.add(switchButton, BorderLayout.EAST);
+        JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
+        descAndComboBox.add(selectDesc);
+        descAndComboBox.add(comboBox);
+        wayControlPanel.add(descAndComboBox, BorderLayout.NORTH);
+        wayControlPanel.add(separator, BorderLayout.CENTER);
 
-        // 创建面板，控制请求和相应是否需要处理
-        JPanel checkBoxesPanel = new JPanel();
-        checkBoxesPanel.setVisible(false);
-        Box checkBoxes = Box.createVerticalBox();
+        // 创建一个控制面板，放置启动开关、检查表达式，checkboxes
+        JPanel nextControlPanel = new JPanel(new BorderLayout());
+        nextControlPanel.setVisible(false);
+        nextControlPanel.setBackground(Color.CYAN);
+        Box switchAndCheckBox = Box.createHorizontalBox();
+        JButton switchButton = new JButton(RunStatus.START.name().toLowerCase());
         JCheckBox hookRequestCheckBox = new JCheckBox("HookRequest");
         JCheckBox hookResponseCheckBox = new JCheckBox("HookResponse");
-        checkBoxes.add(hookRequestCheckBox);
-        checkBoxes.add(hookResponseCheckBox);
-        checkBoxesPanel.add(checkBoxes);
+        switchAndCheckBox.add(hookRequestCheckBox);
+        switchAndCheckBox.add(hookResponseCheckBox);
+        switchAndCheckBox.add(switchButton);
+        JPanel wayDescAndSwitchAndCheckBox = new JPanel(new BorderLayout());
+        wayDescAndSwitchAndCheckBox.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        wayDescAndSwitchAndCheckBox.setBackground(Color.green);
+        wayDescAndSwitchAndCheckBox.add(switchAndCheckBox, BorderLayout.EAST);
+        nextControlPanel.add(wayDescAndSwitchAndCheckBox, BorderLayout.NORTH);
+
 
         // 创建面板，用于输入检查当前请求是否需要被Hook的表达式
-        JPanel requestIsHookPanel = new JPanel(new BorderLayout());
-        requestIsHookPanel.setVisible(false);
-        Box box = Box.createHorizontalBox();
-        JLabel requestCheckExpressionLanguageLabel = new JLabel("RequestCheckEL: ");
+        JPanel requestCheckPanel = new JPanel(new BorderLayout());
+        requestCheckPanel.setBackground(Color.gray);
+        requestCheckPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
+        JLabel elDescLabel = new JLabel("Please enter an expression that will be used to " +
+            "determine which requests need to be processed.");
+        JPanel elDescPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        elDescPanel.add(elDescLabel);
         JTextField checkELTextField = new JTextField();
-        box.add(requestCheckExpressionLanguageLabel);
-        box.add(checkELTextField);
-        requestIsHookPanel.add(box);
+        JPanel checkELPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel elLabel = new JLabel("expression: ");
+        checkELPanel.add(elLabel);
+        checkELPanel.add(checkELTextField);
+        requestCheckPanel.add(elDescPanel, BorderLayout.NORTH);
+        requestCheckPanel.add(checkELPanel, BorderLayout.CENTER);
+        nextControlPanel.add(requestCheckPanel, BorderLayout.CENTER);
 
         // 创建面板，组合wayPanelContainer和requestIsHookPanel
         JPanel blendPanel = new JPanel(new BorderLayout());
-        blendPanel.add(requestIsHookPanel, BorderLayout.NORTH);
         blendPanel.add(wayPanelContainer, BorderLayout.CENTER);
 
-//        controlPanel.setBackground(Color.green);
-        add(controlPanel, BorderLayout.NORTH);
-        add(checkBoxesPanel, BorderLayout.EAST);
+//        wayControlPanel.setBackground(Color.green);
+        JPanel wayAndNextPanel = new JPanel(new BorderLayout());
+        wayAndNextPanel.add(wayControlPanel, BorderLayout.NORTH);
+        wayAndNextPanel.add(nextControlPanel, BorderLayout.CENTER);
+        add(wayAndNextPanel, BorderLayout.NORTH);
         add(blendPanel, BorderLayout.CENTER);
 
         // 设置 JComboBox 的事件监听器, 选择不同的方式，展示不同方式自己的Panel
@@ -84,9 +106,7 @@ public class HttpHookPanel extends JPanel {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 String selectedItem = (String) e.getItem();
                 boolean flag = !selectedItem.equals(panelMap.keySet().iterator().next());
-                switchButton.setVisible(flag);
-                requestIsHookPanel.setVisible(flag);
-                checkBoxesPanel.setVisible(flag);
+                nextControlPanel.setVisible(flag);
                 CardLayout cl = (CardLayout) (wayPanelContainer.getLayout());
                 cl.show(wayPanelContainer, selectedItem);
             }
@@ -98,12 +118,24 @@ public class HttpHookPanel extends JPanel {
             switchButton.setText(text);
             //noinspection SuspiciousMethodCalls
             Tools.changePanelStatus(panelMap.get(comboBox.getSelectedItem()), target);
-            Tools.changePanelStatus(requestIsHookPanel, target);
-            Tools.changePanelStatus(checkBoxesPanel, target);
+            Tools.changePanelStatus(requestCheckPanel, target);
+            if (!target) {
+                cache.setHookWay(HttpHookWay.valueOf((String) comboBox.getSelectedItem()))
+                    .setRequestCheckExpression(checkELTextField.getText())
+                    .setHookRequest(hookRequestCheckBox.isSelected())
+                    .setHookResponse(hookResponseCheckBox.isSelected())
+                    .setRpcConn(rpcPanel.getData())
+                    .setJavaSelectItem(javaJPanel.getData());
+            }
         });
 
-        // 从缓存设置初始状态
-
+        // set data
+        checkELTextField.setText(cache.getRequestCheckExpression());
+        hookRequestCheckBox.setSelected(cache.isHookRequest());
+        hookResponseCheckBox.setSelected(cache.isHookResponse());
+        if (cache.getHookWay() != null) {
+            comboBox.setSelectedItem(cache.getHookWay().name());
+        }
 
     }
 

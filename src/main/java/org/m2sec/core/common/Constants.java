@@ -2,6 +2,7 @@ package org.m2sec.core.common;
 
 import org.m2sec.core.utils.FileUtil;
 
+import javax.swing.plaf.PanelUI;
 import java.io.File;
 
 /**
@@ -19,6 +20,10 @@ public class Constants {
         Author -> outlaws-bai
         Github -> https://github.com/outlaws-bai/Galaxy
         """;
+
+    public static final String HTTP_HOOK_GRPC_DEF = "You need to start a GRPC server and enter its address below.";
+    public static final String HTTP_HOOK_JAVA_DEF = "You need to select the appropriate JAVA file and modify it until" +
+        " it meets your needs.";
 
     public static final String WORK_DIR = System.getProperty("user.home") + File.separator + ".galaxy";
 

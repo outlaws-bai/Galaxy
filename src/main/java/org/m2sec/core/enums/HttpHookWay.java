@@ -6,5 +6,5 @@ package org.m2sec.core.enums;
  * @description:
  */
 public enum HttpHookWay {
-    RPC, JAVA
+    GRPC, JAVA
 }

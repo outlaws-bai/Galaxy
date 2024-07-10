@@ -25,6 +25,7 @@ import org.m2sec.panels.MainPanel;
 import org.m2sec.panels.setting.SettingPanel;
 import org.slf4j.LoggerFactory;
 
+import java.awt.*;
 import java.io.File;
 import java.security.Security;
 
@@ -82,7 +83,8 @@ public class Galaxy implements BurpExtension {
         HttpHookPanel httpHookPanel = new HttpHookPanel(config.getCacheOption());
         SettingPanel settingPanel = new SettingPanel(config.getSetting());
         AboutPanel aboutPanel = new AboutPanel();
-        return new MainPanel(httpHookPanel, settingPanel, aboutPanel);
+        MainPanel mainPanel = new MainPanel(httpHookPanel, settingPanel, aboutPanel);
+        return mainPanel;
     }
 
     private void registerAbility(MontoyaApi api) {

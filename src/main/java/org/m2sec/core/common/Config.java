@@ -27,7 +27,7 @@ public class Config {
     /**
      * 上一次使用的选项
      */
-    private HashMap<String, Object> cacheOption;
+    private CacheInfo cacheOption;
 
 
     public static Config ofWorkDir() {
@@ -36,9 +36,7 @@ public class Config {
 
     public static Config ofWorkDir(String cacheFilePath, String settingFilePath) {
         Setting setting = YamlParser.fromYamlStr(FileUtil.readFileAsString(settingFilePath), Setting.class);
-        Type type = new TypeToken<HashMap<String, Object>>() {
-        }.getType();
-        HashMap<String, Object> cache = YamlParser.fromYamlStr(FileUtil.readFileAsString(cacheFilePath), type);
+        CacheInfo cache = YamlParser.fromYamlStr(FileUtil.readFileAsString(cacheFilePath), CacheInfo.class);
 
         return new Config(setting, cache);
     }

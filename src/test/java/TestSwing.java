@@ -2,6 +2,7 @@ import org.m2sec.Galaxy;
 import org.m2sec.core.common.Config;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author: outlaws-bai

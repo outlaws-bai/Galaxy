@@ -1,6 +1,7 @@
 package org.m2sec.panels.about;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author: outlaws-bai
