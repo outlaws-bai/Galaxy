@@ -3,6 +3,7 @@ package org.m2sec.panels.httphook;
 import burp.api.montoya.MontoyaApi;
 import org.m2sec.core.common.CacheInfo;
 import org.m2sec.core.common.Constants;
+import org.m2sec.panels.SwingTools;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,17 +30,13 @@ public class GrpcJPanel extends JPanel {
 
     private void initPanel() {
 //        setBackground(Color.red);
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         setLayout(new BorderLayout());
         JPanel grpcConnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JPanel descPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel descLabel = new JLabel(Constants.HTTP_HOOK_GRPC_DEF);
-        descPanel.add(descLabel);
         JLabel label = new JLabel("GRPC Conn: ");
+        SwingTools.addTipToLabel(label, Constants.HTTP_HOOK_GRPC_DEF, api);
         grpcConnPanel.add(label);
         grpcConnPanel.add(grpcConnTextField);
 
-        add(descPanel, BorderLayout.NORTH);
         add(grpcConnPanel, BorderLayout.CENTER);
         setData();
     }

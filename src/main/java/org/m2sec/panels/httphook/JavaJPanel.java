@@ -10,6 +10,7 @@ import org.m2sec.core.common.CacheInfo;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Render;
 import org.m2sec.core.utils.FileUtil;
+import org.m2sec.panels.SwingTools;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
@@ -35,6 +36,8 @@ public class JavaJPanel extends JPanel {
 
     private final JComboBox<String> codeCombo = new JComboBox<>();
 
+    RSyntaxTextArea codeTextArea = new RSyntaxTextArea();
+
     public JavaJPanel(CacheInfo cache, MontoyaApi api) {
         this.cache = cache;
         this.api = api;
@@ -48,14 +51,12 @@ public class JavaJPanel extends JPanel {
         UIManager.put("RSyntaxTextAreaUI.inputMap", null);
         UIManager.put("RSyntaxTextAreaUI.actionMap", null);
 //        setBackground(Color.red);
-        setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         setLayout(new BorderLayout());
         // 创建顶部下拉框的面板
         JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 10));
-        JLabel descLabel = new JLabel(Constants.HTTP_HOOK_JAVA_DEF);
-        JLabel selectLabel = new JLabel("Select JAVA File: ");
-        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel selectLabel = new JLabel("JavaFile: ");
+        SwingTools.addTipToLabel(selectLabel, Constants.HTTP_HOOK_JAVA_DEF, api);
+        JPanel rightPanel = new JPanel();
         JButton saveButton = new JButton("Save");
         JButton newButton = new JButton("New");
         JButton deleteButton = new JButton("Delete");
@@ -66,28 +67,8 @@ public class JavaJPanel extends JPanel {
         rightPanel.add(deleteButton);
         reloadExamples(codeCombo);
 
-        topPanel.add(descLabel, BorderLayout.WEST);
-        topPanel.add(rightPanel, BorderLayout.EAST);
+        topPanel.add(rightPanel, BorderLayout.WEST);
 
-        // 创建 RSyntaxTextArea 实例
-        RSyntaxTextArea codeTextArea = new RSyntaxTextArea();
-        codeTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-        codeTextArea.setAntiAliasingEnabled(true);
-        codeTextArea.setAutoIndentEnabled(true);
-        codeTextArea.setPaintTabLines(true);
-        codeTextArea.setTabSize(4);
-        codeTextArea.setCodeFoldingEnabled(true);
-        codeTextArea.setTabsEmulated(true);
-        codeTextArea.setHighlightCurrentLine(true);
-        if (Galaxy.isInBurp() && api.userInterface().currentTheme().equals(Theme.DARK)) {
-            try {
-                org.fife.ui.rsyntaxtextarea.Theme.load(getClass().getResourceAsStream("/org/fife/ui" +
-                    "/rsyntaxtextarea/themes/dark.xml")).apply(codeTextArea);
-                codeTextArea.setFont(api.userInterface().currentEditorFont());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
 
         // 创建 RTextScrollPane 并添加到 JFrame
         RTextScrollPane scrollPane = new RTextScrollPane(codeTextArea);
@@ -149,6 +130,26 @@ public class JavaJPanel extends JPanel {
 
     private String getFilePath(String item) {
         return Constants.HTTP_HOOK_EXAMPLES_FILE_DIR + File.separator + item + javaFileSuffix;
+    }
+
+    public void resetCodeTheme() {
+        codeTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+        codeTextArea.setAntiAliasingEnabled(true);
+        codeTextArea.setAutoIndentEnabled(true);
+        codeTextArea.setPaintTabLines(true);
+        codeTextArea.setTabSize(4);
+        codeTextArea.setCodeFoldingEnabled(true);
+        codeTextArea.setTabsEmulated(true);
+        codeTextArea.setHighlightCurrentLine(true);
+        if (Galaxy.isInBurp() && api.userInterface().currentTheme().equals(Theme.DARK)) {
+            try {
+                org.fife.ui.rsyntaxtextarea.Theme.load(getClass().getResourceAsStream("/org/fife/ui" +
+                    "/rsyntaxtextarea/themes/dark.xml")).apply(codeTextArea);
+                codeTextArea.setFont(api.userInterface().currentEditorFont());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 }

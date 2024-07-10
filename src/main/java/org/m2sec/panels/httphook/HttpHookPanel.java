@@ -1,10 +1,11 @@
 package org.m2sec.panels.httphook;
 
 import burp.api.montoya.MontoyaApi;
+import org.m2sec.Galaxy;
 import org.m2sec.core.common.CacheInfo;
 import org.m2sec.core.enums.HttpHookWay;
 import org.m2sec.core.enums.RunStatus;
-import org.m2sec.panels.Tools;
+import org.m2sec.panels.SwingTools;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,18 +27,18 @@ public class HttpHookPanel extends JPanel {
         this.cache = cache;
         this.api = api;
         setName("HttpHook");
-
         initPanel();
-
     }
 
     private void initPanel() {
+        if (Galaxy.isInBurp()) api.userInterface().applyThemeToComponent(this);
         setLayout(new BorderLayout());
 
         // 存放几种hook方式
         Map<String, JPanel> panelMap = new LinkedHashMap<>();
-        GrpcJPanel rpcPanel = new GrpcJPanel(cache,api);
-        JavaJPanel javaJPanel = new JavaJPanel(cache,api);
+        GrpcJPanel rpcPanel = new GrpcJPanel(cache, api);
+        JavaJPanel javaJPanel = new JavaJPanel(cache, api);
+        javaJPanel.resetCodeTheme();
         panelMap.put("...", new JPanel());
         panelMap.put(HttpHookWay.GRPC.name(), rpcPanel);
         panelMap.put(HttpHookWay.JAVA.name(), javaJPanel);
@@ -49,7 +50,8 @@ public class HttpHookPanel extends JPanel {
         // 创建一个控制面板，放置选择哪种方式Hook的JComboBox
         JPanel wayControlPanel = new JPanel(new BorderLayout());
         JPanel descAndComboBox = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel selectDesc = new JLabel("Select Way: ");
+        JLabel selectDesc = new JLabel("HookWay: ");
+        SwingTools.addTipToLabel(selectDesc, "Choose a hook impl way.", api);
         JComboBox<String> comboBox = new JComboBox<>(panelMap.keySet().toArray(String[]::new));
         JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
         descAndComboBox.add(selectDesc);
@@ -60,33 +62,32 @@ public class HttpHookPanel extends JPanel {
         // 创建一个控制面板，放置启动开关、检查表达式，checkboxes
         JPanel nextControlPanel = new JPanel(new BorderLayout());
         nextControlPanel.setVisible(false);
-        JPanel switchAndCheckBoxPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        switchAndCheckBoxPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-        JButton switchButton = new JButton(RunStatus.START.name().toLowerCase());
+        JPanel switchAndCheckBoxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JButton switchButton = new JButton(SwingTools.capitalizeFirstLetter(RunStatus.START.name()));
+        switchButton.setToolTipText("Start hook...");
         JCheckBox hookRequestCheckBox = new JCheckBox("HookRequest");
+        hookRequestCheckBox.setToolTipText("HTTP requests need to be hook?");
         JCheckBox hookResponseCheckBox = new JCheckBox("HookResponse");
+        hookResponseCheckBox.setToolTipText("HTTP responses need to be hook?");
+        switchAndCheckBoxPanel.add(switchButton);
         switchAndCheckBoxPanel.add(hookRequestCheckBox);
         switchAndCheckBoxPanel.add(hookResponseCheckBox);
-        switchAndCheckBoxPanel.add(switchButton);
         JPanel wayDescAndSwitchAndCheckBox = new JPanel(new BorderLayout());
-        wayDescAndSwitchAndCheckBox.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        wayDescAndSwitchAndCheckBox.add(switchAndCheckBoxPanel, BorderLayout.EAST);
+        wayDescAndSwitchAndCheckBox.add(switchAndCheckBoxPanel, BorderLayout.WEST);
         nextControlPanel.add(wayDescAndSwitchAndCheckBox, BorderLayout.NORTH);
 
 
         // 创建面板，用于输入检查当前请求是否需要被Hook的表达式
         JPanel requestCheckPanel = new JPanel(new BorderLayout());
-        requestCheckPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
-        JLabel elDescLabel = new JLabel("Please enter an expression that will be used to " +
-            "determine which requests need to be processed.");
-        JPanel elDescPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        elDescPanel.add(elDescLabel);
         JTextField checkELTextField = new JTextField();
         JPanel checkELPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel elLabel = new JLabel("expression: ");
+        JLabel elLabel = new JLabel("Expression: ");
+        SwingTools.addTipToLabel(elLabel, "Enter an expression that will be used to determine which requests need to " +
+            "be " +
+            "processed. \r\nFor details on expression, please refer to the \"About\" tab", api);
+
         checkELPanel.add(elLabel);
         checkELPanel.add(checkELTextField);
-        requestCheckPanel.add(elDescPanel, BorderLayout.NORTH);
         requestCheckPanel.add(checkELPanel, BorderLayout.CENTER);
         nextControlPanel.add(requestCheckPanel, BorderLayout.CENTER);
 
@@ -112,12 +113,16 @@ public class HttpHookPanel extends JPanel {
         });
         // 设置 switchButton 的事件监听器, 开关HttpHook功能
         switchButton.addActionListener(e -> {
-            boolean target = !switchButton.getText().equals(RunStatus.START.name().toLowerCase());
-            String text = target ? RunStatus.START.name().toLowerCase() : RunStatus.STOP.name().toLowerCase();
-            switchButton.setText(text);
+            boolean target = !switchButton.getText().equalsIgnoreCase(RunStatus.START.name().toLowerCase());
+            String text = target ? RunStatus.START.name() : RunStatus.STOP.name();
+            switchButton.setText(SwingTools.capitalizeFirstLetter(text));
             //noinspection SuspiciousMethodCalls
-            Tools.changePanelStatus(panelMap.get(comboBox.getSelectedItem()), target);
-            Tools.changePanelStatus(requestCheckPanel, target);
+            SwingTools.changePanelStatus(panelMap.get(comboBox.getSelectedItem()), target);
+            SwingTools.changePanelStatus(requestCheckPanel, target);
+            SwingTools.changePanelStatus(comboBox, target);
+            SwingTools.changePanelStatus(hookRequestCheckBox, target);
+            SwingTools.changePanelStatus(hookResponseCheckBox, target);
+
             if (!target) {
                 cache.setHookWay(HttpHookWay.valueOf((String) comboBox.getSelectedItem()))
                     .setRequestCheckExpression(checkELTextField.getText())

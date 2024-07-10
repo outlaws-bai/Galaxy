@@ -9,6 +9,7 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.FileAppender;
+import com.sun.tools.javac.Main;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.m2sec.abilities.httphook.HttpHookHttpHandler;
@@ -19,15 +20,16 @@ import org.m2sec.core.common.WorkExecutor;
 import org.m2sec.core.enums.RuntimeEnv;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.utils.FileUtil;
+import org.m2sec.panels.SwingTools;
 import org.m2sec.panels.about.AboutPanel;
 import org.m2sec.panels.httphook.HttpHookPanel;
 import org.m2sec.panels.MainPanel;
 import org.m2sec.panels.setting.SettingPanel;
 import org.slf4j.LoggerFactory;
 
-import java.awt.*;
 import java.io.File;
 import java.security.Security;
+import java.util.MissingFormatArgumentException;
 
 /**
  * @author: outlaws-bai
@@ -83,7 +85,12 @@ public class Galaxy implements BurpExtension {
         HttpHookPanel httpHookPanel = new HttpHookPanel(config.getCacheOption(), api);
         SettingPanel settingPanel = new SettingPanel(config.getSetting(), api);
         AboutPanel aboutPanel = new AboutPanel(api);
-        return new MainPanel(httpHookPanel, settingPanel, aboutPanel);
+        MainPanel mainPanel = new MainPanel(httpHookPanel, settingPanel, aboutPanel);
+        if (isInBurp()) {
+            api.userInterface().applyThemeToComponent(settingPanel);
+            api.userInterface().applyThemeToComponent(aboutPanel);
+        }
+        return mainPanel;
     }
 
     private void registerAbility(MontoyaApi api) {
@@ -148,4 +155,5 @@ public class Galaxy implements BurpExtension {
         fileAppender.start();
         rootLogger.addAppender(fileAppender);
     }
+
 }
