@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'org.m2sec'
-version = 'v2.0.0.beta'
+version = '2.0.0.beta'
 def grpcVersion = '1.54.1'
 def protobufVersion = '3.24.0'
 def protocVersion = protobufVersion
@@ -89,5 +89,8 @@ jar {
 }
 
 shadowJar {
+    // 写入版本
+    def versionFile = file("${projectDir}/src/main/resources/version.txt")
+    versionFile.text = version
     mergeServiceFiles()
 }

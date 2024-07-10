@@ -25,3 +25,5 @@ replay_pid*
 .idea/**
 .gradle/**
 build/**
+
+src/main/resources/version.txt

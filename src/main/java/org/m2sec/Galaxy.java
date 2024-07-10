@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.security.Security;
-import java.util.stream.Stream;
 
 /**
  * @author: outlaws-bai
@@ -43,10 +42,15 @@ public class Galaxy implements BurpExtension {
     @Override
     public void initialize(MontoyaApi api) {
         env = RuntimeEnv.BURP;
-        api.extension().setName(Constants.BURP_SUITE_EXT_NAME);
-        api.logging().logToOutput(Constants.BURP_SUITE_EXT_INIT_DEF);
+        api.extension().setName(Constants.BURP_SUITE_EXT_NAME + "-" + Constants.VERSION);
+        api.logging().logToOutput(Constants.BURP_SUITE_EXT_INIT_DEF + "Version -> " + Constants.VERSION);
         // 初始化
-        Config config = init();
+        init();
+        // 加载配置
+        Config config = Config.ofWorkDir();
+        log.debug("load config success! {}", config);
+        // init log
+        initLogger(Constants.LOG_FILE_PATH, config.getSetting().getLogLevel().name());
         // 注册UI
         api.userInterface().registerSuiteTab(Constants.BURP_SUITE_EXT_NAME, getMainPanel(config));
         // 注册插件能力
@@ -55,30 +59,23 @@ public class Galaxy implements BurpExtension {
         api.extension().registerUnloadingHandler(() -> this.destroy(config));
     }
 
-    private Config init() {
+    private void init() {
         Security.addProvider(new BouncyCastleProvider());
 
         // 创建必要的文件和路径
         FileUtil.createDirs(Constants.WORK_DIR, // 插件工作路径
             Constants.TMP_FILE_DIR, // 临时文件路径
             Constants.EXTRACT_FILE_DIR, // 提取文件路径
-            Constants.HTTP_HOOK_EXAMPLES_FILE_DIR
+            Constants.HTTP_HOOK_EXAMPLES_FILE_DIR, // http hook examples
+            Constants.TEMPLATE_FILE_DIR // templates
         );
         FileUtil.createFiles(Constants.CACHE_OPTION_FILE_PATH);
 
         // cp resources 文件到工作目录下
-        String[] examples = new String[]{"AesCbc.java", "AesEcb.java", "AesGcm.java", "Rsa.java", "Sm2.java"};
         FileUtil.cpResourceFileToTarget("setting.yaml", Constants.WORK_DIR);
-        Stream.of(examples).forEach(x -> FileUtil.cpResourceFileToTarget("examples/" + x,
-            Constants.HTTP_HOOK_EXAMPLES_FILE_DIR));
-
-        Config config = Config.loadOfDisk();
-
-        initLogger(Constants.LOG_FILE_PATH, config.getSetting().getLogLevel().name());
-        log.debug("load config success! {}", config);
-
-        return config;
-
+        FileUtil.cpResourceFileToTarget("cache.yaml", Constants.WORK_DIR);
+        FileUtil.copyResourceDirToTargetDir("examples", Constants.HTTP_HOOK_EXAMPLES_FILE_DIR);
+        FileUtil.copyResourceDirToTargetDir("templates", Constants.TEMPLATE_FILE_DIR);
     }
 
     public static MainPanel getMainPanel(Config config) {

@@ -33,7 +33,7 @@ public class HttpHookPanel extends JPanel {
 
         // 存放几种hook方式
         Map<String, JPanel> panelMap = new LinkedHashMap<>();
-        panelMap.put("Select", new JPanel());
+        panelMap.put("", new JPanel());
         panelMap.put("GRPC", new GrpcJPanel(cache));
         panelMap.put("JAVA", new JavaJPanel(cache));
 

@@ -12,6 +12,7 @@ import java.io.File;
 public class Constants {
 
     public static final String BURP_SUITE_EXT_NAME = "Galaxy";
+    public static final String VERSION = FileUtil.getVersion();
 
     public static final String BURP_SUITE_EXT_INIT_DEF = """
         Welcome to Galaxy
@@ -25,10 +26,14 @@ public class Constants {
 
     public static final String EXTRACT_FILE_DIR = WORK_DIR + File.separator + "extract";
     public static final String HTTP_HOOK_EXAMPLES_FILE_DIR = WORK_DIR + File.separator + "examples";
+
+    public static final String TEMPLATE_FILE_DIR = WORK_DIR + File.separator + "templates";
     public static final String CACHE_OPTION_FILE_PATH = WORK_DIR + File.separator + "cache.yaml";
     public static final String SETTING_FILE_PATH = WORK_DIR + File.separator + "setting.yaml";
     public static final String LOG_FILE_PATH = WORK_DIR + File.separator + "run.log";
 
+    public static final String BYPASS_HOST_CHECK_TEMPLATE_FILE_PATH = TEMPLATE_FILE_DIR + File.separator +
+        "bypassHostCheckTemplate.txt";
 
     public static final String HTTP_HEADER_CONTENT_LENGTH = "Content-Length";
     public static final String HTTP_HEADER_CONTENT_TYPE = "Content-Type";

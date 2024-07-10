@@ -30,11 +30,11 @@ public class Config {
     private HashMap<String, Object> cacheOption;
 
 
-    public static Config loadOfDisk() {
-        return loadOfDisk(Constants.CACHE_OPTION_FILE_PATH, Constants.SETTING_FILE_PATH);
+    public static Config ofWorkDir() {
+        return ofWorkDir(Constants.CACHE_OPTION_FILE_PATH, Constants.SETTING_FILE_PATH);
     }
 
-    public static Config loadOfDisk(String cacheFilePath, String settingFilePath) {
+    public static Config ofWorkDir(String cacheFilePath, String settingFilePath) {
         Setting setting = YamlParser.fromYamlStr(FileUtil.readFileAsString(settingFilePath), Setting.class);
         Type type = new TypeToken<HashMap<String, Object>>() {
         }.getType();

@@ -67,7 +67,7 @@ public class JavaJPanel extends JPanel {
             }
         });
 
-        saveButton.addActionListener(e -> FileUtil.overwriteFile(getFilePath((String) codeCombo.getSelectedItem()),
+        saveButton.addActionListener(e -> FileUtil.writeFile(getFilePath((String) codeCombo.getSelectedItem()),
             codeTextArea.getText()));
 
         newButton.addActionListener(e -> {
@@ -75,7 +75,7 @@ public class JavaJPanel extends JPanel {
             if (filename != null) {
                 String filepath = getFilePath(filename.replace(javaFileSuffix, ""));
                 FileUtil.createFiles(filepath);
-                String content = Render.renderTemplate(FileUtil.readResourceAsString("HookTemplate.java"),
+                String content = Render.renderTemplate(FileUtil.readResourceAsString("templates/HttpHookTemplate.java"),
                     new HashMap<>(Map.of("filename", filename)));
                 FileUtil.writeFile(filepath, content);
                 reloadExamples(codeCombo);

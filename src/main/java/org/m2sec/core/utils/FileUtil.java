@@ -2,19 +2,17 @@ package org.m2sec.core.utils;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -48,9 +46,9 @@ public class FileUtil {
         List<String> files = new ArrayList<>();
         Path startDir = Paths.get(dir); // 替换为你的目录路径
         try {
-            Files.walkFileTree(startDir, new SimpleFileVisitor<Path>() {
+            Files.walkFileTree(startDir, new SimpleFileVisitor<>() {
                 @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
                     files.add(file.toAbsolutePath().toString());
                     return FileVisitResult.CONTINUE;
                 }
@@ -121,14 +119,6 @@ public class FileUtil {
         }
     }
 
-    public static void overwriteFile(String targetFilePath, String content) {
-        try {
-            Files.write(Paths.get(targetFilePath), content.getBytes(), StandardOpenOption.CREATE,
-                StandardOpenOption.TRUNCATE_EXISTING);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public static void writeFile(String targetFilePath, String content) {
         try {
@@ -136,6 +126,60 @@ public class FileUtil {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void copyResourceDirToTargetDir(String sourceDir, String targetDir) {
+        try {
+            // 获取目标目录路径
+            Path targetPath = Paths.get(targetDir);
+            if (!Files.exists(targetPath)) {
+                Files.createDirectories(targetPath);
+            }
+
+            // 获取资源目录 URL
+            URL resource = FileUtil.class.getClassLoader().getResource(sourceDir);
+            if (resource == null) {
+                throw new IllegalArgumentException("Resource directory not found: " + sourceDir);
+            }
+
+            // 处理资源目录是文件系统目录的情况
+            if (resource.getProtocol().equals("file")) {
+                Path sourcePath = Paths.get(resource.toURI());
+                try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(sourcePath)) {
+                    for (Path path : directoryStream) {
+                        try (InputStream in = Files.newInputStream(path)) {
+                            Files.copy(in, targetPath.resolve(path.getFileName().toString()),
+                                StandardCopyOption.REPLACE_EXISTING);
+                        }
+                    }
+                }
+            }
+            // 处理资源目录在 JAR 文件中的情况
+            else if (resource.getProtocol().equals("jar")) {
+                String jarPath = resource.getPath().substring(5, resource.getPath().indexOf("!"));
+                //noinspection deprecation
+                try (JarFile jarFile = new JarFile(Paths.get(new URL("file:" + jarPath).toURI()).toFile())) {
+                    Enumeration<JarEntry> entries = jarFile.entries();
+                    while (entries.hasMoreElements()) {
+                        JarEntry entry = entries.nextElement();
+                        if (entry.getName().startsWith(sourceDir + "/") && !entry.isDirectory()) {
+                            try (InputStream in = jarFile.getInputStream(entry)) {
+                                String fileName = entry.getName().substring(sourceDir.length() + 1);
+                                Files.copy(in, targetPath.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
+                            }
+                        }
+                    }
+                }
+            } else {
+                throw new UnsupportedOperationException();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String getVersion() {
+        return readResourceAsString("version.txt");
     }
 
 
