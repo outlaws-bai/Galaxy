@@ -7,6 +7,7 @@ import com.google.protobuf.ByteString;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Tuple;
 import org.m2sec.core.enums.ContentType;
@@ -26,6 +27,7 @@ import java.util.stream.Stream;
  */
 @Getter
 @Setter
+@Slf4j
 @Accessors(chain = true)
 public class Request {
     /**
@@ -84,6 +86,8 @@ public class Request {
     }
 
     public static Request of(HttpRequest request) {
+        log.info("request path: {}, url: {}, raw: {}", request.path(), request.url(),
+            new String(request.toByteArray().getBytes()));
         Tuple<String, String> tuple = HttpUtil.parseFullPath(request.path());
         return new Request(request.httpService().secure(), request.httpService().host(), request.httpService().port()
             , request.httpVersion(), request.method(), tuple.getFirst(), Query.of(tuple.getSecond()),

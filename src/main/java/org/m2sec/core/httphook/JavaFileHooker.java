@@ -31,8 +31,10 @@ public class JavaFileHooker extends AbstractHttpHooker {
 
     @Override
     public void init(Config config) {
-        log.info(config.getCacheOption().getScriptPath(Constants.HTTP_HOOK_EXAMPLES_FILE_DIR, ".java"));
-        init(config.getCacheOption().getScriptPath(Constants.HTTP_HOOK_EXAMPLES_FILE_DIR, ".java"));
+        String javaFilePath = config.getCacheOption().getScriptPath(config.getCacheOption().getJavaSelectItem(),
+            ".java");
+        log.info(javaFilePath);
+        init(javaFilePath);
     }
 
     public void init(String javaFilePath) {
