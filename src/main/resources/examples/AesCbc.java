@@ -1,5 +1,3 @@
-package examples;
-
 import org.m2sec.core.utils.*;
 import org.m2sec.core.models.*;
 

@@ -33,8 +33,8 @@ public class JavaFileHooker extends AbstractHttpHooker {
     public void init(Config config) {
         String javaFilePath = config.getCacheOption().getScriptPath(config.getCacheOption().getJavaSelectItem(),
             ".java");
-        log.info(javaFilePath);
         init(javaFilePath);
+        log.info("load java file success. {}", javaFilePath);
     }
 
     public void init(String javaFilePath) {

@@ -112,6 +112,18 @@ public class ByteUtil {
         return Hex.toHexString(data);
     }
 
+    public static String getWrappedText(byte[] data, char wrappedChar) {
+        int startIndex = ByteUtil.findFirstCharIndex(data, wrappedChar, 0);
+        if (startIndex == -1) {
+            throw new RuntimeException("cannot find first intruder flag in data. " + Arrays.toString(data));
+        }
+        int endIndex = ByteUtil.findFirstCharIndex(data, wrappedChar, startIndex + 1);
+        if (endIndex == -1) {
+            throw new RuntimeException("cannot find second intruder flag in data. " + Arrays.toString(data));
+        }
+        return new String(ByteUtil.subBytes(data, startIndex + 1, endIndex));
+    }
+
     public static String toBase64String(byte[] data) {
         return Base64.getEncoder().encodeToString(data);
     }

@@ -8,6 +8,7 @@ import com.google.gson.JsonPrimitive;
 import org.m2sec.core.common.Tuple;
 import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.enums.Method;
+import org.m2sec.core.enums.Protocol;
 import org.m2sec.core.models.FormDatas;
 import org.m2sec.core.models.Parameters;
 import org.m2sec.core.models.UploadFile;
@@ -96,6 +97,12 @@ public class HttpUtil {
 
     @SuppressWarnings("StatementWithEmptyBody")
     public static String normalizePath(String path) {
+        String prefix = "/";
+        if (path.startsWith(Protocol.HTTP.name().toLowerCase())) {
+            URL url = HttpUtil.parseUrl(path);
+            prefix = url.getProtocol() + "://" + url.getAuthority() + "/";
+            path = url.getPath().isEmpty() ? "/" : url.getPath();
+        }
         if (path.isEmpty()) return "/";
         String[] pathParts = path.split("/");
         if (pathParts.length == 0) return "/";
@@ -115,7 +122,7 @@ public class HttpUtil {
                 normalizedPathParts.add(part);
             }
         }
-        return "/" + String.join("/", normalizedPathParts) + suffix;
+        return prefix + String.join("/", normalizedPathParts) + suffix;
     }
 
     public static <T extends Parameters<String>> T strToParameters(String str, String sep, String conn, Class<?
@@ -268,6 +275,10 @@ public class HttpUtil {
                 jsonArray.set(i, new JsonPrimitive(jsonElement.getAsString() + suffix));
             }
         }
+    }
+
+    public static String getPathFromRaw(byte[] raw) {
+        return ByteUtil.getWrappedText(raw, ' ');
     }
 
 }

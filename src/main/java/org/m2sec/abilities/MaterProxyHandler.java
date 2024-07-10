@@ -22,6 +22,7 @@ public class MaterProxyHandler implements ProxyRequestHandler, ProxyResponseHand
      */
     @Override
     public ProxyRequestReceivedAction handleRequestReceived(InterceptedRequest interceptedRequest) {
+        // 有些情况下，path的位置会显示全路径，但通过.path()又拿不到，只能以这种办法解决
         HttpRequest request;
         if (hooker != null) {
             request = hooker.tryHookRequestToBurp(interceptedRequest);

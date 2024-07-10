@@ -45,7 +45,7 @@ public class Request {
     private String method;
 
     /**
-     * 不包含query参数
+     * 不包含query参数, 有时因为Burp的原因，这里会带上domain url
      */
     private String path;
 
@@ -86,12 +86,8 @@ public class Request {
     }
 
     public static Request of(HttpRequest request) {
-        log.info("request path: {}, url: {}, raw: {}", request.path(), request.url(),
-            new String(request.toByteArray().getBytes()));
-        Tuple<String, String> tuple = HttpUtil.parseFullPath(request.path());
-        return new Request(request.httpService().secure(), request.httpService().host(), request.httpService().port()
-            , request.httpVersion(), request.method(), tuple.getFirst(), Query.of(tuple.getSecond()),
-            Headers.of(request.headers()), request.body().getBytes());
+        return Request.of(request.toByteArray().getBytes(), request.httpService().secure(),
+            request.httpService().host(), request.httpService().port());
     }
 
     @SuppressWarnings("DuplicatedCode")

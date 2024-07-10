@@ -1,6 +1,7 @@
 package org.m2sec.core.httphook;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.m2sec.core.common.Config;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
@@ -10,18 +11,19 @@ import org.m2sec.core.models.Response;
  * @date: 2024/6/21 20:23
  * @description:
  */
+@Slf4j
 public class GRpcHooker extends AbstractHttpHooker {
 
     public GrpcClient client;
 
     @Override
     public void init(Config config) {
-        this.client =
-            new GrpcClient(config.getCacheOption().getGrpcConn());
+        init(config.getCacheOption().getGrpcConn());
     }
 
-    public void init(String grpcConn){
+    public void init(String grpcConn) {
         this.client = new GrpcClient(grpcConn);
+        log.info("Start grpc client success. {}", grpcConn);
     }
 
 
