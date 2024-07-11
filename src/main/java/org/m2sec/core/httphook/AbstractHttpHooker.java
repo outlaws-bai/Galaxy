@@ -7,7 +7,7 @@ import burp.api.montoya.http.message.responses.HttpResponse;
 import burp.api.montoya.proxy.http.InterceptedRequest;
 import burp.api.montoya.proxy.http.InterceptedResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.m2sec.core.common.CacheOption;
+import org.m2sec.core.common.Option;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Render;
 import org.m2sec.core.models.Request;
@@ -27,9 +27,9 @@ import java.util.Map;
 public abstract class AbstractHttpHooker {
     static final HashSet<Integer> hookedIds = new HashSet<>();
 
-    protected static CacheOption cache;
+    protected static Option option;
 
-    public abstract void init(CacheOption cache1);
+    public abstract void init(Option opt);
 
     public abstract void destroy();
 
@@ -37,10 +37,10 @@ public abstract class AbstractHttpHooker {
         String name = "hookRequestToBurp";
         HttpRequest retVal = httpRequest;
         try {
-            if (HttpUtil.isCorrectUrl(httpRequest.url()) && cache.isHookRequest()) {
+            if (HttpUtil.isCorrectUrl(httpRequest.url()) && option.isHookRequest()) {
                 Request request = Request.of(httpRequest).normalize();
                 log.debug("[{}] before hook: {}", name, request);
-                String expression = cache.getRequestCheckExpression();
+                String expression = option.getRequestCheckExpression();
                 if (expression != null && !expression.isEmpty() && (Boolean) Render.renderExpression(expression,
                     new HashMap<>(Map.of("request", request)))) {
                     request = hookRequestToBurp(request);
@@ -74,7 +74,7 @@ public abstract class AbstractHttpHooker {
                 request = hookRequestToServer(request);
                 log.debug("[{}] after hook: {}", name, request);
                 // 添加标记头
-                if (cache.isHookResponse()) {
+                if (option.isHookResponse()) {
                     hookedIds.add(httpRequest.messageId());
                 }
                 if (request == null) {
@@ -95,7 +95,7 @@ public abstract class AbstractHttpHooker {
     public HttpResponse tryHookResponseToBurp(HttpResponseReceived httpResponse) {
         String name = "hookResponseToBurp";
         try {
-            if (cache.isHookResponse() && hookedIds.contains(httpResponse.messageId())) {
+            if (option.isHookResponse() && hookedIds.contains(httpResponse.messageId())) {
                 hookedIds.remove(httpResponse.messageId());
                 Response response = Response.of(httpResponse);
                 log.debug("[{}] before hook: {}", name, response);

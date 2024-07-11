@@ -4,7 +4,6 @@ import burp.api.montoya.MontoyaApi;
 import org.m2sec.core.common.Setting;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * @author: outlaws-bai

@@ -6,7 +6,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.m2sec.Galaxy;
-import org.m2sec.core.common.CacheOption;
+import org.m2sec.core.common.Option;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Render;
 import org.m2sec.core.httphook.JavaFileHooker;
@@ -30,7 +30,7 @@ import java.util.Map;
  */
 
 public class JavaFileImpl extends IHookService<JavaFileHooker> {
-    private final CacheOption cache;
+    private final Option option;
     private final MontoyaApi api;
 
     private static final String javaFileSuffix = ".java";
@@ -39,8 +39,8 @@ public class JavaFileImpl extends IHookService<JavaFileHooker> {
 
     RSyntaxTextArea codeTextArea = new RSyntaxTextArea();
 
-    public JavaFileImpl(CacheOption cache, MontoyaApi api) {
-        this.cache = cache;
+    public JavaFileImpl(Option option, MontoyaApi api) {
+        this.option = option;
         this.api = api;
         initPanel();
     }
@@ -115,9 +115,9 @@ public class JavaFileImpl extends IHookService<JavaFileHooker> {
     }
 
     private void setData() {
-        String javaSelectItem = cache.getJavaSelectItem();
+        String javaSelectItem = option.getJavaSelectItem();
         if (javaSelectItem != null && !javaSelectItem.isBlank()) {
-            codeCombo.setSelectedItem(cache.getJavaSelectItem());
+            codeCombo.setSelectedItem(option.getJavaSelectItem());
         }else {
             codeCombo.setSelectedIndex(0);
         }

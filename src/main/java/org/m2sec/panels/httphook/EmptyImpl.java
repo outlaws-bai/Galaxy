@@ -1,6 +1,5 @@
 package org.m2sec.panels.httphook;
 
-import org.m2sec.core.common.CacheOption;
 import org.m2sec.core.httphook.AbstractHttpHooker;
 
 /**

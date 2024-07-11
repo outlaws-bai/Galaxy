@@ -15,7 +15,7 @@ import org.m2sec.core.enums.HttpHookService;
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class CacheOption {
+public class Option {
     private HttpHookService hookWay;
     private String requestCheckExpression;
     private boolean hookRequest;

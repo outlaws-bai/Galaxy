@@ -3,7 +3,7 @@ package org.m2sec.panels.httphook;
 import burp.api.montoya.MontoyaApi;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.Galaxy;
-import org.m2sec.core.common.CacheOption;
+import org.m2sec.core.common.Option;
 import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.enums.RunStatus;
 import org.m2sec.panels.SwingTools;
@@ -22,11 +22,11 @@ import java.util.Map;
 @Slf4j
 public class HttpHookPanel extends JPanel {
 
-    private final CacheOption cache;
+    private final Option option;
     private final MontoyaApi api;
 
-    public HttpHookPanel(MontoyaApi api, CacheOption cache) {
-        this.cache = cache;
+    public HttpHookPanel(MontoyaApi api, Option option) {
+        this.option = option;
         this.api = api;
         setName("HttpHook");
         initPanel();
@@ -37,8 +37,8 @@ public class HttpHookPanel extends JPanel {
         setLayout(new BorderLayout());
         // 存放几种hook方式
         Map<String, IHookService<?>> serviceMap = new LinkedHashMap<>();
-        GrpcImpl rpcImpl = new GrpcImpl(cache, api);
-        JavaFileImpl javaFileImpl = new JavaFileImpl(cache, api);
+        GrpcImpl rpcImpl = new GrpcImpl(option, api);
+        JavaFileImpl javaFileImpl = new JavaFileImpl(option, api);
         javaFileImpl.resetCodeTheme();
         serviceMap.put("...", new EmptyImpl());
         serviceMap.put(rpcImpl.displayName(), rpcImpl);
@@ -127,25 +127,25 @@ public class HttpHookPanel extends JPanel {
 
             if (!isStop) {
                 // 设置本次所选择的配置
-                cache.setHookStart(true)
+                option.setHookStart(true)
                     .setHookWay(HttpHookService.valueOf((String) comboBox.getSelectedItem()))
                     .setRequestCheckExpression(checkELTextField.getText())
                     .setHookRequest(hookRequestCheckBox.isSelected())
                     .setHookResponse(hookResponseCheckBox.isSelected())
                     .setGrpcConn(rpcImpl.getUserTypeData())
                     .setJavaSelectItem(javaFileImpl.getData());
-                hookService.start(cache);
+                hookService.start(option);
             } else {
-                hookService.stop(cache);
+                hookService.stop(option);
             }
         });
 
         // set data
-        checkELTextField.setText(cache.getRequestCheckExpression());
-        hookRequestCheckBox.setSelected(cache.isHookRequest());
-        hookResponseCheckBox.setSelected(cache.isHookResponse());
-        if (cache.getHookWay() != null) {
-            comboBox.setSelectedItem(cache.getHookWay().name());
+        checkELTextField.setText(option.getRequestCheckExpression());
+        hookRequestCheckBox.setSelected(option.isHookRequest());
+        hookResponseCheckBox.setSelected(option.isHookResponse());
+        if (option.getHookWay() != null) {
+            comboBox.setSelectedItem(option.getHookWay().name());
         }
 
 //        nextControlPanel.setBackground(Color.CYAN);

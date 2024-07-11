@@ -2,7 +2,7 @@ package org.m2sec.panels.httphook;
 
 import org.m2sec.abilities.MasterHttpHandler;
 import org.m2sec.abilities.MaterProxyHandler;
-import org.m2sec.core.common.CacheOption;
+import org.m2sec.core.common.Option;
 import org.m2sec.core.httphook.AbstractHttpHooker;
 
 import javax.swing.*;
@@ -19,15 +19,15 @@ public abstract class IHookService<T extends AbstractHttpHooker> extends JPanel 
         setName(displayName());
     }
 
-    public void start(CacheOption cache){
+    public void start(Option option){
         T hooker = newHooker();
-        hooker.init(cache);
+        hooker.init(option);
         MasterHttpHandler.hooker = hooker;
         MaterProxyHandler.hooker = hooker;
     }
 
-    public void stop(CacheOption cache){
-        cache.setHookStart(false);
+    public void stop(Option option){
+        option.setHookStart(false);
         AbstractHttpHooker hooker = MasterHttpHandler.hooker;
         hooker.destroy();
         MasterHttpHandler.hooker = null;

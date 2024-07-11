@@ -2,7 +2,7 @@ package org.m2sec.core.httphook;
 
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.Galaxy;
-import org.m2sec.core.common.CacheOption;
+import org.m2sec.core.common.Option;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
@@ -31,9 +31,9 @@ public class JavaFileHooker extends AbstractHttpHooker {
 
 
     @Override
-    public void init(CacheOption cache1) {
-        cache = cache1;
-        String javaFilePath = Constants.HTTP_HOOK_EXAMPLES_DIR + File.separator + cache1.getJavaSelectItem() + ".java";
+    public void init(Option opt) {
+        option = opt;
+        String javaFilePath = Constants.HTTP_HOOK_EXAMPLES_DIR + File.separator + opt.getJavaSelectItem() + ".java";
         init(javaFilePath);
         log.info("load java file success. {}", javaFilePath);
     }

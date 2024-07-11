@@ -23,7 +23,7 @@ public class Config {
     /**
      * 上一次使用的选项
      */
-    private CacheOption option;
+    private Option option;
 
 
     public static Config ofDisk() {
@@ -36,8 +36,8 @@ public class Config {
 
     public static Config ofDisk(MontoyaApi api, String optionFilePath, String settingFilePath) {
         Setting setting = YamlUtil.fromYamlStr(FileTools.readFileAsString(settingFilePath), Setting.class);
-        CacheOption cacheOption = YamlUtil.fromYamlStr(FileTools.readFileAsString(optionFilePath), CacheOption.class);
-        Config config = new Config(setting, cacheOption);
+        Option option = YamlUtil.fromYamlStr(FileTools.readFileAsString(optionFilePath), Option.class);
+        Config config = new Config(setting, option);
         Constants.STATIC_EXTENSIONS = config.getSetting().getStaticExtensions().split("\\|");
         if (Galaxy.isInBurp()) Constants.JAR_FILE_PATH = api.extension().filename();
         return config;
