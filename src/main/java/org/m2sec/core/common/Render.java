@@ -1,14 +1,9 @@
 package org.m2sec.core.common;
 
 import org.apache.commons.text.StringSubstitutor;
-import org.codehaus.commons.compiler.CompileException;
-import org.codehaus.janino.ExpressionEvaluator;
-
 import javax.annotation.Nullable;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import java.util.Map;
 
 /**
@@ -26,25 +21,24 @@ public class Render {
 
     public static Object renderExpression(String expression, @Nullable Map<String, Object> env, Class<?>... classes) {
         try {
-            ExpressionEvaluator evaluator = new ExpressionEvaluator();
-            evaluator.setParentClassLoader(Render.class.getClassLoader());
-            evaluator.setDefaultImports(Arrays.stream(classes).map(Class::getName).toArray(String[]::new));
-            if (env == null) {
-                evaluator.cook(expression);
-                return evaluator.evaluate();
+            ScriptEngineManager manager = new ScriptEngineManager();
+            ScriptEngine engine = manager.getEngineByName("nashorn");
+            String importTemplate = "var %s = Java.type('%s')";
+
+            // put params
+            if (env != null) {
+                for (Map.Entry<String, Object> entry : env.entrySet()) {
+                    engine.put(entry.getKey(), entry.getValue());
+                }
             }
-            List<String> keyList = new ArrayList<>();
-            List<Object> valueList = new ArrayList<>();
-            List<Class<?>> valueClassList = new ArrayList<>();
-            for (Map.Entry<String, Object> entry : env.entrySet()) {
-                keyList.add(entry.getKey());
-                valueList.add(entry.getValue());
-                valueClassList.add(entry.getValue().getClass());
+
+            // import classes
+            for (Class<?> clazz : classes) {
+                String importCode = String.format(importTemplate, clazz.getSimpleName(), clazz.getName());
+                engine.eval(importCode);
             }
-            evaluator.setParameters(keyList.toArray(new String[0]), valueClassList.toArray(new Class<?>[0]));
-            evaluator.cook(expression);
-            return evaluator.evaluate(valueList.toArray());
-        } catch (InvocationTargetException | CompileException e) {
+            return engine.eval(expression);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

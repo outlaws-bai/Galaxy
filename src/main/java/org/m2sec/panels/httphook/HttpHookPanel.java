@@ -4,7 +4,7 @@ import burp.api.montoya.MontoyaApi;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.Galaxy;
 import org.m2sec.core.common.CacheOption;
-import org.m2sec.core.enums.HttpHookWay;
+import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.enums.RunStatus;
 import org.m2sec.panels.SwingTools;
 
@@ -38,11 +38,11 @@ public class HttpHookPanel extends JPanel {
         // 存放几种hook方式
         Map<String, IHookService<?>> serviceMap = new LinkedHashMap<>();
         GrpcImpl rpcImpl = new GrpcImpl(cache, api);
-        JavaImpl javaImpl = new JavaImpl(cache, api);
-        javaImpl.resetCodeTheme();
+        JavaFileImpl javaFileImpl = new JavaFileImpl(cache, api);
+        javaFileImpl.resetCodeTheme();
         serviceMap.put("...", new EmptyImpl());
-        serviceMap.put(HttpHookWay.GRPC.name(), rpcImpl);
-        serviceMap.put(HttpHookWay.JAVA.name(), javaImpl);
+        serviceMap.put(rpcImpl.displayName(), rpcImpl);
+        serviceMap.put(javaFileImpl.displayName(), javaFileImpl);
 
         // 创建一个容器(卡片)用于放置不同方式的JPanel
         JPanel wayPanelContainer = new JPanel(new CardLayout());
@@ -51,8 +51,8 @@ public class HttpHookPanel extends JPanel {
         // 创建一个控制面板，放置选择哪种方式Hook的JComboBox
         JPanel wayControlPanel = new JPanel(new BorderLayout());
         JPanel descAndComboBox = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel selectDesc = new JLabel("HookWay: ");
-        SwingTools.addTipToLabel(selectDesc, "Choose a hook impl way.", api);
+        JLabel selectDesc = new JLabel("HookService: ");
+        SwingTools.addTipToLabel(selectDesc, "Choose a impl hooker.", api);
         JComboBox<String> comboBox = new JComboBox<>(serviceMap.keySet().toArray(String[]::new));
         JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
         descAndComboBox.add(selectDesc);
@@ -83,9 +83,9 @@ public class HttpHookPanel extends JPanel {
         JTextField checkELTextField = new JTextField();
         JPanel checkELPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel elLabel = new JLabel("Expression: ");
-        SwingTools.addTipToLabel(elLabel, "Enter an expression that will be used to determine which requests need to " +
-            "be " +
-            "processed. \r\nFor details on expression, please refer to the \"About\" tab", api);
+        SwingTools.addTipToLabel(elLabel,
+            "Enter an javascript expression that will be used to determine which requests need to be processed.",
+            api);
 
         checkELPanel.add(elLabel);
         checkELPanel.add(checkELTextField);
@@ -127,13 +127,13 @@ public class HttpHookPanel extends JPanel {
 
             if (!isStop) {
                 // 设置本次所选择的配置
-                cache.setHookStart(true);
-                cache.setHookWay(HttpHookWay.valueOf((String) comboBox.getSelectedItem()));
-                cache.setRequestCheckExpression(checkELTextField.getText());
-                cache.setHookRequest(hookRequestCheckBox.isSelected());
-                cache.setHookResponse(hookResponseCheckBox.isSelected());
-                cache.setGrpcConn(rpcImpl.getUserTypeData());
-                cache.setJavaSelectItem(javaImpl.getData());
+                cache.setHookStart(true)
+                    .setHookWay(HttpHookService.valueOf((String) comboBox.getSelectedItem()))
+                    .setRequestCheckExpression(checkELTextField.getText())
+                    .setHookRequest(hookRequestCheckBox.isSelected())
+                    .setHookResponse(hookResponseCheckBox.isSelected())
+                    .setGrpcConn(rpcImpl.getUserTypeData())
+                    .setJavaSelectItem(javaFileImpl.getData());
                 hookService.start(cache);
             } else {
                 hookService.stop(cache);

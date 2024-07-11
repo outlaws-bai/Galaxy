@@ -5,6 +5,6 @@ package org.m2sec.core.enums;
  * @date: 2024/6/21 20:23
  * @description:
  */
-public enum HttpHookWay {
+public enum HttpHookService {
     GRPC, JAVA
 }

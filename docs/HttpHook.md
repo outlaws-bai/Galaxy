@@ -10,7 +10,7 @@
 
 `Hook Response`: 是否需要对响应Hook。
 
-`Check Expression`: 判断请求是否需要Hook的Java条件表达式。[Expression](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Expression)
+`Check Expression`: 判断请求是否需要Hook的JavaScript bool表达式。[Expression](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Expression)
 
 **Hook函数**：
 

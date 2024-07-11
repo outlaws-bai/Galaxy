@@ -3,7 +3,7 @@ package org.m2sec.panels.httphook;
 import burp.api.montoya.MontoyaApi;
 import org.m2sec.core.common.CacheOption;
 import org.m2sec.core.common.Constants;
-import org.m2sec.core.enums.HttpHookWay;
+import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.httphook.GRpcHooker;
 import org.m2sec.panels.SwingTools;
 
@@ -59,6 +59,6 @@ public class GrpcImpl extends IHookService<GRpcHooker> {
 
     @Override
     public String displayName() {
-        return HttpHookWay.GRPC.name();
+        return HttpHookService.GRPC.name();
     }
 }

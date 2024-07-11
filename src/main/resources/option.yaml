@@ -1,4 +1,4 @@
-requestCheckExpression: '!request.isStaticExtension() && "192.168.1.4".equals(request.getHost())'
+requestCheckExpression: "!request.isStaticExtension() && request.host=='www.baidu.com'"
 hookRequest: true
 hookResponse: true
 grpcConn: 127.0.0.1:8443

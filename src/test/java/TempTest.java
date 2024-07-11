@@ -1,3 +1,8 @@
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -5,10 +10,11 @@ import org.junit.jupiter.api.Test;
  * @date: 2024/7/9 22:06
  * @description:
  */
-
+@Slf4j
 public class TempTest {
+
     @Test
-    public void test() {
+    public void test() throws Exception {
     }
 
     @Test

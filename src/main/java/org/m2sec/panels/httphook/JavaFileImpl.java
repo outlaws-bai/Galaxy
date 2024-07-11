@@ -29,7 +29,7 @@ import java.util.Map;
  * @description:
  */
 
-public class JavaImpl extends IHookService<JavaFileHooker> {
+public class JavaFileImpl extends IHookService<JavaFileHooker> {
     private final CacheOption cache;
     private final MontoyaApi api;
 
@@ -39,7 +39,7 @@ public class JavaImpl extends IHookService<JavaFileHooker> {
 
     RSyntaxTextArea codeTextArea = new RSyntaxTextArea();
 
-    public JavaImpl(CacheOption cache, MontoyaApi api) {
+    public JavaFileImpl(CacheOption cache, MontoyaApi api) {
         this.cache = cache;
         this.api = api;
         initPanel();
@@ -167,6 +167,6 @@ public class JavaImpl extends IHookService<JavaFileHooker> {
 
     @Override
     public String displayName() {
-        return null;
+        return "JAVA";
     }
 }

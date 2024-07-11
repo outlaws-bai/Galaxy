@@ -8,7 +8,7 @@ Windows: %USERPROFILE%/.galaxy
 
 ## Expression
 
-使用 `janino` 的ExpressionEvaluator实现表达式执行，可以理解就是一行Java代码。
+使用 `nashorn` 实现表达式的执行，可以理解就是一行JavaScript代码。
 
 ## Template
 
