@@ -37,7 +37,7 @@
 
 (二维码失效请添加wx号outlaws_bai，并备注 `Galaxy交流` 。)
 
-<img src="https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240711201827643.png" alt="image-20240711201827643" style="zoom: 67%;" />
+<img src="https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240711201827643.png" alt="image-20240711201827643" style="zoom: 30%;" />
 
 ## 常用地址
 
