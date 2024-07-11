@@ -6,7 +6,7 @@
 
 **应对场景2**：使用桌面的扫描器扫描明文请求。sqlmap、xray...
 
-这些场景下的解决方案名为 [HttpHook](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md) 。
+这些场景下的解决方案名为 [Http Hook](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md) 。
 
 除此之外还有一些小功能：
 
