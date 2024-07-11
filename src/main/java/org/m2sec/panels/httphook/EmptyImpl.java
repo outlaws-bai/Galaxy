@@ -12,7 +12,7 @@ import org.m2sec.core.httphook.AbstractHttpHooker;
 public class EmptyImpl extends IHookService<AbstractHttpHooker> {
 
     @Override
-    public AbstractHttpHooker newHooker(CacheOption cache) {
+    public AbstractHttpHooker newHooker() {
         return null;
     }
 

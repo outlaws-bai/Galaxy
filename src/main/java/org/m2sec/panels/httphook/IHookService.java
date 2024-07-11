@@ -20,7 +20,7 @@ public abstract class IHookService<T extends AbstractHttpHooker> extends JPanel 
     }
 
     public void start(CacheOption cache){
-        T hooker = newHooker(cache);
+        T hooker = newHooker();
         hooker.init(cache);
         MasterHttpHandler.hooker = hooker;
         MaterProxyHandler.hooker = hooker;
@@ -34,7 +34,7 @@ public abstract class IHookService<T extends AbstractHttpHooker> extends JPanel 
         MaterProxyHandler.hooker = null;
     }
 
-    public abstract T newHooker(CacheOption cache);
+    public abstract T newHooker();
 
     public abstract String displayName();
 }

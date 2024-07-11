@@ -17,7 +17,7 @@ import java.awt.*;
  * @description:
  */
 
-public class GrpcImpl extends IHookService {
+public class GrpcImpl extends IHookService<GRpcHooker> {
     private final CacheOption cache;
 
     private final MontoyaApi api;
@@ -54,7 +54,7 @@ public class GrpcImpl extends IHookService {
 
 
     @Override
-    public AbstractHttpHooker newHooker(CacheOption cache) {
+    public GRpcHooker newHooker() {
         return new GRpcHooker();
     }
 

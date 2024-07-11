@@ -157,7 +157,6 @@ public class FileTools {
             // 处理资源目录在 JAR 文件中的情况
             else if (resource.getProtocol().equals("jar")) {
                 String jarPath = resource.getPath().substring(5, resource.getPath().indexOf("!"));
-                //noinspection deprecation
                 try (JarFile jarFile = new JarFile(Paths.get(new URL("file:" + jarPath).toURI()).toFile())) {
                     Enumeration<JarEntry> entries = jarFile.entries();
                     while (entries.hasMoreElements()) {

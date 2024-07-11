@@ -155,8 +155,8 @@ public class JavaImpl extends IHookService<JavaFileHooker> {
 
 
     @Override
-    public JavaFileHooker newHooker(CacheOption cache) {
-        return new JavaFileHooker(cache);
+    public JavaFileHooker newHooker() {
+        return new JavaFileHooker();
     }
 
     @Override

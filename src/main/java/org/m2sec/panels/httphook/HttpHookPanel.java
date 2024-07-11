@@ -23,13 +23,11 @@ import java.util.Map;
 @Slf4j
 public class HttpHookPanel extends JPanel {
 
-    private final Config config;
     private final CacheOption cache;
     private final MontoyaApi api;
 
-    public HttpHookPanel(Config config, MontoyaApi api) {
-        this.config = config;
-        this.cache = config.getOption();
+    public HttpHookPanel(MontoyaApi api, CacheOption cache) {
+        this.cache = cache;
         this.api = api;
         setName("HttpHook");
         initPanel();
@@ -39,7 +37,7 @@ public class HttpHookPanel extends JPanel {
         if (Galaxy.isInBurp()) api.userInterface().applyThemeToComponent(this);
         setLayout(new BorderLayout());
         // 存放几种hook方式
-        Map<String, IHookService> serviceMap = new LinkedHashMap<>();
+        Map<String, IHookService<?>> serviceMap = new LinkedHashMap<>();
         GrpcImpl rpcImpl = new GrpcImpl(cache, api);
         JavaImpl javaImpl = new JavaImpl(cache, api);
         javaImpl.resetCodeTheme();
@@ -118,7 +116,7 @@ public class HttpHookPanel extends JPanel {
         // 设置 switchButton 的事件监听器, 开关HttpHook功能
         switchButton.addActionListener(e -> {
             //noinspection SuspiciousMethodCalls
-            IHookService hookService = serviceMap.get(comboBox.getSelectedItem());
+            IHookService<?> hookService = serviceMap.get(comboBox.getSelectedItem());
             boolean isStop = switchButton.getText().equalsIgnoreCase(RunStatus.STOP.name().toLowerCase());
             String text = isStop ? RunStatus.START.name() : RunStatus.STOP.name();
             switchButton.setText(SwingTools.capitalizeFirstLetter(text));

@@ -15,7 +15,7 @@ import java.awt.*;
 public class SettingPanel extends JPanel {
     private final Setting setting;
 
-    public SettingPanel(Setting setting, MontoyaApi api) {
+    public SettingPanel(MontoyaApi api, Setting setting) {
         this.setting = setting;
         setName("Setting");
     }
