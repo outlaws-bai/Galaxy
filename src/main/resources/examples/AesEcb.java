@@ -1,7 +1,6 @@
 import org.m2sec.core.utils.*;
 import org.m2sec.core.models.*;
 import javax.annotation.Nullable;
-import java.util.Base64;
 import java.util.HashMap;
 
 /**
@@ -17,12 +16,12 @@ public class AesEcb {
     private static final byte[] secret = "32byteslongsecretkeyforaes256!aa".getBytes();
 
     private static byte[] getData(byte[] content, String key) {
-        return Base64.getDecoder().decode((String) JsonUtil.jsonStrToMap(new String(content)).get(key));
+        return CodeUtil.b64decode((String) JsonUtil.jsonStrToMap(new String(content)).get(key));
     }
 
     private static byte[] toData(byte[] content, String key) {
         HashMap<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put(key, Base64.getEncoder().encodeToString(content));
+        jsonBody.put(key, CodeUtil.b64encodeToString(content));
         return JsonUtil.toJsonStr(jsonBody).getBytes();
     }
 

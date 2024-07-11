@@ -1,7 +1,6 @@
 import org.m2sec.core.utils.*;
 import org.m2sec.core.models.*;
 import javax.annotation.Nullable;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,12 +19,12 @@ public class AesGcm {
     private static final Map<String, Object> paramMap = new HashMap<>(Map.of("iv", iv, "tLen", 128));
 
     private static byte[] getData(byte[] content, String key) {
-        return Base64.getDecoder().decode((String) JsonUtil.jsonStrToMap(new String(content)).get(key));
+        return CodeUtil.b64decode((String) JsonUtil.jsonStrToMap(new String(content)).get(key));
     }
 
     private static byte[] toData(byte[] content, String key) {
         HashMap<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put(key, Base64.getEncoder().encodeToString(content));
+        jsonBody.put(key, CodeUtil.b64encodeToString(content));
         return JsonUtil.toJsonStr(jsonBody).getBytes();
     }
 

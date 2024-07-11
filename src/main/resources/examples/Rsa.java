@@ -1,7 +1,6 @@
 import org.m2sec.core.utils.*;
 import org.m2sec.core.models.*;
 import javax.annotation.Nullable;
-import java.util.Base64;
 import java.util.HashMap;
 
 /**
@@ -25,17 +24,17 @@ public class Rsa {
             "/SPQnKJaH38pgbSg+BW+Wm8iJPxrU645c3BfR/sugigFtc3QUxVUXgH7" +
             "+v03bYjZX0SCJpFWphEL20jnjvUW5KzogqSHZOsvOyxngPhkAYLZvPpp6MCaJipZJD8PlZycMCDXoolTHWuYDnspy1CMMz4HuNgaDUxBigQV2VQhooNqWva4yhBaQrh5ssQJ1TrvDn8TUoKnv/X6Ya7+KNDF6AnlnapAgMBAAECggEAI4lZ/36Fag4xCEGkigsvCC+bZVSqj1Pjn24b/SZioPRrFU0hAdYvUFOuK1cGKa0AK+aGapSyZ9i2B4vIlvHN2B+M9SzBWj/xw2TiidgyJlB4DzLoENEW+D/65ZqQBtjbjCINwR8uBTj3jUgyJXTolzVMwX5q80fS5YeT0JvOIWZp2q/+/PH9Awy3dAWmC7bMmIdOSsqD2hJKq4KtO41EI9AhkVCqVXJzzPwriFr1UBOaM3y9Gr1BumxCPGJIr9UD2paOk/lbCF2Vlui+iZjbtzlLYrs2zLuQpMtA8eGBYAlsXS4Q7CKnbNvQCCYLzsjqTU5uZEhAGnFN2mXJAjdsLwKBgQC5cqloKiBf4zQAiS3uIlEHcJy8fkatvvC8ofNQgsrGy/2YUYGaevVnY7I4e5cNypDvulek0idtmPGRkKI0XyAP+72TOYltZyo8hXt2/4kAVZkR0jfjvYIkWDLssIbCE/rx4fGZOVTxfZ3qQkGOfmra8q50FcDd0LRlf68s4ej0cwKBgQDOQR5EQhN5n/fTyv4umVDn253PpqiYbWNTItk9TRKfwIDwgFpgGQBfu/jYBeei3fJTe3TBj5PYoCQA6ETktg5YZv3MIu/DLEH5DCjLFso07ZNF5FWtbRRx5c+XVY6LXksRCnGWXIti420pdjIewyNtnrbt6NNPKXBdumn2eHn9cwKBgQCm96OrU3J+otPpP5mI9IC8EBouZAtC181sKOwnKvtjbbrP72KfMeHNyqdlz3C7TAyeqsnKbiRtuuyUwQIp4RO/EEspSP6A8AfJIe19wKkbEfaVYw5LEA8ipf6DuJQ8HT0tlt6ttD7UhuMtTaY0o4GVzDZh8kwJ6qThVcrkwCm8HQKBgAUbmbtJA6B0dLe7BDZ1N4q2Zp8Y2n4D33zUlRquiPKJ2ueZ1iMhG2BDkHMRGl5vLqwgl5CflKK9vIaFOgeL9qj7y/c9OkDUHMIlKfF1nAZZh9coQ3LrC6GSdmSiCsiqyiMe5hc6LX2Cclafhbg7TupNDuyvYmRIe27mye7/ps2/AoGARgDoTlQ9IfYAk62ZYBn8NmwZc9L7a2JVT4COQ3Y4K8bhJX4EOYsQGX5DSYXGiGjIG2lMPrQTnVgKr6a2tXKGsq9VEHlv2i7V1NjMFPKEzj8v7xSJvX4QDR1JmN4NLMBdD52KNzx6fx8kAHwoMJqhlspBCYyktwiRl7IkRRaGWEc=";
 
-    private static final byte[] publicKey = Base64.getDecoder().decode(publicKeyBase64);
+    private static final byte[] publicKey = CodeUtil.b64decode(publicKeyBase64);
 
-    private static final byte[] privateKey = Base64.getDecoder().decode(privateKeyBase64);
+    private static final byte[] privateKey = CodeUtil.b64decode(privateKeyBase64);
 
     private static byte[] getData(byte[] content, String key) {
-        return Base64.getDecoder().decode((String) JsonUtil.jsonStrToMap(new String(content)).get(key));
+        return CodeUtil.b64decode((String) JsonUtil.jsonStrToMap(new String(content)).get(key));
     }
 
     private static byte[] toData(byte[] content, String key) {
         HashMap<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put(key, Base64.getEncoder().encodeToString(content));
+        jsonBody.put(key, CodeUtil.b64encodeToString(content));
         return JsonUtil.toJsonStr(jsonBody).getBytes();
     }
 
