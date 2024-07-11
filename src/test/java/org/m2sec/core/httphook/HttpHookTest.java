@@ -14,7 +14,7 @@ public class HttpHookTest {
     @Test
     public void testJavaFileService() {
         JavaFileHooker service = new JavaFileHooker();
-        service.init(".\\src\\test\\java\\AesCbc.java");
+        service.init(".\\src\\main\\resources\\examples\\AesCbc.java");
         Request request = Request.of("https://www.baidu.com/a/b/c", Method.POST);
         request.setContent("{\"data\": \"0gXNBPtsCJ903KCjvXD6rQEod3XJ69SFCpN8QHuRQPw=\"}".getBytes());
         System.out.println(request);
