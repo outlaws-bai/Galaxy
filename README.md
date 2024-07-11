@@ -2,9 +2,9 @@
 
 **Galaxy** 是HTTP请求&响应全加密加签场景下的渗透测试解决方案，现在的载体是一款Burp插件。
 
-**场景1**：在Burp中看到且可编辑解密后的报文。
+**应对场景1**：在Burp中看到且可编辑解密后的报文。
 
-**场景2**：使用桌面的扫描器扫描明文请求。sqlmap、xray...
+**应对场景2**：使用桌面的扫描器扫描明文请求。sqlmap、xray...
 
 这些场景下的解决方案名为 [HttpHook](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md) 。
 

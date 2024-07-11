@@ -6,7 +6,6 @@ import burp.api.montoya.http.message.requests.HttpRequest;
 import com.google.protobuf.ByteString;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Tuple;
@@ -28,7 +27,6 @@ import java.util.stream.Stream;
 @Getter
 @Setter
 @Slf4j
-@Accessors(chain = true)
 public class Request {
     /**
      * is https?

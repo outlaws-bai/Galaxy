@@ -27,27 +27,25 @@ public class Helper {
         // add加解密程序
         Security.addProvider(new BouncyCastleProvider());
 
+        // 创建必要的文件和路径
+        FileTools.createDirs(Constants.WORK_DIR, // 插件工作路径
+            Constants.TMP_FILE_DIR, // 临时文件路径
+            Constants.EXTRACT_FILE_DIR // 提取文件路径
+        );
+
+        // cp resources 文件到工作目录下
+        FileTools.writeFileIfEmptyOfResource(Constants.SETTING_FILE_NAME, Constants.SETTING_FILE_PATH);
+        FileTools.writeFileIfEmptyOfResource(Constants.OPTION_FILE_NAME, Constants.OPTION_FILE_PATH);
+        FileTools.copyDirResourcesToTargetDirIfEmpty(Constants.HTTP_HOOK_EXAMPLES_DIR_NAME,
+            Constants.HTTP_HOOK_EXAMPLES_DIR);
+        FileTools.copyDirResourcesToTargetDirIfEmpty(Constants.TEMPLATE_DIR_NAME, Constants.TEMPLATE_DIR);
+
         // 加载配置文件
         Config config = Config.ofDisk(api);
 
         // 初始化log
         Helper.initLogger(Constants.LOG_FILE_PATH, config.getSetting().getLogLevel().name());
         log.debug("load config success! {}", config);
-
-        // 创建必要的文件和路径
-        FileTools.createDirs(Constants.WORK_DIR, // 插件工作路径
-            Constants.TMP_FILE_DIR, // 临时文件路径
-            Constants.EXTRACT_FILE_DIR, // 提取文件路径
-            Constants.HTTP_HOOK_EXAMPLES_FILE_DIR, // http hook examples
-            Constants.TEMPLATE_FILE_DIR // templates
-        );
-        FileTools.createFiles(Constants.OPTION_FILE_PATH);
-
-        // cp resources 文件到工作目录下
-        FileTools.cpResourceFileToTarget("setting.yaml", Constants.WORK_DIR);
-        FileTools.cpResourceFileToTarget("option.yaml", Constants.WORK_DIR);
-        FileTools.copyResourceDirToTargetDir("examples", Constants.HTTP_HOOK_EXAMPLES_FILE_DIR);
-        FileTools.copyResourceDirToTargetDir("templates", Constants.TEMPLATE_FILE_DIR);
 
         return config;
     }
@@ -73,7 +71,9 @@ public class Helper {
 
     public static void deleteLogFile() {
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        if (loggerContext == null) return;
         FileAppender<?> fileAppender = (FileAppender<?>) loggerContext.getLogger("root").getAppender("FILE");
+        if (fileAppender == null) return;
         fileAppender.stop();
         FileTools.deleteFileIfExist(fileAppender.getFile());
     }
@@ -83,6 +83,10 @@ public class Helper {
         if (tempFileDir.exists() && tempFileDir.isDirectory()) {
             FileTools.deleteFileIfExist(tempFileDir.listFiles());
         }
+    }
+
+    public static void initExceptionClean() {
+
     }
 
 }

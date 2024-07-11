@@ -6,7 +6,6 @@ import com.google.protobuf.ByteString;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 import org.m2sec.core.common.Constants;
 import org.m2sec.rpc.HttpHook;
 
@@ -19,7 +18,6 @@ import java.io.ByteArrayOutputStream;
  */
 @Getter
 @Setter
-@Accessors(chain = true)
 @AllArgsConstructor
 public class Response {
     private String version;

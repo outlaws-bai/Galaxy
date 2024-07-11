@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.experimental.Accessors;
 import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.models.*;
@@ -23,7 +22,6 @@ import java.util.*;
 @Getter
 @Setter
 @ToString
-@Accessors(chain = true)
 @AllArgsConstructor
 public class ApiInfo {
     private Version version;

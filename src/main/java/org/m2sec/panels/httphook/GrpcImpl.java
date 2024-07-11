@@ -4,7 +4,6 @@ import burp.api.montoya.MontoyaApi;
 import org.m2sec.core.common.CacheOption;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.enums.HttpHookWay;
-import org.m2sec.core.httphook.AbstractHttpHooker;
 import org.m2sec.core.httphook.GRpcHooker;
 import org.m2sec.panels.SwingTools;
 
@@ -41,14 +40,14 @@ public class GrpcImpl extends IHookService<GRpcHooker> {
         grpcConnPanel.add(grpcConnTextField);
 
         add(grpcConnPanel, BorderLayout.CENTER);
-        setData();
+        setPanelData();
     }
 
-    private void setData() {
+    private void setPanelData() {
         grpcConnTextField.setText(cache.getGrpcConn());
     }
 
-    public String getData() {
+    public String getUserTypeData() {
         return grpcConnTextField.getText();
     }
 

@@ -4,7 +4,6 @@ import burp.api.montoya.MontoyaApi;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.Galaxy;
 import org.m2sec.core.common.CacheOption;
-import org.m2sec.core.common.Config;
 import org.m2sec.core.enums.HttpHookWay;
 import org.m2sec.core.enums.RunStatus;
 import org.m2sec.panels.SwingTools;
@@ -127,13 +126,14 @@ public class HttpHookPanel extends JPanel {
             SwingTools.changeComponentStatus(hookResponseCheckBox, isStop);
 
             if (!isStop) {
-                cache.setHookStart(true)
-                    .setHookWay(HttpHookWay.valueOf((String) comboBox.getSelectedItem()))
-                    .setRequestCheckExpression(checkELTextField.getText())
-                    .setHookRequest(hookRequestCheckBox.isSelected())
-                    .setHookResponse(hookResponseCheckBox.isSelected())
-                    .setGrpcConn(rpcImpl.getData())
-                    .setJavaSelectItem(javaImpl.getData());
+                // 设置本次所选择的配置
+                cache.setHookStart(true);
+                cache.setHookWay(HttpHookWay.valueOf((String) comboBox.getSelectedItem()));
+                cache.setRequestCheckExpression(checkELTextField.getText());
+                cache.setHookRequest(hookRequestCheckBox.isSelected());
+                cache.setHookResponse(hookResponseCheckBox.isSelected());
+                cache.setGrpcConn(rpcImpl.getUserTypeData());
+                cache.setJavaSelectItem(javaImpl.getData());
                 hookService.start(cache);
             } else {
                 hookService.stop(cache);

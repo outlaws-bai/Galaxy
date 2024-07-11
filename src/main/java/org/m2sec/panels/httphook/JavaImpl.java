@@ -94,7 +94,8 @@ public class JavaImpl extends IHookService<JavaFileHooker> {
             if (filename != null) {
                 String filepath = getFilePath(filename.replace(javaFileSuffix, ""));
                 FileTools.createFiles(filepath);
-                String content = Render.renderTemplate(FileTools.readResourceAsString("templates/HttpHookTemplate.java"),
+                String content = Render.renderTemplate(FileTools.readResourceAsString("templates/HttpHookTemplate" +
+                        ".java"),
                     new HashMap<>(Map.of("filename", filename)));
                 FileTools.writeFile(filepath, content);
                 reloadExamples(codeCombo);
@@ -110,12 +111,17 @@ public class JavaImpl extends IHookService<JavaFileHooker> {
         });
 
         setData();
-        codeTextArea.setText(FileTools.readFileAsString(getFilePath((String) codeCombo.getSelectedItem())));
 
     }
 
     private void setData() {
-        codeCombo.setSelectedItem(cache.getJavaSelectItem());
+        String javaSelectItem = cache.getJavaSelectItem();
+        if (javaSelectItem != null && !javaSelectItem.isBlank()) {
+            codeCombo.setSelectedItem(cache.getJavaSelectItem());
+        }else {
+            codeCombo.setSelectedIndex(0);
+        }
+        codeTextArea.setText(FileTools.readFileAsString(getFilePath((String) codeCombo.getSelectedItem())));
     }
 
     public String getData() {
@@ -124,13 +130,13 @@ public class JavaImpl extends IHookService<JavaFileHooker> {
 
     private void reloadExamples(JComboBox<String> codeCombo) {
         codeCombo.removeAllItems();
-        List<String> examples = FileTools.listDir(Constants.HTTP_HOOK_EXAMPLES_FILE_DIR);
+        List<String> examples = FileTools.listDir(Constants.HTTP_HOOK_EXAMPLES_DIR);
         examples.stream().filter(x -> new File(x).getName().endsWith(javaFileSuffix)).forEach(x -> codeCombo.addItem(new File(x).getName().replace(javaFileSuffix, "")));
         setData();
     }
 
     private String getFilePath(String item) {
-        return Constants.HTTP_HOOK_EXAMPLES_FILE_DIR + File.separator + item + javaFileSuffix;
+        return Constants.HTTP_HOOK_EXAMPLES_DIR + File.separator + item + javaFileSuffix;
     }
 
     public void resetCodeTheme() {

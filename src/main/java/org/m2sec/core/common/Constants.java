@@ -27,14 +27,21 @@ public class Constants {
     public static final String TMP_FILE_DIR = WORK_DIR + File.separator + "tmp";
 
     public static final String EXTRACT_FILE_DIR = WORK_DIR + File.separator + "extract";
-    public static final String HTTP_HOOK_EXAMPLES_FILE_DIR = WORK_DIR + File.separator + "examples";
+    public static final String HTTP_HOOK_EXAMPLES_DIR_NAME = "examples";
 
-    public static final String TEMPLATE_FILE_DIR = WORK_DIR + File.separator + "templates";
-    public static final String OPTION_FILE_PATH = WORK_DIR + File.separator + "option.yaml";
-    public static final String SETTING_FILE_PATH = WORK_DIR + File.separator + "setting.yaml";
+    public static final String TEMPLATE_DIR_NAME = "templates";
+    public static final String HTTP_HOOK_EXAMPLES_DIR = WORK_DIR + File.separator + HTTP_HOOK_EXAMPLES_DIR_NAME;
+
+    public static final String TEMPLATE_DIR = WORK_DIR + File.separator + TEMPLATE_DIR_NAME;
+
+    public static final String OPTION_FILE_NAME = "option.yaml";
+    public static final String SETTING_FILE_NAME = "setting.yaml";
+
+    public static final String OPTION_FILE_PATH = WORK_DIR + File.separator + OPTION_FILE_NAME;
+    public static final String SETTING_FILE_PATH = WORK_DIR + File.separator + SETTING_FILE_NAME;
     public static final String LOG_FILE_PATH = WORK_DIR + File.separator + "run.log";
 
-    public static final String BYPASS_HOST_CHECK_TEMPLATE_FILE_PATH = TEMPLATE_FILE_DIR + File.separator +
+    public static final String BYPASS_HOST_CHECK_TEMPLATE_FILE_PATH = TEMPLATE_DIR + File.separator +
         "bypassHostCheckTemplate.txt";
 
     public static final String HTTP_HEADER_CONTENT_LENGTH = "Content-Length";

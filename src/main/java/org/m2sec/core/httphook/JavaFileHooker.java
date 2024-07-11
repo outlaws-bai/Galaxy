@@ -32,6 +32,7 @@ public class JavaFileHooker extends AbstractHttpHooker {
 
     @Override
     public void init(CacheOption cache1) {
+        cache = cache1;
         String javaFilePath = cache1.getScriptPath(cache1.getJavaSelectItem(),
             ".java");
         init(javaFilePath);

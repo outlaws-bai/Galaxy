@@ -25,17 +25,22 @@ public class Galaxy implements BurpExtension {
 
     @Override
     public void initialize(MontoyaApi api) {
-        env = RuntimeEnv.BURP;
-        api.extension().setName(Constants.BURP_SUITE_EXT_NAME + "-" + Constants.VERSION);
-        api.logging().logToOutput(Constants.BURP_SUITE_EXT_INIT_DEF + "Version -> " + Constants.VERSION);
-        // 加载配置并初始化
-        Config config = Helper.initAndLoadConfig(api);
-        // 注册UI
-        api.userInterface().registerSuiteTab(Constants.BURP_SUITE_EXT_NAME, new MainPanel(api, config));
-        // 注册插件能力
-        registerAbilities(api, config);
-        // 注册销毁事件
-        api.extension().registerUnloadingHandler(() -> this.destroy(config));
+        try {
+            env = RuntimeEnv.BURP;
+            api.extension().setName(Constants.BURP_SUITE_EXT_NAME + "-" + Constants.VERSION);
+            api.logging().logToOutput(Constants.BURP_SUITE_EXT_INIT_DEF + "Version -> " + Constants.VERSION);
+            // 加载配置并初始化
+            Config config = Helper.initAndLoadConfig(api);
+            // 注册UI
+            api.userInterface().registerSuiteTab(Constants.BURP_SUITE_EXT_NAME, new MainPanel(api, config));
+            // 注册插件能力
+            registerAbilities(api, config);
+            // 注册销毁事件
+            api.extension().registerUnloadingHandler(() -> this.destroy(config));
+        } catch (Exception e) {
+            Helper.initExceptionClean();
+            throw e;
+        }
     }
 
 

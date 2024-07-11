@@ -1,10 +1,6 @@
 package org.m2sec.core.common;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
+import lombok.*;
 import org.m2sec.core.enums.HttpHookWay;
 
 import java.io.File;
@@ -17,7 +13,7 @@ import java.io.File;
 @Getter
 @Setter
 @ToString
-@Accessors(chain = true)
+@NoArgsConstructor
 @AllArgsConstructor
 public class CacheOption {
     private HttpHookWay hookWay;
@@ -29,6 +25,7 @@ public class CacheOption {
     private boolean hookStart;
 
     public String getScriptPath(String item, String suffix) {
-        return Constants.HTTP_HOOK_EXAMPLES_FILE_DIR + File.separator + item + suffix;
+        return Constants.HTTP_HOOK_EXAMPLES_DIR + File.separator + item + suffix;
     }
+
 }

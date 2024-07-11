@@ -26,6 +26,10 @@ public class Config {
     private CacheOption option;
 
 
+    public static Config ofDisk() {
+        return ofDisk(null);
+    }
+
     public static Config ofDisk(MontoyaApi api) {
         return ofDisk(api, Constants.OPTION_FILE_PATH, Constants.SETTING_FILE_PATH);
     }

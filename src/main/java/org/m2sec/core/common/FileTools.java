@@ -35,7 +35,7 @@ public class FileTools {
     }
 
 
-    public static void cpResourceFileToTarget(String resourceFilePath, String targetDir) {
+    public static void cpResourceToTargetIfExist(String resourceFilePath, String targetDir) {
         Path targetDirPath = Paths.get(targetDir);
         Path targetPath = targetDirPath.resolve(new File(resourceFilePath).getName());
         writeFile(targetPath.toAbsolutePath().toString(), readResourceAsString(resourceFilePath));
@@ -91,8 +91,11 @@ public class FileTools {
     }
 
     public static void createFiles(String... filePaths) {
-        for (String filePath : filePaths) {
-            Path path = Paths.get(filePath);
+        createFiles(Stream.of(filePaths).map(Paths::get).toArray(Path[]::new));
+    }
+
+    public static void createFiles(Path... filePaths) {
+        for (Path path : filePaths) {
             try {
                 if (!Files.exists(path.getParent())) {
                     Files.createDirectories(path.getParent());
@@ -122,13 +125,29 @@ public class FileTools {
 
     public static void writeFile(String targetFilePath, String content) {
         try {
-            Files.write(Paths.get(targetFilePath), content.getBytes());
+            Path path = Paths.get(targetFilePath);
+            if (!Files.exists(path)) createFiles(path);
+            Files.write(path, content.getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void copyResourceDirToTargetDir(String sourceDir, String targetDir) {
+    public static void writeFileIfEmptyOfResource(String resourceName, String filepath) {
+        Path path = Paths.get(filepath);
+        if (!Files.exists(path) || readFileAsString(filepath).isBlank()) {
+            writeFile(filepath, readResourceAsString(resourceName));
+        }
+    }
+
+    public static void writeFileIfEmpty(String targetFilePath, String content) {
+        String raw = readFileAsString(targetFilePath);
+        if (raw.isBlank()) {
+            writeFile(targetFilePath, content);
+        }
+    }
+
+    public static void copyDirResourcesToTargetDirIfEmpty(String sourceDir, String targetDir) {
         try {
             // 获取目标目录路径
             Path targetPath = Paths.get(targetDir);
