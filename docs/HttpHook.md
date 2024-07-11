@@ -19,9 +19,6 @@
 `hookResponseToBurp`：HTTP请求从Server到达Burp时被调用。在此处完成响应解密的代码就可以在Burp中看到明文的响应报文。
 `hookResponseToClient`：HTTP请求从Burp将要发送到Client时被调用。在此处完成响应加密的代码就可以将加密后的响应报文返回给Client。
 
-**流程图**：
-
-![流程图](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/image-20240621105543574.png)
 
 **测试**：在`Repeater`右键找到`Http Hook Test`，点击即可测试，但请确保已经在插件页面中启动该功能。
 
@@ -37,8 +34,6 @@ GRPC proto 见 [HttpHook.proto](https://github.com/outlaws-bai/Galaxy/blob/main/
 
 这里有几个不同语言的示例：[java](https://github.com/outlaws-bai/Galaxy/blob/main/src/test/java/org/m2sec/core/httphook/HttpHookGrpcServer.java), [python](https://github.com/outlaws-bai/PyGRpcServer)。
 
-![]()
-
 ### JAVA
 
 > JAVA代码中需要使用项目中的DataObject和Util。可参考 [DataObject](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#DataObject) [Util](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Util)
@@ -47,13 +42,17 @@ GRPC proto 见 [HttpHook.proto](https://github.com/outlaws-bai/Galaxy/blob/main/
 
 项目已经提供了几个常用的加解密文件，你可以选择/创建一个并修改直到满足你的需求。
 
-![]()
-
 ### Jython *
+
+待实现。
 
 ### JS *
 
+待实现。
+
 ### ...
+
+待增加。
 
 ## 场景及解决方案
 
@@ -64,6 +63,10 @@ GRPC proto 见 [HttpHook.proto](https://github.com/outlaws-bai/Galaxy/blob/main/
 ### 解决方案 - 1
 
 应对场景1，但必须满足条件：涉及非对称加密的情况下必须已知私钥。
+
+**流程图**：
+
+![流程图](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/image-20240621105543574.png)
 
 ### 解决方案 - 2 *
 
