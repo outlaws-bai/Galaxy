@@ -2,7 +2,7 @@ package org.m2sec.core.httphook;
 
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.Galaxy;
-import org.m2sec.core.common.Config;
+import org.m2sec.core.common.CacheOption;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
@@ -29,9 +29,10 @@ public class JavaFileHooker extends AbstractHttpHooker {
 
     private Class<?> clazz;
 
+
     @Override
-    public void init(Config config) {
-        String javaFilePath = config.getCacheOption().getScriptPath(config.getCacheOption().getJavaSelectItem(),
+    public void init(CacheOption cache1) {
+        String javaFilePath = cache1.getScriptPath(cache1.getJavaSelectItem(),
             ".java");
         init(javaFilePath);
         log.info("load java file success. {}", javaFilePath);
@@ -112,7 +113,7 @@ public class JavaFileHooker extends AbstractHttpHooker {
             List<String> optionList = new ArrayList<>();
             if (Galaxy.isInBurp()) {
                 optionList.add("-classpath");
-                optionList.add(config.getJarFilePath());
+                optionList.add(Constants.JAR_FILE_PATH);
             }
 
             // 设置输出目录

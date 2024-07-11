@@ -9,7 +9,7 @@ import org.m2sec.core.common.Tuple;
 import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.enums.Protocol;
-import org.m2sec.core.models.FormDatas;
+import org.m2sec.core.models.FormData;
 import org.m2sec.core.models.Parameters;
 import org.m2sec.core.models.UploadFile;
 
@@ -187,10 +187,10 @@ public class HttpUtil {
         return UUID.randomUUID().toString().replace("-", "");
     }
 
-    public static byte[] generateContentFormDataContent(String boundary, FormDatas<String> formDatas,
-                                                        FormDatas<UploadFile> files) {
+    public static byte[] generateContentFormDataContent(String boundary, FormData<String> formData,
+                                                        FormData<UploadFile> files) {
 
-        if (formDatas.isEmpty() && files.isEmpty()) {
+        if (formData.isEmpty() && files.isEmpty()) {
             return new byte[]{};
         }
         try {
@@ -198,7 +198,7 @@ public class HttpUtil {
 
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(outputStream), true);
             // 1、处理form data
-            for (Map.Entry<String, List<String>> entry : formDatas.entrySet()) {
+            for (Map.Entry<String, List<String>> entry : formData.entrySet()) {
                 String name = entry.getKey();
                 for (String value : entry.getValue()) {
                     writer.append("--").append(boundary).append("\r\n").append("Content-Disposition: form-data; " +

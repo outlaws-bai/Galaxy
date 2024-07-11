@@ -1,9 +1,14 @@
 package org.m2sec.panels;
 
 
+import burp.api.montoya.MontoyaApi;
+import org.m2sec.Galaxy;
+import org.m2sec.core.common.Config;
+import org.m2sec.panels.httphook.HttpHookPanel;
+import org.m2sec.panels.setting.SettingPanel;
+
 import javax.swing.*;
 import java.awt.*;
-import java.util.stream.Stream;
 
 /**
  * @author: outlaws-bai
@@ -13,10 +18,16 @@ import java.util.stream.Stream;
 
 public class MainPanel extends JPanel {
 
-    public MainPanel(JPanel... panels) {
+    public MainPanel(MontoyaApi api, Config config) {
+        HttpHookPanel httpHookPanel = new HttpHookPanel(config, api);
+        SettingPanel settingPanel = new SettingPanel(config.getSetting(), api);
+        if (Galaxy.isInBurp()) {
+            api.userInterface().applyThemeToComponent(settingPanel);
+        }
         JTabbedPane tabManager = new JTabbedPane();
-        Stream.of(panels).forEach(tabManager::add);
         setLayout(new BorderLayout());
+        tabManager.add(httpHookPanel);
+        tabManager.add(settingPanel);
         add(tabManager);
     }
 }

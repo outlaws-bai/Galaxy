@@ -1,8 +1,6 @@
 package org.m2sec.core.common;
 
 
-import org.m2sec.core.utils.CompatUtil;
-
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -20,7 +18,7 @@ public class WorkExecutor extends ThreadPoolExecutor {
     public static final WorkExecutor INSTANCE = new WorkExecutor();
 
     public WorkExecutor() {
-        this(0, CompatUtil.getCPUCount() * 2 - 1,
+        this(0, CompatTools.getCPUCount() * 2 - 1,
             60L, TimeUnit.SECONDS,
             new LinkedBlockingQueue<>());
     }

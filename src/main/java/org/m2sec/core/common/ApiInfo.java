@@ -34,8 +34,8 @@ public class ApiInfo {
     private Headers headers;
     private Cookies cookies;
     private Form form;
-    private FormDatas<String> formDatas;
-    private FormDatas<UploadFile> files;
+    private FormData<String> formData;
+    private FormData<UploadFile> files;
     private Map<String, Object> requestBody;
     private List<Object> requestBody2;
     private LinkedHashMap<String, String> notes;
@@ -49,8 +49,8 @@ public class ApiInfo {
         this.headers = new Headers();
         this.cookies = new Cookies();
         this.form = new Form();
-        this.formDatas = new FormDatas<>();
-        this.files = new FormDatas<>();
+        this.formData = new FormData<>();
+        this.files = new FormData<>();
         this.requestBody = new HashMap<>();
         this.requestBody2 = new ArrayList<>();
         this.notes = new LinkedHashMap<>();
@@ -95,7 +95,7 @@ public class ApiInfo {
         } else if (contentType == ContentType.FORM_DATA) {
             String boundary = HttpUtil.generateBoundary();
             headers.put(Constants.HTTP_HEADER_CONTENT_TYPE, ContentType.FORM_DATA + "; boundary=" + boundary);
-            content = HttpUtil.generateContentFormDataContent(boundary, formDatas, files);
+            content = HttpUtil.generateContentFormDataContent(boundary, formData, files);
         } else {
             // 其余暂时处理为空
             content = new byte[]{};

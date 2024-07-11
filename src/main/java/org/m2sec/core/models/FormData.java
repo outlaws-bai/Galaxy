@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
  * @description:
  */
 @NoArgsConstructor
-public class FormDatas<T> extends Parameters<T> {
+public class FormData<T> extends Parameters<T> {
 }

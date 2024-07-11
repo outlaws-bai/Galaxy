@@ -3,6 +3,7 @@ package org.m2sec.abilities;
 import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.http.message.responses.HttpResponse;
 import burp.api.montoya.proxy.http.*;
+import org.m2sec.core.common.Config;
 import org.m2sec.core.httphook.AbstractHttpHooker;
 
 
@@ -16,15 +17,20 @@ public class MaterProxyHandler implements ProxyRequestHandler, ProxyResponseHand
 
     public static AbstractHttpHooker hooker;
 
+    private final Config config;
+
+    public MaterProxyHandler(Config config) {
+        this.config = config;
+    }
+
 
     /**
      * 在客户端请求到达Burp时被调用
      */
     @Override
     public ProxyRequestReceivedAction handleRequestReceived(InterceptedRequest interceptedRequest) {
-        // 有些情况下，path的位置会显示全路径，但通过.path()又拿不到，只能以这种办法解决
         HttpRequest request;
-        if (hooker != null) {
+        if (config.getOption().isHookStart()) {
             request = hooker.tryHookRequestToBurp(interceptedRequest);
         } else {
             request = interceptedRequest;
@@ -38,7 +44,7 @@ public class MaterProxyHandler implements ProxyRequestHandler, ProxyResponseHand
     @Override
     public ProxyResponseToBeSentAction handleResponseToBeSent(InterceptedResponse interceptedResponse) {
         HttpResponse response;
-        if (hooker != null) {
+        if (config.getOption().isHookStart()) {
             response = hooker.tryHookResponseToClient(interceptedResponse);
         } else {
             response = interceptedResponse;

@@ -6,10 +6,11 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.m2sec.Galaxy;
-import org.m2sec.core.common.CacheInfo;
+import org.m2sec.core.common.CacheOption;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Render;
-import org.m2sec.core.utils.FileUtil;
+import org.m2sec.core.httphook.JavaFileHooker;
+import org.m2sec.core.common.FileTools;
 import org.m2sec.panels.SwingTools;
 
 import javax.swing.*;
@@ -28,8 +29,8 @@ import java.util.Map;
  * @description:
  */
 
-public class JavaJPanel extends JPanel {
-    private final CacheInfo cache;
+public class JavaImpl extends IHookService<JavaFileHooker> {
+    private final CacheOption cache;
     private final MontoyaApi api;
 
     private static final String javaFileSuffix = ".java";
@@ -38,7 +39,7 @@ public class JavaJPanel extends JPanel {
 
     RSyntaxTextArea codeTextArea = new RSyntaxTextArea();
 
-    public JavaJPanel(CacheInfo cache, MontoyaApi api) {
+    public JavaImpl(CacheOption cache, MontoyaApi api) {
         this.cache = cache;
         this.api = api;
         initPanel();
@@ -80,22 +81,22 @@ public class JavaJPanel extends JPanel {
 
         codeCombo.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                codeTextArea.setText(FileUtil.readFileAsString(getFilePath((String) e.getItem())));
+                codeTextArea.setText(FileTools.readFileAsString(getFilePath((String) e.getItem())));
                 codeTextArea.setCaretPosition(0);
             }
         });
 
-        saveButton.addActionListener(e -> FileUtil.writeFile(getFilePath((String) codeCombo.getSelectedItem()),
+        saveButton.addActionListener(e -> FileTools.writeFile(getFilePath((String) codeCombo.getSelectedItem()),
             codeTextArea.getText()));
 
         newButton.addActionListener(e -> {
             String filename = JOptionPane.showInputDialog(null, "Please input filename: ");
             if (filename != null) {
                 String filepath = getFilePath(filename.replace(javaFileSuffix, ""));
-                FileUtil.createFiles(filepath);
-                String content = Render.renderTemplate(FileUtil.readResourceAsString("templates/HttpHookTemplate.java"),
+                FileTools.createFiles(filepath);
+                String content = Render.renderTemplate(FileTools.readResourceAsString("templates/HttpHookTemplate.java"),
                     new HashMap<>(Map.of("filename", filename)));
-                FileUtil.writeFile(filepath, content);
+                FileTools.writeFile(filepath, content);
                 reloadExamples(codeCombo);
                 codeCombo.setSelectedItem(filename);
             }
@@ -103,13 +104,13 @@ public class JavaJPanel extends JPanel {
 
         deleteButton.addActionListener(e -> {
             String filepath = getFilePath((String) codeCombo.getSelectedItem());
-            FileUtil.deleteFileIfExist(filepath);
+            FileTools.deleteFileIfExist(filepath);
             reloadExamples(codeCombo);
             codeCombo.setSelectedIndex(0);
         });
 
         setData();
-        codeTextArea.setText(FileUtil.readFileAsString(getFilePath((String) codeCombo.getSelectedItem())));
+        codeTextArea.setText(FileTools.readFileAsString(getFilePath((String) codeCombo.getSelectedItem())));
 
     }
 
@@ -123,7 +124,7 @@ public class JavaJPanel extends JPanel {
 
     private void reloadExamples(JComboBox<String> codeCombo) {
         codeCombo.removeAllItems();
-        List<String> examples = FileUtil.listDir(Constants.HTTP_HOOK_EXAMPLES_FILE_DIR);
+        List<String> examples = FileTools.listDir(Constants.HTTP_HOOK_EXAMPLES_FILE_DIR);
         examples.stream().filter(x -> new File(x).getName().endsWith(javaFileSuffix)).forEach(x -> codeCombo.addItem(new File(x).getName().replace(javaFileSuffix, "")));
         setData();
     }
@@ -152,4 +153,14 @@ public class JavaJPanel extends JPanel {
         }
     }
 
+
+    @Override
+    public JavaFileHooker newHooker(CacheOption cache) {
+        return new JavaFileHooker(cache);
+    }
+
+    @Override
+    public String displayName() {
+        return null;
+    }
 }

@@ -19,7 +19,7 @@ import java.io.File;
 @ToString
 @Accessors(chain = true)
 @AllArgsConstructor
-public class CacheInfo {
+public class CacheOption {
     private HttpHookWay hookWay;
     private String requestCheckExpression;
     private boolean hookRequest;

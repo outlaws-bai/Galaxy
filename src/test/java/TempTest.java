@@ -1,6 +1,4 @@
 import org.junit.jupiter.api.Test;
-import org.m2sec.core.common.Constants;
-import org.m2sec.core.utils.FileUtil;
 
 import javax.swing.*;
 import java.awt.*;

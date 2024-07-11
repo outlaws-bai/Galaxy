@@ -3,6 +3,7 @@ package org.m2sec.abilities;
 import burp.api.montoya.http.handler.*;
 import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.http.message.responses.HttpResponse;
+import org.m2sec.core.common.Config;
 import org.m2sec.core.httphook.AbstractHttpHooker;
 
 /**
@@ -16,6 +17,12 @@ public class MasterHttpHandler implements HttpHandler {
 
     public static AbstractHttpHooker hooker;
 
+    private final Config config;
+
+    public MasterHttpHandler(Config config) {
+        this.config = config;
+    }
+
 
     /**
      * 请求从Burp发送到服务端时被调用
@@ -23,7 +30,7 @@ public class MasterHttpHandler implements HttpHandler {
     @Override
     public RequestToBeSentAction handleHttpRequestToBeSent(HttpRequestToBeSent requestToBeSent) {
         HttpRequest request;
-        if (hooker != null) {
+        if (config.getOption().isHookStart()) {
             request = hooker.tryHookRequestToServer(requestToBeSent);
         } else {
             request = requestToBeSent;
@@ -37,7 +44,7 @@ public class MasterHttpHandler implements HttpHandler {
     @Override
     public ResponseReceivedAction handleHttpResponseReceived(HttpResponseReceived responseReceived) {
         HttpResponse response;
-        if (hooker != null) {
+        if (config.getOption().isHookStart()) {
             response = hooker.tryHookResponseToBurp(responseReceived);
         } else {
             response = responseReceived;

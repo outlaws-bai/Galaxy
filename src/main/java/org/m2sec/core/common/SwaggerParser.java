@@ -185,7 +185,7 @@ public class SwaggerParser {
                     if ("file".equals(type)) {
                         apiInfo.getFiles().add(name, (UploadFile) getValueByType(type));
                     } else {
-                        apiInfo.getFormDatas().add(name, getValueByType(type).toString());
+                        apiInfo.getFormData().add(name, getValueByType(type).toString());
                     }
                 }
             }

@@ -2,7 +2,7 @@ package org.m2sec.core.httphook;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.m2sec.core.common.Config;
+import org.m2sec.core.common.CacheOption;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
 
@@ -16,9 +16,11 @@ public class GRpcHooker extends AbstractHttpHooker {
 
     public GrpcClient client;
 
+
     @Override
-    public void init(Config config) {
-        init(config.getCacheOption().getGrpcConn());
+    public void init(CacheOption cache1) {
+        cache = cache1;
+        init(cache1.getGrpcConn());
     }
 
     public void init(String grpcConn) {

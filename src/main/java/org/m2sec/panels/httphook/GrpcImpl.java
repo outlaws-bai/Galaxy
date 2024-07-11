@@ -1,8 +1,11 @@
 package org.m2sec.panels.httphook;
 
 import burp.api.montoya.MontoyaApi;
-import org.m2sec.core.common.CacheInfo;
+import org.m2sec.core.common.CacheOption;
 import org.m2sec.core.common.Constants;
+import org.m2sec.core.enums.HttpHookWay;
+import org.m2sec.core.httphook.AbstractHttpHooker;
+import org.m2sec.core.httphook.GRpcHooker;
 import org.m2sec.panels.SwingTools;
 
 import javax.swing.*;
@@ -14,15 +17,15 @@ import java.awt.*;
  * @description:
  */
 
-public class GrpcJPanel extends JPanel {
-    private final CacheInfo cache;
+public class GrpcImpl extends IHookService {
+    private final CacheOption cache;
 
     private final MontoyaApi api;
 
     private final JTextField grpcConnTextField = new JTextField(20);
 
 
-    public GrpcJPanel(CacheInfo cache, MontoyaApi api) {
+    public GrpcImpl(CacheOption cache, MontoyaApi api) {
         this.cache = cache;
         this.api = api;
         initPanel();
@@ -47,5 +50,16 @@ public class GrpcJPanel extends JPanel {
 
     public String getData() {
         return grpcConnTextField.getText();
+    }
+
+
+    @Override
+    public AbstractHttpHooker newHooker(CacheOption cache) {
+        return new GRpcHooker();
+    }
+
+    @Override
+    public String displayName() {
+        return HttpHookWay.GRPC.name();
     }
 }

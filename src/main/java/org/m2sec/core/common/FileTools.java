@@ -1,4 +1,4 @@
-package org.m2sec.core.utils;
+package org.m2sec.core.common;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,10 +22,10 @@ import java.util.stream.Stream;
  * @description:
  */
 @Slf4j
-public class FileUtil {
+public class FileTools {
 
     public static String readResourceAsString(String path) {
-        ClassLoader classLoader = FileUtil.class.getClassLoader();
+        ClassLoader classLoader = FileTools.class.getClassLoader();
         try (InputStream inputStream = classLoader.getResourceAsStream(path)) {
             assert inputStream != null;
             return new String(inputStream.readAllBytes());
@@ -137,7 +137,7 @@ public class FileUtil {
             }
 
             // 获取资源目录 URL
-            URL resource = FileUtil.class.getClassLoader().getResource(sourceDir);
+            URL resource = FileTools.class.getClassLoader().getResource(sourceDir);
             if (resource == null) {
                 throw new IllegalArgumentException("Resource directory not found: " + sourceDir);
             }

@@ -1,6 +1,7 @@
-package org.m2sec.core.utils;
+package org.m2sec.core.common;
 
 import lombok.extern.slf4j.Slf4j;
+import org.m2sec.core.utils.JsonUtil;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -20,7 +21,7 @@ import java.util.Map;
  * @description:
  */
 @Slf4j
-public class CompatUtil {
+public class CompatTools {
 
 
     public static Map<String, List<String>> mapToMultiMap(Map<String, Object> map) {

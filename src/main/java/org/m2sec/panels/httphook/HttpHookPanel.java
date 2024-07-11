@@ -3,13 +3,10 @@ package org.m2sec.panels.httphook;
 import burp.api.montoya.MontoyaApi;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.Galaxy;
-import org.m2sec.abilities.MasterHttpHandler;
-import org.m2sec.abilities.MaterProxyHandler;
-import org.m2sec.core.common.CacheInfo;
+import org.m2sec.core.common.CacheOption;
 import org.m2sec.core.common.Config;
 import org.m2sec.core.enums.HttpHookWay;
 import org.m2sec.core.enums.RunStatus;
-import org.m2sec.core.httphook.AbstractHttpHooker;
 import org.m2sec.panels.SwingTools;
 
 import javax.swing.*;
@@ -27,12 +24,12 @@ import java.util.Map;
 public class HttpHookPanel extends JPanel {
 
     private final Config config;
-    private final CacheInfo cache;
+    private final CacheOption cache;
     private final MontoyaApi api;
 
     public HttpHookPanel(Config config, MontoyaApi api) {
         this.config = config;
-        this.cache = config.getCacheOption();
+        this.cache = config.getOption();
         this.api = api;
         setName("HttpHook");
         initPanel();
@@ -41,26 +38,25 @@ public class HttpHookPanel extends JPanel {
     private void initPanel() {
         if (Galaxy.isInBurp()) api.userInterface().applyThemeToComponent(this);
         setLayout(new BorderLayout());
-
         // 存放几种hook方式
-        Map<String, JPanel> panelMap = new LinkedHashMap<>();
-        GrpcJPanel rpcPanel = new GrpcJPanel(cache, api);
-        JavaJPanel javaJPanel = new JavaJPanel(cache, api);
-        javaJPanel.resetCodeTheme();
-        panelMap.put("...", new JPanel());
-        panelMap.put(HttpHookWay.GRPC.name(), rpcPanel);
-        panelMap.put(HttpHookWay.JAVA.name(), javaJPanel);
+        Map<String, IHookService> serviceMap = new LinkedHashMap<>();
+        GrpcImpl rpcImpl = new GrpcImpl(cache, api);
+        JavaImpl javaImpl = new JavaImpl(cache, api);
+        javaImpl.resetCodeTheme();
+        serviceMap.put("...", new EmptyImpl());
+        serviceMap.put(HttpHookWay.GRPC.name(), rpcImpl);
+        serviceMap.put(HttpHookWay.JAVA.name(), javaImpl);
 
         // 创建一个容器(卡片)用于放置不同方式的JPanel
         JPanel wayPanelContainer = new JPanel(new CardLayout());
-        panelMap.forEach((k, v) -> wayPanelContainer.add(v, k));
+        serviceMap.forEach((k, v) -> wayPanelContainer.add(v, k));
 
         // 创建一个控制面板，放置选择哪种方式Hook的JComboBox
         JPanel wayControlPanel = new JPanel(new BorderLayout());
         JPanel descAndComboBox = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel selectDesc = new JLabel("HookWay: ");
         SwingTools.addTipToLabel(selectDesc, "Choose a hook impl way.", api);
-        JComboBox<String> comboBox = new JComboBox<>(panelMap.keySet().toArray(String[]::new));
+        JComboBox<String> comboBox = new JComboBox<>(serviceMap.keySet().toArray(String[]::new));
         JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
         descAndComboBox.add(selectDesc);
         descAndComboBox.add(comboBox);
@@ -113,7 +109,7 @@ public class HttpHookPanel extends JPanel {
         comboBox.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 String selectedItem = (String) e.getItem();
-                boolean flag = !selectedItem.equals(panelMap.keySet().iterator().next());
+                boolean flag = !selectedItem.equals(serviceMap.keySet().iterator().next());
                 nextControlPanel.setVisible(flag);
                 CardLayout cl = (CardLayout) (wayPanelContainer.getLayout());
                 cl.show(wayPanelContainer, selectedItem);
@@ -121,32 +117,28 @@ public class HttpHookPanel extends JPanel {
         });
         // 设置 switchButton 的事件监听器, 开关HttpHook功能
         switchButton.addActionListener(e -> {
+            //noinspection SuspiciousMethodCalls
+            IHookService hookService = serviceMap.get(comboBox.getSelectedItem());
             boolean isStop = switchButton.getText().equalsIgnoreCase(RunStatus.STOP.name().toLowerCase());
             String text = isStop ? RunStatus.START.name() : RunStatus.STOP.name();
             switchButton.setText(SwingTools.capitalizeFirstLetter(text));
-            //noinspection SuspiciousMethodCalls
-            SwingTools.changePanelStatus(panelMap.get(comboBox.getSelectedItem()), isStop);
+            SwingTools.changePanelStatus(hookService, isStop);
             SwingTools.changePanelStatus(requestCheckPanel, isStop);
             SwingTools.changeComponentStatus(comboBox, isStop);
             SwingTools.changeComponentStatus(hookRequestCheckBox, isStop);
             SwingTools.changeComponentStatus(hookResponseCheckBox, isStop);
 
             if (!isStop) {
-                cache.setHookWay(HttpHookWay.valueOf((String) comboBox.getSelectedItem()))
+                cache.setHookStart(true)
+                    .setHookWay(HttpHookWay.valueOf((String) comboBox.getSelectedItem()))
                     .setRequestCheckExpression(checkELTextField.getText())
                     .setHookRequest(hookRequestCheckBox.isSelected())
                     .setHookResponse(hookResponseCheckBox.isSelected())
-                    .setGrpcConn(rpcPanel.getData())
-                    .setJavaSelectItem(javaJPanel.getData()).setHookStart(true);
-                AbstractHttpHooker hooker = AbstractHttpHooker.getHooker(config);
-                MaterProxyHandler.hooker = hooker;
-                MasterHttpHandler.hooker = hooker;
-                log.info("Hook start - {}", hooker.getClass().getSimpleName());
+                    .setGrpcConn(rpcImpl.getData())
+                    .setJavaSelectItem(javaImpl.getData());
+                hookService.start(cache);
             } else {
-                MaterProxyHandler.hooker.destroy();
-                MaterProxyHandler.hooker = null;
-                cache.setHookStart(false);
-                log.info("Hook stop");
+                hookService.stop(cache);
             }
         });
 

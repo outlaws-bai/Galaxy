@@ -7,10 +7,9 @@ import burp.api.montoya.http.message.responses.HttpResponse;
 import burp.api.montoya.proxy.http.InterceptedRequest;
 import burp.api.montoya.proxy.http.InterceptedResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.m2sec.core.common.Config;
+import org.m2sec.core.common.CacheOption;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Render;
-import org.m2sec.core.enums.HttpHookWay;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
 import org.m2sec.core.utils.HttpUtil;
@@ -28,41 +27,20 @@ import java.util.Map;
 public abstract class AbstractHttpHooker {
     static final HashSet<Integer> hookedIds = new HashSet<>();
 
-    protected static Config config;
+    protected static CacheOption cache;
 
-
-    public abstract void init(Config config);
+    public abstract void init(CacheOption cache1);
 
     public abstract void destroy();
-
-
-    public static AbstractHttpHooker getHooker(Config config1) {
-        config = config1;
-        if (config.getCacheOption().isHookStart()) {
-            AbstractHttpHooker hooker;
-            if (config.getCacheOption().getHookWay().equals(HttpHookWay.GRPC)) {
-                hooker = new GRpcHooker();
-            } else if (config.getCacheOption().getHookWay().equals(HttpHookWay.JAVA)) {
-                hooker = new JavaFileHooker();
-            } else {
-                throw new RuntimeException("hookService is error! please choose RPC or JAVA");
-            }
-            log.info("HTTP Hooker - {} start. ", config.getCacheOption().getHookWay());
-            hooker.init(config);
-            return hooker;
-        } else {
-            throw new RuntimeException("Hook is not start");
-        }
-    }
 
     public HttpRequest tryHookRequestToBurp(InterceptedRequest httpRequest) {
         String name = "hookRequestToBurp";
         HttpRequest retVal = httpRequest;
         try {
-            if (HttpUtil.isCorrectUrl(httpRequest.url()) && config.getCacheOption().isHookRequest()) {
+            if (HttpUtil.isCorrectUrl(httpRequest.url()) && cache.isHookRequest()) {
                 Request request = Request.of(httpRequest).normalize();
                 log.debug("[{}] before hook: {}", name, request);
-                String expression = config.getCacheOption().getRequestCheckExpression();
+                String expression = cache.getRequestCheckExpression();
                 if (expression != null && !expression.isEmpty() && (Boolean) Render.renderExpression(expression,
                     new HashMap<>(Map.of("request", request)))) {
                     request = hookRequestToBurp(request);
@@ -96,7 +74,7 @@ public abstract class AbstractHttpHooker {
                 request = hookRequestToServer(request);
                 log.debug("[{}] after hook: {}", name, request);
                 // 添加标记头
-                if (config.getCacheOption().isHookResponse()) {
+                if (cache.isHookResponse()) {
                     hookedIds.add(httpRequest.messageId());
                 }
                 if (request == null) {
@@ -117,7 +95,7 @@ public abstract class AbstractHttpHooker {
     public HttpResponse tryHookResponseToBurp(HttpResponseReceived httpResponse) {
         String name = "hookResponseToBurp";
         try {
-            if (config.getCacheOption().isHookResponse() && hookedIds.contains(httpResponse.messageId())) {
+            if (cache.isHookResponse() && hookedIds.contains(httpResponse.messageId())) {
                 hookedIds.remove(httpResponse.messageId());
                 Response response = Response.of(httpResponse);
                 log.debug("[{}] before hook: {}", name, response);
@@ -153,7 +131,7 @@ public abstract class AbstractHttpHooker {
                 if (result == null) {
                     return httpResponse;
                 }
-                log.debug("exec method: {} with {} success.",name, this.getClass().getSimpleName());
+                log.debug("exec method: {} with {} success.", name, this.getClass().getSimpleName());
                 return result.toBurp();
             }
         } catch (Exception e) {

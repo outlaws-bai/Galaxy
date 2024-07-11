@@ -244,7 +244,7 @@ public class Request {
     }
 
     public boolean isStaticExtension() {
-        return isStaticExtension(Constants.STATIC_EXTENSIONS.split("\\|"));
+        return isStaticExtension(Constants.STATIC_EXTENSIONS);
     }
 
     public boolean isStaticExtension(String... staticExtensions) {
