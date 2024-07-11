@@ -29,7 +29,7 @@ import java.util.Map;
  * @description:
  */
 
-public class JavaFileImpl extends IHookService<JavaFileHooker> {
+public class JavaFileHookerPanel extends IHookerPanel<JavaFileHooker> {
     private final Option option;
     private final MontoyaApi api;
 
@@ -39,7 +39,7 @@ public class JavaFileImpl extends IHookService<JavaFileHooker> {
 
     RSyntaxTextArea codeTextArea = new RSyntaxTextArea();
 
-    public JavaFileImpl(Option option, MontoyaApi api) {
+    public JavaFileHookerPanel(Option option, MontoyaApi api) {
         this.option = option;
         this.api = api;
         initPanel();
@@ -94,9 +94,10 @@ public class JavaFileImpl extends IHookService<JavaFileHooker> {
             if (filename != null) {
                 String filepath = getFilePath(filename.replace(javaFileSuffix, ""));
                 FileTools.createFiles(filepath);
-                String content = Render.renderTemplate(FileTools.readResourceAsString("templates/HttpHookTemplate" +
-                        ".java"),
-                    new HashMap<>(Map.of("filename", filename)));
+                String content = Render.renderTemplate(
+                    FileTools.readResourceAsString("templates/HttpHookTemplate.java"),
+                    new HashMap<>(Map.of("filename", filename))
+                );
                 FileTools.writeFile(filepath, content);
                 reloadExamples(codeCombo);
                 codeCombo.setSelectedItem(filename);
@@ -118,7 +119,7 @@ public class JavaFileImpl extends IHookService<JavaFileHooker> {
         String javaSelectItem = option.getJavaSelectItem();
         if (javaSelectItem != null && !javaSelectItem.isBlank()) {
             codeCombo.setSelectedItem(option.getJavaSelectItem());
-        }else {
+        } else {
             codeCombo.setSelectedIndex(0);
         }
         codeTextArea.setText(FileTools.readFileAsString(getFilePath((String) codeCombo.getSelectedItem())));
@@ -162,6 +163,8 @@ public class JavaFileImpl extends IHookService<JavaFileHooker> {
 
     @Override
     public JavaFileHooker newHooker() {
+        FileTools.writeFile(FileTools.getExampleScriptFilePath(option.getJavaSelectItem(),
+            Constants.JAVA_FILE_SUFFIX), codeTextArea.getText());
         return new JavaFileHooker();
     }
 

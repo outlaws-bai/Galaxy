@@ -86,7 +86,8 @@ public class Helper {
     }
 
     public static void initExceptionClean() {
-
+        Helper.deleteLogFile();
+        Helper.cleanTmpDir();
     }
 
 }

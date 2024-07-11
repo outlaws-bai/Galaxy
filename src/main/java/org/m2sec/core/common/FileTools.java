@@ -200,5 +200,9 @@ public class FileTools {
         return readResourceAsString("version.txt");
     }
 
+    public static String getExampleScriptFilePath(String item, String suffix) {
+        return Constants.HTTP_HOOK_EXAMPLES_DIR + File.separator + item + suffix;
+    }
+
 
 }

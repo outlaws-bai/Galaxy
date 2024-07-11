@@ -24,7 +24,7 @@ import java.util.Map;
  * @description:
  */
 @Slf4j
-public abstract class AbstractHttpHooker {
+public abstract class IHttpHooker {
     static final HashSet<Integer> hookedIds = new HashSet<>();
 
     protected static Option option;

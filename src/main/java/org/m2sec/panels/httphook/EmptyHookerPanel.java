@@ -1,6 +1,6 @@
 package org.m2sec.panels.httphook;
 
-import org.m2sec.core.httphook.AbstractHttpHooker;
+import org.m2sec.core.httphook.IHttpHooker;
 
 /**
  * @author: outlaws-bai
@@ -8,10 +8,10 @@ import org.m2sec.core.httphook.AbstractHttpHooker;
  * @description:
  */
 
-public class EmptyImpl extends IHookService<AbstractHttpHooker> {
+public class EmptyHookerPanel extends IHookerPanel<IHttpHooker> {
 
     @Override
-    public AbstractHttpHooker newHooker() {
+    public IHttpHooker newHooker() {
         return null;
     }
 

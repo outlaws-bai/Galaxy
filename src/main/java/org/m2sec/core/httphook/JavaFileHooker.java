@@ -2,6 +2,7 @@ package org.m2sec.core.httphook;
 
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.Galaxy;
+import org.m2sec.core.common.FileTools;
 import org.m2sec.core.common.Option;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.models.Request;
@@ -25,7 +26,7 @@ import java.util.*;
  * @description:
  */
 @Slf4j
-public class JavaFileHooker extends AbstractHttpHooker {
+public class JavaFileHooker extends IHttpHooker {
 
     private Class<?> clazz;
 
@@ -33,7 +34,8 @@ public class JavaFileHooker extends AbstractHttpHooker {
     @Override
     public void init(Option opt) {
         option = opt;
-        String javaFilePath = Constants.HTTP_HOOK_EXAMPLES_DIR + File.separator + opt.getJavaSelectItem() + ".java";
+        String javaFilePath = FileTools.getExampleScriptFilePath(option.getJavaSelectItem(),
+            Constants.JAVA_FILE_SUFFIX);
         init(javaFilePath);
         log.info("load java file success. {}", javaFilePath);
     }

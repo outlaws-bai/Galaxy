@@ -12,7 +12,7 @@ import org.m2sec.core.models.Response;
  * @description:
  */
 @Slf4j
-public class GRpcHooker extends AbstractHttpHooker {
+public class GRpcHooker extends IHttpHooker {
 
     public GrpcClient client;
 

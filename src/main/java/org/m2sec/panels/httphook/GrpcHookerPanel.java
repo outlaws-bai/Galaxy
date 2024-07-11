@@ -16,7 +16,7 @@ import java.awt.*;
  * @description:
  */
 
-public class GrpcImpl extends IHookService<GRpcHooker> {
+public class GrpcHookerPanel extends IHookerPanel<GRpcHooker> {
     private final Option option;
 
     private final MontoyaApi api;
@@ -24,7 +24,7 @@ public class GrpcImpl extends IHookService<GRpcHooker> {
     private final JTextField grpcConnTextField = new JTextField(20);
 
 
-    public GrpcImpl(Option option, MontoyaApi api) {
+    public GrpcHookerPanel(Option option, MontoyaApi api) {
         this.option = option;
         this.api = api;
         initPanel();

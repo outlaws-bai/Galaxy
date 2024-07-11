@@ -4,7 +4,7 @@ import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.http.message.responses.HttpResponse;
 import burp.api.montoya.proxy.http.*;
 import org.m2sec.core.common.Config;
-import org.m2sec.core.httphook.AbstractHttpHooker;
+import org.m2sec.core.httphook.IHttpHooker;
 
 
 /**
@@ -15,7 +15,7 @@ import org.m2sec.core.httphook.AbstractHttpHooker;
 
 public class MaterProxyHandler implements ProxyRequestHandler, ProxyResponseHandler {
 
-    public static AbstractHttpHooker hooker;
+    public static IHttpHooker hooker;
 
     private final Config config;
 

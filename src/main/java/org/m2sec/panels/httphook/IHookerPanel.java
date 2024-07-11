@@ -3,7 +3,7 @@ package org.m2sec.panels.httphook;
 import org.m2sec.abilities.MasterHttpHandler;
 import org.m2sec.abilities.MaterProxyHandler;
 import org.m2sec.core.common.Option;
-import org.m2sec.core.httphook.AbstractHttpHooker;
+import org.m2sec.core.httphook.IHttpHooker;
 
 import javax.swing.*;
 
@@ -13,9 +13,9 @@ import javax.swing.*;
  * @description:
  */
 
-public abstract class IHookService<T extends AbstractHttpHooker> extends JPanel {
+public abstract class IHookerPanel<T extends IHttpHooker> extends JPanel {
 
-    public IHookService() {
+    public IHookerPanel() {
         setName(displayName());
     }
 
@@ -28,7 +28,7 @@ public abstract class IHookService<T extends AbstractHttpHooker> extends JPanel 
 
     public void stop(Option option){
         option.setHookStart(false);
-        AbstractHttpHooker hooker = MasterHttpHandler.hooker;
+        IHttpHooker hooker = MasterHttpHandler.hooker;
         hooker.destroy();
         MasterHttpHandler.hooker = null;
         MaterProxyHandler.hooker = null;

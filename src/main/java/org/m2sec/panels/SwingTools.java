@@ -79,5 +79,9 @@ public class SwingTools {
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 
+    public static void showException(Exception e) {
+        JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
 
 }

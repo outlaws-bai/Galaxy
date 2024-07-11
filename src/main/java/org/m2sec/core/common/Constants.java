@@ -66,5 +66,11 @@ public class Constants {
 
     public static String JAR_FILE_PATH = null;
 
+    public static final String JAVA_FILE_SUFFIX = ".java";
+
+    public static final String PYTHON_FILE_SUFFIX = ".py";
+
+    public static final String JS_FILE_SUFFIX = ".js";
+
 
 }

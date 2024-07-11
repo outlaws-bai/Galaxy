@@ -36,13 +36,13 @@ public class HttpHookPanel extends JPanel {
         if (Galaxy.isInBurp()) api.userInterface().applyThemeToComponent(this);
         setLayout(new BorderLayout());
         // 存放几种hook方式
-        Map<String, IHookService<?>> serviceMap = new LinkedHashMap<>();
-        GrpcImpl rpcImpl = new GrpcImpl(option, api);
-        JavaFileImpl javaFileImpl = new JavaFileImpl(option, api);
-        javaFileImpl.resetCodeTheme();
-        serviceMap.put("...", new EmptyImpl());
+        Map<String, IHookerPanel<?>> serviceMap = new LinkedHashMap<>();
+        GrpcHookerPanel rpcImpl = new GrpcHookerPanel(option, api);
+        JavaFileHookerPanel javaFileHookerPanel = new JavaFileHookerPanel(option, api);
+        javaFileHookerPanel.resetCodeTheme();
+        serviceMap.put("...", new EmptyHookerPanel());
         serviceMap.put(rpcImpl.displayName(), rpcImpl);
-        serviceMap.put(javaFileImpl.displayName(), javaFileImpl);
+        serviceMap.put(javaFileHookerPanel.displayName(), javaFileHookerPanel);
 
         // 创建一个容器(卡片)用于放置不同方式的JPanel
         JPanel wayPanelContainer = new JPanel(new CardLayout());
@@ -51,8 +51,8 @@ public class HttpHookPanel extends JPanel {
         // 创建一个控制面板，放置选择哪种方式Hook的JComboBox
         JPanel wayControlPanel = new JPanel(new BorderLayout());
         JPanel descAndComboBox = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel selectDesc = new JLabel("HookService: ");
-        SwingTools.addTipToLabel(selectDesc, "Choose a impl hooker.", api);
+        JLabel selectDesc = new JLabel("Hooker: ");
+        SwingTools.addTipToLabel(selectDesc, "Choose a hooker.", api);
         JComboBox<String> comboBox = new JComboBox<>(serviceMap.keySet().toArray(String[]::new));
         JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
         descAndComboBox.add(selectDesc);
@@ -115,29 +115,35 @@ public class HttpHookPanel extends JPanel {
         // 设置 switchButton 的事件监听器, 开关HttpHook功能
         switchButton.addActionListener(e -> {
             //noinspection SuspiciousMethodCalls
-            IHookService<?> hookService = serviceMap.get(comboBox.getSelectedItem());
+            IHookerPanel<?> hookService = serviceMap.get(comboBox.getSelectedItem());
             boolean isStop = switchButton.getText().equalsIgnoreCase(RunStatus.STOP.name().toLowerCase());
             String text = isStop ? RunStatus.START.name() : RunStatus.STOP.name();
+
+            try {
+                if (!isStop) {
+                    // 设置本次所选择的配置
+                    option.setHookStart(true)
+                        .setHookWay(HttpHookService.valueOf((String) comboBox.getSelectedItem()))
+                        .setRequestCheckExpression(checkELTextField.getText())
+                        .setHookRequest(hookRequestCheckBox.isSelected())
+                        .setHookResponse(hookResponseCheckBox.isSelected())
+                        .setGrpcConn(rpcImpl.getUserTypeData())
+                        .setJavaSelectItem(javaFileHookerPanel.getData());
+                    hookService.start(option);
+                } else {
+                    hookService.stop(option);
+                }
+            } catch (Exception exc) {
+                SwingTools.showException(exc);
+                return;
+            }
+
             switchButton.setText(SwingTools.capitalizeFirstLetter(text));
             SwingTools.changePanelStatus(hookService, isStop);
             SwingTools.changePanelStatus(requestCheckPanel, isStop);
             SwingTools.changeComponentStatus(comboBox, isStop);
             SwingTools.changeComponentStatus(hookRequestCheckBox, isStop);
             SwingTools.changeComponentStatus(hookResponseCheckBox, isStop);
-
-            if (!isStop) {
-                // 设置本次所选择的配置
-                option.setHookStart(true)
-                    .setHookWay(HttpHookService.valueOf((String) comboBox.getSelectedItem()))
-                    .setRequestCheckExpression(checkELTextField.getText())
-                    .setHookRequest(hookRequestCheckBox.isSelected())
-                    .setHookResponse(hookResponseCheckBox.isSelected())
-                    .setGrpcConn(rpcImpl.getUserTypeData())
-                    .setJavaSelectItem(javaFileImpl.getData());
-                hookService.start(option);
-            } else {
-                hookService.stop(option);
-            }
         });
 
         // set data
