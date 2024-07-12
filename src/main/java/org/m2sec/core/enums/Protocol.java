@@ -1,7 +1,5 @@
 package org.m2sec.core.enums;
 
-import org.m2sec.core.common.Constants;
-
 /**
  * @author: outlaws-bai
  * @date: 2024/7/10 20:11

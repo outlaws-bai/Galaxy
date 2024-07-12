@@ -1,5 +1,6 @@
 package org.m2sec.core.httphook;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.core.common.FileTools;
 import org.m2sec.core.common.Option;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
  * @date: 2024/6/21 20:23
  * @description:
  */
+@Getter
 @Slf4j
 public class JavaFileHookerAdapterAdapter extends IHttpHooker implements ICodeHookerAdapter {
 
@@ -68,10 +70,6 @@ public class JavaFileHookerAdapterAdapter extends IHttpHooker implements ICodeHo
     @Override
     public byte[] decrypt(byte[] data) {
         return hooker.decrypt(data);
-    }
-
-    public IJavaHooker getHooker() {
-        return hooker;
     }
 
     @Override

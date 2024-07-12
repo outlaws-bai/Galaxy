@@ -26,8 +26,6 @@ import java.io.File;
 @Slf4j
 public class HttpHookCodeTest {
 
-    public static final int rpcPort = 8443;
-
     public static final String examplesFilePath = "./src/main/resources//examples";
 
     @BeforeAll
@@ -76,8 +74,8 @@ public class HttpHookCodeTest {
         request.setContent(("{\"data\": \"" + randomString + "\"}").getBytes());
         log.info("hook by java file: {}", filepath);
         log.info("randomString: {}", randomString);
-        ICodeHookerAdapter hooker = getCodeHooker(filepath);
-        IJavaHooker hooker1 = ((JavaFileHookerAdapterAdapter) hooker).getHooker();
+        ICodeHookerAdapter adapter = getCodeHooker(filepath);
+        IJavaHooker hooker1 = ((JavaFileHookerAdapterAdapter) adapter).getHooker();
         log.info("raw request: \r\n{}", request);
         Request request1 = hooker1.hookRequestToServer(request);
         log.info("encrypted request: \r\n{}", request1);

@@ -5,8 +5,6 @@ import org.m2sec.core.common.Option;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.httphook.GRpcHooker;
-import org.m2sec.panels.SwingTools;
-
 import javax.swing.*;
 import java.awt.*;
 

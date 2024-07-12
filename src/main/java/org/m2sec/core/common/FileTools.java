@@ -3,7 +3,6 @@ package org.m2sec.core.common;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;

@@ -12,8 +12,6 @@ import java.awt.*;
 
 public class SwingTools {
 
-    private static Icon icon;
-
 
     public static void changePanelStatus(Container panel, boolean target) {
         Component[] components = panel.getComponents();

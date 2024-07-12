@@ -9,17 +9,12 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.FileAppender;
 import lombok.extern.slf4j.Slf4j;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.m2sec.Galaxy;
 import org.slf4j.LoggerFactory;
-
 import java.io.File;
-import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.SecureRandom;
-import java.security.Security;
-import java.util.Base64;
 
 /**
  * @author: outlaws-bai
