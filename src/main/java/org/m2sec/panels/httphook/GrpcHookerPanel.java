@@ -35,7 +35,7 @@ public class GrpcHookerPanel extends IHookerPanel<GRpcHooker> {
         setLayout(new BorderLayout());
         JPanel grpcConnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel label = new JLabel("GRPC Conn: ");
-        SwingTools.addTipToLabel(label, Constants.HTTP_HOOK_GRPC_DEF, api);
+        label.setToolTipText(Constants.HOOK_GRPC_IMPL_DEF);
         grpcConnPanel.add(label);
         grpcConnPanel.add(grpcConnTextField);
 

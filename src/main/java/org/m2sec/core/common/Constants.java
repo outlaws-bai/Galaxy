@@ -9,6 +9,7 @@ import java.io.File;
  */
 public class Constants {
 
+    // global
     public static final String BURP_SUITE_EXT_NAME = "Galaxy";
     public static final String VERSION = FileTools.getVersion();
 
@@ -18,9 +19,9 @@ public class Constants {
         Github -> https://github.com/outlaws-bai/Galaxy
         """;
 
-    public static final String HTTP_HOOK_GRPC_DEF = "Please start a GRPC server and enter its address below.";
-    public static final String HTTP_HOOK_JAVA_DEF = "Please select the appropriate JAVA file and modify it until" +
-        " it meets your needs.";
+    public static String JAR_FILE_PATH;
+
+    // work file
 
     public static final String WORK_DIR = System.getProperty("user.home") + File.separator + ".galaxy";
 
@@ -44,6 +45,10 @@ public class Constants {
     public static final String BYPASS_HOST_CHECK_TEMPLATE_FILE_PATH = TEMPLATE_DIR + File.separator +
         "bypassHostCheckTemplate.txt";
 
+    public static final String VERSION_STORAGE_FILE_NAME = "version.txt";
+
+    // http
+
     public static final String HTTP_HEADER_CONTENT_LENGTH = "Content-Length";
     public static final String HTTP_HEADER_CONTENT_TYPE = "Content-Type";
 
@@ -55,18 +60,50 @@ public class Constants {
 
     public static final String HTTP_HEADER_COOKIE = "Cookie";
 
-    public static final String DEFAULT_HTTP_VERSION = "HTTP/1.1";
+    public static final String HTTP_DEFAULT_VERSION = "HTTP/1.1";
 
-    public static String[] STATIC_EXTENSIONS = (".css|.js|.jpg|.jpeg|.png|.gif|.bmp|.svg|.ico|.html|.htm|.xml|.txt|" +
+    public static final String HTTP_DEFAULT_REASON = "OK";
+
+    public static final int HTTP_DEFAULT_TIMEOUT = 5;
+
+    public static final String HTTP_QUERY_FORM_SEP = "&";
+
+    public static final String HTTP_HEADER_CONN = ":[ ]+";
+
+    public static final String HTTP_COOKIE_CONN = ";[ ]+";
+
+    public static final String HTTP_H_C_Q_F_CONN = "=";
+
+    public static final String HTTP_HEADERS_SEP = "\r\n\r\n";
+
+    public static final String HTTP_HEADERS_CONN_RAW = ": ";
+    public static final String HTTP_COOKIES_CONN_RAW = "; ";
+
+    public static final String HTTP_PROTOCOL_DOMAIN_SEP = "://";
+
+    public static String[] HTTP_STATIC_EXTENSIONS = (".css|.js|.jpg|.jpeg|.png|.gif|.bmp|.svg|.ico|.html|.htm|.xml|" +
+        ".txt|" +
         ".pdf|.zip|.rar|.tar|.gz|.7z|.mp3|.mp4|.avi|.webm|.mov|.ogg|.wav|.swf|.woff|.ttf|.eot|.otf|.webp|.m4a|.m4v|" +
         ".flv|.wmv|.doc|.docx|.xls|.xlsx|.ppt|.pptx|.csv|.rtf").split("\\|");
-    public static final String DEFAULT_USER_AGENT =
+    public static final String HTTP_DEFAULT_USER_AGENT =
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " + "(KHTML, like Gecko) Chrome/120.0.0.0 " +
             "Safari/537" + ".36 Edg/120.0.0.0 M2Sec/1.0";
 
-    public static String JAR_FILE_PATH = null;
+    // hook
 
+    public static final String HOOK_FUNC_1 = "hookRequestToBurp";
+    public static final String HOOK_FUNC_2 = "hookRequestToServer";
+    public static final String HOOK_FUNC_3 = "hookResponseToBurp";
+    public static final String HOOK_FUNC_4 = "hookResponseToClient";
+
+    public static final String HOOK_GRPC_IMPL_DEF = "Please start a GRPC server and enter its address below.";
+    public static final String HOOK_JAVA_IMPL_DEF = "Please select the appropriate JAVA file and modify it until" +
+        " it meets your needs.";
+
+    // file suffix
     public static final String JAVA_FILE_SUFFIX = ".java";
+
+    public static final String JAVA_COMPILED_FILE_SUFFIX = ".class";
 
     public static final String PYTHON_FILE_SUFFIX = ".py";
 

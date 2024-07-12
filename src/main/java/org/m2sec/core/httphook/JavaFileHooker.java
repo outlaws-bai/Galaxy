@@ -7,6 +7,7 @@ import org.m2sec.core.common.Option;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
+import org.slf4j.Logger;
 
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
@@ -14,6 +15,7 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -41,8 +43,8 @@ public class JavaFileHooker extends IHttpHooker {
     }
 
     public void init(String javaFilePath) {
-        if (javaFilePath.endsWith(".java")) loadJavaFile(javaFilePath);
-        else if (javaFilePath.endsWith(".class")) loadJavaClass(javaFilePath);
+        if (javaFilePath.endsWith(Constants.JAVA_FILE_SUFFIX)) loadJavaFile(javaFilePath);
+        else if (javaFilePath.endsWith(Constants.JAVA_COMPILED_FILE_SUFFIX)) loadJavaClass(javaFilePath);
         else throw new IllegalArgumentException("javaFilePath suffix error!");
     }
 
@@ -54,7 +56,7 @@ public class JavaFileHooker extends IHttpHooker {
     @Override
     public Request hookRequestToBurp(Request request) {
         try {
-            Method method = clazz.getMethod("hookRequestToBurp", Request.class);
+            Method method = clazz.getMethod(Constants.HOOK_FUNC_1, Request.class);
             return (Request) method.invoke(null, request);
         } catch (NoSuchMethodException e) {
             return null;
@@ -66,7 +68,7 @@ public class JavaFileHooker extends IHttpHooker {
     @Override
     public Request hookRequestToServer(Request request) {
         try {
-            Method method = clazz.getMethod("hookRequestToServer", Request.class);
+            Method method = clazz.getMethod(Constants.HOOK_FUNC_2, Request.class);
             return (Request) method.invoke(null, request);
         } catch (NoSuchMethodException e) {
             return null;
@@ -78,7 +80,7 @@ public class JavaFileHooker extends IHttpHooker {
     @Override
     public Response hookResponseToBurp(Response response) {
         try {
-            Method method = clazz.getMethod("hookResponseToBurp", Response.class);
+            Method method = clazz.getMethod(Constants.HOOK_FUNC_3, Response.class);
             return (Response) method.invoke(null, response);
         } catch (NoSuchMethodException e) {
             return null;
@@ -90,7 +92,7 @@ public class JavaFileHooker extends IHttpHooker {
     @Override
     public Response hookResponseToClient(Response response) {
         try {
-            Method method = clazz.getMethod("hookResponseToClient", Response.class);
+            Method method = clazz.getMethod(Constants.HOOK_FUNC_4, Response.class);
             return (Response) method.invoke(null, response);
         } catch (NoSuchMethodException e) {
             return null;
@@ -143,8 +145,9 @@ public class JavaFileHooker extends IHttpHooker {
                 throw new RuntimeException("Compilation failed:\n" + errorMessages);
             }
 
-            String classFilePath = Constants.TMP_FILE_DIR + File.separator + javaFile.getName().replace(".java",
-                ".class");
+            String classFilePath =
+                Constants.TMP_FILE_DIR + File.separator + javaFile.getName().replace(Constants.JAVA_FILE_SUFFIX,
+                    Constants.JAVA_COMPILED_FILE_SUFFIX);
             loadJavaClass(classFilePath);
 
         } catch (IOException e) {
@@ -155,13 +158,17 @@ public class JavaFileHooker extends IHttpHooker {
     private void loadJavaClass(String javaClassFilePath) {
         try {
             File javaFile = new File(javaClassFilePath);
-            String className = javaFile.getName().replace(".class", "");
+            String className = javaFile.getName().replace(Constants.JAVA_COMPILED_FILE_SUFFIX, "");
 
             URL[] urls = new URL[]{new File(javaFile.getParent()).toURI().toURL()};
             try (URLClassLoader classLoader = new URLClassLoader(urls, this.getClass().getClassLoader())) {
                 clazz = classLoader.loadClass(className);
+                // set log
+                Field field = clazz.getDeclaredField("log");
+                field.setAccessible(true); // to access private field
+                field.set(null, log);
             }
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException | IllegalAccessException | NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
     }

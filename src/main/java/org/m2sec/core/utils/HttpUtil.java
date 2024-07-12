@@ -5,13 +5,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Tuple;
 import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.enums.Protocol;
-import org.m2sec.core.models.FormData;
-import org.m2sec.core.models.Parameters;
-import org.m2sec.core.models.UploadFile;
+import org.m2sec.core.models.*;
 
 import javax.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
@@ -45,11 +44,7 @@ public class HttpUtil {
     }
 
     public static boolean urlIsSecure(URL url) {
-        return url.getProtocol().equals("https");
-    }
-
-    public static String getProtocol(boolean secure) {
-        return secure ? "https" : "http";
+        return url.getProtocol().equals(Protocol.HTTPS.toRaw());
     }
 
     public static String getDomainUrl(HttpService httpService) {
@@ -57,7 +52,12 @@ public class HttpUtil {
     }
 
     public static String getDomainUrl(boolean secure, String host, int port) {
-        return getProtocol(secure) + "://" + getFullHost(secure, host, port);
+        return Protocol.of(secure).toRaw() + Constants.HTTP_PROTOCOL_DOMAIN_SEP + getFullHost(secure, host, port);
+    }
+
+    public static int defaultPort(boolean isSecure) {
+        if (!isSecure) return 80;
+        else return 443;
     }
 
     public static int getUrlPort(URL url) {
@@ -87,12 +87,28 @@ public class HttpUtil {
         return host + ":" + port;
     }
 
-    public static String toFullPath(String path, String queryStr) {
-        if (queryStr.isEmpty()) {
+    public static String getFullPath(String path, Query query) {
+        return getFullPath(path, query.toRawString());
+    }
+
+    public static String getFullPath(String path, String queryStr) {
+        if (queryStr == null || queryStr.isEmpty()) {
             return path;
         } else {
             return path + "?" + queryStr;
         }
+    }
+
+    public static String getUrl(boolean isSecure, String host, int port, String path) {
+        return getDomainUrl(isSecure, host, port) + path;
+    }
+
+    public static String getFullUrl(boolean isSecure, String host, int port, String path, Query query) {
+        return getFullUrl(isSecure, host, port, path, query.toRawString());
+    }
+
+    public static String getFullUrl(boolean isSecure, String host, int port, String path, String queryString) {
+        return getDomainUrl(isSecure, host, port) + getFullPath(path, queryString);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -275,10 +291,6 @@ public class HttpUtil {
                 jsonArray.set(i, new JsonPrimitive(jsonElement.getAsString() + suffix));
             }
         }
-    }
-
-    public static String getPathFromRaw(byte[] raw) {
-        return ByteUtil.getWrappedText(raw, ' ');
     }
 
 }

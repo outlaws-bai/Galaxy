@@ -11,6 +11,7 @@ import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Tuple;
 import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.enums.Method;
+import org.m2sec.core.enums.Protocol;
 import org.m2sec.core.utils.HttpUtil;
 import org.m2sec.rpc.HttpHook;
 
@@ -62,7 +63,7 @@ public class Request {
             headers.put(Constants.HTTP_HEADER_HOST, HttpUtil.getFullHost(secure, host, port));
         }
         if (!headers.containsKey(Constants.HTTP_HEADER_USER_AGENT)) {
-            headers.put(Constants.HTTP_HEADER_USER_AGENT, Constants.DEFAULT_USER_AGENT);
+            headers.put(Constants.HTTP_HEADER_USER_AGENT, Constants.HTTP_DEFAULT_USER_AGENT);
         }
         this.secure = secure;
         this.host = host;
@@ -99,7 +100,7 @@ public class Request {
         }
         String requestLine = new String(raw, start, index - start);
         String[] requestLineParts = requestLine.split(" ");
-        String httpVersion = "HTTP/1.1"; // 默认为 HTTP/1.1
+        String httpVersion = Constants.HTTP_DEFAULT_VERSION; // 默认为 HTTP/1.1
         String method = requestLineParts[0];
         String fullPath = requestLineParts[1];
 
@@ -119,7 +120,7 @@ public class Request {
             }
             if (index + 1 < raw.length) {
                 String headerLine = new String(raw, start, index - start);
-                String[] headerParts = headerLine.split(": ");
+                String[] headerParts = headerLine.split(Constants.HTTP_HEADER_CONN);
                 if (headerParts.length == 2) headers.add(headerParts[0], headerParts[1]);
             }
 
@@ -145,7 +146,7 @@ public class Request {
         }
 
         if (port == 0) {
-            port = secure ? 443 : 80;
+            port = HttpUtil.defaultPort(secure);
         }
 
         return new Request(secure, host, port, httpVersion, method, tuple.getFirst(), Query.of(tuple.getSecond()),
@@ -158,7 +159,7 @@ public class Request {
 
 
     public static Request of(String str) {
-        if (str.startsWith("http")) return of(str, Method.GET);
+        if (str.startsWith(Protocol.HTTP.toRaw())) return of(str, Method.GET);
         else return of(str.getBytes());
     }
 
@@ -172,14 +173,14 @@ public class Request {
             content = "{}".getBytes();
         }
         return new Request(HttpUtil.urlIsSecure(url), url.getHost(), HttpUtil.getUrlPort(url),
-            Constants.DEFAULT_HTTP_VERSION, method.name(), HttpUtil.normalizePath(url.getPath()),
+            Constants.HTTP_DEFAULT_VERSION, method.name(), HttpUtil.normalizePath(url.getPath()),
             Query.of(url.getQuery()), headers, content);
     }
 
     public byte[] toRaw() {
         ByteArrayOutputStream retVal = new ByteArrayOutputStream();
         // 处理请求行
-        String fullPath = HttpUtil.toFullPath(path, query.toRawString());
+        String fullPath = HttpUtil.getFullPath(path, query.toRawString());
         String requestLine = String.format("%s %s %s\r\n", method, !fullPath.isEmpty() ? fullPath : "/", version);
         // 处理请求头
         String requestHeader = headers.toRawString();
@@ -229,20 +230,24 @@ public class Request {
         return this;
     }
 
-    public String getProtocol() {
-        return HttpUtil.getProtocol(secure);
+    public Protocol getProtocol() {
+        return Protocol.of(secure);
     }
 
     public String getUrl() {
-        return HttpUtil.getDomainUrl(secure, host, port) + path;
+        return HttpUtil.getUrl(secure, host, port, path);
+    }
+
+    public String getFullUrl() {
+        return HttpUtil.getFullUrl(secure, host, port, path, query);
     }
 
     public String getFullPath() {
-        return HttpUtil.toFullPath(path, query.toRawString());
+        return HttpUtil.getFullPath(path, query);
     }
 
     public boolean isStaticExtension() {
-        return isStaticExtension(Constants.STATIC_EXTENSIONS);
+        return isStaticExtension(Constants.HTTP_STATIC_EXTENSIONS);
     }
 
     public boolean isStaticExtension(String... staticExtensions) {

@@ -197,7 +197,7 @@ public class FileTools {
     }
 
     public static String getVersion() {
-        return readResourceAsString("version.txt");
+        return readResourceAsString(Constants.VERSION_STORAGE_FILE_NAME);
     }
 
     public static String getExampleScriptFilePath(String item, String suffix) {

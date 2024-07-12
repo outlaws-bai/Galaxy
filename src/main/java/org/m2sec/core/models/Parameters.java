@@ -13,12 +13,14 @@ import java.util.*;
 @NoArgsConstructor
 public class Parameters<T> extends LinkedHashMap<String, List<T>> {
 
+    public Parameters(Map<String, List<T>> multiMap) {
+        super(multiMap);
+    }
 
     public Parameters<T> put(String key, T value) {
         this.put(key, new ArrayList<>(List.of(value)));
         return this;
     }
-
 
     public Parameters<T> add(String key, T value) {
         List<T> values = super.get(key);

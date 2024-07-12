@@ -38,7 +38,7 @@ public class Config {
         Setting setting = YamlUtil.fromYamlStr(FileTools.readFileAsString(settingFilePath), Setting.class);
         Option option = YamlUtil.fromYamlStr(FileTools.readFileAsString(optionFilePath), Option.class);
         Config config = new Config(setting, option);
-        Constants.STATIC_EXTENSIONS = config.getSetting().getStaticExtensions().split("\\|");
+        Constants.HTTP_STATIC_EXTENSIONS = config.getSetting().getStaticExtensions().split("\\|");
         if (Galaxy.isInBurp()) Constants.JAR_FILE_PATH = api.extension().filename();
         return config;
     }

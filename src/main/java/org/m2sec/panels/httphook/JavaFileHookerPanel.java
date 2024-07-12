@@ -9,6 +9,7 @@ import org.m2sec.Galaxy;
 import org.m2sec.core.common.Option;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Render;
+import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.httphook.JavaFileHooker;
 import org.m2sec.core.common.FileTools;
 import org.m2sec.panels.SwingTools;
@@ -33,8 +34,6 @@ public class JavaFileHookerPanel extends IHookerPanel<JavaFileHooker> {
     private final Option option;
     private final MontoyaApi api;
 
-    private static final String javaFileSuffix = ".java";
-
     private final JComboBox<String> codeCombo = new JComboBox<>();
 
     RSyntaxTextArea codeTextArea = new RSyntaxTextArea();
@@ -55,8 +54,8 @@ public class JavaFileHookerPanel extends IHookerPanel<JavaFileHooker> {
         setLayout(new BorderLayout());
         // 创建顶部下拉框的面板
         JPanel topPanel = new JPanel(new BorderLayout());
-        JLabel selectLabel = new JLabel("JavaFile: ");
-        SwingTools.addTipToLabel(selectLabel, Constants.HTTP_HOOK_JAVA_DEF, api);
+        JLabel selectLabel = new JLabel("Java code file: ");
+        selectLabel.setText(Constants.HOOK_JAVA_IMPL_DEF);
         JPanel rightPanel = new JPanel();
         JButton saveButton = new JButton("Save");
         JButton newButton = new JButton("New");
@@ -92,12 +91,10 @@ public class JavaFileHookerPanel extends IHookerPanel<JavaFileHooker> {
         newButton.addActionListener(e -> {
             String filename = JOptionPane.showInputDialog(null, "Please input filename: ");
             if (filename != null) {
-                String filepath = getFilePath(filename.replace(javaFileSuffix, ""));
+                String filepath = getFilePath(filename.replace(Constants.JAVA_FILE_SUFFIX, ""));
                 FileTools.createFiles(filepath);
-                String content = Render.renderTemplate(
-                    FileTools.readResourceAsString("templates/HttpHookTemplate.java"),
-                    new HashMap<>(Map.of("filename", filename))
-                );
+                String content = Render.renderTemplate(FileTools.readResourceAsString("templates/HttpHookTemplate" +
+                    ".java"), new HashMap<>(Map.of("filename", filename)));
                 FileTools.writeFile(filepath, content);
                 reloadExamples(codeCombo);
                 codeCombo.setSelectedItem(filename);
@@ -132,12 +129,12 @@ public class JavaFileHookerPanel extends IHookerPanel<JavaFileHooker> {
     private void reloadExamples(JComboBox<String> codeCombo) {
         codeCombo.removeAllItems();
         List<String> examples = FileTools.listDir(Constants.HTTP_HOOK_EXAMPLES_DIR);
-        examples.stream().filter(x -> new File(x).getName().endsWith(javaFileSuffix)).forEach(x -> codeCombo.addItem(new File(x).getName().replace(javaFileSuffix, "")));
+        examples.stream().filter(x -> new File(x).getName().endsWith(Constants.JAVA_FILE_SUFFIX)).forEach(x -> codeCombo.addItem(new File(x).getName().replace(Constants.JAVA_FILE_SUFFIX, "")));
         setData();
     }
 
     private String getFilePath(String item) {
-        return Constants.HTTP_HOOK_EXAMPLES_DIR + File.separator + item + javaFileSuffix;
+        return Constants.HTTP_HOOK_EXAMPLES_DIR + File.separator + item + Constants.JAVA_FILE_SUFFIX;
     }
 
     public void resetCodeTheme() {
@@ -170,6 +167,6 @@ public class JavaFileHookerPanel extends IHookerPanel<JavaFileHooker> {
 
     @Override
     public String displayName() {
-        return "JAVA";
+        return HttpHookService.GRPC.name();
     }
 }

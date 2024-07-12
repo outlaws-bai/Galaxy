@@ -2,6 +2,7 @@ import org.m2sec.core.utils.*;
 import org.m2sec.core.models.*;
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import org.slf4j.Logger;
 
 /**
  * The available classes are as follows...
@@ -12,6 +13,7 @@ import java.util.HashMap;
  */
 public class Rsa {
 
+    private static Logger log;
     private static final String ALGORITHM = "RSA";
     private static final String publicKeyBase64 = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlWlwW7eFn0apxrW0j" +
         "+W9fcGiJ9Pq8fDS7mGpF28kTz5mwbe5wajs7r9CQrcQS5mD75aItdNT" +

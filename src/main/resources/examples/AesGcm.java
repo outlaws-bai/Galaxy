@@ -3,6 +3,7 @@ import org.m2sec.core.models.*;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
 
 /**
  * The available classes are as follows...
@@ -13,6 +14,7 @@ import java.util.Map;
  */
 public class AesGcm {
 
+    private static Logger log;
     private static final String ALGORITHM = "AES/GCM/NoPadding";
     private static final byte[] secret = "32byteslongsecretkeyforaes256!aa".getBytes();
     private static final byte[] iv = "16byteslongiv456".getBytes();

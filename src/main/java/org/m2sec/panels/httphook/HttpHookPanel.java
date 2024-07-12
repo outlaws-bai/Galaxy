@@ -28,7 +28,7 @@ public class HttpHookPanel extends JPanel {
     public HttpHookPanel(MontoyaApi api, Option option) {
         this.option = option;
         this.api = api;
-        setName("HttpHook");
+        setName("Http Hook");
         initPanel();
     }
 
@@ -52,7 +52,7 @@ public class HttpHookPanel extends JPanel {
         JPanel wayControlPanel = new JPanel(new BorderLayout());
         JPanel descAndComboBox = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel selectDesc = new JLabel("Hooker: ");
-        SwingTools.addTipToLabel(selectDesc, "Choose a hooker.", api);
+        selectDesc.setToolTipText("Choose a hooker.");
         JComboBox<String> comboBox = new JComboBox<>(serviceMap.keySet().toArray(String[]::new));
         JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
         descAndComboBox.add(selectDesc);
@@ -66,9 +66,9 @@ public class HttpHookPanel extends JPanel {
         JPanel switchAndCheckBoxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton switchButton = new JButton(SwingTools.capitalizeFirstLetter(RunStatus.START.name()));
         switchButton.setToolTipText("Start hook...");
-        JCheckBox hookRequestCheckBox = new JCheckBox("HookRequest");
+        JCheckBox hookRequestCheckBox = new JCheckBox("Hook request");
         hookRequestCheckBox.setToolTipText("HTTP requests need to be hook?");
-        JCheckBox hookResponseCheckBox = new JCheckBox("HookResponse");
+        JCheckBox hookResponseCheckBox = new JCheckBox("Hook response");
         hookResponseCheckBox.setToolTipText("HTTP responses need to be hook?");
         switchAndCheckBoxPanel.add(switchButton);
         switchAndCheckBoxPanel.add(hookRequestCheckBox);
@@ -83,9 +83,7 @@ public class HttpHookPanel extends JPanel {
         JTextField checkELTextField = new JTextField();
         JPanel checkELPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel elLabel = new JLabel("Expression: ");
-        SwingTools.addTipToLabel(elLabel,
-            "Enter an javascript expression that will be used to determine which requests need to be processed.",
-            api);
+        elLabel.setToolTipText("Enter an javascript expression that will be used to determine which requests need to be processed.");
 
         checkELPanel.add(elLabel);
         checkELPanel.add(checkELTextField);
@@ -123,7 +121,7 @@ public class HttpHookPanel extends JPanel {
                 if (!isStop) {
                     // 设置本次所选择的配置
                     option.setHookStart(true)
-                        .setHookWay(HttpHookService.valueOf((String) comboBox.getSelectedItem()))
+                        .setHookerName(HttpHookService.valueOf((String) comboBox.getSelectedItem()))
                         .setRequestCheckExpression(checkELTextField.getText())
                         .setHookRequest(hookRequestCheckBox.isSelected())
                         .setHookResponse(hookResponseCheckBox.isSelected())
@@ -150,8 +148,8 @@ public class HttpHookPanel extends JPanel {
         checkELTextField.setText(option.getRequestCheckExpression());
         hookRequestCheckBox.setSelected(option.isHookRequest());
         hookResponseCheckBox.setSelected(option.isHookResponse());
-        if (option.getHookWay() != null) {
-            comboBox.setSelectedItem(option.getHookWay().name());
+        if (option.getHookerName() != null) {
+            comboBox.setSelectedItem(option.getHookerName().name());
         }
 
 //        nextControlPanel.setBackground(Color.CYAN);

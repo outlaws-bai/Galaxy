@@ -1,7 +1,9 @@
 package org.m2sec.core.common;
 
+import jdk.jfr.Timespan;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * @author: outlaws-bai
@@ -9,13 +11,10 @@ import lombok.Getter;
  * @description:
  */
 @Getter
+@ToString
 @AllArgsConstructor
 public class Tuple<A, B> {
     private A first;
     private B second;
 
-    @Override
-    public String toString() {
-        return "(" + first + ", " + second + ")";
-    }
 }

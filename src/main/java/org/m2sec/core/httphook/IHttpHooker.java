@@ -34,7 +34,7 @@ public abstract class IHttpHooker {
     public abstract void destroy();
 
     public HttpRequest tryHookRequestToBurp(InterceptedRequest httpRequest) {
-        String name = "hookRequestToBurp";
+        String name = Constants.HOOK_FUNC_1;
         HttpRequest retVal = httpRequest;
         try {
             if (HttpUtil.isCorrectUrl(httpRequest.url()) && option.isHookRequest()) {
@@ -55,7 +55,7 @@ public abstract class IHttpHooker {
                 }
             }
         } catch (Exception e) {
-            log.error("hookRequestToBurp execute error.", e);
+            log.error("{} execute error.", name, e);
         }
         return retVal;
     }
@@ -64,7 +64,7 @@ public abstract class IHttpHooker {
      * 该函数在请求从Burp发送到服务端时被调用
      */
     public HttpRequest tryHookRequestToServer(HttpRequestToBeSent httpRequest) {
-        String name = "hookRequestToServer";
+        String name = Constants.HOOK_FUNC_2;
         HttpRequest retVal = httpRequest;
         try {
             if (HttpUtil.isCorrectUrl(httpRequest.url()) && httpRequest.hasHeader(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
@@ -80,11 +80,11 @@ public abstract class IHttpHooker {
                 if (request == null) {
                     return retVal;
                 }
-                log.debug("exec method: hookRequestToServer with {} success.", this.getClass().getSimpleName());
+                log.debug("exec method: {} with {} success.", name, this.getClass().getSimpleName());
                 retVal = request.toBurp();
             }
         } catch (Exception e) {
-            log.error("hookRequestToServer execute error.", e);
+            log.error("{} execute error.", name, e);
         }
         return retVal;
     }
@@ -93,7 +93,7 @@ public abstract class IHttpHooker {
      * 该函数在响应从服务端刚到达Burp时被调用
      */
     public HttpResponse tryHookResponseToBurp(HttpResponseReceived httpResponse) {
-        String name = "hookResponseToBurp";
+        String name = Constants.HOOK_FUNC_3;
         try {
             if (option.isHookResponse() && hookedIds.contains(httpResponse.messageId())) {
                 hookedIds.remove(httpResponse.messageId());
@@ -105,13 +105,13 @@ public abstract class IHttpHooker {
                 if (result == null) {
                     return httpResponse;
                 }
-                log.debug("exec method: hookResponseToBurp with {} success.", this.getClass().getSimpleName());
+                log.debug("exec method: {} with {} success.", name, this.getClass().getSimpleName());
 
                 return result.toBurp();
             }
 
         } catch (Exception e) {
-            log.error("hookResponseToBurp execute error.", e);
+            log.error("{} execute error.", name, e);
         }
         return httpResponse;
     }
@@ -120,7 +120,7 @@ public abstract class IHttpHooker {
      * 该函数在响应从Burp发送到客户端时被调用
      */
     public HttpResponse tryHookResponseToClient(InterceptedResponse httpResponse) {
-        String name = "hookResponseToClient";
+        String name = Constants.HOOK_FUNC_4;
         try {
             if (httpResponse.hasHeader(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
                 Response response = Response.of(httpResponse);
@@ -135,7 +135,7 @@ public abstract class IHttpHooker {
                 return result.toBurp();
             }
         } catch (Exception e) {
-            log.error("hookResponseToClient execute error.", e);
+            log.error("{} execute error.", name, e);
         }
         return httpResponse;
     }

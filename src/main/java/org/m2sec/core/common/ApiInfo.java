@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.enums.Method;
+import org.m2sec.core.enums.Protocol;
 import org.m2sec.core.models.*;
 import org.m2sec.core.utils.HttpUtil;
 import org.m2sec.core.utils.JsonUtil;
@@ -65,7 +66,7 @@ public class ApiInfo {
         String newPath;
         byte[] content;
 
-        if (!input.startsWith("http")) {
+        if (!input.startsWith(Protocol.HTTP.name())) {
             newPath = HttpUtil.normalizePath(input + path);
             secure = request.isSecure();
             host = request.getHost();

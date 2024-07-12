@@ -1,5 +1,7 @@
 package org.m2sec.core.enums;
 
+import org.m2sec.core.common.Constants;
+
 /**
  * @author: outlaws-bai
  * @date: 2024/7/10 20:11
@@ -7,5 +9,21 @@ package org.m2sec.core.enums;
  */
 
 public enum Protocol {
-    HTTP, HTTPS
+    HTTP, HTTPS;
+
+    public int defaultPort() {
+        if (this.equals(HTTP)) return 80;
+        else return 443;
+    }
+
+
+    public static Protocol of(boolean isSecure) {
+        if (!isSecure) return HTTP;
+        else return HTTPS;
+    }
+
+    public String toRaw() {
+        return this.name().toLowerCase();
+    }
+
 }

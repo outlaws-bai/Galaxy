@@ -16,7 +16,7 @@ import org.m2sec.core.enums.HttpHookService;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Option {
-    private HttpHookService hookWay;
+    private HttpHookService hookerName;
     private String requestCheckExpression;
     private boolean hookRequest;
     private boolean hookResponse;

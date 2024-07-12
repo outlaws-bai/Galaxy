@@ -6,5 +6,5 @@ package org.m2sec.core.enums;
  * @description:
  */
 public enum HttpHookService {
-    GRPC, JAVA
+    GRPC, JAVA, PYTHON, JS
 }

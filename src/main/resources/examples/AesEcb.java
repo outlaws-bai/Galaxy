@@ -2,6 +2,7 @@ import org.m2sec.core.utils.*;
 import org.m2sec.core.models.*;
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import org.slf4j.Logger;
 
 /**
  * The available classes are as follows...
@@ -12,6 +13,7 @@ import java.util.HashMap;
  */
 public class AesEcb {
 
+    private static Logger log;
     private static final String ALGORITHM = "AES/ECB/PKCS5Padding";
     private static final byte[] secret = "32byteslongsecretkeyforaes256!aa".getBytes();
 

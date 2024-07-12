@@ -1,6 +1,8 @@
 package org.m2sec.core.models;
 
 import burp.api.montoya.http.message.HttpHeader;
+import lombok.NoArgsConstructor;
+import org.m2sec.core.common.Constants;
 import org.m2sec.core.utils.HttpUtil;
 import org.m2sec.rpc.HttpHook;
 
@@ -13,10 +15,15 @@ import java.util.Map;
  * @date: 2024/6/21 20:23
  * @description:
  */
+@NoArgsConstructor
 public class Headers extends Parameters<String> {
 
+    public Headers(Map<String, List<String>> multiMap) {
+        super(multiMap);
+    }
+
     public static Headers of(String str) {
-        return HttpUtil.strToParameters(str, "\r\n\r\n", ":[ ]+", Headers.class);
+        return HttpUtil.strToParameters(str, Constants.HTTP_HEADERS_SEP, Constants.HTTP_HEADER_CONN, Headers.class);
     }
 
     public static Headers of(List<HttpHeader> headers) {

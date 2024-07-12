@@ -1,6 +1,9 @@
 import org.m2sec.core.utils.*;
 import org.m2sec.core.models.*;
 import javax.annotation.Nullable;
+import org.slf4j.Logger;
+import java.util.HashMap;
+import org.slf4j.Logger;
 
 /**
  * The available classes are as follows...
@@ -11,6 +14,7 @@ import javax.annotation.Nullable;
  */
 public class ${filename} {
 
+    private static Logger log;
 
     /**
      * HTTP请求从客户端到达Burp时被调用。在此处完成请求解密的代码就可以在Burp中看到明文的请求报文。
