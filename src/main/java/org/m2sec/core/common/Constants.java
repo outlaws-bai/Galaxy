@@ -19,11 +19,16 @@ public class Constants {
         Github -> https://github.com/outlaws-bai/Galaxy
         """;
 
+    public static final String UPDATE_VERSION_DEF = "You have updated the version of Galaxy, but due to significant " +
+        "version differences, your original work dir has been replaced with ";
+
     public static String JAR_FILE_PATH;
 
     // work file
 
-    public static final String WORK_DIR = System.getProperty("user.home") + File.separator + ".galaxy";
+    public static final String USER_HOME_DIR = System.getProperty("user.home");
+
+    public static final String WORK_DIR = USER_HOME_DIR + File.separator + ".galaxy";
 
     public static final String TMP_FILE_DIR = WORK_DIR + File.separator + "tmp";
 
@@ -46,6 +51,8 @@ public class Constants {
         "bypassHostCheckTemplate.txt";
 
     public static final String VERSION_STORAGE_FILE_NAME = "version.txt";
+
+    public static final String VERSION_STORAGE_FILE_PATH = WORK_DIR + File.separator + "version.txt";
 
     // http
 

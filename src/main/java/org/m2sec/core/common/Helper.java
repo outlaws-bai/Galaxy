@@ -10,10 +10,16 @@ import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.FileAppender;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.m2sec.Galaxy;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.SecureRandom;
 import java.security.Security;
+import java.util.Base64;
 
 /**
  * @author: outlaws-bai
@@ -24,8 +30,26 @@ import java.security.Security;
 public class Helper {
 
     public static Config initAndLoadConfig(MontoyaApi api) {
-        // add加解密程序
-        Security.addProvider(new BouncyCastleProvider());
+        String message;
+        if (Files.exists(Paths.get(Constants.WORK_DIR))) {
+            if (Files.exists(Paths.get(Constants.VERSION_STORAGE_FILE_PATH)) && !Constants.VERSION.equalsIgnoreCase(FileTools.readFileAsString(Constants.VERSION_STORAGE_FILE_PATH))) {
+                // 使用过旧版本
+                String randomString = generateRandomString(6);
+                String bakDir = Constants.WORK_DIR + "." + randomString + ".bak";
+                FileTools.renameDir(Constants.WORK_DIR, bakDir);
+                message = Constants.UPDATE_VERSION_DEF + bakDir + ". \r\nGood luck.";
+            } else {
+                message = "Good luck.";
+            }
+        } else {
+            message = "You seem to be using this plugin for the first time. \r\nGood luck.";
+        }
+
+        if (Galaxy.isInBurp()) {
+            api.logging().logToOutput(message);
+        } else {
+            System.out.println(message);
+        }
 
         // 创建必要的文件和路径
         FileTools.createDirs(Constants.WORK_DIR, // 插件工作路径
@@ -34,6 +58,7 @@ public class Helper {
         );
 
         // cp resources 文件到工作目录下
+        FileTools.writeFileIfEmptyOfResource(Constants.VERSION_STORAGE_FILE_NAME, Constants.VERSION_STORAGE_FILE_PATH);
         FileTools.writeFileIfEmptyOfResource(Constants.SETTING_FILE_NAME, Constants.SETTING_FILE_PATH);
         FileTools.writeFileIfEmptyOfResource(Constants.OPTION_FILE_NAME, Constants.OPTION_FILE_PATH);
         FileTools.copyDirResourcesToTargetDirIfEmpty(Constants.HTTP_HOOK_EXAMPLES_DIR_NAME,
@@ -69,6 +94,7 @@ public class Helper {
         rootLogger.addAppender(fileAppender);
     }
 
+
     public static void deleteLogFile() {
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         if (loggerContext == null) return;
@@ -88,6 +114,22 @@ public class Helper {
     public static void initExceptionClean() {
         Helper.deleteLogFile();
         Helper.cleanTmpDir();
+    }
+
+    public static String generateRandomString(int length) {
+        @SuppressWarnings("SpellCheckingInspection") String CHARACTERS =
+            "abcdefghijklmnopqrstuvwxyz0123456789";
+        SecureRandom RANDOM = new SecureRandom();
+        if (length <= 0) {
+            throw new IllegalArgumentException("Length must be greater than 0");
+        }
+
+        StringBuilder stringBuilder = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            int randomIndex = RANDOM.nextInt(CHARACTERS.length());
+            stringBuilder.append(CHARACTERS.charAt(randomIndex));
+        }
+        return stringBuilder.toString();
     }
 
 }

@@ -28,7 +28,7 @@ public class Galaxy implements BurpExtension {
         try {
             env = RuntimeEnv.BURP;
             api.extension().setName(Constants.BURP_SUITE_EXT_NAME + "-" + Constants.VERSION);
-            api.logging().logToOutput(Constants.BURP_SUITE_EXT_INIT_DEF + "Version -> " + Constants.VERSION);
+            api.logging().logToOutput(Constants.BURP_SUITE_EXT_INIT_DEF + "Version -> " + Constants.VERSION + "\r\n");
             // 加载配置并初始化
             Config config = Helper.initAndLoadConfig(api);
             // 注册UI

@@ -111,7 +111,6 @@ public class HttpUtil {
         return getDomainUrl(isSecure, host, port) + getFullPath(path, queryString);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     public static String normalizePath(String path) {
         String prefix = "/";
         if (path.startsWith(Protocol.HTTP.name().toLowerCase())) {
@@ -123,6 +122,12 @@ public class HttpUtil {
         String[] pathParts = path.split("/");
         if (pathParts.length == 0) return "/";
         String suffix = path.endsWith("/") ? "/" : ""; // spring在3.0后，声明为/a/b/c/使用/a/b/c访问无法匹配，该后缀做兼容
+        ArrayList<String> normalizedPathParts = normalizePathParts(pathParts);
+        return prefix + String.join("/", normalizedPathParts) + suffix;
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    private static ArrayList<String> normalizePathParts(String[] pathParts) {
         ArrayList<String> normalizedPathParts = new ArrayList<>();
         for (String part : pathParts) {
             if ("".equals(part)) {
@@ -138,7 +143,7 @@ public class HttpUtil {
                 normalizedPathParts.add(part);
             }
         }
-        return prefix + String.join("/", normalizedPathParts) + suffix;
+        return normalizedPathParts;
     }
 
     public static <T extends Parameters<String>> T strToParameters(String str, String sep, String conn, Class<?

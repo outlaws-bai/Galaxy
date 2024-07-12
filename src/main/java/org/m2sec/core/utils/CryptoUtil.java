@@ -1,6 +1,7 @@
 package org.m2sec.core.utils;
 
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.m2sec.core.enums.SymmetricKeyMode;
 
 import javax.annotation.Nullable;
@@ -25,6 +26,10 @@ import java.util.Map;
  */
 
 public class CryptoUtil {
+
+    static {
+        Security.addProvider(new BouncyCastleProvider());
+    }
 
     public static final String ALGORITHM_AES = "AES";
     public static final String ALGORITHM_AES_DEFAULT_TRANSFORMATION = "AES/ECB/PKCS5Padding";

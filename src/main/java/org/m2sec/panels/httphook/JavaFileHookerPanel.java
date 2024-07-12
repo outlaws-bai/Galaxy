@@ -10,9 +10,8 @@ import org.m2sec.core.common.Option;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Render;
 import org.m2sec.core.enums.HttpHookService;
-import org.m2sec.core.httphook.JavaFileHooker;
+import org.m2sec.core.httphook.JavaFileHookerAdapterAdapter;
 import org.m2sec.core.common.FileTools;
-import org.m2sec.panels.SwingTools;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
@@ -30,7 +29,7 @@ import java.util.Map;
  * @description:
  */
 
-public class JavaFileHookerPanel extends IHookerPanel<JavaFileHooker> {
+public class JavaFileHookerPanel extends IHookerPanel<JavaFileHookerAdapterAdapter> {
     private final Option option;
     private final MontoyaApi api;
 
@@ -159,10 +158,10 @@ public class JavaFileHookerPanel extends IHookerPanel<JavaFileHooker> {
 
 
     @Override
-    public JavaFileHooker newHooker() {
+    public JavaFileHookerAdapterAdapter newHooker() {
         FileTools.writeFile(FileTools.getExampleScriptFilePath(option.getJavaSelectItem(),
             Constants.JAVA_FILE_SUFFIX), codeTextArea.getText());
-        return new JavaFileHooker();
+        return new JavaFileHookerAdapterAdapter();
     }
 
     @Override

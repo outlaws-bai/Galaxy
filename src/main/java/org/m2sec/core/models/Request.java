@@ -44,9 +44,14 @@ public class Request {
     private String method;
 
     /**
-     * 不包含query参数, 有时因为Burp的原因，这里会带上domain url
+     * 不包含query参数,
      */
     private String path;
+
+    /**
+     * 有时因为Burp的原因，path会带上domain url, 使用该参数保存原始path
+     */
+    private String rawPath;
 
     private Query query;
 
@@ -70,7 +75,8 @@ public class Request {
         this.port = port;
         this.version = version;
         this.method = method;
-        this.path = path;
+        this.rawPath = path;
+        this.path = HttpUtil.normalizePath(path);
         this.query = query;
         this.headers = headers;
         this.content = content;

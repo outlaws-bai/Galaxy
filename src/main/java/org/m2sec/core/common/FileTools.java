@@ -3,6 +3,7 @@ package org.m2sec.core.common;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -58,6 +59,25 @@ public class FileTools {
             throw new RuntimeException(e);
         }
         return files;
+    }
+
+    public static void renameDir(String sourceDir, String targetDir) {
+        File oldDir = new File(sourceDir);
+        File newDir = new File(targetDir);
+
+        // 检查旧文件夹是否存在并且是一个目录
+        if (!oldDir.exists() || !oldDir.isDirectory()) {
+            throw new RuntimeException("Old directory does not exist or is not a directory.");
+        }
+
+        // 如果新文件夹路径已存在，则重命名失败
+        if (newDir.exists()) {
+            throw new RuntimeException("New directory already exists.");
+        }
+
+        // 重命名文件夹
+        //noinspection ResultOfMethodCallIgnored
+        oldDir.renameTo(newDir);
     }
 
 

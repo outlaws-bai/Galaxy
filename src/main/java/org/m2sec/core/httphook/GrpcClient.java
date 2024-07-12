@@ -19,6 +19,11 @@ public class GrpcClient {
         blockingStub = HttpHookServiceGrpc.newBlockingStub(channel);
     }
 
+    public GrpcClient(int port) {
+        channel = ManagedChannelBuilder.forAddress("127.0.0.1", port).usePlaintext().build();
+        blockingStub = HttpHookServiceGrpc.newBlockingStub(channel);
+    }
+
     public void shutdown() {
         channel.shutdown();
     }

@@ -1,7 +1,9 @@
+import org.m2sec.core.dynamic.IJavaHooker;
 import org.m2sec.core.utils.*;
 import org.m2sec.core.models.*;
-import javax.annotation.Nullable;
+
 import java.util.HashMap;
+
 import org.slf4j.Logger;
 
 /**
@@ -11,32 +13,23 @@ import org.slf4j.Logger;
  * utils：可能用到的工具类
  * https://github.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/utils
  */
-public class Sm2 {
+public class Sm2 implements IJavaHooker {
 
-    private static Logger log;
-    private static final String publicKeyBase64 = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlWlwW7eFn0apxrW0j" +
-        "+W9fcGiJ9Pq8fDS7mGpF28kTz5mwbe5wajs7r9CQrcQS5mD75aItdNT" +
-        "/XTPPCGawvgF4N4gxtExlzDNackg1YygGpVPuNY3B8M616vl6av0j0JyiWh9/KYG0oPgVvlpvIiT8a1OuOXNwX0f7LoIoBbXN0FMVVF4B" +
-        "+/r9N22I2V9EgiaRVqYRC9tI5471FuSs6IKkh2TrLzssZ4D4ZAGC2bz6aejAmiYqWSQ/D5WcnDAg16KJUx1rmA57KctQjDM" +
-        "+B7jYGg1MQYoEFdlUIaKDalr2uMoQWkK4ebLECdU67w5/E1KCp7/1+mGu/ijQxegJ5Z2qQIDAQAB";
+    private static final String publicKeyBase64 = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEJniVFlbjYdpZrWlnnWt" +
+        "/Ac9QBqIamsDL1GU9EB42Q6rVd7ArRAxtr6Ae5Xb+sSd9hc5LpIAR6jQ05v28LO8eFQ==";
     private static final String privateKeyBase64 =
-        "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCVaXBbt4WfRqnGtbSP5b19waIn0" +
-            "+rx8NLuYakXbyRPPmbBt7nBqOzuv0JCtxBLmYPvloi101P9dM88IZrC+AXg3iDG0TGXMM1pySDVjKAalU+41jcHwzrXq+Xpq" +
-            "/SPQnKJaH38pgbSg+BW+Wm8iJPxrU645c3BfR/sugigFtc3QUxVUXgH7" +
-            "+v03bYjZX0SCJpFWphEL20jnjvUW5KzogqSHZOsvOyxngPhkAYLZvPpp6MCaJipZJD8PlZycMCDXoolTHWuYDnspy1CMMz4HuNgaDUxBigQV2VQhooNqWva4yhBaQrh5ssQJ1TrvDn8TUoKnv/X6Ya7+KNDF6AnlnapAgMBAAECggEAI4lZ/36Fag4xCEGkigsvCC+bZVSqj1Pjn24b/SZioPRrFU0hAdYvUFOuK1cGKa0AK+aGapSyZ9i2B4vIlvHN2B+M9SzBWj/xw2TiidgyJlB4DzLoENEW+D/65ZqQBtjbjCINwR8uBTj3jUgyJXTolzVMwX5q80fS5YeT0JvOIWZp2q/+/PH9Awy3dAWmC7bMmIdOSsqD2hJKq4KtO41EI9AhkVCqVXJzzPwriFr1UBOaM3y9Gr1BumxCPGJIr9UD2paOk/lbCF2Vlui+iZjbtzlLYrs2zLuQpMtA8eGBYAlsXS4Q7CKnbNvQCCYLzsjqTU5uZEhAGnFN2mXJAjdsLwKBgQC5cqloKiBf4zQAiS3uIlEHcJy8fkatvvC8ofNQgsrGy/2YUYGaevVnY7I4e5cNypDvulek0idtmPGRkKI0XyAP+72TOYltZyo8hXt2/4kAVZkR0jfjvYIkWDLssIbCE/rx4fGZOVTxfZ3qQkGOfmra8q50FcDd0LRlf68s4ej0cwKBgQDOQR5EQhN5n/fTyv4umVDn253PpqiYbWNTItk9TRKfwIDwgFpgGQBfu/jYBeei3fJTe3TBj5PYoCQA6ETktg5YZv3MIu/DLEH5DCjLFso07ZNF5FWtbRRx5c+XVY6LXksRCnGWXIti420pdjIewyNtnrbt6NNPKXBdumn2eHn9cwKBgQCm96OrU3J+otPpP5mI9IC8EBouZAtC181sKOwnKvtjbbrP72KfMeHNyqdlz3C7TAyeqsnKbiRtuuyUwQIp4RO/EEspSP6A8AfJIe19wKkbEfaVYw5LEA8ipf6DuJQ8HT0tlt6ttD7UhuMtTaY0o4GVzDZh8kwJ6qThVcrkwCm8HQKBgAUbmbtJA6B0dLe7BDZ1N4q2Zp8Y2n4D33zUlRquiPKJ2ueZ1iMhG2BDkHMRGl5vLqwgl5CflKK9vIaFOgeL9qj7y/c9OkDUHMIlKfF1nAZZh9coQ3LrC6GSdmSiCsiqyiMe5hc6LX2Cclafhbg7TupNDuyvYmRIe27mye7/ps2/AoGARgDoTlQ9IfYAk62ZYBn8NmwZc9L7a2JVT4COQ3Y4K8bhJX4EOYsQGX5DSYXGiGjIG2lMPrQTnVgKr6a2tXKGsq9VEHlv2i7V1NjMFPKEzj8v7xSJvX4QDR1JmN4NLMBdD52KNzx6fx8kAHwoMJqhlspBCYyktwiRl7IkRRaGWEc=";
+        "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQgSBfDgcogzGLkd9lNXKnLjZvjniGORXKZWsU3ncGkcdKgCgYIKoEcz1UBgi2hRANCAAQmeJUWVuNh2lmtaWeda38Bz1AGohqawMvUZT0QHjZDqtV3sCtEDG2voB7ldv6xJ32FzkukgBHqNDTm/bws7x4V";
 
     private static final byte[] publicKey = CodeUtil.b64decode(publicKeyBase64);
 
     private static final byte[] privateKey = CodeUtil.b64decode(privateKeyBase64);
 
-    private static byte[] getData(byte[] content, String key) {
-        return CodeUtil.b64decode((String) JsonUtil.jsonStrToMap(new String(content)).get(key));
-    }
+    private static final String jsonKey = "data";
 
-    private static byte[] toData(byte[] content, String key) {
-        HashMap<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put(key, CodeUtil.b64encodeToString(content));
-        return JsonUtil.toJsonStr(jsonBody).getBytes();
+    private Logger log;
+
+    public Sm2(Logger log) {
+        this.log = log;
     }
 
     /**
@@ -45,12 +38,12 @@ public class Sm2 {
      * @param request Request 请求对象
      * @return 经过处理后的request对象，返回null代表不需要处理
      */
-    @Nullable
-    public static Request hookRequestToBurp(Request request) {
+    @Override
+    public Request hookRequestToBurp(Request request) {
         // 获取需要解密的数据
-        byte[] encryptedData = getData(request.getContent(), "request");
+        byte[] encryptedData = getData(request.getContent());
         // 调用内置函数解密
-        byte[] data = CryptoUtil.sm2Decrypt(encryptedData, privateKey);
+        byte[] data = decrypt(encryptedData);
         // 更新body为已加密的数据
         request.setContent(data);
         return request;
@@ -62,14 +55,14 @@ public class Sm2 {
      * @param request Request 请求对象
      * @return 经过处理后的request对象，返回null代表不需要处理
      */
-    @Nullable
-    public static Request hookRequestToServer(Request request) {
+    @Override
+    public Request hookRequestToServer(Request request) {
         // 获取被解密的数据
         byte[] data = request.getContent();
         // 调用内置函数加密回去
-        byte[] encryptedData = CryptoUtil.sm2Encrypt(data, publicKey);
+        byte[] encryptedData = encrypt(data);
         // 将已加密的数据转换为Server可识别的格式
-        byte[] body = toData(encryptedData, "request");
+        byte[] body = toData(encryptedData);
         // 更新body
         request.setContent(body);
         return request;
@@ -81,12 +74,12 @@ public class Sm2 {
      * @param response Response 响应对象
      * @return 经过处理后的response对象，返回null代表不需要处理
      */
-    @Nullable
-    public static Response hookResponseToBurp(Response response) {
+    @Override
+    public Response hookResponseToBurp(Response response) {
         // 获取需要解密的数据
-        byte[] encryptedData = getData(response.getContent(), "response");
+        byte[] encryptedData = getData(response.getContent());
         // 调用内置函数解密
-        byte[] data = CryptoUtil.sm2Decrypt(encryptedData, privateKey);
+        byte[] data = decrypt(encryptedData);
         // 更新body
         response.setContent(data);
         return response;
@@ -98,17 +91,45 @@ public class Sm2 {
      * @param response Response 响应对象
      * @return 经过处理后的response对象，返回null代表不需要处理
      */
-    @Nullable
-    public static Response hookResponseToClient(Response response) {
+    @Override
+    public Response hookResponseToClient(Response response) {
         // 获取被解密的数据
         byte[] data = response.getContent();
         // 调用内置函数加密回去
-        byte[] encryptedData = CryptoUtil.sm2Encrypt(data, publicKey);
+        byte[] encryptedData = encrypt(data);
         // 更新body
         // 将已加密的数据转换为Server可识别的格式
-        byte[] body = toData(encryptedData, "response");
+        byte[] body = toData(encryptedData);
         // 更新body
         response.setContent(body);
         return response;
+    }
+
+    /**
+     * @param content byte[] 要解密的数据
+     * @return 解密结果
+     */
+    @Override
+    public byte[] decrypt(byte[] content) {
+        return CryptoUtil.sm2Decrypt(content, privateKey);
+    }
+
+    /**
+     * @param content byte[] 要加密的数据
+     * @return 加密结果
+     */
+    @Override
+    public byte[] encrypt(byte[] content) {
+        return CryptoUtil.sm2Encrypt(content, publicKey);
+    }
+
+    private static byte[] getData(byte[] content) {
+        return CodeUtil.b64decode((String) JsonUtil.jsonStrToMap(new String(content)).get(jsonKey));
+    }
+
+    private static byte[] toData(byte[] content) {
+        HashMap<String, Object> jsonBody = new HashMap<>();
+        jsonBody.put(jsonKey, CodeUtil.b64encodeToString(content));
+        return JsonUtil.toJsonStr(jsonBody).getBytes();
     }
 }

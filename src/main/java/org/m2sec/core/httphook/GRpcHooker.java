@@ -28,6 +28,11 @@ public class GRpcHooker extends IHttpHooker {
         log.info("Start grpc client success. {}", grpcConn);
     }
 
+    public void init(int port) {
+        this.client = new GrpcClient(port);
+        log.info("Start grpc client success. {}", port);
+    }
+
 
     @Override
     public void destroy() {

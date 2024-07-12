@@ -1,5 +1,8 @@
 import lombok.extern.slf4j.Slf4j;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.Test;
+import org.m2sec.core.common.Helper;
+import java.security.*;
 
 /**
  * @author: outlaws-bai
@@ -9,8 +12,13 @@ import org.junit.jupiter.api.Test;
 @Slf4j
 public class TempTest {
 
+    static {
+        Security.addProvider(new BouncyCastleProvider());
+    }
+
     @Test
     public void test() throws Exception {
+        Helper.initAndLoadConfig(null);
     }
 
     @Test
