@@ -20,7 +20,7 @@ public class Constants {
         """;
 
     public static final String UPDATE_VERSION_DEF = "You have updated the version of Galaxy, but due to significant " +
-        "version differences, your original work dir has been replaced with ";
+        "version differences, your original work dir has been moved to ";
 
     public static String JAR_FILE_PATH;
 
