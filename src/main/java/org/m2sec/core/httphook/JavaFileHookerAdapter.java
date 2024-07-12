@@ -19,7 +19,7 @@ import org.slf4j.Logger;
  */
 @Getter
 @Slf4j
-public class JavaFileHookerAdapterAdapter extends IHttpHooker implements ICodeHookerAdapter {
+public class JavaFileHookerAdapter extends IHttpHooker implements ICodeHookerAdapter {
 
     private IJavaHooker hooker;
 

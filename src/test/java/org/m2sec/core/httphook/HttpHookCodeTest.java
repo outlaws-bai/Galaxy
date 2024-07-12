@@ -75,7 +75,7 @@ public class HttpHookCodeTest {
         log.info("hook by java file: {}", filepath);
         log.info("randomString: {}", randomString);
         ICodeHookerAdapter adapter = getCodeHooker(filepath);
-        IJavaHooker hooker1 = ((JavaFileHookerAdapterAdapter) adapter).getHooker();
+        IJavaHooker hooker1 = ((JavaFileHookerAdapter) adapter).getHooker();
         log.info("raw request: \r\n{}", request);
         Request request1 = hooker1.hookRequestToServer(request);
         log.info("encrypted request: \r\n{}", request1);
@@ -97,7 +97,7 @@ public class HttpHookCodeTest {
     private static ICodeHookerAdapter getCodeHooker(String filepath) {
         ICodeHookerAdapter hooker;
         if (filepath.endsWith(Constants.JAVA_FILE_SUFFIX)) {
-            hooker = new JavaFileHookerAdapterAdapter();
+            hooker = new JavaFileHookerAdapter();
         } else if (filepath.endsWith(Constants.PYTHON_FILE_SUFFIX)) {
             hooker = new PythonHookerAdapter();
         } else if (filepath.endsWith(Constants.JS_FILE_SUFFIX)) {
