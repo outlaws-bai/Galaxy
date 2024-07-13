@@ -3,8 +3,6 @@ package org.m2sec.core.common;
 import burp.api.montoya.MontoyaApi;
 import org.m2sec.core.utils.ByteUtil;
 
-import java.util.Arrays;
-
 /**
  * @author: outlaws-bai
  * @date: 2024/6/21 20:23
