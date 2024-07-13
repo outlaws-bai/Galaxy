@@ -8,14 +8,11 @@ import burp.api.montoya.http.message.responses.HttpResponse;
 import burp.api.montoya.ui.contextmenu.ContextMenuEvent;
 import burp.api.montoya.ui.contextmenu.MessageEditorHttpRequestResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.m2sec.core.common.ApiInfo;
-import org.m2sec.core.common.Config;
-import org.m2sec.core.common.SwaggerParser;
-import org.m2sec.core.common.WorkExecutor;
+import org.m2sec.Galaxy;
+import org.m2sec.core.common.*;
 import org.m2sec.core.enums.Protocol;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
-import org.m2sec.core.common.SwingTools;
 
 import javax.swing.*;
 import java.util.InputMismatchException;
@@ -50,35 +47,64 @@ public class ParseSwaggerApiDocItem extends IItem {
         MessageEditorHttpRequestResponse messageEditorHttpRequestResponse = event.messageEditorRequestResponse().get();
         Request originRequest = Request.of(messageEditorHttpRequestResponse.requestResponse().request());
         Response originResponse = Response.of(messageEditorHttpRequestResponse.requestResponse().response());
+        action(api, originRequest, originResponse);
+    }
 
+    public void action(MontoyaApi montoyaApi, Request originRequest, Response originResponse) {
         String userInput = JOptionPane.showInputDialog("Please input url or relative path");
         if (userInput == null || (!userInput.startsWith("/") && !userInput.startsWith(Protocol.HTTP.toRaw()))) {
             SwingTools.showException(new InputMismatchException("Please input url or relative path!"));
             return;
         }
         List<ApiInfo> apiInfoList = SwaggerParser.parseSwaggerDoc(new String(originResponse.getContent()));
-        List<Runnable> workRunnables = apiInfoList.stream().map(apiInfo -> (Runnable) () -> {
+        List<Runnable> workRunnables = apiInfoList.stream().map(apiInfo -> (Runnable) () -> run(montoyaApi,
+            originRequest, originResponse, apiInfo, userInput)).toList();
+        WorkExecutor.INSTANCE.beyondBatchExecute(
+            () -> before(montoyaApi, apiInfoList.size()),
+            () -> after(montoyaApi),
+            workRunnables.toArray(Runnable[]::new));
+    }
+
+    public void run(MontoyaApi montoyaApi, Request originRequest, Response response, ApiInfo apiInfo,
+                    String userInput) {
+        if (Galaxy.isInBurp()) {
             Request request = apiInfo.generateRequest(originRequest, userInput);
             HttpRequest httpRequest = request.toBurp();
             Annotations annotations = Annotations.annotations(apiInfo.getNoteString());
             try {
                 HttpRequestResponse requestResponse;
                 if (config.getSetting().isParsedSwaggerApiDocRequestAutoSend()) {
-                    requestResponse = api.http().sendRequest(httpRequest);
+                    requestResponse = montoyaApi.http().sendRequest(httpRequest);
                     requestResponse = requestResponse.withAnnotations(annotations);
                 } else {
                     requestResponse = HttpRequestResponse.httpRequestResponse(httpRequest,
                         HttpResponse.httpResponse(), annotations);
                 }
-                api.organizer().sendToOrganizer(requestResponse);
+                montoyaApi.organizer().sendToOrganizer(requestResponse);
             } catch (Exception e) {
                 log.error("send request fail. request: {}, message: {}", request, e.getMessage(), e);
             }
-        }).toList();
-        WorkExecutor.INSTANCE.beyondBatchExecute(
-            () -> api.logging().raiseInfoEvent(String.format("%s get %d url. Please wait for execution" +
-                ".", displayName(), apiInfoList.size())),
-            () -> api.logging().raiseInfoEvent("Fuzz Swagger Docs execute complete. You can view it in tab Organizer."),
-            workRunnables.toArray(Runnable[]::new));
+        } else {
+            log.debug("test send request to organizer.");
+        }
     }
+
+    public void before(MontoyaApi montoyaApi, int size) {
+        String message = String.format("%s get %d url. Please wait for execution.", displayName(), size);
+        if (Galaxy.isInBurp()) {
+            montoyaApi.logging().raiseInfoEvent(message);
+        } else {
+            log.info(message);
+        }
+    }
+
+    public void after(MontoyaApi montoyaApi) {
+        String message = "Fuzz Swagger Docs execute complete. You can view it in tab Organizer.";
+        if (Galaxy.isInBurp()) {
+            montoyaApi.logging().raiseInfoEvent(message);
+        } else {
+            log.info(message);
+        }
+    }
+
 }
