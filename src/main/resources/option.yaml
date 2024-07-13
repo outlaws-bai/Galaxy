@@ -4,4 +4,4 @@ hookResponse: true
 grpcConn: 127.0.0.1:8443
 codeSelectItem: ""
 hookStart: false
-hookService: ...
+hookService: null
