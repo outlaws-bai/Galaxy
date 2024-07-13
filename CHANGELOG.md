@@ -1,6 +1,8 @@
 # Release History
 
-## 开发中
+## Under release
+
+1. 完成所有小功能开发。@outlaws-bai
 
 ## 2024-07-13 Release 2.1.0
 
