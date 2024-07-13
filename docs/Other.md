@@ -2,9 +2,7 @@
 
 其他小功能
 
-> 下方带*为待实现。
-
-## Parse Swagger Api Doc *
+## Parse Swagger Api Doc
 
 该功能会自动解析并生成所有接口的请求报文，将其发送到`Organizer`，可以对参数进行修改测试。
 
@@ -14,7 +12,7 @@
 
 在任意响应报文Editor右键，选择"Parse Swagger Doc"即可。
 
-## Bypass Host Check *
+## Bypass Host Check
 
 绕过服务端在csrf/ssrf的测试点对host做了验证
 
@@ -24,7 +22,7 @@
 
 在测试点输入要攻击的URL，选中它右键`Send To Intruder`, 然后在`Intruder` 中选择`Payload type -> Extension-generated`, `Selected generator -> Bypass Host Check`，之后点击`Start attack`即可。
 
-## Bypass Auth Of Path *
+## Bypass Auth Of Path
 
 通过修改Path的方式绕过某些认证/鉴权/拦截
 

@@ -16,4 +16,5 @@ import org.m2sec.core.enums.LogLevel;
 public class Setting {
     private LogLevel logLevel;
     private String staticExtensions;
+    public boolean ParsedSwaggerApiDocRequestAutoSend;
 }

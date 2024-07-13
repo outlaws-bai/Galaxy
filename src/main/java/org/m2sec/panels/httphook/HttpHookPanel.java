@@ -6,7 +6,7 @@ import org.m2sec.Galaxy;
 import org.m2sec.core.common.Option;
 import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.enums.RunStatus;
-import org.m2sec.panels.SwingTools;
+import org.m2sec.core.common.SwingTools;
 
 import javax.swing.*;
 import java.awt.*;

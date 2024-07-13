@@ -1,4 +1,4 @@
-package org.m2sec.panels;
+package org.m2sec.core.common;
 
 
 import javax.swing.*;

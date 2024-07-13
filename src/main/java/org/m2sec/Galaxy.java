@@ -3,8 +3,10 @@ package org.m2sec;
 import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
 import lombok.extern.slf4j.Slf4j;
+import org.m2sec.abilities.MasterContextMenuProvider;
 import org.m2sec.abilities.MasterHttpHandler;
 import org.m2sec.abilities.MaterProxyHandler;
+import org.m2sec.abilities.payloads.MasterPayloadGeneratorProviderFactor;
 import org.m2sec.core.common.Config;
 import org.m2sec.core.common.Helper;
 import org.m2sec.core.common.WorkExecutor;
@@ -50,6 +52,10 @@ public class Galaxy implements BurpExtension {
         MaterProxyHandler materProxyHandler = new MaterProxyHandler(config);
         api.proxy().registerRequestHandler(materProxyHandler);
         api.proxy().registerResponseHandler(materProxyHandler);
+        // 注册menu
+        api.userInterface().registerContextMenuItemsProvider(new MasterContextMenuProvider(api, config));
+        // 注册payload生成器
+        new MasterPayloadGeneratorProviderFactor(api).getProviders().forEach(provider -> api.intruder().registerPayloadGeneratorProvider(provider));
     }
 
 
