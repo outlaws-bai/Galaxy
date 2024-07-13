@@ -6,7 +6,7 @@ package org.m2sec.core.httphook;
  * @description:
  */
 
-public interface ICodeHookerAdapter {
+public interface ICodeHookerFactor {
 
     void init(String filepath);
 

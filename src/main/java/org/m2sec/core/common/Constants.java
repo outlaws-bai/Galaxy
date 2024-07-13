@@ -103,8 +103,8 @@ public class Constants {
     public static final String HOOK_FUNC_3 = "hookResponseToBurp";
     public static final String HOOK_FUNC_4 = "hookResponseToClient";
 
-    public static final String HOOK_GRPC_IMPL_DEF = "Please start a GRPC server and enter its address below.";
-    public static final String HOOK_JAVA_IMPL_DEF = "Please select the appropriate JAVA file and modify it until" +
+    public static final String HOOK_BY_GRPC_IMPL_DEF = "Please start a GRPC server and enter its address below.";
+    public static final String HOOK_BY_CODE_IMPL_DEF = "Please select the appropriate file and modify it until" +
         " it meets your needs.";
 
     // file suffix
@@ -115,6 +115,10 @@ public class Constants {
     public static final String PYTHON_FILE_SUFFIX = ".py";
 
     public static final String JS_FILE_SUFFIX = ".js";
+
+    // swing
+
+    public static final String COMBO_BOX_DEFAULT_ITEM = "...";
 
 
 }

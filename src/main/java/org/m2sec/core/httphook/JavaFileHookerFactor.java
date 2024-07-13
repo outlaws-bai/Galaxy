@@ -19,14 +19,14 @@ import org.slf4j.Logger;
  */
 @Getter
 @Slf4j
-public class JavaFileHookerAdapter extends IHttpHooker implements ICodeHookerAdapter {
+public class JavaFileHookerFactor extends IHttpHooker implements ICodeHookerFactor {
 
     private IJavaHooker hooker;
 
     @Override
     public void init(Option opt) {
         option = opt;
-        String javaFilePath = FileTools.getExampleScriptFilePath(option.getJavaSelectItem(),
+        String javaFilePath = FileTools.getExampleScriptFilePath(option.getCodeSelectItem(),
             Constants.JAVA_FILE_SUFFIX);
         init(javaFilePath);
         log.info("load java file success. {}", javaFilePath);

@@ -10,14 +10,15 @@ import org.m2sec.core.models.Response;
  * @description:
  */
 
-public class JsHookerAdapter extends IHttpHooker implements ICodeHookerAdapter {
+public class JsHookerFactor extends IHttpHooker implements ICodeHookerFactor {
+
     @Override
     public void init(Option opt) {
 
     }
 
     @Override
-    public void destroy() {
+    public void init(String filepath) {
 
     }
 
@@ -42,11 +43,6 @@ public class JsHookerAdapter extends IHttpHooker implements ICodeHookerAdapter {
     }
 
     @Override
-    public void init(String filepath) {
-
-    }
-
-    @Override
     public byte[] encrypt(byte[] data) {
         return new byte[0];
     }
@@ -54,5 +50,10 @@ public class JsHookerAdapter extends IHttpHooker implements ICodeHookerAdapter {
     @Override
     public byte[] decrypt(byte[] data) {
         return new byte[0];
+    }
+
+    @Override
+    public void destroy() {
+
     }
 }

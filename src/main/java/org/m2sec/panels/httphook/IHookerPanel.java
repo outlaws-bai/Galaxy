@@ -1,11 +1,14 @@
 package org.m2sec.panels.httphook;
 
+import burp.api.montoya.MontoyaApi;
 import org.m2sec.abilities.MasterHttpHandler;
 import org.m2sec.abilities.MaterProxyHandler;
 import org.m2sec.core.common.Option;
+import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.httphook.IHttpHooker;
 
 import javax.swing.*;
+import java.nio.file.attribute.AttributeView;
 
 /**
  * @author: outlaws-bai
@@ -15,8 +18,13 @@ import javax.swing.*;
 
 public abstract class IHookerPanel<T extends IHttpHooker> extends JPanel {
 
-    public IHookerPanel() {
-        setName(displayName());
+    protected final Option option;
+
+    protected final MontoyaApi api;
+
+    public IHookerPanel(Option option, MontoyaApi api) {
+        this.option = option;
+        this.api = api;
     }
 
     public void start(Option option){
@@ -36,5 +44,7 @@ public abstract class IHookerPanel<T extends IHttpHooker> extends JPanel {
 
     public abstract T newHooker();
 
-    public abstract String displayName();
+    public abstract String getInput();
+
+    public abstract void resetInput();
 }

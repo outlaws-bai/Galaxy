@@ -1,5 +1,8 @@
 package org.m2sec.panels.httphook;
 
+import burp.api.montoya.MontoyaApi;
+import org.m2sec.core.common.Option;
+import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.httphook.IHttpHooker;
 
 /**
@@ -10,13 +13,22 @@ import org.m2sec.core.httphook.IHttpHooker;
 
 public class EmptyHookerPanel extends IHookerPanel<IHttpHooker> {
 
+    public EmptyHookerPanel(Option option, MontoyaApi api) {
+        super(option, api);
+    }
+
     @Override
     public IHttpHooker newHooker() {
         return null;
     }
 
     @Override
-    public String displayName() {
-        return "...";
+    public String getInput() {
+        return null;
+    }
+
+    @Override
+    public void resetInput() {
+
     }
 }

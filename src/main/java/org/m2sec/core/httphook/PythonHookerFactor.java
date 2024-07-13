@@ -10,7 +10,7 @@ import org.m2sec.core.models.Response;
  * @description:
  */
 
-public class PythonHookerAdapter extends IHttpHooker implements ICodeHookerAdapter {
+public class PythonHookerFactor extends IHttpHooker implements ICodeHookerFactor {
     @Override
     public void init(Option opt) {
 

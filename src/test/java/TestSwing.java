@@ -1,4 +1,5 @@
 import org.m2sec.core.common.Config;
+import org.m2sec.core.common.Helper;
 import org.m2sec.panels.MainPanel;
 
 import javax.swing.*;
@@ -11,6 +12,7 @@ import javax.swing.*;
 
 public class TestSwing {
     public static void main(String[] args) {
+        Helper.initAndLoadConfig(null);
         // 创建主窗体
         JFrame frame = new JFrame("Java Syntax Highlighting");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

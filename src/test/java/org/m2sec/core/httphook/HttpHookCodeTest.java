@@ -30,9 +30,7 @@ public class HttpHookCodeTest {
 
     @BeforeAll
     public static void setRootLoggerLevel() {
-        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-        Logger rootLogger = loggerContext.getLogger("root");
-        rootLogger.setLevel(Level.valueOf(LogLevel.INFO.name()));
+        Helper.initAndLoadConfig(null);
     }
 
     @Test
@@ -74,8 +72,8 @@ public class HttpHookCodeTest {
         request.setContent(("{\"data\": \"" + randomString + "\"}").getBytes());
         log.info("hook by java file: {}", filepath);
         log.info("randomString: {}", randomString);
-        ICodeHookerAdapter adapter = getCodeHooker(filepath);
-        IJavaHooker hooker1 = ((JavaFileHookerAdapter) adapter).getHooker();
+        ICodeHookerFactor adapter = getCodeHooker(filepath);
+        IJavaHooker hooker1 = ((JavaFileHookerFactor) adapter).getHooker();
         log.info("raw request: \r\n{}", request);
         Request request1 = hooker1.hookRequestToServer(request);
         log.info("encrypted request: \r\n{}", request1);
@@ -87,25 +85,25 @@ public class HttpHookCodeTest {
         String randomString = Helper.generateRandomString(50);
         log.info("hook by java file: {}", filepath);
         log.info("randomString: {}", randomString);
-        ICodeHookerAdapter hooker = getCodeHooker(filepath);
+        ICodeHookerFactor hooker = getCodeHooker(filepath);
         byte[] encryptData = hooker.encrypt(randomString.getBytes());
         log.info("encrypted base64 data: {}", CodeUtil.b64encodeToString(encryptData));
         byte[] data = hooker.decrypt(encryptData);
         log.info("decrypted data: {}", new String(data));
     }
 
-    private static ICodeHookerAdapter getCodeHooker(String filepath) {
-        ICodeHookerAdapter hooker;
+    private static ICodeHookerFactor getCodeHooker(String filepath) {
+        ICodeHookerFactor hooker;
         if (filepath.endsWith(Constants.JAVA_FILE_SUFFIX)) {
-            hooker = new JavaFileHookerAdapter();
+            hooker = new JavaFileHookerFactor();
         } else if (filepath.endsWith(Constants.PYTHON_FILE_SUFFIX)) {
-            hooker = new PythonHookerAdapter();
+            hooker = new PythonHookerFactor();
         } else if (filepath.endsWith(Constants.JS_FILE_SUFFIX)) {
-            hooker = new JsHookerAdapter();
+            hooker = new JsHookerFactor();
         } else {
             throw new RuntimeException("Abnormal example file");
         }
-        ICodeHookerAdapter codeHooker = hooker;
+        ICodeHookerFactor codeHooker = hooker;
         codeHooker.init(filepath);
         return codeHooker;
     }

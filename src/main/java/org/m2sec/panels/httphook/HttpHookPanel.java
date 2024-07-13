@@ -3,6 +3,7 @@ package org.m2sec.panels.httphook;
 import burp.api.montoya.MontoyaApi;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.Galaxy;
+import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Option;
 import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.enums.RunStatus;
@@ -38,11 +39,18 @@ public class HttpHookPanel extends JPanel {
         // 存放几种hook方式
         Map<String, IHookerPanel<?>> serviceMap = new LinkedHashMap<>();
         GrpcHookerPanel rpcImpl = new GrpcHookerPanel(option, api);
-        JavaFileHookerPanel javaFileHookerPanel = new JavaFileHookerPanel(option, api);
-        javaFileHookerPanel.resetCodeTheme();
-        serviceMap.put("...", new EmptyHookerPanel());
-        serviceMap.put(rpcImpl.displayName(), rpcImpl);
-        serviceMap.put(javaFileHookerPanel.displayName(), javaFileHookerPanel);
+        CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(option, api);
+        javaFileHookerPanel.setService(HttpHookService.JAVA).resetCodeTheme();
+        CodeFileHookerPanel pythonFileHookerPanel = new CodeFileHookerPanel(option, api);
+        pythonFileHookerPanel.setService(HttpHookService.PYTHON).resetCodeTheme();
+        CodeFileHookerPanel jsFileHookerPanel = new CodeFileHookerPanel(option, api);
+        jsFileHookerPanel.setService(HttpHookService.JS).resetCodeTheme();
+
+        serviceMap.put(Constants.COMBO_BOX_DEFAULT_ITEM, new EmptyHookerPanel(option, api));
+        serviceMap.put(HttpHookService.GRPC.name(), rpcImpl);
+        serviceMap.put(HttpHookService.JAVA.name(), javaFileHookerPanel);
+        serviceMap.put(HttpHookService.PYTHON.name(), pythonFileHookerPanel);
+        serviceMap.put(HttpHookService.JS.name(), jsFileHookerPanel);
 
         // 创建一个容器(卡片)用于放置不同方式的JPanel
         JPanel wayPanelContainer = new JPanel(new CardLayout());
@@ -83,7 +91,8 @@ public class HttpHookPanel extends JPanel {
         JTextField checkELTextField = new JTextField();
         JPanel checkELPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel elLabel = new JLabel("Expression: ");
-        elLabel.setToolTipText("Enter an javascript expression that will be used to determine which requests need to be processed.");
+        elLabel.setToolTipText("Enter an javascript expression that will be used to determine which requests need to " +
+            "be processed.");
 
         checkELPanel.add(elLabel);
         checkELPanel.add(checkELTextField);
@@ -112,24 +121,25 @@ public class HttpHookPanel extends JPanel {
         });
         // 设置 switchButton 的事件监听器, 开关HttpHook功能
         switchButton.addActionListener(e -> {
-            //noinspection SuspiciousMethodCalls
-            IHookerPanel<?> hookService = serviceMap.get(comboBox.getSelectedItem());
+            String selectItem = (String) comboBox.getSelectedItem();
+            IHookerPanel<?> hookerPanel = serviceMap.get(selectItem);
             boolean isStop = switchButton.getText().equalsIgnoreCase(RunStatus.STOP.name().toLowerCase());
             String text = isStop ? RunStatus.START.name() : RunStatus.STOP.name();
 
             try {
                 if (!isStop) {
+                    HttpHookService service = HttpHookService.valueOf(selectItem);
                     // 设置本次所选择的配置
                     option.setHookStart(true)
-                        .setHookerName(HttpHookService.valueOf((String) comboBox.getSelectedItem()))
+                        .setHookService(service)
                         .setRequestCheckExpression(checkELTextField.getText())
                         .setHookRequest(hookRequestCheckBox.isSelected())
                         .setHookResponse(hookResponseCheckBox.isSelected())
-                        .setGrpcConn(rpcImpl.getUserTypeData())
-                        .setJavaSelectItem(javaFileHookerPanel.getData());
-                    hookService.start(option);
+                        .setGrpcConn(rpcImpl.getInput())
+                        .setCodeSelectItem(hookerPanel.getInput());
+                    hookerPanel.start(option);
                 } else {
-                    hookService.stop(option);
+                    hookerPanel.stop(option);
                 }
             } catch (Exception exc) {
                 SwingTools.showException(exc);
@@ -137,7 +147,7 @@ public class HttpHookPanel extends JPanel {
             }
 
             switchButton.setText(SwingTools.capitalizeFirstLetter(text));
-            SwingTools.changePanelStatus(hookService, isStop);
+            SwingTools.changePanelStatus(hookerPanel, isStop);
             SwingTools.changePanelStatus(requestCheckPanel, isStop);
             SwingTools.changeComponentStatus(comboBox, isStop);
             SwingTools.changeComponentStatus(hookRequestCheckBox, isStop);
@@ -148,8 +158,8 @@ public class HttpHookPanel extends JPanel {
         checkELTextField.setText(option.getRequestCheckExpression());
         hookRequestCheckBox.setSelected(option.isHookRequest());
         hookResponseCheckBox.setSelected(option.isHookResponse());
-        if (option.getHookerName() != null) {
-            comboBox.setSelectedItem(option.getHookerName().name());
+        if (option.getHookService() != null) {
+            comboBox.setSelectedItem(option.getHookService().name());
         }
 
 //        nextControlPanel.setBackground(Color.CYAN);

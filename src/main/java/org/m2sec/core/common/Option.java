@@ -16,12 +16,12 @@ import org.m2sec.core.enums.HttpHookService;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Option {
-    private HttpHookService hookerName;
+    private HttpHookService hookService;
     private String requestCheckExpression;
     private boolean hookRequest;
     private boolean hookResponse;
     private String grpcConn;
-    private String javaSelectItem;
+    private String codeSelectItem;
     private boolean hookStart;
 
 

@@ -2,5 +2,6 @@ requestCheckExpression: "!request.isStaticExtension() && request.host=='www.baid
 hookRequest: true
 hookResponse: true
 grpcConn: 127.0.0.1:8443
-javaSelectItem: ""
+codeSelectItem: ""
 hookStart: false
+hookService: ...
