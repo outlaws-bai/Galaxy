@@ -27,3 +27,4 @@ replay_pid*
 build/**
 
 src/main/resources/version.txt
+.jython_cache/**

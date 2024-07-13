@@ -1,20 +1,15 @@
 package org.m2sec.core.httphook;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
-import ch.qos.logback.classic.LoggerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.FileTools;
 import org.m2sec.core.common.Helper;
-import org.m2sec.core.dynamic.IJavaHooker;
-import org.m2sec.core.enums.LogLevel;
+import org.m2sec.core.dynamic.ICodeHooker;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.utils.CodeUtil;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
@@ -31,16 +26,17 @@ public class HttpHookCodeTest {
     @BeforeAll
     public static void setRootLoggerLevel() {
         Helper.initAndLoadConfig(null);
+        System.setProperty("python.import.site", "false");
     }
 
     @Test
     public void testOneCodeHookerByRandomString() {
-        testCodeHookerByRandomString(examplesFilePath + File.separator + "Sm2.java");
+        testCodeHookerByRandomString(examplesFilePath + File.separator + "aes_cbc.py");
     }
 
     @Test
     public void testOneCodeHookerByRequest() {
-        testCodeHookerByRequest(examplesFilePath + File.separator + "Sm2.java");
+        testCodeHookerByRequest(examplesFilePath + File.separator + "aes_cbc.py");
     }
 
 
@@ -72,40 +68,43 @@ public class HttpHookCodeTest {
         request.setContent(("{\"data\": \"" + randomString + "\"}").getBytes());
         log.info("hook by java file: {}", filepath);
         log.info("randomString: {}", randomString);
-        ICodeHookerFactor adapter = getCodeHooker(filepath);
-        IJavaHooker hooker1 = ((JavaFileHookerFactor) adapter).getHooker();
+        ICodeHooker hooker = getCodeHooker(filepath);
         log.info("raw request: \r\n{}", request);
-        Request request1 = hooker1.hookRequestToServer(request);
+        Request request1 = hooker.hookRequestToServer(request);
         log.info("encrypted request: \r\n{}", request1);
-        Request request2 = hooker1.hookRequestToBurp(request1);
+        Request request2 = hooker.hookRequestToBurp(request1);
         log.info("decrypted request: \r\n{}", request2);
     }
 
     public void testCodeHookerByRandomString(String filepath) {
         String randomString = Helper.generateRandomString(50);
-        log.info("hook by java file: {}", filepath);
+        log.info("hook by file: {}", filepath);
         log.info("randomString: {}", randomString);
-        ICodeHookerFactor hooker = getCodeHooker(filepath);
+        ICodeHooker hooker = getCodeHooker(filepath);
         byte[] encryptData = hooker.encrypt(randomString.getBytes());
         log.info("encrypted base64 data: {}", CodeUtil.b64encodeToString(encryptData));
         byte[] data = hooker.decrypt(encryptData);
         log.info("decrypted data: {}", new String(data));
     }
 
-    private static ICodeHookerFactor getCodeHooker(String filepath) {
-        ICodeHookerFactor hooker;
+    private static ICodeHooker getCodeHooker(String filepath) {
+        ICodeHooker hooker;
         if (filepath.endsWith(Constants.JAVA_FILE_SUFFIX)) {
-            hooker = new JavaFileHookerFactor();
+            JavaFileHookerFactor hookerFactor = new JavaFileHookerFactor();
+            hookerFactor.init(filepath);
+            hooker = hookerFactor.getHooker();
         } else if (filepath.endsWith(Constants.PYTHON_FILE_SUFFIX)) {
-            hooker = new PythonHookerFactor();
+            PythonHookerFactor hookerFactor = new PythonHookerFactor();
+            hookerFactor.init(filepath);
+            hooker = hookerFactor.getHooker();
         } else if (filepath.endsWith(Constants.JS_FILE_SUFFIX)) {
-            hooker = new JsHookerFactor();
+            JsHookerFactor hookerFactor = new JsHookerFactor();
+            hookerFactor.init(filepath);
+            hooker = hookerFactor.getHooker();
         } else {
             throw new RuntimeException("Abnormal example file");
         }
-        ICodeHookerFactor codeHooker = hooker;
-        codeHooker.init(filepath);
-        return codeHooker;
+        return hooker;
     }
 
 

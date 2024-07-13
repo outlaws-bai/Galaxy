@@ -1,4 +1,4 @@
-import org.m2sec.core.dynamic.IJavaHooker;
+import org.m2sec.core.dynamic.ICodeHooker;
 import org.m2sec.core.utils.*;
 import org.m2sec.core.models.*;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import org.slf4j.Logger;
  * utils：可能用到的工具类
  * https://github.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/utils
  */
-public class Rsa implements IJavaHooker {
+public class Rsa implements ICodeHooker {
 
     private static final String ALGORITHM = "RSA";
     private static final String publicKeyBase64 = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlWlwW7eFn0apxrW0j" +

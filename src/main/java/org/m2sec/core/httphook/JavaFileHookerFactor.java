@@ -6,22 +6,21 @@ import org.m2sec.core.common.FileTools;
 import org.m2sec.core.common.Option;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.ReflectTools;
-import org.m2sec.core.dynamic.IJavaHooker;
+import org.m2sec.core.dynamic.ICodeHooker;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
 import org.slf4j.Logger;
-
 
 /**
  * @author: outlaws-bai
  * @date: 2024/6/21 20:23
  * @description:
  */
-@Getter
 @Slf4j
+@Getter
 public class JavaFileHookerFactor extends IHttpHooker implements ICodeHookerFactor {
 
-    private IJavaHooker hooker;
+    private ICodeHooker hooker;
 
     @Override
     public void init(Option opt) {
@@ -29,7 +28,6 @@ public class JavaFileHookerFactor extends IHttpHooker implements ICodeHookerFact
         String javaFilePath = FileTools.getExampleScriptFilePath(option.getCodeSelectItem(),
             Constants.JAVA_FILE_SUFFIX);
         init(javaFilePath);
-        log.info("load java file success. {}", javaFilePath);
     }
 
     public void init(String javaFilePath) {
@@ -38,7 +36,8 @@ public class JavaFileHookerFactor extends IHttpHooker implements ICodeHookerFact
         else if (javaFilePath.endsWith(Constants.JAVA_COMPILED_FILE_SUFFIX)) clazz =
             ReflectTools.loadJavaClass(javaFilePath);
         else throw new IllegalArgumentException("javaFilePath suffix error!");
-        hooker = (IJavaHooker) ReflectTools.newInstance(clazz, Logger.class, log);
+        hooker = (ICodeHooker) ReflectTools.newInstance(clazz, Logger.class, log);
+        log.info("load java file success. {}", javaFilePath);
     }
 
 
@@ -78,3 +77,4 @@ public class JavaFileHookerFactor extends IHttpHooker implements ICodeHookerFact
     }
 
 }
+

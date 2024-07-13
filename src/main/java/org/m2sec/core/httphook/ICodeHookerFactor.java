@@ -13,4 +13,5 @@ public interface ICodeHookerFactor {
     byte[] encrypt(byte[] data);
 
     byte[] decrypt(byte[] data);
+
 }

@@ -1,4 +1,4 @@
-import org.m2sec.core.dynamic.IJavaHooker;
+import org.m2sec.core.dynamic.ICodeHooker;
 import org.m2sec.core.utils.*;
 import org.m2sec.core.models.*;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import org.slf4j.Logger;
  * utils：可能用到的工具类
  * https://github.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/utils
  */
-public class AesGcm implements IJavaHooker {
+public class AesGcm implements ICodeHooker {
 
     private static final String ALGORITHM = "AES/GCM/NoPadding";
     private static final byte[] secret = "32byteslongsecretkeyforaes256!aa".getBytes();

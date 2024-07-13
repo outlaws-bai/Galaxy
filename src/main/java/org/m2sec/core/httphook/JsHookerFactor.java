@@ -1,6 +1,9 @@
 package org.m2sec.core.httphook;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.m2sec.core.common.Option;
+import org.m2sec.core.dynamic.ICodeHooker;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
 
@@ -9,8 +12,11 @@ import org.m2sec.core.models.Response;
  * @date: 2024/7/12 22:49
  * @description:
  */
-
+@Slf4j
+@Getter
 public class JsHookerFactor extends IHttpHooker implements ICodeHookerFactor {
+
+    private ICodeHooker hooker;
 
     @Override
     public void init(Option opt) {

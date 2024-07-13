@@ -1,4 +1,4 @@
-import org.m2sec.core.dynamic.IJavaHooker;
+import org.m2sec.core.dynamic.ICodeHooker;
 import org.m2sec.core.utils.*;
 import org.m2sec.core.models.*;
 import java.util.HashMap;
@@ -7,12 +7,12 @@ import org.slf4j.Logger;
 
 /**
  * The available classes are as follows...
- * models：可能用到的DataObject
- * https://github.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/models
- * utils：可能用到的工具类
- * https://github.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/utils
+ * 可能用到的DataObject
+ * https://github1s.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/models
+ * 可能用到的工具类
+ * https://github1s.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/utils
  */
-public class AesCbc implements IJavaHooker {
+public class AesCbc implements ICodeHooker {
 
     private Logger log;
     private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
@@ -28,14 +28,14 @@ public class AesCbc implements IJavaHooker {
     /**
      * HTTP请求从客户端到达Burp时被调用。在此处完成请求解密的代码就可以在Burp中看到明文的请求报文。
      *
-     * @param request Request 请求对象
+     * @param request Request 请求对象, https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Request.java
      * @return 经过处理后的request对象，返回null代表不需要处理
      */
     @Override
     public Request hookRequestToBurp(Request request) {
         // 获取需要解密的数据
         byte[] encryptedData = getData(request.getContent());
-        // 调用内置函数解密
+        // 调用函数解密
         byte[] data = decrypt(encryptedData);
         // 更新body为已加密的数据
         request.setContent(data);
@@ -45,14 +45,14 @@ public class AesCbc implements IJavaHooker {
     /**
      * HTTP请求从Burp将要发送到Server时被调用。在此处完成请求加密的代码就可以将加密后的请求报文发送到Server。
      *
-     * @param request Request 请求对象
+     * @param request Request 请求对象, https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Request.java
      * @return 经过处理后的request对象，返回null代表不需要处理
      */
     @Override
     public Request hookRequestToServer(Request request) {
         // 获取被解密的数据
         byte[] data = request.getContent();
-        // 调用内置函数加密回去
+        // 调用函数加密回去
         byte[] encryptedData = encrypt(data);
         // 将已加密的数据转换为Server可识别的格式
         byte[] body = toData(encryptedData);
@@ -64,14 +64,14 @@ public class AesCbc implements IJavaHooker {
     /**
      * HTTP请求从Server到达Burp时被调用。在此处完成响应解密的代码就可以在Burp中看到明文的响应报文。
      *
-     * @param response Response 响应对象
+     * @param response Response 响应对象, https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Response.java
      * @return 经过处理后的response对象，返回null代表不需要处理
      */
     @Override
     public Response hookResponseToBurp(Response response) {
         // 获取需要解密的数据
         byte[] encryptedData = getData(response.getContent());
-        // 调用内置函数解密
+        // 调用函数解密
         byte[] data = decrypt(encryptedData);
         // 更新body
         response.setContent(data);
@@ -81,14 +81,14 @@ public class AesCbc implements IJavaHooker {
     /**
      * HTTP请求从Burp将要发送到Client时被调用。在此处完成响应加密的代码就可以将加密后的响应报文返回给Client。
      *
-     * @param response Response 响应对象
+     * @param response Response 响应对象, https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Response.java
      * @return 经过处理后的response对象，返回null代表不需要处理
      */
     @Override
     public Response hookResponseToClient(Response response) {
         // 获取被解密的数据
         byte[] data = response.getContent();
-        // 调用内置函数加密回去
+        // 调用函数加密回去
         byte[] encryptedData = decrypt(data);
         // 更新body
         // 将已加密的数据转换为Server可识别的格式

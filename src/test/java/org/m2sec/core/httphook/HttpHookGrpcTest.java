@@ -1,7 +1,9 @@
 package org.m2sec.core.httphook;
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.m2sec.core.common.Helper;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.models.Request;
 
@@ -16,6 +18,11 @@ import java.io.IOException;
 public class HttpHookGrpcTest {
 
     public static final int rpcPort = 8443;
+
+    @BeforeAll
+    public static void setRootLoggerLevel() {
+        Helper.initAndLoadConfig(null);
+    }
 
     @Test
     public void testJavaGRpcService() {

@@ -16,7 +16,7 @@ import java.util.Map;
  * @description:
  */
 public class JsonUtil {
-    private static final Gson gson = new GsonBuilder().create();
+    private static final Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
     public static String toJsonStr(Object obj) {
         return gson.toJson(obj);

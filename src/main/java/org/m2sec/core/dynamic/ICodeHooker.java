@@ -9,7 +9,7 @@ import org.m2sec.core.models.Response;
  * @description:
  */
 
-public interface IJavaHooker {
+public interface ICodeHooker {
 
     Request hookRequestToBurp(Request request);
 

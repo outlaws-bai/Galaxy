@@ -1,4 +1,4 @@
-import org.m2sec.core.dynamic.IJavaHooker;
+import org.m2sec.core.dynamic.ICodeHooker;
 import org.m2sec.core.utils.*;
 import org.m2sec.core.models.*;
 
@@ -13,7 +13,7 @@ import org.slf4j.Logger;
  * utils：可能用到的工具类
  * https://github.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/utils
  */
-public class Sm2 implements IJavaHooker {
+public class Sm2 implements ICodeHooker {
 
     private static final String publicKeyBase64 = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEJniVFlbjYdpZrWlnnWt" +
         "/Ac9QBqIamsDL1GU9EB42Q6rVd7ArRAxtr6Ae5Xb+sSd9hc5LpIAR6jQ05v28LO8eFQ==";
