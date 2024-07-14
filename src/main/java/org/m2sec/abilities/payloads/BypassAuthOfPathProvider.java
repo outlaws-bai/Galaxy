@@ -13,9 +13,9 @@ import java.util.Set;
  * @date: 2024/6/21 20:23
  * @description:
  */
-public class BypassPathGeneratorProviderProvider extends IPayloadGeneratorProvider {
+public class BypassAuthOfPathProvider extends IPayloadProvider {
 
-    public BypassPathGeneratorProviderProvider(MontoyaApi api) {
+    public BypassAuthOfPathProvider(MontoyaApi api) {
         super(api);
     }
 

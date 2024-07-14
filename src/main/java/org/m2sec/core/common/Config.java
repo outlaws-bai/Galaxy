@@ -44,6 +44,7 @@ public class Config {
     }
 
     public void dumpOption() {
+        option.setHookStart(false);
         FileTools.writeFile(Constants.OPTION_FILE_PATH, YamlUtil.toYamlStr(option));
     }
 

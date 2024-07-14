@@ -8,19 +8,18 @@ import java.util.List;
 
 /**
  * @author: outlaws-bai
- * @date: 2024/7/13 10:56
+ * @date: 2024/7/13 10:54
  * @description:
  */
 
-public class TopMenu extends IMenu {
-
-    public TopMenu(MontoyaApi api, Config config) {
+public class HttpHookMenu extends IMenu {
+    public HttpHookMenu(MontoyaApi api, Config config) {
         super(api, config);
     }
 
     @Override
     public String displayName() {
-        return "Top";
+        return "Http hook";
     }
 
     @Override
@@ -31,7 +30,8 @@ public class TopMenu extends IMenu {
     @Override
     public List<IItem> getSubItems() {
         List<IItem> items = new ArrayList<>();
-        items.add(new ParseSwaggerApiDocItem(api, config));
+        items.add(new DecryptItem(api, config));
+        items.add(new EncryptItem(api, config));
         return items;
     }
 }

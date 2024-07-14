@@ -19,10 +19,10 @@ public class MasterPayloadGeneratorProviderFactor {
         this.api = api;
     }
 
-    public List<IPayloadGeneratorProvider> getProviders() {
-        List<IPayloadGeneratorProvider> retVal = new ArrayList<>();
-        retVal.add(new BypassPathGeneratorProviderProvider(api));
-        retVal.add(new BypassUrlGeneratorProviderProvider(api));
+    public List<IPayloadProvider> getProviders() {
+        List<IPayloadProvider> retVal = new ArrayList<>();
+        retVal.add(new BypassAuthOfPathProvider(api));
+        retVal.add(new BypassUrlProviderProvider(api));
         return retVal;
     }
 }

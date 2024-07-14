@@ -1,6 +1,7 @@
 package org.m2sec.core.models;
 
 import burp.api.montoya.http.message.HttpHeader;
+import io.grpc.NameResolver;
 import lombok.NoArgsConstructor;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.utils.HttpUtil;
@@ -40,6 +41,13 @@ public class Headers extends Parameters<String> {
             retVal.add(rpcHeader.getKey(), rpcHeader.getValue());
         }
         return retVal;
+    }
+
+    public boolean hasIgnoreCase(String key) {
+        for (Map.Entry<String, List<String>> entry : entrySet()) {
+            if (key.equalsIgnoreCase(entry.getKey())) return true;
+        }
+        return false;
     }
 
     public List<String> getIgnoreCase(String key) {

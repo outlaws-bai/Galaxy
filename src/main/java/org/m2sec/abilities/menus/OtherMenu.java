@@ -3,22 +3,24 @@ package org.m2sec.abilities.menus;
 import burp.api.montoya.MontoyaApi;
 import org.m2sec.core.common.Config;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author: outlaws-bai
- * @date: 2024/7/13 10:54
+ * @date: 2024/7/13 10:56
  * @description:
  */
 
-public class HttpHookTestMenu extends IMenu {
-    public HttpHookTestMenu(MontoyaApi api, Config config) {
+public class OtherMenu extends IMenu {
+
+    public OtherMenu(MontoyaApi api, Config config) {
         super(api, config);
     }
 
     @Override
     public String displayName() {
-        return "Http hook";
+        return "Other";
     }
 
     @Override
@@ -28,6 +30,8 @@ public class HttpHookTestMenu extends IMenu {
 
     @Override
     public List<IItem> getSubItems() {
-        return null;
+        List<IItem> items = new ArrayList<>();
+        items.add(new ParseSwaggerApiDocItem(api, config));
+        return items;
     }
 }

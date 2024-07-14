@@ -29,7 +29,7 @@ public class Galaxy implements BurpExtension {
     public void initialize(MontoyaApi api) {
         try {
             env = RuntimeEnv.BURP;
-            api.extension().setName(Constants.BURP_SUITE_EXT_NAME + "-" + Constants.VERSION);
+            api.extension().setName(Constants.BURP_SUITE_EXT_NAME);
             api.logging().logToOutput(Constants.BURP_SUITE_EXT_INIT_DEF + "Version -> " + Constants.VERSION + "\r\n");
             // 加载配置并初始化
             Config config = Helper.initAndLoadConfig(api);

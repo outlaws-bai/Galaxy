@@ -43,6 +43,10 @@ public class SwingTools {
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
+    public static void showInfoDialog(String message) {
+        JOptionPane.showMessageDialog(null, message, "Info", JOptionPane.INFORMATION_MESSAGE);
+    }
+
 
     public static boolean showConfirmDialog(String message) {
         int result = JOptionPane.showConfirmDialog(null, message, "Please confirm again", JOptionPane.YES_NO_OPTION);

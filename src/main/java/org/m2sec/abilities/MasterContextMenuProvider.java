@@ -4,9 +4,9 @@ import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.ui.contextmenu.ContextMenuEvent;
 import burp.api.montoya.ui.contextmenu.ContextMenuItemsProvider;
 import lombok.extern.slf4j.Slf4j;
-import org.m2sec.abilities.menus.HttpHookTestMenu;
+import org.m2sec.abilities.menus.HttpHookMenu;
 import org.m2sec.abilities.menus.IMenu;
-import org.m2sec.abilities.menus.TopMenu;
+import org.m2sec.abilities.menus.OtherMenu;
 import org.m2sec.core.common.Config;
 
 import java.awt.*;
@@ -34,11 +34,9 @@ public class MasterContextMenuProvider implements ContextMenuItemsProvider {
     public List<Component> provideMenuItems(ContextMenuEvent event) {
         List<Component> retVal = new ArrayList<>();
         List<IMenu> menus = new ArrayList<>();
-        menus.add(new HttpHookTestMenu(api, config));
+        menus.add(new HttpHookMenu(api, config));
+        menus.add(new OtherMenu(api, config));
         menus.stream().filter(x -> x.isDisplay(event)).forEach(retVal::add);
-        TopMenu topMenu = new TopMenu(api, config);
-        if (topMenu.getSubItems() != null)
-            topMenu.getSubItems().stream().filter(x -> x.isDisplay(event)).forEach(retVal::add);
         return retVal;
     }
 

@@ -31,7 +31,7 @@ public class MasterHttpHandler implements HttpHandler {
     public RequestToBeSentAction handleHttpRequestToBeSent(HttpRequestToBeSent requestToBeSent) {
         HttpRequest request;
         if (config.getOption().isHookStart()) {
-            request = hooker.tryHookRequestToServer(requestToBeSent);
+            request = hooker.tryHookRequestToServer(requestToBeSent, requestToBeSent.messageId());
         } else {
             request = requestToBeSent;
         }
@@ -45,7 +45,7 @@ public class MasterHttpHandler implements HttpHandler {
     public ResponseReceivedAction handleHttpResponseReceived(HttpResponseReceived responseReceived) {
         HttpResponse response;
         if (config.getOption().isHookStart()) {
-            response = hooker.tryHookResponseToBurp(responseReceived);
+            response = hooker.tryHookResponseToBurp(responseReceived, responseReceived.messageId());
         } else {
             response = responseReceived;
         }

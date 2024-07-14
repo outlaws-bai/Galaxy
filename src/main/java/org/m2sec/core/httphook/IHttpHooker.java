@@ -33,7 +33,7 @@ public abstract class IHttpHooker {
 
     public abstract void destroy();
 
-    public HttpRequest tryHookRequestToBurp(InterceptedRequest httpRequest) {
+    public HttpRequest tryHookRequestToBurp(HttpRequest httpRequest) {
         String name = Constants.HOOK_FUNC_1;
         HttpRequest retVal = httpRequest;
         try {
@@ -63,7 +63,7 @@ public abstract class IHttpHooker {
     /**
      * 该函数在请求从Burp发送到服务端时被调用
      */
-    public HttpRequest tryHookRequestToServer(HttpRequestToBeSent httpRequest) {
+    public HttpRequest tryHookRequestToServer(HttpRequest httpRequest, int messageId) {
         String name = Constants.HOOK_FUNC_2;
         HttpRequest retVal = httpRequest;
         try {
@@ -74,8 +74,8 @@ public abstract class IHttpHooker {
                 request = hookRequestToServer(request);
                 log.debug("[{}] after hook: {}", name, request);
                 // 添加标记头
-                if (option.isHookResponse()) {
-                    hookedIds.add(httpRequest.messageId());
+                if (option.isHookResponse() && messageId!=0) {
+                    hookedIds.add(messageId);
                 }
                 if (request == null) {
                     return retVal;
@@ -92,11 +92,11 @@ public abstract class IHttpHooker {
     /**
      * 该函数在响应从服务端刚到达Burp时被调用
      */
-    public HttpResponse tryHookResponseToBurp(HttpResponseReceived httpResponse) {
+    public HttpResponse tryHookResponseToBurp(HttpResponse httpResponse, int messageId) {
         String name = Constants.HOOK_FUNC_3;
         try {
-            if (option.isHookResponse() && hookedIds.contains(httpResponse.messageId())) {
-                hookedIds.remove(httpResponse.messageId());
+            if (option.isHookResponse() && hookedIds.contains(messageId)) {
+                hookedIds.remove(messageId);
                 Response response = Response.of(httpResponse);
                 log.debug("[{}] before hook: {}", name, response);
                 response.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "HttpHook");
@@ -119,7 +119,7 @@ public abstract class IHttpHooker {
     /**
      * 该函数在响应从Burp发送到客户端时被调用
      */
-    public HttpResponse tryHookResponseToClient(InterceptedResponse httpResponse) {
+    public HttpResponse tryHookResponseToClient(HttpResponse httpResponse) {
         String name = Constants.HOOK_FUNC_4;
         try {
             if (httpResponse.hasHeader(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {

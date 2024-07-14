@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
  * @date: 2024/6/21 20:23
  * @description:
  */
-public class BypassUrlGeneratorProviderProvider extends IPayloadGeneratorProvider {
+public class BypassUrlProviderProvider extends IPayloadProvider {
 
 
-    public BypassUrlGeneratorProviderProvider(MontoyaApi api) {
+    public BypassUrlProviderProvider(MontoyaApi api) {
         super(api);
     }
 

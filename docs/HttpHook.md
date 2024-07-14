@@ -1,7 +1,5 @@
 # HttpHook
 
-> 下方带*为待实现。
-
 ## 基本信息
 
 **选项解释**：
@@ -20,7 +18,7 @@
 `hookResponseToClient`：HTTP请求从Burp将要发送到Client时被调用。在此处完成响应加密的代码就可以将加密后的响应报文返回给Client。
 
 
-**测试**：在`Repeater`右键找到`Http Hook Test`，点击即可测试，但请确保已经在插件页面中启动该功能。
+**测试**：在`Repeater`右键找到`Http Hook Test`，点击即可测试。
 
 ## 实现方式
 

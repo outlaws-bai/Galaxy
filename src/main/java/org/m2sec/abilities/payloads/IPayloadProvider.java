@@ -15,11 +15,11 @@ import java.util.Set;
  * @description:
  */
 @Slf4j
-public abstract class IPayloadGeneratorProvider implements PayloadGeneratorProvider {
+public abstract class IPayloadProvider implements PayloadGeneratorProvider {
 
     private final MontoyaApi api;
 
-    public IPayloadGeneratorProvider(MontoyaApi api) {
+    public IPayloadProvider(MontoyaApi api) {
         this.api = api;
     }
 
