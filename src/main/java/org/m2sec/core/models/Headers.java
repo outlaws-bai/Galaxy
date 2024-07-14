@@ -1,7 +1,6 @@
 package org.m2sec.core.models;
 
 import burp.api.montoya.http.message.HttpHeader;
-import io.grpc.NameResolver;
 import lombok.NoArgsConstructor;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.utils.HttpUtil;

@@ -1,11 +1,7 @@
 package org.m2sec.core.httphook;
 
-import burp.api.montoya.http.handler.HttpRequestToBeSent;
-import burp.api.montoya.http.handler.HttpResponseReceived;
 import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.http.message.responses.HttpResponse;
-import burp.api.montoya.proxy.http.InterceptedRequest;
-import burp.api.montoya.proxy.http.InterceptedResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.core.common.Option;
 import org.m2sec.core.common.Constants;

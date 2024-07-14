@@ -6,7 +6,6 @@ import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Setting;
 
 import javax.swing.*;
-import javax.swing.text.View;
 
 /**
  * @author: outlaws-bai

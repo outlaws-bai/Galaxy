@@ -8,14 +8,10 @@ import burp.api.montoya.http.message.responses.HttpResponse;
 import burp.api.montoya.ui.contextmenu.ContextMenuEvent;
 import burp.api.montoya.ui.contextmenu.MessageEditorHttpRequestResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.m2sec.Galaxy;
 import org.m2sec.core.common.*;
 import org.m2sec.core.enums.Protocol;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
-
-import javax.swing.*;
-import java.util.InputMismatchException;
 import java.util.List;
 
 /**
