@@ -1,14 +1,20 @@
-﻿## 项目介绍
+﻿# Galaxy
 
-Burp插件，主要用于应对HTTP请求&响应全加密加签场景下对明文请求查看、编辑、扫描的需求，另外还有一些可以提高Burp使用效率的功能。
+Burp插件，主要实现在 `HTTP请求&响应全加密加签 `场景下，高效的对明文报文查看、编辑和扫描的需求。
 
-**应对场景1**：在Burp中看到且可编辑解密后的报文。
+### 功能介绍
 
-**应对场景2**：使用桌面的扫描器扫描明文请求。sqlmap、xray...
+### Http Hook
 
-这些场景下的解决方案名为 [Http Hook](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md) 。
+使用Burp新版  `Montoya API`  开发，你可以使用Python、JS、Grpc、Java语言实现四个函数，来完成需求。
 
-除此之外还有一些小功能：
+> 项目已内置多种加解密规则，对于常规算法可以做到开箱即用。
+
+进一步了解：[Detail](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md)
+
+![hook](https://raw.githubusercontent.com/outlaws-bai/picture/main/hook.gif)
+
+### 其他功能
 
 1. [Parse Swagger Api Doc](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Parse-Swagger-Api-Doc):  解析swagger文档，生成所有URL的请求，带入参数、路径、描述。可选自动发送。
 2. [Bypass Host Check](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Bypass-Host-Check):  绕过服务端在csrf/ssrf的测试点对host做了验证。
@@ -31,13 +37,14 @@ Burp插件，主要用于应对HTTP请求&响应全加密加签场景下对明�
 
 > 期待你的star，如果该项目对你有帮助的话 ~
 >
-> 欢迎共建 ~
 
-如果你发现BUG、有建议、有新小功能的想法，欢迎在GitHub上提Issue或扫码添加下方微信群一起交流讨论。
+如果你发现BUG或有好的建议，，欢迎在GitHub上提Issue或扫码添加下方微信群一起交流讨论。
 
 (二维码失效请添加wx号outlaws_bai，并备注 `Galaxy交流` 。)
 
-<img src="https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240711201827643.png" height="300px" width="240px" />
+<img src="https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240714204644975.png" height="300px" width="240px" />
+
+
 
 ## 常用地址
 
