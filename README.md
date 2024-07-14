@@ -9,6 +9,8 @@ Burp插件，主要实现在 `HTTP请求&响应全加密加签 `场景下，高�
 使用Burp新版  `Montoya API`  开发，你可以使用Python、JS、Grpc、Java语言实现四个函数，来完成需求。
 
 > 项目已内置多种加解密规则，对于常规算法可以做到开箱即用。
+> 
+> 相比于其它类似通过配置的方案，该插件是将请求&响应对象交给你实现的函数处理，适配性更广，甚至即便项目是动态必要，也有办法实现需求。
 
 进一步了解：[Detail](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md)
 
