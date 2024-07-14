@@ -122,43 +122,5 @@ public class ReflectTools {
         }
     }
 
-//    public static void addJarToClassPath(String jarPath) {
-//        try {
-//            // 创建一个URL对象，指向要添加的JAR包的路径
-//            File jarFile = new File(jarPath);
-//            URL jarUrl = jarFile.toURI().toURL();
-//
-//            // 获取系统类加载器
-//            ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-//
-//            // 获取ClassLoader的addURL方法
-//            Method addURLMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-//            addURLMethod.setAccessible(true);
-//
-//            // 调用addURL方法，将JAR包添加到classpath
-//            addURLMethod.invoke(classLoader, jarUrl);
-//        } catch (MalformedURLException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    public static void tryLoadJython(Config config) {
-//        String jythonPath = config.getSetting().getJythonPath();
-//        if (jythonPath == null || jythonPath.isBlank()) {
-//            String jarPath = SwingTools.showInputDialog(Constants.INPUT_JYTHON_JAR_DEF);
-//            if (jarPath != null && !jarPath.isBlank()) {
-//                addJarToClassPath(jarPath);
-//                config.getSetting().setJythonPath(jythonPath);
-//                config.dumpSetting();
-//            }
-//        } else {
-//            try {
-//                addJarToClassPath(jythonPath);
-//            } catch (Exception e) {
-//                config.getSetting().setJythonPath("");
-//                config.dumpSetting();
-//            }
-//        }
-//    }
 
 }

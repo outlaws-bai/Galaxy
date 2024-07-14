@@ -12,7 +12,9 @@ import org.m2sec.core.common.SwingTools;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,19 +40,24 @@ public class HttpHookPanel extends JPanel {
         setLayout(new BorderLayout());
         // 存放几种hook方式
         Map<String, IHookerPanel<?>> serviceMap = new LinkedHashMap<>();
+        List<String> hookNames = new ArrayList<>();
 
         GrpcHookerPanel rpcImpl = new GrpcHookerPanel(option, api, HttpHookService.GRPC);
-        CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(option, api,HttpHookService.JAVA);
+        CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(option, api, HttpHookService.JAVA);
         javaFileHookerPanel.resetCodeTheme();
-        CodeFileHookerPanel pythonFileHookerPanel = new CodeFileHookerPanel(option, api,HttpHookService.PYTHON);
+        CodeFileHookerPanel pythonFileHookerPanel = new CodeFileHookerPanel(option, api, HttpHookService.PYTHON);
         pythonFileHookerPanel.resetCodeTheme();
-        CodeFileHookerPanel jsFileHookerPanel = new CodeFileHookerPanel(option, api,HttpHookService.JS);
+        CodeFileHookerPanel jsFileHookerPanel = new CodeFileHookerPanel(option, api, HttpHookService.JS);
         jsFileHookerPanel.resetCodeTheme();
 
+        hookNames.add(HttpHookService.JS.name());
+        hookNames.add(HttpHookService.JAVA.name());
+        hookNames.add(HttpHookService.GRPC.name());
+        hookNames.add(HttpHookService.PYTHON.name());
         serviceMap.put(Helper.capitalizeFirstLetter(HttpHookService.JS.name()), jsFileHookerPanel);
         serviceMap.put(Helper.capitalizeFirstLetter(HttpHookService.JAVA.name()), javaFileHookerPanel);
         serviceMap.put(Helper.capitalizeFirstLetter(HttpHookService.GRPC.name()), rpcImpl);
-//        serviceMap.put(Helper.capitalizeFirstLetter(HttpHookService.PYTHON.name()), pythonFileHookerPanel);
+        serviceMap.put(Helper.capitalizeFirstLetter(HttpHookService.PYTHON.name()), pythonFileHookerPanel);
 
         // 创建一个容器(卡片)用于放置不同方式的JPanel
         JPanel wayPanelContainer = new JPanel(new CardLayout());
@@ -113,11 +120,18 @@ public class HttpHookPanel extends JPanel {
         comboBox.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 wayPanelContainer.setVisible(true);
-                CardLayout cl = (CardLayout) (wayPanelContainer.getLayout());
+                requestCheckPanel.setVisible(true);
                 nextControlPanel.setVisible(true);
+                hookRequestCheckBox.setVisible(true);
+                hookResponseCheckBox.setVisible(true);
+                CardLayout cl = (CardLayout) (wayPanelContainer.getLayout());
                 cl.show(wayPanelContainer, (String) e.getItem());
             } else {
                 wayPanelContainer.setVisible(false);
+                requestCheckPanel.setVisible(false);
+                nextControlPanel.setVisible(false);
+                hookRequestCheckBox.setVisible(false);
+                hookResponseCheckBox.setVisible(false);
             }
         });
         // 设置 switchButton 的事件监听器, 开关HttpHook功能
@@ -150,8 +164,8 @@ public class HttpHookPanel extends JPanel {
 
             switchButton.setText(Helper.capitalizeFirstLetter(text));
             SwingTools.changePanelStatus(hookerPanel, isStop);
-            SwingTools.changePanelStatus(requestCheckPanel, isStop);
             SwingTools.changeComponentStatus(comboBox, isStop);
+            SwingTools.changePanelStatus(requestCheckPanel, isStop);
             SwingTools.changeComponentStatus(hookRequestCheckBox, isStop);
             SwingTools.changeComponentStatus(hookResponseCheckBox, isStop);
         });
@@ -161,7 +175,7 @@ public class HttpHookPanel extends JPanel {
         hookRequestCheckBox.setSelected(option.isHookRequest());
         hookResponseCheckBox.setSelected(option.isHookResponse());
         if (option.getHookService() != null) {
-            comboBox.setSelectedItem(option.getHookService().name());
+            comboBox.setSelectedIndex(hookNames.indexOf(option.getHookService().name()));
         } else {
             comboBox.setSelectedIndex(-1);
         }

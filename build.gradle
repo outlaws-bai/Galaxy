@@ -48,7 +48,7 @@ dependencies {
     implementation 'com.fifesoft:rsyntaxtextarea:3.4.1'
     // cross-language
     implementation 'org.openjdk.nashorn:nashorn-core:15.4'
-    compileOnly 'org.python:jython-standalone:2.7.3'
+    implementation 'org.python:jython-standalone:2.7.3'
     // test
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
     testImplementation platform('org.junit:junit-bom:5.9.1')
