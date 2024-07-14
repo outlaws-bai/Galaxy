@@ -1,6 +1,10 @@
 package org.m2sec.core.common;
 
 import org.apache.commons.text.StringSubstitutor;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
+
 import javax.annotation.Nullable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -22,7 +26,7 @@ public class Render {
     public static Object renderExpression(String expression, @Nullable Map<String, Object> env, Class<?>... classes) {
         try {
             ScriptEngineManager manager = new ScriptEngineManager();
-            ScriptEngine engine = manager.getEngineByName("nashorn");
+            ScriptEngine engine = manager.getEngineByName(Constants.JAVA_SCRIPT_ENGINE_NAME);
             String importTemplate = "var %s = Java.type('%s')";
 
             // put params
@@ -38,6 +42,31 @@ public class Render {
                 engine.eval(importCode);
             }
             return engine.eval(expression);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Object renderExpression2(String expression, @Nullable Map<String, Object> env, Class<?>... classes) {
+        try(Context rhinoContext = Context.enter()) {
+            // 初始化脚本上下文
+            Scriptable scope = rhinoContext.initStandardObjects();
+            String importTemplate = "var %s = Java.type('%s')";
+
+            // put params
+            if (env != null) {
+                for (Map.Entry<String, Object> entry : env.entrySet()) {
+                    Object wrappedJavaVariable = Context.javaToJS(entry.getValue(), scope);
+                    ScriptableObject.putProperty(scope, entry.getKey(), wrappedJavaVariable);
+                }
+            }
+
+            // import classes
+            for (Class<?> clazz : classes) {
+                String importCode = String.format(importTemplate, clazz.getSimpleName(), clazz.getName());
+                rhinoContext.evaluateString(scope, importCode, "<import>", 1, null);
+            }
+            return rhinoContext.evaluateString(scope, expression, "<render>", 1, null);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

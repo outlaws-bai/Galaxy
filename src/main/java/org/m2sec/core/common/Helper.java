@@ -11,6 +11,7 @@ import ch.qos.logback.core.FileAppender;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.Galaxy;
 import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -126,5 +127,6 @@ public class Helper {
         }
         return stringBuilder.toString();
     }
+
 
 }

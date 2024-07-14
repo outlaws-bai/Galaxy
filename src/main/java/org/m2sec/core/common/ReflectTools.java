@@ -1,6 +1,7 @@
 package org.m2sec.core.common;
 
 import org.m2sec.Galaxy;
+
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
@@ -104,25 +105,10 @@ public class ReflectTools {
         }
     }
 
-    public static void setStaticAttr(Class<?> clazz, String attrName, Object attr) {
-        try {
-            Field field = clazz.getDeclaredField(attrName);
-            field.setAccessible(true); // to access private field
-            field.set(null, attr);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
-    public static Object callStaticFunc(Class<?> clazz, String funcName, Class<?>[] parameterTypes, Object[] objects) {
-        try {
-            Method method = clazz.getMethod(funcName, parameterTypes);
-            return method.invoke(null, objects);
-        } catch (NoSuchMethodException e) {
-            return null;
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
+    public static Object callFunc(Class<?> clazz, Object instance, String funcName, Class<?> parameterType,
+                                  Object object) {
+        return callFunc(clazz, instance, funcName, new Class[]{parameterType}, new Object[]{object});
     }
 
     public static Object callFunc(Class<?> clazz, Object instance, String funcName, Class<?>[] parameterTypes,
@@ -135,6 +121,30 @@ public class ReflectTools {
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String camelToSnake(String camelCase) {
+        if (camelCase == null || camelCase.isEmpty()) {
+            return camelCase;
+        }
+
+        StringBuilder snakeCase = new StringBuilder();
+        char[] charArray = camelCase.toCharArray();
+        boolean firstChar = true;
+
+        for (char c : charArray) {
+            if (Character.isUpperCase(c)) {
+                if (!firstChar) {
+                    snakeCase.append('_');
+                }
+                snakeCase.append(Character.toLowerCase(c));
+            } else {
+                snakeCase.append(c);
+            }
+            firstChar = false;
+        }
+
+        return snakeCase.toString();
     }
 
 

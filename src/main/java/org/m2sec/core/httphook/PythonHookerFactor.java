@@ -2,13 +2,11 @@ package org.m2sec.core.httphook;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.m2sec.core.common.Constants;
-import org.m2sec.core.common.FileTools;
-import org.m2sec.core.common.Option;
-import org.m2sec.core.dynamic.ICodeHooker;
+import org.m2sec.core.common.*;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
 import org.python.core.Py;
+import org.python.core.PyFunction;
 import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
 
@@ -19,11 +17,17 @@ import org.python.util.PythonInterpreter;
  */
 @Slf4j
 @Getter
-public class PythonHookerFactor extends IHttpHooker implements ICodeHookerFactor {
+public class PythonHookerFactor extends IHttpHooker {
 
     private PythonInterpreter interpreter;
+    private PyFunction func1;
+    private PyFunction func2;
+    private PyFunction func3;
+    private PyFunction func4;
 
-    private ICodeHooker hooker;
+    static {
+        System.setProperty("python.import.site", "false");
+    }
 
     public PythonHookerFactor() {
         interpreter = new PythonInterpreter();
@@ -37,53 +41,66 @@ public class PythonHookerFactor extends IHttpHooker implements ICodeHookerFactor
         init(pyFilePath);
     }
 
-    @Override
     public void init(String filepath) {
         interpreter.exec(FileTools.readFileAsString(filepath));
-        PyObject object = interpreter.get("Hooker");
-        String errorMessage = "load python script fail, \n" +
-            "Unable to find a class named Hooker that inherits from ICodeHooker.";
         try {
-            hooker = (ICodeHooker) (object.__call__(new PyObject[]{Py.java2py(log)})).__tojava__(ICodeHooker.class);
+            interpreter.exec(FileTools.readFileAsString(filepath));
+            init();
         } catch (Exception e) {
-            throw new RuntimeException(errorMessage, e);
+            throw new RuntimeException("load python script fail.", e);
         }
     }
 
     @Override
     public Request hookRequestToBurp(Request request) {
-        return hooker.hookRequestToBurp(request);
+        if (func1 == null) return null;
+        return (Request) func1.__call__(Py.java2py(request)).__tojava__(Request.class);
     }
 
     @Override
     public Request hookRequestToServer(Request request) {
-        return hooker.hookRequestToServer(request);
+        if (func2 == null) return null;
+        return (Request) func2.__call__(Py.java2py(request)).__tojava__(Request.class);
     }
 
     @Override
     public Response hookResponseToBurp(Response response) {
-        return hooker.hookResponseToBurp(response);
+        if (func3 == null) return null;
+        return (Response) func3.__call__(Py.java2py(response)).__tojava__(Response.class);
     }
 
     @Override
     public Response hookResponseToClient(Response response) {
-        return hooker.hookResponseToClient(response);
-    }
-
-    @Override
-    public byte[] encrypt(byte[] data) {
-        return hooker.encrypt(data);
-    }
-
-    @Override
-    public byte[] decrypt(byte[] data) {
-        return hooker.decrypt(data);
+        if (func4 == null) return null;
+        return (Response) func4.__call__(Py.java2py(response)).__tojava__(Response.class);
     }
 
     @Override
     public void destroy() {
         interpreter.close();
         interpreter = null;
-        hooker = null;
+        func1 = null;
+        func2 = null;
+        func3 = null;
+        func4 = null;
+    }
+
+    public void init() {
+        PyFunction setLog = safeGetPyFunction("set_log");
+        if (setLog != null) setLog.__call__(Py.java2py(log));
+        func1 = safeGetPyFunction(Constants.HOOK_FUNC_1);
+        func2 = safeGetPyFunction(Constants.HOOK_FUNC_2);
+        func3 = safeGetPyFunction(Constants.HOOK_FUNC_3);
+        func4 = safeGetPyFunction(Constants.HOOK_FUNC_4);
+
+    }
+
+    public PyFunction safeGetPyFunction(String funcName) {
+        PyObject object = interpreter.get(ReflectTools.camelToSnake(funcName));
+        if (object == null) {
+            log.warn("You have not implemented the {} method, which may lead to unknown issues", funcName);
+            return null;
+        }
+        return (PyFunction) object;
     }
 }

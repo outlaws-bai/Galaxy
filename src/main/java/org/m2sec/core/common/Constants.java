@@ -120,5 +120,7 @@ public class Constants {
 
     public static final String COMBO_BOX_DEFAULT_ITEM = "...";
 
+    public static final String JAVA_SCRIPT_ENGINE_NAME = "nashorn";
+
 
 }

@@ -1,8 +1,15 @@
-from org.m2sec.core.dynamic import ICodeHooker
-from org.m2sec.core.utils import *
-from org.m2sec.core.models import *
-from org.slf4j import Logger
-from java.util import HashMap
+from org.m2sec.core.utils import (
+    ByteUtil,
+    CodeUtil,
+    CryptoUtil,
+    HashUtil,
+    HttpUtil,
+    JsonUtil,
+    MacUtil,
+    YamlUtil,
+)
+from org.m2sec.core.models import Request, Response
+from java.lang import String
 
 
 """
@@ -18,114 +25,120 @@ secret = b"32byteslongsecretkeyforaes256!aa"
 iv = b"16byteslongiv456"
 paramMap = {"iv": iv}
 jsonKey = "data"
+log = None
 
 
-class Hooker(ICodeHooker):
-    def __init__(self, log):
-        self.log = log
+def set_log(log1):
+    global log
+    log = log1
 
-    def hookRequestToBurp(self, request):
-        """HTTP请求从客户端到达Burp时被调用。在此处完成请求解密的代码就可以在Burp中看到明文的请求报文。
 
-        Args:
-            request (_type_): 请求对象, https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Request.java
+def hook_request_to_burp(request):
+    """HTTP请求从客户端到达Burp时被调用。在此处完成请求解密的代码就可以在Burp中看到明文的请求报文。
 
-        Returns:
-            _type_: 经过处理后的request对象，返回null代表不需要处理
-        """
-        # 获取需要解密的数据
-        encryptedData = self.get_data(request.getContent())
-        # 调用函数解密
-        data = self.decrypt(encryptedData)
-        # 更新body为已加密的数据
-        request.content = data
-        return request
+    Args:
+        request (_type_): 请求对象, https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Request.java
 
-    def hookRequestToServer(self, request):
-        """HTTP请求从Burp将要发送到Server时被调用。在此处完成请求加密的代码就可以将加密后的请求报文发送到Server。
+    Returns:
+        _type_: 经过处理后的request对象，返回null代表不需要处理
+    """
+    # 获取需要解密的数据
+    encryptedData = get_data(request.getContent())
+    # 调用函数解密
+    data = decrypt(encryptedData)
+    # 更新body为已加密的数据
+    request.content = data
+    return request
 
-        Args:
-            request (Request): 请求对象，https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Request.java
 
-        Returns:
-            _type_: 经过处理后的request对象，返回null代表不需要处理
-        """
-        # 获取被解密的数据
-        data = request.content
-        # 调用函数加密回去
-        encryptedData = self.encrypt(data)
-        # 将已加密的数据转换为Server可识别的格式
-        body = self.to_data(encryptedData)
-        # 更新body
-        request.content = body
-        return request
+def hook_request_to_server(request):
+    """HTTP请求从Burp将要发送到Server时被调用。在此处完成请求加密的代码就可以将加密后的请求报文发送到Server。
 
-    def hookResponseToBurp(self, response):
-        """HTTP请求从Server到达Burp时被调用。在此处完成响应解密的代码就可以在Burp中看到明文的响应报文。
+    Args:
+        request (Request): 请求对象，https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Request.java
 
-        Args:
-            response (Request): 响应对象，https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Response.java
+    Returns:
+        _type_: 经过处理后的request对象，返回null代表不需要处理
+    """
+    # 获取被解密的数据
+    data = request.content
+    # 调用函数加密回去
+    encryptedData = encrypt(data)
+    # 将已加密的数据转换为Server可识别的格式
+    body = to_data(encryptedData)
+    # 更新body
+    request.content = body
+    return request
 
-        Returns:
-            _type_: 经过处理后的response对象，返回null代表不需要处理
-        """
-        # 获取需要解密的数据
-        encryptedData = self.get_data(response.getContent())
-        # 调用函数解密
-        data = self.decrypt(encryptedData)
-        # 更新body
-        response.content = data
-        return response
 
-    def hookResponseToClient(self, response):
-        """HTTP请求从Burp将要发送到Client时被调用。在此处完成响应加密的代码就可以将加密后的响应报文返回给Client。
+def hook_response_to_burp(response):
+    """HTTP请求从Server到达Burp时被调用。在此处完成响应解密的代码就可以在Burp中看到明文的响应报文。
 
-        Args:
-            response (Response): 响应对象，https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Response.java
+    Args:
+        response (Request): 响应对象，https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Response.java
 
-        Returns:
-            _type_: 经过处理后的response对象，返回null代表不需要处理
-        """
-        # 获取被解密的数据
-        data = response.getContent()
-        # 调用函数加密回去
-        encryptedData = self.decrypt(data)
-        # 更新body
-        # 将已加密的数据转换为Server可识别的格式
-        body = self.to_data(encryptedData)
-        # 更新body
-        response.content = body
-        return response
+    Returns:
+        _type_: 经过处理后的response对象，返回null代表不需要处理
+    """
+    # 获取需要解密的数据
+    encryptedData = get_data(response.getContent())
+    # 调用函数解密
+    data = decrypt(encryptedData)
+    # 更新body
+    response.content = data
+    return response
 
-    def decrypt(self, content):
-        """解密函数
 
-        Args:
-            content (Response): 要解密的数据
+def hook_response_to_client(response):
+    """HTTP请求从Burp将要发送到Client时被调用。在此处完成响应加密的代码就可以将加密后的响应报文返回给Client。
 
-        Returns:
-            _type_: 解密结果
-        """
-        return CryptoUtil.aesDecrypt(ALGORITHM, content, secret, paramMap)
+    Args:
+        response (Response): 响应对象，https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Response.java
 
-    def encrypt(self, content):
-        """加密函数
+    Returns:
+        _type_: 经过处理后的response对象，返回null代表不需要处理
+    """
+    # 获取被解密的数据
+    data = response.getContent()
+    # 调用函数加密回去
+    encryptedData = decrypt(data)
+    # 更新body
+    # 将已加密的数据转换为Server可识别的格式
+    body = to_data(encryptedData)
+    # 更新body
+    response.content = body
+    return response
 
-        Args:
-            content (byte[]): 要加密的数据
 
-        Returns:
-            _type_: 加密结果
-        """
-        return CryptoUtil.aesEncrypt(ALGORITHM, content, secret, paramMap)
+def decrypt(content):
+    """解密函数
 
-    def get_data(self, content):
-        return CodeUtil.b64decode(
-            JsonUtil.jsonStrToMap(content.tostring()).get(jsonKey)
-        )
+    Args:
+        content (Response): 要解密的数据
 
-    def to_data(self, content):
-        jsonBody = {}
-        jsonBody[jsonKey] = CodeUtil.b64encodeToString(content)
-        temp = JsonUtil.toJsonStr(jsonBody)
-        return temp.encode()
+    Returns:
+        _type_: 解密结果
+    """
+    return CryptoUtil.aesDecrypt(ALGORITHM, content, secret, paramMap)
+
+
+def encrypt(content):
+    """加密函数
+
+    Args:
+        content (byte[]): 要加密的数据
+
+    Returns:
+        _type_: 加密结果
+    """
+    return CryptoUtil.aesEncrypt(ALGORITHM, content, secret, paramMap)
+
+
+def get_data(content):
+    return CodeUtil.b64decode(JsonUtil.jsonStrToMap(String(content)).get(jsonKey))
+
+
+def to_data(content):
+    jsonBody = {}
+    jsonBody[jsonKey] = CodeUtil.b64encodeToString(content)
+    return JsonUtil.toJsonStr(jsonBody).encode()

@@ -1,4 +1,3 @@
-import org.m2sec.core.dynamic.ICodeHooker;
 import org.m2sec.core.utils.*;
 import org.m2sec.core.models.*;
 import java.util.HashMap;
@@ -12,7 +11,7 @@ import org.slf4j.Logger;
  * 可能用到的工具类
  * https://github1s.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/utils
  */
-public class AesCbc implements ICodeHooker {
+public class AesCbc{
 
     private Logger log;
     private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
@@ -31,7 +30,6 @@ public class AesCbc implements ICodeHooker {
      * @param request Request 请求对象, https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Request.java
      * @return 经过处理后的request对象，返回null代表不需要处理
      */
-    @Override
     public Request hookRequestToBurp(Request request) {
         // 获取需要解密的数据
         byte[] encryptedData = getData(request.getContent());
@@ -48,7 +46,6 @@ public class AesCbc implements ICodeHooker {
      * @param request Request 请求对象, https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Request.java
      * @return 经过处理后的request对象，返回null代表不需要处理
      */
-    @Override
     public Request hookRequestToServer(Request request) {
         // 获取被解密的数据
         byte[] data = request.getContent();
@@ -67,7 +64,6 @@ public class AesCbc implements ICodeHooker {
      * @param response Response 响应对象, https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Response.java
      * @return 经过处理后的response对象，返回null代表不需要处理
      */
-    @Override
     public Response hookResponseToBurp(Response response) {
         // 获取需要解密的数据
         byte[] encryptedData = getData(response.getContent());
@@ -84,7 +80,6 @@ public class AesCbc implements ICodeHooker {
      * @param response Response 响应对象, https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Response.java
      * @return 经过处理后的response对象，返回null代表不需要处理
      */
-    @Override
     public Response hookResponseToClient(Response response) {
         // 获取被解密的数据
         byte[] data = response.getContent();
@@ -102,7 +97,6 @@ public class AesCbc implements ICodeHooker {
      * @param content byte[] 要解密的数据
      * @return 解密结果
      */
-    @Override
     public byte[] decrypt(byte[] content) {
         return CryptoUtil.aesDecrypt(ALGORITHM, content, secret, paramMap);
     }
@@ -111,7 +105,6 @@ public class AesCbc implements ICodeHooker {
      * @param content byte[] 要加密的数据
      * @return 加密结果
      */
-    @Override
     public byte[] encrypt(byte[] content) {
         return CryptoUtil.aesEncrypt(ALGORITHM, content, secret, paramMap);
     }

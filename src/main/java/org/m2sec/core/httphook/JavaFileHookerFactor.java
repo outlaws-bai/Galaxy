@@ -6,7 +6,6 @@ import org.m2sec.core.common.FileTools;
 import org.m2sec.core.common.Option;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.ReflectTools;
-import org.m2sec.core.dynamic.ICodeHooker;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
 import org.slf4j.Logger;
@@ -18,9 +17,11 @@ import org.slf4j.Logger;
  */
 @Slf4j
 @Getter
-public class JavaFileHookerFactor extends IHttpHooker implements ICodeHookerFactor {
+public class JavaFileHookerFactor extends IHttpHooker {
 
-    private ICodeHooker hooker;
+    private Class<?> clazz;
+
+    private Object hooker;
 
     @Override
     public void init(Option opt) {
@@ -31,48 +32,38 @@ public class JavaFileHookerFactor extends IHttpHooker implements ICodeHookerFact
     }
 
     public void init(String javaFilePath) {
-        Class<?> clazz;
         if (javaFilePath.endsWith(Constants.JAVA_FILE_SUFFIX)) clazz = ReflectTools.loadJavaFile(javaFilePath);
         else if (javaFilePath.endsWith(Constants.JAVA_COMPILED_FILE_SUFFIX)) clazz =
             ReflectTools.loadJavaClass(javaFilePath);
         else throw new IllegalArgumentException("javaFilePath suffix error!");
-        hooker = (ICodeHooker) ReflectTools.newInstance(clazz, Logger.class, log);
+        hooker = ReflectTools.newInstance(clazz, Logger.class, log);
         log.info("load java file success. {}", javaFilePath);
     }
 
 
     @Override
     public Request hookRequestToBurp(Request request) {
-        return hooker.hookRequestToBurp(request);
+        return (Request) ReflectTools.callFunc(clazz, hooker, Constants.HOOK_FUNC_1, Request.class, request);
     }
 
     @Override
     public Request hookRequestToServer(Request request) {
-        return hooker.hookRequestToServer(request);
+        return (Request) ReflectTools.callFunc(clazz, hooker, Constants.HOOK_FUNC_2, Request.class, request);
     }
 
     @Override
     public Response hookResponseToBurp(Response response) {
-        return hooker.hookResponseToBurp(response);
+        return (Response) ReflectTools.callFunc(clazz, hooker, Constants.HOOK_FUNC_3, Response.class, response);
     }
 
     @Override
     public Response hookResponseToClient(Response response) {
-        return hooker.hookResponseToClient(response);
-    }
-
-    @Override
-    public byte[] encrypt(byte[] data) {
-        return hooker.encrypt(data);
-    }
-
-    @Override
-    public byte[] decrypt(byte[] data) {
-        return hooker.decrypt(data);
+        return (Response) ReflectTools.callFunc(clazz, hooker, Constants.HOOK_FUNC_4, Response.class, response);
     }
 
     @Override
     public void destroy() {
+        clazz = null;
         hooker = null;
     }
 

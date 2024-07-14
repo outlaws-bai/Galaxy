@@ -2,10 +2,17 @@ package org.m2sec.core.httphook;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.m2sec.core.common.Constants;
+import org.m2sec.core.common.FileTools;
 import org.m2sec.core.common.Option;
-import org.m2sec.core.dynamic.ICodeHooker;
+import org.m2sec.core.common.ReflectTools;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
+
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 
 /**
  * @author: outlaws-bai
@@ -14,52 +21,66 @@ import org.m2sec.core.models.Response;
  */
 @Slf4j
 @Getter
-public class JsHookerFactor extends IHttpHooker implements ICodeHookerFactor {
+public class JsHookerFactor extends IHttpHooker {
 
-    private ICodeHooker hooker;
+
+    Invocable invocable;
 
     @Override
     public void init(Option opt) {
+        option = opt;
+        String filepath = FileTools.getExampleScriptFilePath(option.getCodeSelectItem(),
+            Constants.JS_FILE_SUFFIX);
+        init(filepath);
 
     }
 
-    @Override
     public void init(String filepath) {
-
+        try {
+            String content = FileTools.readFileAsString(filepath);
+            ScriptEngine engine = new ScriptEngineManager().getEngineByName(Constants.JAVA_SCRIPT_ENGINE_NAME);
+            engine.eval(content);
+            invocable = (Invocable) engine;
+        } catch (ScriptException e) {
+            throw new RuntimeException("load java script fail.", e);
+        }
+        log.info("load java script file success. {}", filepath);
     }
 
     @Override
     public Request hookRequestToBurp(Request request) {
-        return null;
+        return (Request) safeRun(Constants.HOOK_FUNC_1, request);
     }
 
     @Override
     public Request hookRequestToServer(Request request) {
-        return null;
+        return (Request) safeRun(Constants.HOOK_FUNC_2, request);
     }
 
     @Override
     public Response hookResponseToBurp(Response response) {
-        return null;
+        return (Response) safeRun(Constants.HOOK_FUNC_3, response);
     }
 
     @Override
     public Response hookResponseToClient(Response response) {
-        return null;
-    }
-
-    @Override
-    public byte[] encrypt(byte[] data) {
-        return new byte[0];
-    }
-
-    @Override
-    public byte[] decrypt(byte[] data) {
-        return new byte[0];
+        return (Response) safeRun(Constants.HOOK_FUNC_3, response);
     }
 
     @Override
     public void destroy() {
-
+        invocable = null;
     }
+
+    public Object safeRun(String funcName, Object arg) {
+        try {
+            return invocable.invokeFunction(ReflectTools.camelToSnake(funcName), arg);
+        } catch (NoSuchMethodException e) {
+            log.warn("You have not implemented the {} method, which may lead to unknown issues", funcName);
+            return null;
+        } catch (ScriptException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
