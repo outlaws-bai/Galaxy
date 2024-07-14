@@ -36,9 +36,9 @@
 
 **对比**
 
-`Grpc`：你需要用其他语言实现Grpc Server。优点是跨语言能力强，缺点是学习成本稍高、依赖IO、可能存在兼容性问题。
+`Grpc`：你需要用其他语言实现Grpc Server。优点是跨语言能力强，运行兼容性强，缺点是学习成本稍高、依赖IO - 可能存在性能问题、不同语言算法间可能存在兼容性问题。
 
-`Code`：你需要用支持的方式写对应语言的脚本，使其可以与项目中的DataObjects和Utils交互。优点是可以与JVM交互 - 兼容性强、且项目已包含多种示例 - 成本低，缺点是需要熟悉项目自带的DataObjects和Utils。
+`Code`：你需要用支持的方式写对应语言的脚本，使其可以与项目中的DataObjects和Utils交互。优点是可以与JVM交互可以使用Java原生的加解密库 - 没有算法兼容性的问题、且项目已包含多种示例 - 成本低，缺点是需要熟悉项目自带的DataObjects和Utils，并且可能存在运行兼容性的问题。
 
 [DataObjects](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#DataObjects)      [Utils](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Utils)
 
