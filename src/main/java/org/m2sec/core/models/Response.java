@@ -7,9 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.m2sec.core.common.Constants;
+import org.m2sec.core.enums.ContentType;
+import org.m2sec.core.enums.Protocol;
 import org.m2sec.rpc.HttpHook;
 
 import java.io.ByteArrayOutputStream;
+
 
 /**
  * @author: outlaws-bai
@@ -38,6 +41,13 @@ public class Response {
 
     public static Response of(String str) {
         return of(str.getBytes());
+    }
+
+    public static Response empty() {
+        Headers headers1 = new Headers();
+        headers1.add(Constants.HTTP_HEADER_CONTENT_TYPE, ContentType.JSON.getHeaderValuePrefix());
+        return new Response(Constants.HTTP_DEFAULT_VERSION, 200, Constants.HTTP_DEFAULT_REASON, headers1,
+            new byte[]{});
     }
 
     @SuppressWarnings("DuplicatedCode")

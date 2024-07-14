@@ -223,5 +223,9 @@ public class FileTools {
         return Constants.HTTP_HOOK_EXAMPLES_DIR + File.separator + item + suffix;
     }
 
+    public static boolean fileIsExist(String filepath){
+        return Files.exists(Paths.get(filepath));
+    }
+
 
 }

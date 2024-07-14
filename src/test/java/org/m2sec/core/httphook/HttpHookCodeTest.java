@@ -8,6 +8,7 @@ import org.m2sec.core.common.FileTools;
 import org.m2sec.core.common.Helper;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.models.Request;
+import org.m2sec.core.models.Response;
 
 import java.io.File;
 
@@ -30,7 +31,7 @@ public class HttpHookCodeTest {
 
     @Test
     public void testOneCodeHooker() {
-        testCodeHooker(examplesFilePath + File.separator + "AesCbc.java");
+        testCodeHooker(examplesFilePath + File.separator + "aes_cbc.js");
     }
 
 
@@ -47,17 +48,28 @@ public class HttpHookCodeTest {
     }
 
     public void testCodeHooker(String filepath) {
-        String randomString = Helper.generateRandomString(50);
+        String randomString1 = Helper.generateRandomString(50);
+        String randomString2 = Helper.generateRandomString(50);
+
         Request request = Request.of("https://www.baidu.com/a/b/c", Method.POST);
-        request.setContent(("{\"data\": \"" + randomString + "\"}").getBytes());
+        request.setContent(("{\"data\": \"" + randomString1 + "\"}").getBytes());
+        Response response = Response.empty();
+        response.setContent(("{\"data\": \"" + randomString2 + "\"}").getBytes());
         log.info("hook by java file: {}", filepath);
-        log.info("randomString: {}", randomString);
+        log.info("randomString: {}", randomString1);
         IHttpHooker hooker = getCodeHooker(filepath);
+
         log.info("raw request: \r\n{}", request);
         Request request1 = hooker.hookRequestToServer(request);
         log.info("encrypted request: \r\n{}", request1);
         Request request2 = hooker.hookRequestToBurp(request1);
         log.info("decrypted request: \r\n{}", request2);
+
+        log.info("raw response: \r\n{}", response);
+        Response response1 = hooker.hookResponseToClient(response);
+        log.info("encrypted response: \r\n{}", response1);
+        Response response2 = hooker.hookResponseToBurp(response);
+        log.info("decrypted response: \r\n{}", response2);
     }
 
 

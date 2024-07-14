@@ -37,9 +37,10 @@ public class JsHookerFactor extends IHttpHooker {
     public void init(String filepath) {
         try {
             String content = FileTools.readFileAsString(filepath);
-            ScriptEngine engine = new NashornScriptEngineFactory().getScriptEngine();
+            ScriptEngine engine = new NashornScriptEngineFactory().getScriptEngine(this.getClass().getClassLoader());
             engine.eval(content);
             invocable = (Invocable) engine;
+            safeRun("set_log", log);
         } catch (ScriptException e) {
             throw new RuntimeException("load java script fail.", e);
         }
@@ -63,7 +64,7 @@ public class JsHookerFactor extends IHttpHooker {
 
     @Override
     public Response hookResponseToClient(Response response) {
-        return (Response) safeRun(Constants.HOOK_FUNC_3, response);
+        return (Response) safeRun(Constants.HOOK_FUNC_4, response);
     }
 
     @Override

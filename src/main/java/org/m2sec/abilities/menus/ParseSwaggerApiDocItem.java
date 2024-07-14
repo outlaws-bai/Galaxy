@@ -53,7 +53,7 @@ public class ParseSwaggerApiDocItem extends IItem {
     public void action(MontoyaApi montoyaApi, Request originRequest, Response originResponse) {
         String userInput = JOptionPane.showInputDialog("Please input url or relative path");
         if (userInput == null || (!userInput.startsWith("/") && !userInput.startsWith(Protocol.HTTP.toRaw()))) {
-            SwingTools.showException(new InputMismatchException("Please input url or relative path!"));
+            SwingTools.showErrorDialog("Please input url or relative path!");
             return;
         }
         List<ApiInfo> apiInfoList = SwaggerParser.parseSwaggerDoc(new String(originResponse.getContent()));

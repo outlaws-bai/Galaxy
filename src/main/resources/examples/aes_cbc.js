@@ -17,10 +17,6 @@ paramMap = {"iv": iv}
 jsonKey = "data"
 log = void 0
 
-function set_log(log1){
-    log = log1
-}
-
 
 /**
  * HTTP请求从Burp将要发送到Server时被调用。在此处完成请求加密的代码就可以将加密后的请求报文发送到Server。
@@ -63,7 +59,7 @@ function hook_request_to_server(request){
  */
 function hook_response_to_burp(response){
     // 获取需要解密的数据
-    encryptedData = get_data(response.getContent())
+    encryptedData = get_data(response.content)
     // 调用函数解密
     data = decrypt(encryptedData)
     // 更新body
@@ -78,7 +74,7 @@ function hook_response_to_burp(response){
  * @returns 经过处理后的response对象，返回null代表不需要处理 
  */
 function hook_response_to_client(response){
-    data = response.getContent()
+    data = response.content
     // 调用函数加密回去
     encryptedData = encrypt(data)
     // 更新body
@@ -119,4 +115,8 @@ function to_data(content){
     jsonBody = {}
     jsonBody[jsonKey] = CodeUtil.b64encodeToString(content)
     return JsonUtil.toJsonStr(jsonBody).getBytes()
+}
+
+function set_log(log1){
+    log = log1
 }

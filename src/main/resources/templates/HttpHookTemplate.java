@@ -11,7 +11,7 @@ import org.slf4j.Logger;
  * utils：可能用到的工具类
  * https://github.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/utils
  */
-public class ${filename} implements IJavaHooker {
+public class ${filename}{
 
     private Logger log;
 

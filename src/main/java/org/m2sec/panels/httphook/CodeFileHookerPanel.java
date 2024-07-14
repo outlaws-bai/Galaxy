@@ -19,6 +19,7 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -98,10 +99,12 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
 //        setBackground(Color.blue);
 
         codeCombo.addItemListener(e -> {
-            String selectItem = (String) e.getItem();
-            if (e.getStateChange() == ItemEvent.SELECTED && !Constants.COMBO_BOX_DEFAULT_ITEM.equals(selectItem)) {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                codeTextArea.setVisible(true);
                 codeTextArea.setText(FileTools.readFileAsString(getFilePath((String) e.getItem())));
                 codeTextArea.setCaretPosition(0);
+            } else {
+                codeTextArea.setVisible(false);
             }
         });
 
@@ -109,29 +112,34 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             codeTextArea.getText()));
 
         newButton.addActionListener(e -> {
-            String filename = JOptionPane.showInputDialog(null, "Please input filename: ");
-            if (filename != null) {
-                String filepath = getFilePath(filename.replace(CODE_FILE_SUFFIX, ""));
-                FileTools.createFiles(filepath);
-                String content;
-                if (service.equals(HttpHookService.JAVA))
-                    content = Render.renderTemplate(FileTools.readResourceAsString("templates/HttpHookTemplate" +
-                        CODE_FILE_SUFFIX), new HashMap<>(Map.of("filename", filename)));
-                else content = FileTools.readResourceAsString("templates/HttpHookTemplate" +
-                    CODE_FILE_SUFFIX);
-                FileTools.writeFile(filepath, content);
-                reloadExamples();
-                codeCombo.setSelectedItem(filename);
+            String filename = SwingTools.showInputDialog("Please input filename: ");
+            if (filename == null) return;
+            String filepath = getFilePath(filename.replace(CODE_FILE_SUFFIX, ""));
+            if(FileTools.fileIsExist(filepath)) {
+                SwingTools.showErrorDialog("This already exists, please try again. ");
+                return;
             }
+            FileTools.createFiles(filepath);
+            String content;
+            if (service.equals(HttpHookService.JAVA))
+                content = Render.renderTemplate(FileTools.readResourceAsString("templates/HttpHookTemplate" +
+                    CODE_FILE_SUFFIX), new HashMap<>(Map.of("filename", filename)));
+            else content = FileTools.readResourceAsString("templates/HttpHookTemplate" +
+                CODE_FILE_SUFFIX);
+            FileTools.writeFile(filepath, content);
+            reloadExamples();
+            codeCombo.setSelectedItem(filename);
         });
 
         deleteButton.addActionListener(e -> {
+            if (codeCombo.getSelectedIndex() == -1) return;
             String selectItem = (String) codeCombo.getSelectedItem();
-            if (Constants.COMBO_BOX_DEFAULT_ITEM.equals(selectItem)) return;
             String filepath = getFilePath(selectItem);
+            boolean res = SwingTools.showConfirmDialog(String.format("Are you sure you want to delete this: %s?",
+                selectItem));
+            if (!res) return;
             FileTools.deleteFileIfExist(filepath);
             reloadExamples();
-            codeCombo.setSelectedIndex(0);
         });
 
         resetInput();
@@ -141,11 +149,8 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
 
     private void reloadExamples() {
         codeCombo.removeAllItems();
-        codeCombo.addItem(Constants.COMBO_BOX_DEFAULT_ITEM);
         List<String> examples = FileTools.listDir(Constants.HTTP_HOOK_EXAMPLES_DIR);
-        examples.forEach(System.out::println);
         examples.stream().filter(x -> x.endsWith(CODE_FILE_SUFFIX)).forEach(x -> {
-            System.out.println("add success: " + x);
             codeCombo.addItem(new File(x).getName().replace(CODE_FILE_SUFFIX, ""));
         });
         resetInput();
@@ -209,11 +214,18 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
     public void resetInput() {
         String codeSelectItem = option.getCodeSelectItem();
         if (codeSelectItem != null && !codeSelectItem.isBlank()) {
+            codeTextArea.setVisible(true);
             codeCombo.setSelectedItem(option.getCodeSelectItem());
             codeTextArea.setText(FileTools.readFileAsString(getFilePath((String) codeCombo.getSelectedItem())));
         } else {
-            codeCombo.setSelectedIndex(0);
-            codeTextArea.setText("");
+            if (codeCombo.getItemCount() > 0) {
+                codeTextArea.setVisible(true);
+                codeCombo.setSelectedIndex(0);
+                codeTextArea.setText(FileTools.readFileAsString(getFilePath((String) codeCombo.getSelectedItem())));
+            } else {
+                codeCombo.setSelectedIndex(-1);
+                codeTextArea.setVisible(false);
+            }
         }
     }
 }

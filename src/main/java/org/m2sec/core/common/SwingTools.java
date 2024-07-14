@@ -43,8 +43,22 @@ public class SwingTools {
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 
-    public static void showException(Exception e) {
-        JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    public static void showErrorDetailDialog(Exception e) {
+        JOptionPane.showMessageDialog(null, e.getStackTrace(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void showErrorDialog(String message) {
+        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+
+    public static boolean showConfirmDialog(String message) {
+        int result = JOptionPane.showConfirmDialog(null, message, "Please confirm again", JOptionPane.YES_NO_OPTION);
+        return result == JOptionPane.YES_OPTION;
+    }
+
+    public static String showInputDialog(String message){
+        return JOptionPane.showInputDialog(null, message);
     }
 
 

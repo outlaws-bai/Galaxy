@@ -28,11 +28,6 @@ jsonKey = "data"
 log = None
 
 
-def set_log(log1):
-    global log
-    log = log1
-
-
 def hook_request_to_burp(request):
     """HTTP请求从客户端到达Burp时被调用。在此处完成请求解密的代码就可以在Burp中看到明文的请求报文。
 
@@ -142,3 +137,8 @@ def to_data(content):
     jsonBody = {}
     jsonBody[jsonKey] = CodeUtil.b64encodeToString(content)
     return JsonUtil.toJsonStr(jsonBody).encode()
+
+
+def set_log(log1):
+    global log
+    log = log1

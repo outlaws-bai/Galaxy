@@ -3,7 +3,6 @@ package org.m2sec.panels.httphook;
 import burp.api.montoya.MontoyaApi;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.Galaxy;
-import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Option;
 import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.enums.RunStatus;
@@ -38,6 +37,7 @@ public class HttpHookPanel extends JPanel {
         setLayout(new BorderLayout());
         // 存放几种hook方式
         Map<String, IHookerPanel<?>> serviceMap = new LinkedHashMap<>();
+
         GrpcHookerPanel rpcImpl = new GrpcHookerPanel(option, api);
         CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(option, api);
         javaFileHookerPanel.setService(HttpHookService.JAVA).resetCodeTheme();
@@ -46,7 +46,6 @@ public class HttpHookPanel extends JPanel {
         CodeFileHookerPanel jsFileHookerPanel = new CodeFileHookerPanel(option, api);
         jsFileHookerPanel.setService(HttpHookService.JS).resetCodeTheme();
 
-        serviceMap.put(Constants.COMBO_BOX_DEFAULT_ITEM, new EmptyHookerPanel(option, api));
         serviceMap.put(HttpHookService.GRPC.name(), rpcImpl);
         serviceMap.put(HttpHookService.JAVA.name(), javaFileHookerPanel);
         serviceMap.put(HttpHookService.PYTHON.name(), pythonFileHookerPanel);
@@ -112,11 +111,12 @@ public class HttpHookPanel extends JPanel {
         // 设置 JComboBox 的事件监听器, 选择不同的方式，展示不同方式自己的Panel
         comboBox.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                String selectedItem = (String) e.getItem();
-                boolean flag = !selectedItem.equals(serviceMap.keySet().iterator().next());
-                nextControlPanel.setVisible(flag);
+                wayPanelContainer.setVisible(true);
                 CardLayout cl = (CardLayout) (wayPanelContainer.getLayout());
-                cl.show(wayPanelContainer, selectedItem);
+                nextControlPanel.setVisible(true);
+                cl.show(wayPanelContainer, (String) e.getItem());
+            } else {
+                wayPanelContainer.setVisible(false);
             }
         });
         // 设置 switchButton 的事件监听器, 开关HttpHook功能
@@ -142,7 +142,8 @@ public class HttpHookPanel extends JPanel {
                     hookerPanel.stop(option);
                 }
             } catch (Exception exc) {
-                SwingTools.showException(exc);
+                log.error("Start fail!", exc);
+                SwingTools.showErrorDetailDialog(exc);
                 return;
             }
 
@@ -160,6 +161,8 @@ public class HttpHookPanel extends JPanel {
         hookResponseCheckBox.setSelected(option.isHookResponse());
         if (option.getHookService() != null) {
             comboBox.setSelectedItem(option.getHookService().name());
+        } else {
+            comboBox.setSelectedIndex(-1);
         }
 
 //        nextControlPanel.setBackground(Color.CYAN);
