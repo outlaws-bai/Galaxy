@@ -2,10 +2,7 @@ package org.m2sec.core.httphook;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.m2sec.core.common.Constants;
-import org.m2sec.core.common.FileTools;
-import org.m2sec.core.common.Option;
-import org.m2sec.core.common.ReflectTools;
+import org.m2sec.core.common.*;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
 import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
@@ -74,7 +71,7 @@ public class JsHookerFactor extends IHttpHooker {
 
     public Object safeRun(String funcName, Object arg) {
         try {
-            return invocable.invokeFunction(ReflectTools.camelToSnake(funcName), arg);
+            return invocable.invokeFunction(Helper.camelToSnake(funcName), arg);
         } catch (NoSuchMethodException e) {
             log.warn("You have not implemented the {} method, which may lead to unknown issues", funcName);
             return null;

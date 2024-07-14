@@ -19,8 +19,8 @@ public class GrpcHookerPanel extends IHookerPanel<GRpcHooker> {
 
     private final JTextField grpcConnTextField = new JTextField(20);
 
-    public GrpcHookerPanel(Option option, MontoyaApi api) {
-        super(option, api);
+    public GrpcHookerPanel(Option option, MontoyaApi api, HttpHookService service) {
+        super(option, api, service);
         initPanel();
     }
 

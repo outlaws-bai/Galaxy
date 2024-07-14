@@ -35,14 +35,6 @@ public class SwingTools {
     }
 
 
-    public static String capitalizeFirstLetter(String str) {
-        if (str == null || str.isEmpty()) {
-            return str;
-        }
-        // 将首字母大写，其他字母保持不变
-        return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
-    }
-
     public static void showErrorDetailDialog(Exception e) {
         JOptionPane.showMessageDialog(null, e.getStackTrace(), "Error", JOptionPane.ERROR_MESSAGE);
     }
@@ -57,7 +49,7 @@ public class SwingTools {
         return result == JOptionPane.YES_OPTION;
     }
 
-    public static String showInputDialog(String message){
+    public static String showInputDialog(String message) {
         return JOptionPane.showInputDialog(null, message);
     }
 

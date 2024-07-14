@@ -37,19 +37,13 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
 
     private String CODE_FILE_SUFFIX;
 
-    private HttpHookService service;
-
     private JComboBox<String> codeCombo;
 
     RSyntaxTextArea codeTextArea = new RSyntaxTextArea();
 
-    public CodeFileHookerPanel(Option option, MontoyaApi api) {
-        super(option, api);
-    }
-
-    public CodeFileHookerPanel setService(HttpHookService service) {
-        this.service = service;
-        CODE_LANGUAGE = SwingTools.capitalizeFirstLetter(service.name());
+    public CodeFileHookerPanel(Option option, MontoyaApi api, HttpHookService service) {
+        super(option, api, service);
+        CODE_LANGUAGE = Helper.capitalizeFirstLetter(service.name());
         if (service.equals(HttpHookService.JAVA)) {
             CODE_FILE_SUFFIX = Constants.JAVA_FILE_SUFFIX;
         } else if (service.equals(HttpHookService.PYTHON)) {
@@ -60,9 +54,7 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             throw new InputMismatchException(service.name());
         }
         initPanel();
-        return this;
     }
-
 
     private void initPanel() {
         codeCombo = new JComboBox<>();

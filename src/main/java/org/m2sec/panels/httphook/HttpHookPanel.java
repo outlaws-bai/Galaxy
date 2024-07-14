@@ -3,6 +3,7 @@ package org.m2sec.panels.httphook;
 import burp.api.montoya.MontoyaApi;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.Galaxy;
+import org.m2sec.core.common.Helper;
 import org.m2sec.core.common.Option;
 import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.enums.RunStatus;
@@ -38,18 +39,18 @@ public class HttpHookPanel extends JPanel {
         // 存放几种hook方式
         Map<String, IHookerPanel<?>> serviceMap = new LinkedHashMap<>();
 
-        GrpcHookerPanel rpcImpl = new GrpcHookerPanel(option, api);
-        CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(option, api);
-        javaFileHookerPanel.setService(HttpHookService.JAVA).resetCodeTheme();
-        CodeFileHookerPanel pythonFileHookerPanel = new CodeFileHookerPanel(option, api);
-        pythonFileHookerPanel.setService(HttpHookService.PYTHON).resetCodeTheme();
-        CodeFileHookerPanel jsFileHookerPanel = new CodeFileHookerPanel(option, api);
-        jsFileHookerPanel.setService(HttpHookService.JS).resetCodeTheme();
+        GrpcHookerPanel rpcImpl = new GrpcHookerPanel(option, api, HttpHookService.GRPC);
+        CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(option, api,HttpHookService.JAVA);
+        javaFileHookerPanel.resetCodeTheme();
+        CodeFileHookerPanel pythonFileHookerPanel = new CodeFileHookerPanel(option, api,HttpHookService.JS);
+        pythonFileHookerPanel.resetCodeTheme();
+        CodeFileHookerPanel jsFileHookerPanel = new CodeFileHookerPanel(option, api,HttpHookService.PYTHON);
+        jsFileHookerPanel.resetCodeTheme();
 
-        serviceMap.put(HttpHookService.GRPC.name(), rpcImpl);
-        serviceMap.put(HttpHookService.JAVA.name(), javaFileHookerPanel);
-        serviceMap.put(HttpHookService.JS.name(), jsFileHookerPanel);
-        serviceMap.put(HttpHookService.PYTHON.name(), pythonFileHookerPanel);
+        serviceMap.put(Helper.capitalizeFirstLetter(HttpHookService.JS.name()), jsFileHookerPanel);
+        serviceMap.put(Helper.capitalizeFirstLetter(HttpHookService.JAVA.name()), javaFileHookerPanel);
+        serviceMap.put(Helper.capitalizeFirstLetter(HttpHookService.GRPC.name()), rpcImpl);
+        serviceMap.put(Helper.capitalizeFirstLetter(HttpHookService.PYTHON.name()), pythonFileHookerPanel);
 
         // 创建一个容器(卡片)用于放置不同方式的JPanel
         JPanel wayPanelContainer = new JPanel(new CardLayout());
@@ -71,7 +72,7 @@ public class HttpHookPanel extends JPanel {
         JPanel nextControlPanel = new JPanel(new BorderLayout());
         nextControlPanel.setVisible(false);
         JPanel switchAndCheckBoxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JButton switchButton = new JButton(SwingTools.capitalizeFirstLetter(RunStatus.START.name()));
+        JButton switchButton = new JButton(Helper.capitalizeFirstLetter(RunStatus.START.name()));
         switchButton.setToolTipText("Start hook...");
         JCheckBox hookRequestCheckBox = new JCheckBox("Hook request");
         hookRequestCheckBox.setToolTipText("HTTP requests need to be hook?");
@@ -128,7 +129,7 @@ public class HttpHookPanel extends JPanel {
 
             try {
                 if (!isStop) {
-                    HttpHookService service = HttpHookService.valueOf(selectItem);
+                    HttpHookService service = hookerPanel.getService();
                     // 设置本次所选择的配置
                     option.setHookStart(true)
                         .setHookService(service)
@@ -147,7 +148,7 @@ public class HttpHookPanel extends JPanel {
                 return;
             }
 
-            switchButton.setText(SwingTools.capitalizeFirstLetter(text));
+            switchButton.setText(Helper.capitalizeFirstLetter(text));
             SwingTools.changePanelStatus(hookerPanel, isStop);
             SwingTools.changePanelStatus(requestCheckPanel, isStop);
             SwingTools.changeComponentStatus(comboBox, isStop);

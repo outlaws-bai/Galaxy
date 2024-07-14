@@ -128,5 +128,37 @@ public class Helper {
         return stringBuilder.toString();
     }
 
+    public static String camelToSnake(String camelCase) {
+        if (camelCase == null || camelCase.isEmpty()) {
+            return camelCase;
+        }
+
+        StringBuilder snakeCase = new StringBuilder();
+        char[] charArray = camelCase.toCharArray();
+        boolean firstChar = true;
+
+        for (char c : charArray) {
+            if (Character.isUpperCase(c)) {
+                if (!firstChar) {
+                    snakeCase.append('_');
+                }
+                snakeCase.append(Character.toLowerCase(c));
+            } else {
+                snakeCase.append(c);
+            }
+            firstChar = false;
+        }
+
+        return snakeCase.toString();
+    }
+
+    public static String capitalizeFirstLetter(String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+        // 将首字母大写，其他字母保持不变
+        return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
+    }
+
 
 }

@@ -94,7 +94,7 @@ public class PythonHookerFactor extends IHttpHooker {
     }
 
     public PyFunction safeGetPyFunction(String funcName) {
-        PyObject object = interpreter.get(ReflectTools.camelToSnake(funcName));
+        PyObject object = interpreter.get(Helper.camelToSnake(funcName));
         if (object == null) {
             log.warn("You have not implemented the {} method, which may lead to unknown issues", funcName);
             return null;

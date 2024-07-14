@@ -116,10 +116,11 @@ public class Constants {
 
     public static final String JS_FILE_SUFFIX = ".js";
 
-    // swing
+    // def
 
-    public static final String COMBO_BOX_DEFAULT_ITEM = "...";
-
+    public static final String INPUT_JYTHON_JAR_DEF = "If you need cross platform capabilities related to Python, " +
+        "please enter the jython jar path. On the contrary, you will not be able to use it, but the impact on you " +
+        "will not be significant.";
 
 
 }
