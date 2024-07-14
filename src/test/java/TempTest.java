@@ -32,7 +32,6 @@ public class TempTest {
     public void test2() {
         String expression = "!request.isStaticExtension() && request.host=='www.baidu.com'";
         Request request = Request.of("https://www.baidu.com");
-        System.out.println(Render.renderExpression2(expression, new HashMap<>(Map.of("request",request))));
     }
 
     public static void main(String[] args) {
