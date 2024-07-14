@@ -8,10 +8,9 @@ import org.m2sec.core.common.Option;
 import org.m2sec.core.common.ReflectTools;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
-
+import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 /**
@@ -38,7 +37,7 @@ public class JsHookerFactor extends IHttpHooker {
     public void init(String filepath) {
         try {
             String content = FileTools.readFileAsString(filepath);
-            ScriptEngine engine = new ScriptEngineManager().getEngineByName(Constants.JAVA_SCRIPT_ENGINE_NAME);
+            ScriptEngine engine = new NashornScriptEngineFactory().getScriptEngine();
             engine.eval(content);
             invocable = (Invocable) engine;
         } catch (ScriptException e) {

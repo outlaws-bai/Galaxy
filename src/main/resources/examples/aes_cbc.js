@@ -80,7 +80,7 @@ function hook_response_to_burp(response){
 function hook_response_to_client(response){
     data = response.getContent()
     // 调用函数加密回去
-    encryptedData = decrypt(data)
+    encryptedData = encrypt(data)
     // 更新body
     // 将已加密的数据转换为Server可识别的格式
     body = to_data(encryptedData)

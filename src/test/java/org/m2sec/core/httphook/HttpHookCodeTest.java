@@ -30,7 +30,7 @@ public class HttpHookCodeTest {
 
     @Test
     public void testOneCodeHooker() {
-        testCodeHooker(examplesFilePath + File.separator + "aes_cbc.js");
+        testCodeHooker(examplesFilePath + File.separator + "AesCbc.java");
     }
 
 

@@ -84,7 +84,7 @@ public class AesCbc{
         // 获取被解密的数据
         byte[] data = response.getContent();
         // 调用函数加密回去
-        byte[] encryptedData = decrypt(data);
+        byte[] encryptedData = encrypt(data);
         // 更新body
         // 将已加密的数据转换为Server可识别的格式
         byte[] body = toData(encryptedData);

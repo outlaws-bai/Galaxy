@@ -1,9 +1,9 @@
 package org.m2sec.core.common;
 
 import org.apache.commons.text.StringSubstitutor;
+import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import javax.annotation.Nullable;
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import java.util.Map;
 
 /**
@@ -21,8 +21,8 @@ public class Render {
 
     public static Object renderExpression(String expression, @Nullable Map<String, Object> env, Class<?>... classes) {
         try {
-            ScriptEngineManager manager = new ScriptEngineManager();
-            ScriptEngine engine = manager.getEngineByName(Constants.JAVA_SCRIPT_ENGINE_NAME);
+            NashornScriptEngineFactory factory = new NashornScriptEngineFactory();
+            ScriptEngine engine = factory.getScriptEngine();
             String importTemplate = "var %s = Java.type('%s')";
 
             // put params
@@ -42,5 +42,6 @@ public class Render {
             throw new RuntimeException(e);
         }
     }
+
 
 }
