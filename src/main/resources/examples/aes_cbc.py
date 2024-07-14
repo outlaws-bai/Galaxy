@@ -1,3 +1,4 @@
+# Utils: https://github1s.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/utils
 from org.m2sec.core.utils import (
     ByteUtil,
     CodeUtil,
@@ -8,16 +9,15 @@ from org.m2sec.core.utils import (
     MacUtil,
     YamlUtil,
 )
+# DataObjects: https://github1s.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/models
 from org.m2sec.core.models import Request, Response
 from java.lang import String
 
 
 """
-You can complete the requirements in Hooker by calling encryption and decryption functions in Java.
-
-The available classes are as follows...
-utils：可能用到的工具类
-https://github.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/utils
+用法：使用Python代码修改请求/响应对象的任何部分以满足需求。
+内置：该项目内置了一些可能使用的DataObjects和Utils类，可以在代码中使用它们来满足加密、签名等要求。
+警告(*)：你应该使用Python代码调用项目中的内置Utils或DataObjects，不要尝试安装其他依赖项，这可能会导致兼容性问题。
 """
 
 ALGORITHM = "AES/CBC/PKCS5Padding"

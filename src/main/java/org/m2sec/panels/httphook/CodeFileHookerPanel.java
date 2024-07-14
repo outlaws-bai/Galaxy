@@ -219,5 +219,6 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
                 codeTextArea.setVisible(false);
             }
         }
+        codeTextArea.setCaretPosition(0);
     }
 }
