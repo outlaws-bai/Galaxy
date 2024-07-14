@@ -1,3 +1,4 @@
+// Utils: https://github1s.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/utils
 var ByteUtil = Java.type("org.m2sec.core.utils.ByteUtil")
 var CodeUtil = Java.type("org.m2sec.core.utils.CodeUtil")
 var CryptoUtil = Java.type("org.m2sec.core.utils.CryptoUtil")
@@ -6,6 +7,7 @@ var HttpUtil = Java.type("org.m2sec.core.utils.HttpUtil")
 var JsonUtil = Java.type("org.m2sec.core.utils.JsonUtil")
 var MacUtil = Java.type("org.m2sec.core.utils.MacUtil")
 var YamlUtil = Java.type("org.m2sec.core.utils.YamlUtil")
+// DataObjects: https://github1s.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/models
 var Request = Java.type("org.m2sec.core.models.Request")
 var Response = Java.type("org.m2sec.core.models.Response")
 var String = Java.type("java.lang.String")
