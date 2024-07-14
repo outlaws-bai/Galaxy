@@ -42,15 +42,15 @@ public class HttpHookPanel extends JPanel {
         GrpcHookerPanel rpcImpl = new GrpcHookerPanel(option, api, HttpHookService.GRPC);
         CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(option, api,HttpHookService.JAVA);
         javaFileHookerPanel.resetCodeTheme();
-        CodeFileHookerPanel pythonFileHookerPanel = new CodeFileHookerPanel(option, api,HttpHookService.JS);
+        CodeFileHookerPanel pythonFileHookerPanel = new CodeFileHookerPanel(option, api,HttpHookService.PYTHON);
         pythonFileHookerPanel.resetCodeTheme();
-        CodeFileHookerPanel jsFileHookerPanel = new CodeFileHookerPanel(option, api,HttpHookService.PYTHON);
+        CodeFileHookerPanel jsFileHookerPanel = new CodeFileHookerPanel(option, api,HttpHookService.JS);
         jsFileHookerPanel.resetCodeTheme();
 
         serviceMap.put(Helper.capitalizeFirstLetter(HttpHookService.JS.name()), jsFileHookerPanel);
         serviceMap.put(Helper.capitalizeFirstLetter(HttpHookService.JAVA.name()), javaFileHookerPanel);
         serviceMap.put(Helper.capitalizeFirstLetter(HttpHookService.GRPC.name()), rpcImpl);
-        serviceMap.put(Helper.capitalizeFirstLetter(HttpHookService.PYTHON.name()), pythonFileHookerPanel);
+//        serviceMap.put(Helper.capitalizeFirstLetter(HttpHookService.PYTHON.name()), pythonFileHookerPanel);
 
         // 创建一个容器(卡片)用于放置不同方式的JPanel
         JPanel wayPanelContainer = new JPanel(new CardLayout());
