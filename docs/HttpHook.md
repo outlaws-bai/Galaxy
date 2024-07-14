@@ -1,5 +1,7 @@
 # HttpHook
 
+> 带 * 为待实现
+
 ## 基本信息
 
 **选项解释**：
@@ -18,39 +20,64 @@
 `hookResponseToClient`：HTTP请求从Burp将要发送到Client时被调用。在此处完成响应加密的代码就可以将加密后的响应报文返回给Client。
 
 
-**测试**：在`Repeater`右键找到`Http Hook Test`，点击即可测试。
+**测试**：在`Repeater`右键找到`Http Hook`，点击其选的按钮即可测试。前提是你已经开启了Http Hook服务
 
 ## 实现方式
 
-暂时支持GRPC、JAVA。打算增加更多方式，欢迎加群共建~
+支持Grpc、Java、Python、Js这四种实现需求。
 
-### GRPC
+四种但可分为两类：
+
+`Grpc` ：在HTTP报文的对应生命周期调用对应的接口。
+
+`Code` ：在HTTP报文的特定生命周期调用对应的函数。
+
+这两种实现方式稍有差异，且各有优缺点。
+
+**对比**
+
+`Grpc`：你需要用其他语言实现Grpc Server。优点是跨语言能力强，缺点是学习成本稍高、依赖IO、可能存在兼容性问题。
+
+`Code`：你需要用支持的方式写对应语言的脚本，使其可以与项目中的DataObjects和Utils交互。优点是可以与JVM交互 - 兼容性强、且项目已包含多种示例 - 成本低，缺点是需要熟悉项目自带的DataObjects和Utils。
+
+[DataObjects](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#DataObjects)      [Utils](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Utils)
+
+### Grpc
 
 你需要自行编写并启动一个 GRPC 服务端。实现四个Hook函数。
 
 GRPC proto 见 [HttpHook.proto](https://github.com/outlaws-bai/Galaxy/blob/main/src/main/proto/HttpHook.proto)
 
-这里有几个不同语言的示例：[java](https://github.com/outlaws-bai/Galaxy/blob/main/src/test/java/org/m2sec/core/httphook/HttpHookGrpcServer.java), [python](https://github.com/outlaws-bai/PyGRpcServer)。
+这里有几个不同语言的Grpc Server：
+1. [java](https://github.com/outlaws-bai/Galaxy/blob/main/src/test/java/org/m2sec/core/httphook/HttpHookGrpcServer.java)
+2. [python](https://github.com/outlaws-bai/PyGRpcServer)。
 
-### JAVA
+### Java
 
-> JAVA代码中需要使用项目中的DataObject和Util。可参考 [DataObject](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#DataObject) [Util](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Util)
+> 必须使用JDK启动Burp，因为要动态编译.java文件，JRE不满足条件。
 
-你需要选择一个包含Hook函数的JAVA文件，程序会动态编译并调用其中的Hook函数。
+你需要选择一个JAVA文件，并在需要的时候修改它直到满足你的需求，程序会动态编译并调用其中的Hook函数。
 
-项目已经提供了几个常用的加解密文件，你可以选择/创建一个并修改直到满足你的需求。
+示例：
+1. [AesCbc](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/resources/examples/AesCbc.java)
+2. [AesEcb](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/resources/examples/AesEcb.java)
+3. [AesGcm](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/resources/examples/AesGcm.java)
+4. [Rsa](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/resources/examples/Rsa.java)
+5. [Sm2](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/resources/examples/Sm2.java)
 
-### Jython *
+### Python
 
-待实现。
+你需要选择一个Python文件，程序会在不同的HTTP报文的对应生命周期调用对应的函数。
 
-### JS *
+示例：
+1. [aes_cbc](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/resources/examples/aes_cbc.py)
 
-待实现。
+### Js
 
-### ...
+你需要选择一个Js文件，程序会在不同的HTTP报文的对应生命周期调用对应的函数。
 
-待增加。
+示例：
+1. [aes_cbc](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/resources/examples/aes_cbc.js)
 
 ## 场景及解决方案
 

@@ -16,7 +16,7 @@ ${xxx} 中的内容会被当作 `Expression` 执行，执行结果通过 `common
 
 > 在Template要使用$字符时，需要双写转义。
 
-## DataObject
+## DataObjects
 
 Request：请求。 [Request.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Request.java)
 
@@ -34,7 +34,7 @@ FormData：请求Body中通过`multipart/form-data`传递的数据。[FormData.j
 
 UploadFile：请求Body中通过`multipart/form-data`传递的文件。[UploadFile.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/UploadFile.java)
 
-## Util
+## Utils
 
 ByteUtil：byte数组处理的工具类。[ByteUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/ByteUtil.java)
 
