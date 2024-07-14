@@ -47,7 +47,7 @@ dependencies {
     // code text area
     implementation 'com.fifesoft:rsyntaxtextarea:3.4.1'
     // cross-language
-    implementation 'org.mozilla:rhino:1.7.15'
+    implementation 'org.openjdk.nashorn:nashorn-core:15.4'
     compileOnly 'org.python:jython-standalone:2.7.3'
     // test
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
@@ -58,7 +58,7 @@ dependencies {
     testImplementation 'org.projectlombok:lombok:1.18.32'
     testImplementation 'com.fifesoft:rsyntaxtextarea:3.4.1'
     testImplementation 'org.python:jython-standalone:2.7.3'
-    testImplementation 'org.mozilla:rhino:1.7.15'
+    testImplementation 'org.openjdk.nashorn:nashorn-core:15.4'
 }
 
 test {
