@@ -35,7 +35,6 @@ public class JsonUtil {
     }
 
     public static Map<?, ?> jsonStrToMap(String jsonStr) {
-        System.out.println(jsonStr);
         return fromJsonStr(jsonStr, HashMap.class);
     }
 

@@ -29,10 +29,6 @@ public class PythonHookerFactor extends IHttpHooker {
         System.setProperty("python.import.site", "false");
     }
 
-    public PythonHookerFactor() {
-        interpreter = new PythonInterpreter();
-    }
-
     @Override
     public void init(Option opt) {
         option = opt;
@@ -42,6 +38,7 @@ public class PythonHookerFactor extends IHttpHooker {
     }
 
     public void init(String filepath) {
+        interpreter = new PythonInterpreter();
         interpreter.exec(FileTools.readFileAsString(filepath));
         try {
             interpreter.exec(FileTools.readFileAsString(filepath));
@@ -49,6 +46,7 @@ public class PythonHookerFactor extends IHttpHooker {
         } catch (Exception e) {
             throw new RuntimeException("load python script fail.", e);
         }
+        log.info("load python script file success. {}", filepath);
     }
 
     @Override

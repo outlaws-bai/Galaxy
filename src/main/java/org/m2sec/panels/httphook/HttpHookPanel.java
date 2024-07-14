@@ -48,8 +48,8 @@ public class HttpHookPanel extends JPanel {
 
         serviceMap.put(HttpHookService.GRPC.name(), rpcImpl);
         serviceMap.put(HttpHookService.JAVA.name(), javaFileHookerPanel);
-        serviceMap.put(HttpHookService.PYTHON.name(), pythonFileHookerPanel);
         serviceMap.put(HttpHookService.JS.name(), jsFileHookerPanel);
+        serviceMap.put(HttpHookService.PYTHON.name(), pythonFileHookerPanel);
 
         // 创建一个容器(卡片)用于放置不同方式的JPanel
         JPanel wayPanelContainer = new JPanel(new CardLayout());
