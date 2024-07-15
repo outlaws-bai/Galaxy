@@ -1,24 +1,26 @@
 # Release History
 
+## Under release
+
 ## 2024-07-14 Release 2.2.3
 
-1. 修复已知BUG
-2. Setting增加打开工作目录按钮
-3. HTTP HOOK新增两个Test按钮
+1. 修复已知BUG。@outlaws-bai
+2. Setting增加打开工作目录按钮。@outlaws-bai
+3. HTTP HOOK新增两个Test按钮。@outlaws-bai
 
 ## 2024-07-14 Release 2.2.2
 
-1. fix bug
-2. 修改示例中的描述
+1. fix bug。@outlaws-bai
+2. 修改示例中的描述。@outlaws-bai
 
 ## 2024-07-14 Release 2.2.1
 
-1. 通过导入jython的方式解决http hook -python 无法使用的问题
+1. 通过导入jython的方式解决http hook -python 无法使用的问题。@outlaws-bai
 
 ## 2024-07-14 Release 2.2.0
 
-1. http hook功能中新增语言支持：js
-2. 修复已知bug
+1. http hook功能中新增语言支持：js、python 。@outlaws-bai
+2. 修复已知bug 。@outlaws-bai
 
 ## 2024-07-13 Release 2.1.0
 
