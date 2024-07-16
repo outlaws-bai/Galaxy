@@ -2,6 +2,11 @@
 
 ## Under release
 
+## 2024-07-17 Release 2.2.4
+
+1. 修复path正常化处理遇到根目录失效的bug
+2. 修复js和py模板中的描述错误
+
 ## 2024-07-14 Release 2.2.3
 
 1. 修复已知BUG。@outlaws-bai
