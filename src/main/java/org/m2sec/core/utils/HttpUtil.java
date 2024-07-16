@@ -118,9 +118,9 @@ public class HttpUtil {
             prefix = url.getProtocol() + "://" + url.getAuthority() + "/";
             path = url.getPath().isEmpty() ? "/" : url.getPath();
         }
-        if (path.isEmpty()) return "/";
+        if (path.isEmpty()) return prefix;
         String[] pathParts = path.split("/");
-        if (pathParts.length == 0) return "/";
+        if (pathParts.length == 0) return prefix;
         String suffix = path.endsWith("/") ? "/" : ""; // spring在3.0后，声明为/a/b/c/使用/a/b/c访问无法匹配，该后缀做兼容
         ArrayList<String> normalizedPathParts = normalizePathParts(pathParts);
         return prefix + String.join("/", normalizedPathParts) + suffix;

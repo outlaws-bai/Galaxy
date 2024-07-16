@@ -141,7 +141,7 @@ public class Request {
         Tuple<String, String> tuple = HttpUtil.parseFullPath(fullPath);
 
         if (host == null) {
-            host = headers.getFirst(Constants.HTTP_HEADER_HOST);
+            host = headers.getFirstIgnoreCase(Constants.HTTP_HEADER_HOST);
             assert host != null;
         }
 
