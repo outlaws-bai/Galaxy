@@ -2,10 +2,19 @@
 
 ## Under release
 
+1. ...
+
+## 2024-07-17 Release 2.2.5
+
+1. Request/Response 增加getBody、getJson方法。@outlaws-bai
+2. 更新examples中的描述。@outlaws-bai
+3. 移除无用的grpc-services。@outlaws-bai
+4. 增加自定义日志Appender，将日志自动输出到Burp的logging。@outlaws-bai
+
 ## 2024-07-17 Release 2.2.4
 
-1. 修复path正常化处理遇到根目录失效的bug
-2. 修复js和py模板中的描述错误
+1. 修复path正常化处理遇到根目录失效的bug。@outlaws-bai
+2. 修复js和py模板中的描述错误。@outlaws-bai
 
 ## 2024-07-14 Release 2.2.3
 
