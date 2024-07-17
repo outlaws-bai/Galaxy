@@ -8,10 +8,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.enums.ContentType;
-import org.m2sec.core.enums.Protocol;
+import org.m2sec.core.utils.HttpUtil;
+import org.m2sec.core.utils.JsonUtil;
 import org.m2sec.rpc.HttpHook;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Map;
 
 
 /**
@@ -125,6 +127,21 @@ public class Response {
         // write content
         retVal.writeBytes(content);
         return retVal.toByteArray();
+    }
+
+    public ContentType getContentType() {
+        String value = headers.getFirstIgnoreCase(Constants.HTTP_HEADER_CONTENT_TYPE);
+        return HttpUtil.getContentType(null, value);
+    }
+
+    public String getBody() {
+        return new String(content);
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> getJson() {
+        assert getContentType().equals(ContentType.JSON);
+        return (Map<String, Object>) JsonUtil.jsonStrToMap(getBody());
     }
 
     @Override

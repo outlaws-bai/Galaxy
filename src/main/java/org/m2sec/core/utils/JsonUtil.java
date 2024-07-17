@@ -35,10 +35,12 @@ public class JsonUtil {
     }
 
     public static Map<?, ?> jsonStrToMap(String jsonStr) {
+        if (jsonStr == null || jsonStr.isBlank()) return new HashMap<>();
         return fromJsonStr(jsonStr, HashMap.class);
     }
 
     public static List<?> jsonStrToList(String jsonStr) {
+        if (jsonStr == null || jsonStr.isBlank()) return new ArrayList<>();
         return fromJsonStr(jsonStr, ArrayList.class);
     }
 }

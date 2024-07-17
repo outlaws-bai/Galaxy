@@ -190,7 +190,7 @@ public class HttpUtil {
     }
 
     public static ContentType getContentType(String method, @Nullable String contentTypeHeaderValue) {
-        if (Method.GET.toString().equalsIgnoreCase(method) || Method.OPTIONS.toString().equalsIgnoreCase(method) || Method.HEAD.toString().equalsIgnoreCase(method)) {
+        if (method != null && (Method.GET.toString().equalsIgnoreCase(method) || Method.OPTIONS.toString().equalsIgnoreCase(method) || Method.HEAD.toString().equalsIgnoreCase(method))) {
             return ContentType.NON_BODY;
         }
         if (contentTypeHeaderValue != null) {

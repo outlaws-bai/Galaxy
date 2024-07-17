@@ -13,11 +13,13 @@ import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.enums.Protocol;
 import org.m2sec.core.utils.HttpUtil;
+import org.m2sec.core.utils.JsonUtil;
 import org.m2sec.rpc.HttpHook;
 
 import javax.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
+import java.util.Map;
 import java.util.stream.Stream;
 
 /**
@@ -213,7 +215,7 @@ public class Request {
     }
 
     public ContentType getContentType() {
-        String value = headers.getFirst(Constants.HTTP_HEADER_CONTENT_TYPE);
+        String value = headers.getFirstIgnoreCase(Constants.HTTP_HEADER_CONTENT_TYPE);
         return HttpUtil.getContentType(method, value);
     }
 
@@ -244,6 +246,16 @@ public class Request {
 
     public String getFullPath() {
         return HttpUtil.getFullPath(path, query);
+    }
+
+    public String getBody(){
+        return new String(content);
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> getJson(){
+        assert getContentType().equals(ContentType.JSON);
+        return (Map<String, Object>) JsonUtil.jsonStrToMap(getBody());
     }
 
     public boolean isStaticExtension() {
