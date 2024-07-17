@@ -5,6 +5,7 @@ import org.m2sec.core.common.Helper;
 import org.m2sec.core.common.ReflectTools;
 import org.m2sec.core.common.Render;
 import org.m2sec.core.models.Request;
+import org.m2sec.core.utils.JsonUtil;
 
 import javax.script.ScriptEngineManager;
 import java.security.*;
@@ -25,14 +26,10 @@ public class TempTest {
 
     @Test
     public void test() throws Exception {
-        Helper.initAndLoadConfig(null);
     }
 
     @Test
     public void test2() {
-        String expression = "!request.isStaticExtension() && request.host=='www.baidu.com'";
-        Request request = Request.of("https://www.baidu.com");
-        System.out.println(Render.renderExpression(expression, new HashMap<>(Map.of("request",request))));
     }
 
     public static void main(String[] args) {

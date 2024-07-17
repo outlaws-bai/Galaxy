@@ -8,7 +8,6 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.FileAppender;
-import lombok.extern.slf4j.Slf4j;
 import org.m2sec.Galaxy;
 import org.slf4j.LoggerFactory;
 
@@ -22,72 +21,90 @@ import java.security.SecureRandom;
  * @date: 2024/7/11 21:29
  * @description: 符合初始化及清理
  */
-@Slf4j
 public class Helper {
 
-    public static Config initAndLoadConfig(MontoyaApi api) {
+    public static void init(MontoyaApi api) {
+        api.extension().setName(Constants.BURP_SUITE_EXT_NAME);
+        api.logging().logToOutput(Constants.BURP_SUITE_EXT_INIT_DEF + "Version -> " + Constants.VERSION + "\r\n");
+        if (checkVersion(api)) {
+            initWorkDir();
+        }
+    }
+
+    public static boolean checkVersion(MontoyaApi api) {
+        boolean buildWorkDir = false;
         String message;
         if (Files.exists(Paths.get(Constants.WORK_DIR))) {
-            if (Files.exists(Paths.get(Constants.VERSION_STORAGE_FILE_PATH)) && !Constants.VERSION.equalsIgnoreCase(FileTools.readFileAsString(Constants.VERSION_STORAGE_FILE_PATH))) {
-                // 使用过旧版本
+            if (
+                Files.exists(Paths.get(Constants.VERSION_STORAGE_FILE_PATH))
+                    && !Constants.VERSION.equalsIgnoreCase(FileTools.readFileAsString(Constants.VERSION_STORAGE_FILE_PATH))
+            ) {
+                // 更新了版本
                 String randomString = generateRandomString(6);
                 String bakDir = Constants.WORK_DIR + "." + randomString + ".bak";
                 FileTools.renameDir(Constants.WORK_DIR, bakDir);
                 message = Constants.UPDATE_VERSION_DEF + bakDir + ". \r\nGood luck.";
-            } else {
+                buildWorkDir = true;
+            } else { // reload
                 message = "Good luck.";
             }
-        } else {
+        } else { // 第一次使用
+            buildWorkDir = true;
             message = "You seem to be using this plugin for the first time. \r\nGood luck.";
         }
-
         if (Galaxy.isInBurp()) {
             api.logging().logToOutput(message);
         } else {
             System.out.println(message);
         }
+        return buildWorkDir;
+    }
 
+    public static void initWorkDir() {
         // 创建必要的文件和路径
         FileTools.createDirs(Constants.WORK_DIR, // 插件工作路径
             Constants.TMP_FILE_DIR, // 临时文件路径
             Constants.EXTRACT_FILE_DIR // 提取文件路径
         );
-
-        // cp resources 文件到工作目录下
-        FileTools.writeFileIfEmptyOfResource(Constants.VERSION_STORAGE_FILE_NAME, Constants.VERSION_STORAGE_FILE_PATH);
-        FileTools.writeFileIfEmptyOfResource(Constants.SETTING_FILE_NAME, Constants.SETTING_FILE_PATH);
-        FileTools.writeFileIfEmptyOfResource(Constants.OPTION_FILE_NAME, Constants.OPTION_FILE_PATH);
-        FileTools.copyDirResourcesToTargetDirIfEmpty(Constants.HTTP_HOOK_EXAMPLES_DIR_NAME,
-            Constants.HTTP_HOOK_EXAMPLES_DIR);
-        FileTools.copyDirResourcesToTargetDirIfEmpty(Constants.TEMPLATE_DIR_NAME, Constants.TEMPLATE_DIR);
-
-        // 加载配置文件
-        Config config = Config.ofDisk(api);
-
-        // 初始化log
-        Helper.initLogger(Constants.LOG_FILE_PATH, config.getSetting().getLogLevel().name());
-        log.debug("load config success! {}", config);
-
-        return config;
+        // mv resource
+        FileTools.mvResource(Constants.VERSION_STORAGE_FILE_NAME, Constants.WORK_DIR);
+        FileTools.mvResource(Constants.SETTING_FILE_NAME, Constants.WORK_DIR);
+        FileTools.mvResource(Constants.OPTION_FILE_NAME, Constants.WORK_DIR);
+        // mv resources
+        FileTools.mvResources(Constants.HTTP_HOOK_EXAMPLES_DIR_NAME,
+            Constants.WORK_DIR);
+        FileTools.mvResources(Constants.TEMPLATE_DIR_NAME, Constants.WORK_DIR);
     }
 
-    public static void initLogger(String logFilePath, String level) {
+
+    /**
+     * 初始化日志框架
+     * 1. 增加文件输出
+     * 2. 将文件输出copy一份到burp logging
+     */
+    public static void initLogger(MontoyaApi api, String level) {
+        if (!Galaxy.isInBurp()) return;
+        // 获取root logger
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         Logger rootLogger = loggerContext.getLogger("root");
         rootLogger.setLevel(Level.valueOf(level));
+        // 获取xml中配置的 console appender
         ConsoleAppender<ILoggingEvent> consoleAppender = (ConsoleAppender<ILoggingEvent>) rootLogger.getAppender(
             "CONSOLE");
-        PatternLayoutEncoder logEncoder = new PatternLayoutEncoder();
-        logEncoder.setContext(loggerContext);
-        logEncoder.setPattern(((PatternLayoutEncoder) consoleAppender.getEncoder()).getPattern());
-        logEncoder.start();
+        // 创建并设置 file appender
         FileAppender<ILoggingEvent> fileAppender = new FileAppender<>();
         fileAppender.setContext(loggerContext);
         fileAppender.setName("FILE");
-        fileAppender.setFile(logFilePath);
-        fileAppender.setEncoder(logEncoder);
+        fileAppender.setFile(Constants.LOG_FILE_PATH);
+        fileAppender.setEncoder(consoleAppender.getEncoder());
         fileAppender.start();
         rootLogger.addAppender(fileAppender);
+        // 创建并设置自定义 appender，将日志发送到burp
+        BurpAppender burpAppender = new BurpAppender(api, (PatternLayoutEncoder) consoleAppender.getEncoder());
+        burpAppender.setContext(loggerContext);
+        burpAppender.setName("BURP");
+        burpAppender.start();
+        rootLogger.addAppender(burpAppender);
     }
 
 
@@ -97,13 +114,13 @@ public class Helper {
         FileAppender<?> fileAppender = (FileAppender<?>) loggerContext.getLogger("root").getAppender("FILE");
         if (fileAppender == null) return;
         fileAppender.stop();
-        FileTools.deleteFileIfExist(fileAppender.getFile());
+        FileTools.deleteFiles(fileAppender.getFile());
     }
 
     public static void cleanTmpDir() {
         File tempFileDir = new File(Constants.TMP_FILE_DIR);
         if (tempFileDir.exists() && tempFileDir.isDirectory()) {
-            FileTools.deleteFileIfExist(tempFileDir.listFiles());
+            FileTools.deleteFiles(tempFileDir.listFiles());
         }
     }
 
@@ -128,6 +145,9 @@ public class Helper {
         return stringBuilder.toString();
     }
 
+    /**
+     * 驼峰转蛇形
+     */
     public static String camelToSnake(String camelCase) {
         if (camelCase == null || camelCase.isEmpty()) {
             return camelCase;
@@ -152,11 +172,13 @@ public class Helper {
         return snakeCase.toString();
     }
 
+    /**
+     * 首字母大写
+     */
     public static String capitalizeFirstLetter(String str) {
         if (str == null || str.isEmpty()) {
             return str;
         }
-        // 将首字母大写，其他字母保持不变
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 

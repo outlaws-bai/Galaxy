@@ -21,7 +21,6 @@ public class HttpHookGrpcTest {
 
     @BeforeAll
     public static void setRootLoggerLevel() {
-        Helper.initAndLoadConfig(null);
     }
 
     @Test

@@ -11,7 +11,7 @@ public class Constants {
 
     // global
     public static final String BURP_SUITE_EXT_NAME = "Galaxy";
-    public static final String VERSION = FileTools.getVersion();
+    public static final String VERSION = FileTools.readResourceAsString(Constants.VERSION_STORAGE_FILE_NAME);
 
     public static final String BURP_SUITE_EXT_INIT_DEF = """
         Welcome to Galaxy
@@ -52,7 +52,7 @@ public class Constants {
 
     public static final String VERSION_STORAGE_FILE_NAME = "version.txt";
 
-    public static final String VERSION_STORAGE_FILE_PATH = WORK_DIR + File.separator + "version.txt";
+    public static final String VERSION_STORAGE_FILE_PATH = WORK_DIR + File.separator + VERSION_STORAGE_FILE_NAME;
 
     // http
 
@@ -81,7 +81,7 @@ public class Constants {
 
     public static final String HTTP_H_C_Q_F_CONN = "=";
 
-    public static final String HTTP_HEADERS_SEP = "\r\n\r\n";
+    public static final String HTTP_HEADERS_SEP = "\r\n";
 
     public static final String HTTP_HEADERS_CONN_RAW = ": ";
     public static final String HTTP_COOKIES_CONN_RAW = "; ";

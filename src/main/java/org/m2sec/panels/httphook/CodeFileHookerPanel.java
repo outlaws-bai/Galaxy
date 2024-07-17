@@ -106,7 +106,7 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             String filename = SwingTools.showInputDialog("Please input filename: ");
             if (filename == null) return;
             String filepath = getFilePath(filename.replace(CODE_FILE_SUFFIX, ""));
-            if(FileTools.fileIsExist(filepath)) {
+            if(FileTools.isExist(filepath)) {
                 SwingTools.showErrorDialog("This already exists, please try again. ");
                 return;
             }
@@ -129,7 +129,7 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             boolean res = SwingTools.showConfirmDialog(String.format("Are you sure you want to delete this: %s?",
                 selectItem));
             if (!res) return;
-            FileTools.deleteFileIfExist(filepath);
+            FileTools.deleteFiles(filepath);
             reloadExamples();
         });
 

@@ -98,6 +98,6 @@ public class Headers extends Parameters<String> {
     }
 
     public String toRawString() {
-        return HttpUtil.parametersToStr(this, "\r\n", ": ", false);
+        return HttpUtil.parametersToStr(this, Constants.HTTP_HEADERS_SEP, Constants.HTTP_HEADERS_CONN_RAW, false);
     }
 }

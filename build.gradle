@@ -34,7 +34,6 @@ dependencies {
     // grpc
     runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
     implementation "io.grpc:grpc-protobuf:${grpcVersion}"
-    implementation "io.grpc:grpc-services:${grpcVersion}"
     implementation "io.grpc:grpc-stub:${grpcVersion}"
     implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
     // crypto

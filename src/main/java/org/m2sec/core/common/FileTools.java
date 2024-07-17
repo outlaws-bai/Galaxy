@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -32,13 +33,6 @@ public class FileTools {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-
-    public static void cpResourceToTargetIfExist(String resourceFilePath, String targetDir) {
-        Path targetDirPath = Paths.get(targetDir);
-        Path targetPath = targetDirPath.resolve(new File(resourceFilePath).getName());
-        writeFile(targetPath.toAbsolutePath().toString(), readResourceAsString(resourceFilePath));
     }
 
 
@@ -129,15 +123,15 @@ public class FileTools {
     }
 
 
-    public static void deleteFileIfExist(String... filePaths) {
-        deleteFileIfExist(Stream.of(filePaths).map(File::new).toArray(File[]::new));
+    public static void deleteFiles(String... filePaths) {
+        deleteFiles(Stream.of(filePaths).map(File::new).toArray(File[]::new));
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void deleteFileIfExist(File... files) {
+    public static void deleteFiles(File... files) {
         if (files == null) return;
         for (File file : files) {
-            file.delete();
+            if (file.exists()) file.delete();
         }
     }
 
@@ -152,35 +146,27 @@ public class FileTools {
         }
     }
 
-    public static void writeFileIfEmptyOfResource(String resourceName, String filepath) {
-        Path path = Paths.get(filepath);
-        if (!Files.exists(path) || readFileAsString(filepath).isBlank()) {
-            writeFile(filepath, readResourceAsString(resourceName));
+
+    public static void mvResource(String resourceName, String targetDir) {
+        Path path = Paths.get(targetDir);
+        if (Files.exists(path) && Files.isDirectory(path)) {
+            writeFile(targetDir + File.separator + resourceName, readResourceAsString(resourceName));
         }
     }
 
-    public static void writeFileIfEmpty(String targetFilePath, String content) {
-        String raw = readFileAsString(targetFilePath);
-        if (raw.isBlank()) {
-            writeFile(targetFilePath, content);
-        }
-    }
-
-    public static void copyDirResourcesToTargetDirIfEmpty(String sourceDir, String targetDir) {
+    public static void mvResources(String resourceDir, String targetDir) {
         try {
-            // 获取目标目录路径
-            Path targetPath = Paths.get(targetDir);
+            String dir = targetDir + File.separator + resourceDir;
+            Path targetPath = Paths.get(dir);
             if (!Files.exists(targetPath)) {
-                Files.createDirectories(targetPath);
+                createDirs(dir);
             }
 
-            // 获取资源目录 URL
-            URL resource = FileTools.class.getClassLoader().getResource(sourceDir);
+            URL resource = FileTools.class.getClassLoader().getResource(resourceDir);
             if (resource == null) {
-                throw new IllegalArgumentException("Resource directory not found: " + sourceDir);
+                throw new IllegalArgumentException("Resource directory not found: " + resourceDir);
             }
 
-            // 处理资源目录是文件系统目录的情况
             if (resource.getProtocol().equals("file")) {
                 Path sourcePath = Paths.get(resource.toURI());
                 try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(sourcePath)) {
@@ -191,17 +177,15 @@ public class FileTools {
                         }
                     }
                 }
-            }
-            // 处理资源目录在 JAR 文件中的情况
-            else if (resource.getProtocol().equals("jar")) {
+            } else if (resource.getProtocol().equals("jar")) {
                 String jarPath = resource.getPath().substring(5, resource.getPath().indexOf("!"));
                 try (JarFile jarFile = new JarFile(Paths.get(new URL("file:" + jarPath).toURI()).toFile())) {
                     Enumeration<JarEntry> entries = jarFile.entries();
                     while (entries.hasMoreElements()) {
                         JarEntry entry = entries.nextElement();
-                        if (entry.getName().startsWith(sourceDir + "/") && !entry.isDirectory()) {
+                        if (entry.getName().startsWith(resourceDir + "/") && !entry.isDirectory()) {
                             try (InputStream in = jarFile.getInputStream(entry)) {
-                                String fileName = entry.getName().substring(sourceDir.length() + 1);
+                                String fileName = entry.getName().substring(resourceDir.length() + 1);
                                 Files.copy(in, targetPath.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
                             }
                         }
@@ -210,22 +194,19 @@ public class FileTools {
             } else {
                 throw new UnsupportedOperationException();
             }
-        } catch (Exception e) {
+
+        } catch (URISyntaxException | IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static String getVersion() {
-        return readResourceAsString(Constants.VERSION_STORAGE_FILE_NAME);
-    }
 
     public static String getExampleScriptFilePath(String item, String suffix) {
         return Constants.HTTP_HOOK_EXAMPLES_DIR + File.separator + item + suffix;
     }
 
-    public static boolean fileIsExist(String filepath){
+    public static boolean isExist(String filepath) {
         return Files.exists(Paths.get(filepath));
     }
-
 
 }

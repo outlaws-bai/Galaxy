@@ -20,7 +20,7 @@ public abstract class IItem extends JMenuItem {
 
     protected final Config config;
 
-    public IItem(MontoyaApi api,Config config) {
+    public IItem(MontoyaApi api, Config config) {
         this.api = api;
         this.config = config;
         this.setText(displayName());
@@ -34,7 +34,6 @@ public abstract class IItem extends JMenuItem {
         try {
             this.action(event);
         } catch (Exception exc) {
-            api.logging().logToError("action execute error."+ exc.getMessage(), exc);
             log.error("action execute error. {} .", exc.getMessage(), exc);
             SwingTools.showErrorDetailDialog(exc);
         }

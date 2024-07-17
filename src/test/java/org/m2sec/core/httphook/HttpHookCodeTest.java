@@ -24,7 +24,6 @@ public class HttpHookCodeTest {
 
     @BeforeAll
     public static void setRootLoggerLevel() {
-        Helper.initAndLoadConfig(null);
         System.setProperty("python.import.site", "false");
     }
 
