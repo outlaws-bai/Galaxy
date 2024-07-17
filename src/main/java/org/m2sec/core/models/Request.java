@@ -52,9 +52,6 @@ public class Request {
 
     private Query query;
 
-    /**
-     * 不包含cookie
-     */
     private Headers headers;
 
     private byte[] content;
