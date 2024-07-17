@@ -1,16 +1,12 @@
-// Utils: https://github1s.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/utils
 import org.m2sec.core.utils.*;
-// DataObject: https://github1s.com/outlaws-bai/Galaxy/tree/main/src/main/java/org/m2sec/core/models
 import org.m2sec.core.models.*;
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
 
 /**
- * 限制：必须使用JDK启动Burp，JRE无法动态编译.java
- * 用法：使用Java代码修改请求/响应对象的任何部分以满足需求。
- * 内置：该项目内置了一些可能使用的DataObjects和Utils类，可以在代码中使用它们来满足加密、签名等要求。
- * 警告(*)：你应该使用Java代码调用项目中的内置Utils或DataObjects，不要尝试安装其他依赖项，这可能会导致兼容性问题。
+ * 内置示例，需要自定义代码文件时查看该文档：https://github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md
+ * 局限性：必须使用JDK启动Burp
  */
 public class AesCbc{
 
@@ -28,7 +24,7 @@ public class AesCbc{
     /**
      * HTTP请求从客户端到达Burp时被调用。在此处完成请求解密的代码就可以在Burp中看到明文的请求报文。
      *
-     * @param request Request 请求对象, https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Request.java
+     * @param request Request 请求对象
      * @return 经过处理后的request对象，返回null代表不需要处理
      */
     public Request hookRequestToBurp(Request request) {
@@ -44,7 +40,7 @@ public class AesCbc{
     /**
      * HTTP请求从Burp将要发送到Server时被调用。在此处完成请求加密的代码就可以将加密后的请求报文发送到Server。
      *
-     * @param request Request 请求对象, https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Request.java
+     * @param request Request 请求对象
      * @return 经过处理后的request对象，返回null代表不需要处理
      */
     public Request hookRequestToServer(Request request) {
@@ -62,7 +58,7 @@ public class AesCbc{
     /**
      * HTTP请求从Server到达Burp时被调用。在此处完成响应解密的代码就可以在Burp中看到明文的响应报文。
      *
-     * @param response Response 响应对象, https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Response.java
+     * @param response Response 响应对象
      * @return 经过处理后的response对象，返回null代表不需要处理
      */
     public Response hookResponseToBurp(Response response) {
@@ -78,7 +74,7 @@ public class AesCbc{
     /**
      * HTTP请求从Burp将要发送到Client时被调用。在此处完成响应加密的代码就可以将加密后的响应报文返回给Client。
      *
-     * @param response Response 响应对象, https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Response.java
+     * @param response Response 响应对象
      * @return 经过处理后的response对象，返回null代表不需要处理
      */
     public Response hookResponseToClient(Response response) {
@@ -94,18 +90,10 @@ public class AesCbc{
         return response;
     }
 
-    /**
-     * @param content byte[] 要解密的数据
-     * @return 解密结果
-     */
     public byte[] decrypt(byte[] content) {
         return CryptoUtil.aesDecrypt(ALGORITHM, content, secret, paramMap);
     }
 
-    /**
-     * @param content byte[] 要加密的数据
-     * @return 加密结果
-     */
     public byte[] encrypt(byte[] content) {
         return CryptoUtil.aesEncrypt(ALGORITHM, content, secret, paramMap);
     }
