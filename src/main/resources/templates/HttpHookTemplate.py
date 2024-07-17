@@ -25,7 +25,7 @@ def hook_request_to_burp(request):
         request (Request): 请求对象
 
     Returns:
-        Request: 经过处理后的request对象，返回null代表不需要处理
+        Request: 经过处理后的request对象，返回null代表从当前节点开始流量不再需要处理
     """
 
 
@@ -36,7 +36,7 @@ def hook_request_to_server(request):
         request (Request): 请求对象
 
     Returns:
-        Request: 经过处理后的request对象，返回null代表不需要处理
+        Request: 经过处理后的request对象，返回null代表从当前节点开始流量不再需要处理
     """
 
 
@@ -47,7 +47,7 @@ def hook_response_to_burp(response):
         response (Response): 响应对象
 
     Returns:
-        Response: 经过处理后的response对象，返回null代表不需要处理
+        Response: 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理
     """
 
 
@@ -58,7 +58,7 @@ def hook_response_to_client(response):
         response (Response): 响应对象
 
     Returns:
-        Response: 经过处理后的response对象，返回null代表不需要处理
+        Response: 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理
     """
 
 def set_log(log1):
