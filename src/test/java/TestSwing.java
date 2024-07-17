@@ -12,6 +12,7 @@ import javax.swing.*;
 
 public class TestSwing {
     public static void main(String[] args) {
+        Helper.initWorkDir();
         // 创建主窗体
         JFrame frame = new JFrame("Java Syntax Highlighting");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

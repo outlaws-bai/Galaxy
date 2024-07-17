@@ -62,7 +62,7 @@ def hook_response_to_client(response):
     """
 
 def set_log(log1):
-    """程序在最开始会自动调用该函数，在上方函数可以大方使用log对象"""
+    """程序在最开始会自动调用该函数，在上方函数可以放心使用log对象"""
     global log
     log = log1
 
