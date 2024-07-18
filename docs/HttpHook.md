@@ -27,7 +27,7 @@
 
 ## 实现方式
 
-支持Grpc、Java、Python、Js这四种实现四个生命周期。
+支持Grpc、Java、Python、Js这四种实现四个阶段。
 
 可分为两类：
 
