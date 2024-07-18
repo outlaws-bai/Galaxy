@@ -19,6 +19,9 @@
 `hookResponseToBurp`：HTTP请求从Server到达Burp时被调用。在此处完成响应解密的代码就可以在Burp中看到明文的响应报文。
 `hookResponseToClient`：HTTP请求从Burp将要发送到Client时被调用。在此处完成响应加密的代码就可以将加密后的响应报文返回给Client。
 
+**流程图**：
+
+![流程图](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/image-20240621105543574.png)
 
 **测试**：在`Repeater`右键找到`Http Hook`，点击其选的按钮即可测试。前提是你已经开启了Http Hook服务
 
@@ -79,24 +82,4 @@ GRPC proto 见 [HttpHook.proto](https://github.com/outlaws-bai/Galaxy/blob/main/
 示例：
 1. [aes_cbc](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/resources/examples/aes_cbc.js)
 
-## 场景及解决方案
-
-**场景1**：在Burp中看到且可编辑解密后的报文。
-
-**场景2**：使用桌面的扫描器扫描明文请求。sqlmap、xray...
-
-### 解决方案 - 1
-
-应对场景1，但必须满足条件：涉及非对称加密的情况下必须已知私钥。
-
-**流程图**：
-
-![流程图](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/image-20240621105543574.png)
-
-### 解决方案 - 2 *
-
-应对场景2，使得可以用sqlmap，xray等桌面扫描器扫描明文请求。待实现。
-
-### 解决方案 - 3 *
-
-对场景1的补充，提出涉及非对称加密情况下的解决方案。待实现。
+   
