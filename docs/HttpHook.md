@@ -82,4 +82,6 @@ GRPC proto 见 [HttpHook.proto](https://github.com/outlaws-bai/Galaxy/blob/main/
 示例：
 1. [aes_cbc](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/resources/examples/aes_cbc.js)
 
-   
+## 设计思路
+
+https://xz.aliyun.com/t/15051
