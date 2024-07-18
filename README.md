@@ -6,7 +6,7 @@ Burp插件，主要实现在 `HTTP请求&响应全加密加签 `场景下，高�
 
 ### Http Hook
 
-使用Burp新版  `Montoya API`  开发，从中提取出必要的四个生命周期，你可以使用Python、JS、Java语言或Grpc来完成生命周期的逻辑以实现需求需求。
+使用Burp新版  `Montoya API`  开发，从中提取出四个生命周期，你可以使用Python、JS、Java语言或Grpc来完成生命周期的逻辑以实现需求需求。
 
 > 项目已内置多种加解密规则，对于常规算法可以做到开箱即用。
 
