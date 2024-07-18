@@ -12,7 +12,7 @@
 
 `Check Expression`: 判断请求是否需要Hook的JavaScript bool表达式。[Expression](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Expression)
 
-**Hook函数**：
+**Hook生命周期**：
 
 `hookRequestToBurp`：HTTP请求从客户端到达Burp时被调用。在此处完成请求解密的代码就可以在Burp中看到明文的请求报文。
 `hookRequestToServer`：HTTP请求从Burp将要发送到Server时被调用。在此处完成请求加密的代码就可以将加密后的请求报文发送到Server。
@@ -27,15 +27,13 @@
 
 ## 实现方式
 
-支持Grpc、Java、Python、Js这四种实现需求。
+支持Grpc、Java、Python、Js这四种实现四个生命周期。
 
-四种但可分为两类：
+可分为两类：
 
 `Grpc` ：在HTTP报文的对应生命周期调用对应的 `Hook 接口`。你需要用其他语言实现Grpc Server，并自行通过三方库实现对应 `Hook 接口` 应有的功能。
 
 `Code` ：在HTTP报文的特定生命周期调用对应的 `Hook 函数`。你需要用支持的方式编写对应语言的脚本，在脚本中组合、调用项目中的DataObjects和Util，实现对应 `Hook 函数` 应有的功能。
-
-这两种实现方式稍有差异，且各有优缺点。
 
 **对比**
 
