@@ -12,7 +12,7 @@
 
 `Check Expression`: 判断请求是否需要Hook的JavaScript bool表达式。[Expression](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Expression)
 
-**Hook生命周期**：
+**Hook 阶段**：
 
 `hookRequestToBurp`：HTTP请求从客户端到达Burp时被调用。在此处完成请求解密的代码就可以在Burp中看到明文的请求报文。
 `hookRequestToServer`：HTTP请求从Burp将要发送到Server时被调用。在此处完成请求加密的代码就可以将加密后的请求报文发送到Server。
