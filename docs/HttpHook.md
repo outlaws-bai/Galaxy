@@ -25,7 +25,7 @@
 
 ## 实现方式
 
-支持Grpc、Java、Python、Js这四种实现四个阶段。
+支持Grpc、Java、Python、Js这四种方式实现四个阶段。
 
 可分为两类：
 
