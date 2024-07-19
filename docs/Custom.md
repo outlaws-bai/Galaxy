@@ -8,7 +8,7 @@
 
 `hookRequestToBurp`，`hookRequestToServer`， `hookResponseToBurp`， `hookResponseToClient`
 
-你需要实现图中的四个函数，实现逻辑是 **使用项目提供的工具类按照你的需求修改函数提供给你的请求/响应，以达到你的需求**。所以你必须熟悉项目中的DataObjects和Utils。
+你需要实现其中的四个函数，实现逻辑是 **使用项目提供的工具类按照你的需求修改请求/响应，以达到你的需求**。所以你必须熟悉项目中的DataObjects和Utils。
 
 ## DataObjects
 
@@ -76,32 +76,32 @@ request.setContent(byte[] content) -> content
 获取/修改状态码
 
 ```java
-request.getStatusCode() -> int
+response.getStatusCode() -> int
 ```
 
 ```java
-request.setStatusCode(int statusCode) -> void
+response.setStatusCode(int statusCode) -> void
 ```
 
 获取/修改响应头
 
 ```java
-request.getHeaders() -> Headers extends Map<String, List<String>>
+response.getHeaders() -> Headers extends Map<String, List<String>>
 ```
 
 ```java
-request.setHeaders(Headers headers) -> void
+response.setHeaders(Headers headers) -> void
 ```
 
 获取/修改响应体
 
 ```java
-request.getContent() -> byte[]
-request.getBody() -> String
+response.getContent() -> byte[]
+response.getBody() -> String
 ```
 
 ```java
-request.setContent(byte[] content) -> content
+response.setContent(byte[] content) -> content
 ```
 
 ## Utils
@@ -110,8 +110,8 @@ request.setContent(byte[] content) -> content
 
 ### CodeUtil
 
-hex、base64编码工具类。[CodeUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/CodeUtil.java)
-
+> hex、base64编码工具类。[CodeUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/CodeUtil.java)
+>
 > 在python中可以导入base64和binascii使用
 
 base64
@@ -132,8 +132,8 @@ CodeUtil.hexEncodeToString(byte[] data) -> String
 
 ### JsonUtil
 
-json解析工具类。[JsonUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/JsonUtil.java)
-
+> json解析工具类。[JsonUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/JsonUtil.java)
+>
 > 在python中可以导入json使用
 
 json字符串转Map或者说dict
@@ -158,9 +158,9 @@ JsonUtil.toJsonStr(Object obj) -> String
 
 > 加解密工具类。[CryptoUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/CryptoUtil.java)
 >
-> 项目中加解密使用java中的bouncycastle，具体的transformation可查询官方文档
->
 > 不建议利用脚本中的语言去引入本地的加解密依赖，这样可能会导致兼容问题。
+>
+> 项目中加解密使用java中的bouncycastle，具体的transformation可查询官方文档
 
 AES加密/解密
 
@@ -228,7 +228,7 @@ MacUtil.calcToBase64(byte[] data, byte[] secret, String algorithm) -> String
 
 ## Debug
 
-在脚本中你可以使用log对象打印日志进行调试，比如
+在脚本中你可以使用log对象打印日志，比如
 
 ```
 log.info("request: {}", request)
