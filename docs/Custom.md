@@ -1,102 +1,243 @@
 # 自定义代码文件
 
-> 适用于想要通过Python、JavaScript、Java代码完成HTTP HOOK功能，并且项目示例不满足需求。
->
 > 需要一定的编程能力。
 
 如不了解Http Hook功能的基本信息，请先阅读 [Http Hook](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md)
 
-在Burp中打开插件Tab，选择你要使用的语言后，点击下方的New按钮，我们以Java为例，代码文件名称为Example
+在Burp中打开插件Tab，选择你要使用的语言，点击下方的New按钮并输入文件名，之后在编辑器会生成对应语言的模版文件，并且其中有四个函数(java为驼峰，js/python为蛇形)：
 
-![image-20240717225425967](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240717225425967.png)
+`hookRequestToBurp`，`hookRequestToServer`， `hookResponseToBurp`， `hookResponseToClient`
 
-你需要实现图中的四个函数，实现逻辑是 **使用项目提供的工具类按照你的需求修改函数提供给你的请求/响应，以达到你的需求**。
-
-所以你必须熟悉项目中的DataObjects和Utils。
+你需要实现图中的四个函数，实现逻辑是 **使用项目提供的工具类按照你的需求修改函数提供给你的请求/响应，以达到你的需求**。所以你必须熟悉项目中的DataObjects和Utils。
 
 ## DataObjects
 
 > 推荐点击链接阅读代码
 
-Request：请求。 [Request.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Request.java)
+### Request
 
-1. 获取请求头：Headers getHeaders()
-2. 获取Body：String getBody()
+> HTTP请求。 [Request.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Request.java)
 
-Response：响应。 [Response.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Response.java)
+获取/修改请求方法
 
-1. 获取请求头：Headers getHeaders()
-2. 获取Body：String getBody()
+```java
+request.getMethod() -> String
+```
 
-Headers：请求/响应头。[Headers.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Headers.java)
+```java
+request.setMethod(String method) -> void
+```
 
-1. 获取：List\<String\> get(String key)
-2. 覆盖：Headers put(String key, String value)
-3. 追加：Headers add(String key, String value)
+获取/修改请求路径
 
-Cookies：请求Cookie。[Cookies.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Cookies.java)
+```java
+request.getPath() -> String
+```
 
-1. 获取：List\<String\> get(String key)
-2. 覆盖：Cookies put(String key, String value)
-3. 追加：Cookies add(String key, String value)
+```java
+request.setPath(String path) -> void
+```
 
-Query：请求query参数。[Query.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Query.java)
+获取/修改Query参数
 
-1. 获取：List\<String\> get(String key)
-2. 覆盖：Query put(String key, String value)
-3. 追加：Query add(String key, String value)
+```java
+request.getQuery() -> Query extends Map<String, List<String>>
+```
 
-Form：请求Body中通过`application/x-www-form-urlencoded`传递的数据。[Form.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Form.java)
+```java
+request.setQuery(Query query) -> void
+```
 
-1. 获取：List\<String\> get(String key)
-2. 覆盖：Form put(String key, String value)
-3. 追加：Form add(String key, String value)
+获取/修改请求头
 
-FormData：请求Body中通过`multipart/form-data`传递的数据。[FormData.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/FormData.java)
+```java
+request.getHeaders() -> Headers extends Map<String, List<String>>
+```
 
-1. 获取：List\<T\> get(String key)
-2. 覆盖：Form put(String key, T value)
-3. 追加：Form add(String key, T value)
+```java
+request.setHeaders(Headers headers) -> void
+```
 
-UploadFile：请求Body中通过`multipart/form-data`传递的文件。[UploadFile.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/UploadFile.java)
+获取/修改响应体
 
-1. 获取文件名：String getFilename()
-2. 获取文件内容：byte[] getContent()
+```java
+request.getContent() -> byte[]
+request.getBody() -> String
+```
+
+```java
+request.setContent(byte[] content) -> content
+```
+
+### Response
+
+> HTTP响应。 [Response.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Response.java)
+
+获取/修改状态码
+
+```java
+request.getStatusCode() -> int
+```
+
+```java
+request.setStatusCode(int statusCode) -> void
+```
+
+获取/修改响应头
+
+```java
+request.getHeaders() -> Headers extends Map<String, List<String>>
+```
+
+```java
+request.setHeaders(Headers headers) -> void
+```
+
+获取/修改响应体
+
+```java
+request.getContent() -> byte[]
+request.getBody() -> String
+```
+
+```java
+request.setContent(byte[] content) -> content
+```
 
 ## Utils
 
 > 推荐点击链接阅读代码
 
-ByteUtil：byte数组处理的工具类。[ByteUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/ByteUtil.java)
+### CodeUtil
 
-CodeUtil：hex、base64编码工具类。[CodeUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/CodeUtil.java)
+hex、base64编码工具类。[CodeUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/CodeUtil.java)
 
-HttpUtil：http相关工具类。[HttpUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/HttpUtil.java)
+> 在python中可以导入base64和binascii使用
 
-JsonUtil：json解析工具类。[JsonUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/JsonUtil.java)
+base64
 
-YamlUtil：yaml解析工具类。[YamlUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/YamlUtil.java)
+```java
+CodeUtil.b64decode(String data) -> byte[]
+CodeUtil.b64encode(byte[] data) -> byte[]
+CodeUtil.b64encodeToString(byte[] data) -> String
+```
 
-CryptoUtil：加解密工具类。[CryptoUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/CryptoUtil.java)
+hex
 
-HashUtil：hash计算工具类。[HashUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/HashUtil.java)
+```java
+CodeUtil.hexDecode(String data) -> byte[]
+CodeUtil.hexEncode(byte[] data) -> byte[]
+CodeUtil.hexEncodeToString(byte[] data) -> String
+```
 
-## 示例
+### JsonUtil
 
-说起来还是比较抽象，我们假设有一个场景（对称加密+非堆成加密），也是现在比较主流的。
+json解析工具类。[JsonUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/JsonUtil.java)
 
-服务端生成了两对公私钥pri1，pub1，pri2，pub2，客户端持有pub1，pri2，服务端持有pri2，pub2。当然有一个大前提，在这种非加密场景下想进行中间人攻击，我们必须已知pri2。
+> 在python中可以导入json使用
 
-1. 客户端生成一个长度为32的随机密钥
-2. 通过`AES` 将请求body加密，再使用pub1将1中的随机密钥进行`RSA`加密
-3. 服务端收到body后使用pri1解密被`RSA`加密的随机密钥
-4. 使用解密得到的随机密钥，再解密被`AES`加密的原始body
-5. 服务端进行正常的业务逻辑处理，处理完成后
-6. 服务端生成一个长度为32的随机密钥
-7. 通过`AES` 将响应body加密，再使用pub2将6中的随机密钥进行`RSA`加密
-8. 客户端收到body后使用pri2解密被`RSA`加密的随机密钥
-9. 使用解密得到的随机密钥，再解密被`AES`加密的原始body
-10. 客户端进行正常的业务逻辑
+json字符串转Map或者说dict
 
-coding...
+```java
+JsonUtil.jsonStrToMap(String jsonStr) -> Map
+```
+
+json字符串转List
+
+```java
+JsonUtil.jsonStrToList(String jsonStr) -> Map
+```
+
+对象转json字符串
+
+```java
+JsonUtil.toJsonStr(Object obj) -> String
+```
+
+### CryptoUtil
+
+> 加解密工具类。[CryptoUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/CryptoUtil.java)
+>
+> 项目中加解密使用java中的bouncycastle，具体的transformation可查询官方文档
+>
+> 不建议利用脚本中的语言去引入本地的加解密依赖，这样可能会导致兼容问题。
+
+AES加密/解密
+
+```java
+CryptoUtil.aesEncrypt(String transformation, byte[] data, byte[] secret, Map<String, Object> params) -> byte[]
+```
+
+```java
+CryptoUtil.aesDecrypt(String transformation, byte[] data, byte[] secret, Map<String, Object> params) -> byte[]
+```
+
+RSA加密/解密
+
+```java
+CryptoUtil.rsaEncrypt(String transformation, byte[] data, byte[] publicKey) -> byte[]
+```
+
+```java
+CryptoUtil.rsaDecrypt(String transformation, byte[] data, byte[] privateKey) -> byte[]
+```
+
+SM2加密/解密
+
+```java
+CryptoUtil.sm2Encrypt(byte[] data, byte[] publicKey) -> byte[]
+```
+
+```java
+CryptoUtil.sm2Decrypt(byte[] data, byte[] privateKey) -> byte[]
+```
+
+SM4加密/解密
+
+```java
+CryptoUtil.sm4Encrypt(String transformation, byte[] data, byte[] secret, Map<String, Object> params) -> byte[]
+```
+
+```java
+CryptoUtil.sm4Decrypt(String transformation, byte[] data, byte[] secret, Map<String, Object> params) -> byte[]
+```
+
+### HashUtil
+
+> hash计算工具类。[HashUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/HashUtil.java)
+>
+> 项目中hash计算使用java中的bouncycastle，具体的algorithm可查询官方文档
+
+```java
+HashUtil.calc(byte[] data, String algorithm) -> byte[]
+HashUtil.calcToHex(byte[] data, String algorithm) -> String
+HashUtil.calcToBase64(byte[] data, String algorithm) -> String
+```
+
+### MacUtil
+
+> mac计算工具类。[MacUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/MacUtil.java)
+>
+> 项目中mac计算使用java中的bouncycastle，具体的algorithm可查询官方文档
+
+```java
+MacUtil.calc(byte[] data, byte[] secret, String algorithm) -> byte[]
+MacUtil.calcToHex(byte[] data, byte[] secret, String algorithm) -> String
+MacUtil.calcToBase64(byte[] data, byte[] secret, String algorithm) -> String
+```
+
+## Debug
+
+在脚本中你可以使用log对象打印日志进行调试，比如
+
+```
+log.info("request: {}", request)
+```
+
+## Log
+
+所有日志会显示在两个地方：
+
+1. Burp Extensions，选中插件可以看到，不过这里Burp限制了显示行数
+2. work dir下有run.log文件，包含了所有日志
 

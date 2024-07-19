@@ -138,11 +138,6 @@ public class Response {
         return new String(content);
     }
 
-    @SuppressWarnings("unchecked")
-    public Map<String, Object> getJson() {
-        assert getContentType().equals(ContentType.JSON);
-        return (Map<String, Object>) JsonUtil.jsonStrToMap(getBody());
-    }
 
     @Override
     public String toString() {

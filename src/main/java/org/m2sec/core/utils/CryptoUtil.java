@@ -95,13 +95,13 @@ public class CryptoUtil {
     }
 
 
-    public static byte[] sm2Decrypt(byte[] cipherText, byte[] privateKey) {
+    public static byte[] sm2Decrypt(byte[] data, byte[] privateKey) {
         try {
             PrivateKey priKey =
                 KeyFactory.getInstance(ALGORITHM_EC).generatePrivate(new PKCS8EncodedKeySpec(privateKey));
             Cipher cipher = Cipher.getInstance(ALGORITHM_SM2);
             cipher.init(Cipher.DECRYPT_MODE, priKey);
-            return cipher.doFinal(cipherText);
+            return cipher.doFinal(data);
         } catch (InvalidKeySpecException | NoSuchPaddingException | NoSuchAlgorithmException |
                  IllegalBlockSizeException | BadPaddingException | InvalidKeyException e) {
             throw new RuntimeException(e);

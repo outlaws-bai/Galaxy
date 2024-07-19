@@ -249,12 +249,6 @@ public class Request {
         return new String(content);
     }
 
-    @SuppressWarnings("unchecked")
-    public Map<String, Object> getJson(){
-        assert getContentType().equals(ContentType.JSON);
-        return (Map<String, Object>) JsonUtil.jsonStrToMap(getBody());
-    }
-
     public boolean isStaticExtension() {
         return isStaticExtension(Constants.HTTP_STATIC_EXTENSIONS);
     }
