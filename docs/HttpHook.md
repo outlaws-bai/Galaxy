@@ -1,7 +1,5 @@
 # Http Hook
 
-> 带 * 为待实现
-
 ## 基本信息
 
 **选项解释**：
@@ -41,8 +39,6 @@
 
 `Code`：优点是与JVM交互调用Java原生的加解密库 -> 对Java来说没有算法兼容性的问题、且项目已包含多种示例 -> 成本低，缺点是需要熟悉项目自带的DataObjects和Utils，并且可能存在运行兼容性的问题。
 
-[DataObjects](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#DataObjects)      [Utils](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Utils)
-
 ### Grpc
 
 你需要自行编写并启动一个 GRPC 服务端。实现四个Hook函数。
@@ -57,7 +53,7 @@ GRPC proto 见 [HttpHook.proto](https://github.com/outlaws-bai/Galaxy/blob/main/
 
 > 必须使用JDK启动Burp，因为要动态编译.java文件，JRE不满足条件。
 
-你需要选择一个JAVA文件，并在需要的时候修改它直到满足你的需求，程序会动态编译并调用其中的Hook函数。
+你需要选择一个JAVA文件，并在必要的时候修改它直到满足你的需求，程序会动态编译并调用其中的Hook函数。
 
 示例：
 1. [AesCbc](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/resources/examples/AesCbc.java)
@@ -68,14 +64,14 @@ GRPC proto 见 [HttpHook.proto](https://github.com/outlaws-bai/Galaxy/blob/main/
 
 ### Python
 
-你需要选择一个Python文件，程序会在不同的HTTP报文的对应生命周期调用对应的函数。
+你需要选择一个Python文件，并在必要的时候修改它直到满足你的需求，程序会在不同的HTTP报文的对应生命周期调用对应的函数。
 
 示例：
 1. [aes_cbc](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/resources/examples/aes_cbc.py)
 
 ### Js
 
-你需要选择一个Js文件，程序会在不同的HTTP报文的对应生命周期调用对应的函数。
+你需要选择一个Js文件，并在必要的时候修改它直到满足你的需求，程序会在不同的HTTP报文的对应生命周期调用对应的函数。
 
 示例：
 1. [aes_cbc](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/resources/examples/aes_cbc.js)
