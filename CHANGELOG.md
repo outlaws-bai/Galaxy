@@ -4,6 +4,11 @@
 
 1. ...
 
+## 2024-07-20 Release 2.2.6
+
+1. fix some bugs
+2. 代码编辑器增加提示/补全功能
+
 ## 2024-07-17 Release 2.2.5
 
 1. Request/Response 增加getBody、getJson方法。@outlaws-bai
