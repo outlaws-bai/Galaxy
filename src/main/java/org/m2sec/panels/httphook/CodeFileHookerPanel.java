@@ -32,8 +32,6 @@ import java.util.Map;
 
 public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
 
-    private final String CODE_LANGUAGE;
-
     private final String CODE_FILE_SUFFIX;
 
     private JComboBox<String> codeCombo;
@@ -42,7 +40,6 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
 
     public CodeFileHookerPanel(Option option, MontoyaApi api, HttpHookService service) {
         super(option, api, service);
-        CODE_LANGUAGE = Helper.capitalizeFirstLetter(service.name());
         if (service.equals(HttpHookService.JAVA)) {
             CODE_FILE_SUFFIX = Constants.JAVA_FILE_SUFFIX;
         } else if (service.equals(HttpHookService.PYTHON)) {

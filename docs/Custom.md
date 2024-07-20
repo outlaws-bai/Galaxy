@@ -104,6 +104,26 @@ response.getBody() -> String
 response.setContent(byte[] content) -> content
 ```
 
+### Headers Query
+
+> 请求头或者Query对象，均继承自Map\<String, List\<String\>\>
+
+获取value
+
+```java
+headers.get("Host") -> List<String>
+headers.getFirst("Host") -> String
+```
+
+修改value
+
+```java
+// {"Host": ["www.baidu.com"]}
+headers.add("Host", "192.168.1.4") => {"Host": ["www.baidu.com", "192.168.1.4"]}
+headers.put("Host", "192.168.1.4") => {"Host": ["192.168.1.4"]}
+headers.remove("Host") => {}
+```
+
 ## Utils
 
 > 推荐点击链接阅读代码
@@ -226,11 +246,13 @@ MacUtil.calcToHex(byte[] data, byte[] secret, String algorithm) -> String
 MacUtil.calcToBase64(byte[] data, byte[] secret, String algorithm) -> String
 ```
 
-## Debug
+## Test
 
-在脚本中你可以使用log对象打印日志，比如
+当启动服务后，在Repeater页面会绑定Encrypt/Decrypt按钮，可以用于测试。
 
-```
+同时在脚本中你可以使用log对象打印日志，来判断代码逻辑是否正确。
+
+```java
 log.info("request: {}", request)
 ```
 

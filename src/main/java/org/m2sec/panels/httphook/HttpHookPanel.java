@@ -50,14 +50,14 @@ public class HttpHookPanel extends JPanel {
         CodeFileHookerPanel jsFileHookerPanel = new CodeFileHookerPanel(option, api, HttpHookService.JS);
         jsFileHookerPanel.resetCodeTheme();
 
-        hookNames.add(HttpHookService.JS.name());
-        hookNames.add(HttpHookService.PYTHON.name());
-        hookNames.add(HttpHookService.GRPC.name());
-        hookNames.add(HttpHookService.JAVA.name());
-        serviceMap.put(Helper.capitalizeFirstLetter(HttpHookService.JS.name()), jsFileHookerPanel);
-        serviceMap.put(Helper.capitalizeFirstLetter(HttpHookService.PYTHON.name()), pythonFileHookerPanel);
-        serviceMap.put(Helper.capitalizeFirstLetter(HttpHookService.GRPC.name()), rpcImpl);
-        serviceMap.put(Helper.capitalizeFirstLetter(HttpHookService.JAVA.name()), javaFileHookerPanel);
+        hookNames.add(HttpHookService.JS.name().toLowerCase());
+        hookNames.add(HttpHookService.PYTHON.name().toLowerCase());
+        hookNames.add(HttpHookService.GRPC.name().toLowerCase());
+        hookNames.add(HttpHookService.JAVA.name().toLowerCase());
+        serviceMap.put(HttpHookService.JS.name().toLowerCase(), jsFileHookerPanel);
+        serviceMap.put(HttpHookService.PYTHON.name().toLowerCase(), pythonFileHookerPanel);
+        serviceMap.put(HttpHookService.GRPC.name().toLowerCase(), rpcImpl);
+        serviceMap.put(HttpHookService.JAVA.name().toLowerCase(), javaFileHookerPanel);
 
         // 创建一个容器(卡片)用于放置不同方式的JPanel
         JPanel wayPanelContainer = new JPanel(new CardLayout());
@@ -79,7 +79,7 @@ public class HttpHookPanel extends JPanel {
         JPanel nextControlPanel = new JPanel(new BorderLayout());
         nextControlPanel.setVisible(false);
         JPanel switchAndCheckBoxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JButton switchButton = new JButton(Helper.capitalizeFirstLetter(RunStatus.START.name()));
+        JButton switchButton = new JButton(RunStatus.START.getDisplay());
         switchButton.setToolTipText("Start hook...");
         JCheckBox hookRequestCheckBox = new JCheckBox("Hook request");
         hookRequestCheckBox.setToolTipText("HTTP requests need to be hook?");
@@ -139,7 +139,7 @@ public class HttpHookPanel extends JPanel {
             String selectItem = (String) comboBox.getSelectedItem();
             IHookerPanel<?> hookerPanel = serviceMap.get(selectItem);
             boolean isStop = switchButton.getText().equalsIgnoreCase(RunStatus.STOP.name().toLowerCase());
-            String text = isStop ? RunStatus.START.name() : RunStatus.STOP.name();
+            RunStatus status = isStop ? RunStatus.START : RunStatus.STOP;
 
             try {
                 if (!isStop) {
@@ -162,7 +162,7 @@ public class HttpHookPanel extends JPanel {
                 return;
             }
 
-            switchButton.setText(Helper.capitalizeFirstLetter(text));
+            switchButton.setText(status.getDisplay());
             SwingTools.changePanelStatus(hookerPanel, isStop);
             SwingTools.changeComponentStatus(comboBox, isStop);
             SwingTools.changePanelStatus(requestCheckPanel, isStop);
@@ -175,7 +175,7 @@ public class HttpHookPanel extends JPanel {
         hookRequestCheckBox.setSelected(option.isHookRequest());
         hookResponseCheckBox.setSelected(option.isHookResponse());
         if (option.getHookService() != null) {
-            comboBox.setSelectedIndex(hookNames.indexOf(option.getHookService().name()));
+            comboBox.setSelectedIndex(hookNames.indexOf(option.getHookService().name().toLowerCase()));
         } else {
             comboBox.setSelectedIndex(-1);
         }

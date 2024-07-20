@@ -45,6 +45,7 @@ dependencies {
     implementation 'ch.qos.logback:logback-classic:1.5.6'
     // code text area
     implementation 'com.fifesoft:rsyntaxtextarea:3.4.1'
+    implementation 'com.fifesoft:autocomplete:3.3.1'
     // cross-language
     implementation 'org.openjdk.nashorn:nashorn-core:15.4'
     implementation 'org.python:jython-standalone:2.7.3'
