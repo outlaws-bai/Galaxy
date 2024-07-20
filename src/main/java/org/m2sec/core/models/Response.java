@@ -9,11 +9,8 @@ import lombok.Setter;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.utils.HttpUtil;
-import org.m2sec.core.utils.JsonUtil;
 import org.m2sec.rpc.HttpHook;
-
 import java.io.ByteArrayOutputStream;
-import java.util.Map;
 
 
 /**

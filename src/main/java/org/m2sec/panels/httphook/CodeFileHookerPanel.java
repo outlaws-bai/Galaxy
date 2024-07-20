@@ -137,9 +137,7 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
     private void reloadExamples() {
         codeCombo.removeAllItems();
         List<String> examples = FileTools.listDir(Constants.HTTP_HOOK_EXAMPLES_DIR);
-        examples.stream().filter(x -> x.endsWith(CODE_FILE_SUFFIX)).forEach(x -> {
-            codeCombo.addItem(new File(x).getName().replace(CODE_FILE_SUFFIX, ""));
-        });
+        examples.stream().filter(x -> x.endsWith(CODE_FILE_SUFFIX)).forEach(x -> codeCombo.addItem(new File(x).getName().replace(CODE_FILE_SUFFIX, "")));
         resetInput();
     }
 

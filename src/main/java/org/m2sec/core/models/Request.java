@@ -13,13 +13,11 @@ import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.enums.Protocol;
 import org.m2sec.core.utils.HttpUtil;
-import org.m2sec.core.utils.JsonUtil;
 import org.m2sec.rpc.HttpHook;
 
 import javax.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
-import java.util.Map;
 import java.util.stream.Stream;
 
 /**

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.FileTools;
-import org.m2sec.core.common.Helper;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
