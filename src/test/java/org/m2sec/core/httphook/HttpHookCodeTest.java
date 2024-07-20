@@ -9,6 +9,7 @@ import org.m2sec.core.common.Helper;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
+import org.m2sec.core.utils.FactorUtil;
 
 import java.io.File;
 
@@ -47,8 +48,8 @@ public class HttpHookCodeTest {
     }
 
     public void testCodeHooker(String filepath) {
-        String randomString1 = Helper.generateRandomString(50);
-        String randomString2 = Helper.generateRandomString(50);
+        String randomString1 = FactorUtil.randomString(50);
+        String randomString2 = FactorUtil.randomString(50);
 
         Request request = Request.of("https://www.baidu.com/a/b/c", Method.POST);
         request.setContent(("{\"data\": \"" + randomString1 + "\"}").getBytes());

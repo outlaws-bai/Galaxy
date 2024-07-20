@@ -138,6 +138,10 @@ public class Response {
         return new String(content);
     }
 
+    public void setBody(String body) {
+        content = body.getBytes();
+    }
+
 
     @Override
     public String toString() {

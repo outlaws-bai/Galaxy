@@ -3,6 +3,7 @@ var CryptoUtil = Java.type("org.m2sec.core.utils.CryptoUtil")
 var HashUtil = Java.type("org.m2sec.core.utils.HashUtil")
 var JsonUtil = Java.type("org.m2sec.core.utils.JsonUtil")
 var MacUtil = Java.type("org.m2sec.core.utils.MacUtil")
+var FactorUtil = Java.type("org.m2sec.core.utils.FactorUtil")
 var Request = Java.type("org.m2sec.core.models.Request")
 var Response = Java.type("org.m2sec.core.models.Response")
 var String = Java.type("java.lang.String")
@@ -17,6 +18,7 @@ log = void 0
 
 /**
  * 内置模版，需要自定义代码文件时查看该文档：https://github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md
+ * 按 Tab 可查看内置函数
  */
 
 

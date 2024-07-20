@@ -9,12 +9,12 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.FileAppender;
 import org.m2sec.Galaxy;
+import org.m2sec.core.utils.FactorUtil;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.SecureRandom;
 
 /**
  * @author: outlaws-bai
@@ -40,7 +40,7 @@ public class Helper {
                     && !Constants.VERSION.equalsIgnoreCase(FileTools.readFileAsString(Constants.VERSION_STORAGE_FILE_PATH))
             ) {
                 // 更新了版本
-                String randomString = generateRandomString(6);
+                String randomString = FactorUtil.randomString(6);
                 String bakDir = Constants.WORK_DIR + "." + randomString + ".bak";
                 FileTools.renameDir(Constants.WORK_DIR, bakDir);
                 message = Constants.UPDATE_VERSION_DEF + bakDir + ". \r\nGood luck.";
@@ -124,26 +124,11 @@ public class Helper {
         }
     }
 
-    public static void initExceptionClean() {
+    public static void clean() {
         Helper.deleteLogFile();
         Helper.cleanTmpDir();
     }
 
-    public static String generateRandomString(int length) {
-        @SuppressWarnings("SpellCheckingInspection") String CHARACTERS =
-            "abcdefghijklmnopqrstuvwxyz0123456789";
-        SecureRandom RANDOM = new SecureRandom();
-        if (length <= 0) {
-            throw new IllegalArgumentException("Length must be greater than 0");
-        }
-
-        StringBuilder stringBuilder = new StringBuilder(length);
-        for (int i = 0; i < length; i++) {
-            int randomIndex = RANDOM.nextInt(CHARACTERS.length());
-            stringBuilder.append(CHARACTERS.charAt(randomIndex));
-        }
-        return stringBuilder.toString();
-    }
 
     /**
      * 驼峰转蛇形

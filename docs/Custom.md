@@ -150,6 +150,28 @@ CodeUtil.hexEncode(byte[] data) -> byte[]
 CodeUtil.hexEncodeToString(byte[] data) -> String
 ```
 
+### FactorUtil
+
+> 因子工具类。[FactorUtil](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/FactorUtil.java)
+
+生成uuid
+
+```java
+FactorUtil.uuid()
+```
+
+生成随机字符串
+
+```java
+FactorUtil.randomString(int length)
+```
+
+获取当前时间
+
+```java
+FactorUtil.currentDate()
+```
+
 ### JsonUtil
 
 > json解析工具类。[JsonUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/JsonUtil.java)
@@ -165,7 +187,7 @@ JsonUtil.jsonStrToMap(String jsonStr) -> Map
 json字符串转List
 
 ```java
-JsonUtil.jsonStrToList(String jsonStr) -> Map
+JsonUtil.jsonStrToList(String jsonStr) -> List
 ```
 
 对象转json字符串

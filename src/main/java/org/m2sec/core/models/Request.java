@@ -245,8 +245,12 @@ public class Request {
         return HttpUtil.getFullPath(path, query);
     }
 
-    public String getBody(){
+    public String getBody() {
         return new String(content);
+    }
+
+    public void setBody(String body) {
+        content = body.getBytes();
     }
 
     public boolean isStaticExtension() {

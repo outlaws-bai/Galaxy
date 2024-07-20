@@ -4,6 +4,7 @@ from org.m2sec.core.utils import (
     HashUtil,
     JsonUtil,
     MacUtil,
+    FactorUtil,
 )
 from org.m2sec.core.models import Request, Response
 from java.lang import String
@@ -11,6 +12,7 @@ from java.lang import String
 
 """
 内置模版，需要自定义代码文件时查看该文档：https://github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md
+按 Tab 可查看内置函数
 """
 
 log = None

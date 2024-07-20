@@ -3,6 +3,7 @@ package org.m2sec.core.common;
 import burp.api.montoya.MontoyaApi;
 import org.m2sec.Galaxy;
 import org.m2sec.core.utils.ByteUtil;
+import org.m2sec.core.utils.FactorUtil;
 
 /**
  * @author: outlaws-bai
@@ -24,8 +25,8 @@ public class BurpTools {
             if (DNS_LOG_ROOT_DOMAIN == null) {
                 DNS_LOG_ROOT_DOMAIN = api.collaborator().defaultPayloadGenerator().generatePayload().toString();
             }
-            return Helper.generateRandomString(8) + "." + DNS_LOG_ROOT_DOMAIN;
+            return FactorUtil.randomString(8) + "." + DNS_LOG_ROOT_DOMAIN;
         }
-        return Helper.generateRandomString(32);
+        return FactorUtil.randomString(8) + "." + "baidu.com";
     }
 }

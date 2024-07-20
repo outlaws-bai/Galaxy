@@ -42,7 +42,7 @@ public class Galaxy implements BurpExtension {
             // 注册销毁事件
             api.extension().registerUnloadingHandler(() -> this.destroy(config));
         } catch (Exception e) {
-            Helper.initExceptionClean();
+            Helper.clean();
             throw e;
         }
     }
