@@ -154,10 +154,9 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
         ac.setParameterAssistanceEnabled(true);
         ac.setChoicesWindowSize(640, 360);
         ac.setDescriptionWindowSize(480, 270);
-
+        ac.setAutoCompleteSingleChoices(false);
         ac.setAutoCompleteEnabled(true);
         ac.setAutoActivationEnabled(true);
-        ac.setAutoCompleteSingleChoices(true);
         ac.setAutoActivationDelay(800);
         ac.install(codeTextArea);
     }
