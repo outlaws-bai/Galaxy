@@ -1,4 +1,4 @@
-# Other Ability
+# Other Abilities
 
 其他小功能
 
