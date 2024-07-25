@@ -23,7 +23,6 @@ public class ${filename}{
      * @param request Request 请求对象
      * @return 经过处理后的request对象，返回null代表从当前节点开始流量不再需要处理
      */
-    @Override
     public Request hookRequestToBurp(Request request) {
         return null;
     }
@@ -34,7 +33,6 @@ public class ${filename}{
      * @param request Request 请求对象
      * @return 经过处理后的request对象，返回null代表从当前节点开始流量不再需要处理
      */
-    @Override
     public Request hookRequestToServer(Request request) {
         return null;
     }
@@ -45,7 +43,6 @@ public class ${filename}{
      * @param response Response 响应对象
      * @return 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理
      */
-    @Override
     public Response hookResponseToBurp(Response response) {
         return null;
     }
@@ -56,7 +53,6 @@ public class ${filename}{
      * @param response Response 响应对象
      * @return 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理
      */
-    @Override
     public Response hookResponseToClient(Response response) {
         return null;
     }
