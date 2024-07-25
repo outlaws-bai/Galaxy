@@ -67,7 +67,7 @@ public class Request {
         this.port = port;
         this.version = version;
         this.method = method;
-        this.path = HttpUtil.normalizePath(path);
+        this.path = path;
         this.query = query;
         this.headers = headers;
         this.content = content;
@@ -170,7 +170,7 @@ public class Request {
             content = "{}".getBytes();
         }
         return new Request(HttpUtil.urlIsSecure(url), url.getHost(), HttpUtil.getUrlPort(url),
-            Constants.HTTP_DEFAULT_VERSION, method.name(), HttpUtil.normalizePath(url.getPath()),
+            Constants.HTTP_DEFAULT_VERSION, method.name(), url.getPath(),
             Query.of(url.getQuery()), headers, content);
     }
 

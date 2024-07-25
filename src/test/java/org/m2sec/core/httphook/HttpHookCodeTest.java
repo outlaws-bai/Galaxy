@@ -11,6 +11,8 @@ import org.m2sec.core.models.Response;
 import org.m2sec.core.utils.FactorUtil;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author: outlaws-bai
@@ -30,19 +32,25 @@ public class HttpHookCodeTest {
 
     @Test
     public void testOneCodeHooker() {
-        testCodeHooker(examplesFilePath + File.separator + "Sm4.java");
+        testCodeHooker(examplesFilePath + File.separator + "Sm2.java");
     }
-
 
 
     @Test
     public void testAllCodeHooker() {
+        List<String> failPaths = new ArrayList<>();
         for (String filepath : FileTools.listDir(examplesFilePath)) {
             try {
                 testCodeHooker(filepath);
             } catch (Exception e) {
+                failPaths.add(filepath);
                 log.error("test error: {}", filepath, e);
             }
+        }
+        if (failPaths.isEmpty()) {
+            log.info("all success");
+        } else {
+            failPaths.forEach(x -> log.error("fail: {}", x));
         }
     }
 
@@ -91,7 +99,6 @@ public class HttpHookCodeTest {
         }
         return hooker;
     }
-
 
 
 }

@@ -14,7 +14,7 @@ public class Sm4{
     private Logger log;
     private static final String ALGORITHM = "SM4/CBC/PKCS5Padding";
     private static final byte[] secret = "16byteslongkey12".getBytes();
-    private static final byte[] iv = "16byteslongiv345".getBytes();
+    private static final byte[] iv = "16byteslongiv456".getBytes();
     private static final Map<String, Object> paramMap = new HashMap<>(Map.of("iv", iv));
     private static final String jsonKey = "data";
 

@@ -53,11 +53,10 @@ public class CryptoUtil {
     }
 
 
-    public static byte[] rsaEncrypt(@Nullable String transformation, byte[] data, byte[] publicKey) {
+    public static byte[] rsaEncrypt(byte[] data, byte[] publicKey) {
         try {
-            String finalTransformation = transformation != null ? transformation : ALGORITHM_RSA;
             PublicKey pubKey = KeyFactory.getInstance(ALGORITHM_RSA).generatePublic(new X509EncodedKeySpec(publicKey));
-            Cipher cipher = Cipher.getInstance(finalTransformation);
+            Cipher cipher = Cipher.getInstance(ALGORITHM_RSA);
             cipher.init(Cipher.ENCRYPT_MODE, pubKey);
             return cipher.doFinal(data);
         } catch (InvalidKeySpecException | NoSuchPaddingException | NoSuchAlgorithmException |
@@ -67,12 +66,11 @@ public class CryptoUtil {
     }
 
 
-    public static byte[] rsaDecrypt(@Nullable String transformation, byte[] data, byte[] privateKey) {
+    public static byte[] rsaDecrypt(byte[] data, byte[] privateKey) {
         try {
-            String finalTransformation = transformation != null ? transformation : ALGORITHM_RSA;
             PrivateKey priKey =
                 KeyFactory.getInstance(ALGORITHM_RSA).generatePrivate(new PKCS8EncodedKeySpec(privateKey));
-            Cipher cipher = Cipher.getInstance(finalTransformation);
+            Cipher cipher = Cipher.getInstance(ALGORITHM_RSA);
             cipher.init(Cipher.DECRYPT_MODE, priKey);
             return cipher.doFinal(data);
         } catch (InvalidKeySpecException | NoSuchPaddingException | NoSuchAlgorithmException |

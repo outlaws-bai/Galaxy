@@ -4,6 +4,11 @@
 
 1. ...
 
+## 2024-07-20 Release 2.2.7
+
+1. fix some bugs
+2. 完成py、js的部分示例
+
 ## 2024-07-20 Release 2.2.6
 
 1. fix some bugs

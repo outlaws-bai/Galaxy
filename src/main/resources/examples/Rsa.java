@@ -12,20 +12,17 @@ import org.slf4j.Logger;
 public class Rsa{
 
     private static final String ALGORITHM = "RSA";
-    private static final String publicKeyBase64 = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlWlwW7eFn0apxrW0j" +
-        "+W9fcGiJ9Pq8fDS7mGpF28kTz5mwbe5wajs7r9CQrcQS5mD75aItdNT" +
-        "/XTPPCGawvgF4N4gxtExlzDNackg1YygGpVPuNY3B8M616vl6av0j0JyiWh9/KYG0oPgVvlpvIiT8a1OuOXNwX0f7LoIoBbXN0FMVVF4B" +
-        "+/r9N22I2V9EgiaRVqYRC9tI5471FuSs6IKkh2TrLzssZ4D4ZAGC2bz6aejAmiYqWSQ/D5WcnDAg16KJUx1rmA57KctQjDM" +
-        "+B7jYGg1MQYoEFdlUIaKDalr2uMoQWkK4ebLECdU67w5/E1KCp7/1+mGu/ijQxegJ5Z2qQIDAQAB";
-    private static final String privateKeyBase64 =
-        "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCVaXBbt4WfRqnGtbSP5b19waIn0" +
-            "+rx8NLuYakXbyRPPmbBt7nBqOzuv0JCtxBLmYPvloi101P9dM88IZrC+AXg3iDG0TGXMM1pySDVjKAalU+41jcHwzrXq+Xpq" +
-            "/SPQnKJaH38pgbSg+BW+Wm8iJPxrU645c3BfR/sugigFtc3QUxVUXgH7" +
-            "+v03bYjZX0SCJpFWphEL20jnjvUW5KzogqSHZOsvOyxngPhkAYLZvPpp6MCaJipZJD8PlZycMCDXoolTHWuYDnspy1CMMz4HuNgaDUxBigQV2VQhooNqWva4yhBaQrh5ssQJ1TrvDn8TUoKnv/X6Ya7+KNDF6AnlnapAgMBAAECggEAI4lZ/36Fag4xCEGkigsvCC+bZVSqj1Pjn24b/SZioPRrFU0hAdYvUFOuK1cGKa0AK+aGapSyZ9i2B4vIlvHN2B+M9SzBWj/xw2TiidgyJlB4DzLoENEW+D/65ZqQBtjbjCINwR8uBTj3jUgyJXTolzVMwX5q80fS5YeT0JvOIWZp2q/+/PH9Awy3dAWmC7bMmIdOSsqD2hJKq4KtO41EI9AhkVCqVXJzzPwriFr1UBOaM3y9Gr1BumxCPGJIr9UD2paOk/lbCF2Vlui+iZjbtzlLYrs2zLuQpMtA8eGBYAlsXS4Q7CKnbNvQCCYLzsjqTU5uZEhAGnFN2mXJAjdsLwKBgQC5cqloKiBf4zQAiS3uIlEHcJy8fkatvvC8ofNQgsrGy/2YUYGaevVnY7I4e5cNypDvulek0idtmPGRkKI0XyAP+72TOYltZyo8hXt2/4kAVZkR0jfjvYIkWDLssIbCE/rx4fGZOVTxfZ3qQkGOfmra8q50FcDd0LRlf68s4ej0cwKBgQDOQR5EQhN5n/fTyv4umVDn253PpqiYbWNTItk9TRKfwIDwgFpgGQBfu/jYBeei3fJTe3TBj5PYoCQA6ETktg5YZv3MIu/DLEH5DCjLFso07ZNF5FWtbRRx5c+XVY6LXksRCnGWXIti420pdjIewyNtnrbt6NNPKXBdumn2eHn9cwKBgQCm96OrU3J+otPpP5mI9IC8EBouZAtC181sKOwnKvtjbbrP72KfMeHNyqdlz3C7TAyeqsnKbiRtuuyUwQIp4RO/EEspSP6A8AfJIe19wKkbEfaVYw5LEA8ipf6DuJQ8HT0tlt6ttD7UhuMtTaY0o4GVzDZh8kwJ6qThVcrkwCm8HQKBgAUbmbtJA6B0dLe7BDZ1N4q2Zp8Y2n4D33zUlRquiPKJ2ueZ1iMhG2BDkHMRGl5vLqwgl5CflKK9vIaFOgeL9qj7y/c9OkDUHMIlKfF1nAZZh9coQ3LrC6GSdmSiCsiqyiMe5hc6LX2Cclafhbg7TupNDuyvYmRIe27mye7/ps2/AoGARgDoTlQ9IfYAk62ZYBn8NmwZc9L7a2JVT4COQ3Y4K8bhJX4EOYsQGX5DSYXGiGjIG2lMPrQTnVgKr6a2tXKGsq9VEHlv2i7V1NjMFPKEzj8v7xSJvX4QDR1JmN4NLMBdD52KNzx6fx8kAHwoMJqhlspBCYyktwiRl7IkRRaGWEc=";
+    private static final String publicKey1Base64 = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC7JoQAWLsovzHjaUMZg2lwO4LCuP97mitUc4chqRlQD3NgyCWLqEnYyM+OJ7i6cyMuWLwGtMi29DoKLjpE/xRZR0OUk46PDCAtyDgIyejK7c7KlZTbiqb4PtiJNLZgg0UP62kLMycnpY/wg/R2G9g+7MiJWUV5SR+Lhryv8CWezQIDAQAB";
+    private static final String privateKey1Base64 = "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBALsmhABYuyi/MeNpQxmDaXA7gsK4/3uaK1RzhyGpGVAPc2DIJYuoSdjIz44nuLpzIy5YvAa0yLb0OgouOkT/FFlHQ5STjo8MIC3IOAjJ6MrtzsqVlNuKpvg+2Ik0tmCDRQ/raQszJyelj/CD9HYb2D7syIlZRXlJH4uGvK/wJZ7NAgMBAAECgYAhgbhRbZF4rp6Kdh6e00HN58G2BjQrl4MZeCOh+aoABPwlwD/EnMk36GAMtfzjWNjcI+PqGXT0GI7JotQo5ThpoweXX/uoeGOW+UkYLA6a67lmxfoZsDtY2+jnaWIs2c7Itz3ClRxo4tYwCoPNjtaBpMfPgZaYg2QN8/wLQPI66wJBAM0xpjb2OlLDs75lVxbm6v6Dx3YBS20GSqJqvf+14a/k7mrZ3PmAHOfqTqKOwbVQJmLbeOpU+sUBpeLpILKOCLcCQQDpfSsDhdosC6qTL9XnF2jS49iws2RBKw5YjDkClwA6VMNj5uzL1Rl7/AimLRMnB4BwrD95ksuOJsqNXW6wRGibAkAkk28PaQCodB38GFBX0r2ctJy/Wie5vV9caC6KAD/EfMhK357WEpIUfN2beFrrGOhewsRg8NjqeQq60dd0PIEtAkBYAm03O7n8Bj26kzpejA1gCLBCEqyEf/U9XUWT+1UDp7Wqr32sa1vaxyp/cNgaSxKX5eVbLwD5SRfqZ0B0wqRnAkATpUNiCqjQVS+OI5dwjoI1Rx3oI8pyKWOg3+QIHIRgL3pc8HLdZ2BkX4Vf6ANb4+noQnD/di1Mj+0pUL8RhIJE";
+    private static final String publicKey2Base64 = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCrfqYv278oDvreohZeR+UMiNSJC2FG4u8dSNC/hj88lw7eULQOiuUnsZ4eineeFOquXckjhkh1AJsd87+Nz1ZQB61dY3NmVR5Tk+2wH/kNdiVCoRrbULs29Tms17IyrZZU9WQFQbBxC/g6n5zwp6ST/siGRfHAwVVbq+iccQfdpwIDAQAB";
+    private static final String privateKey2Base64 = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAKt+pi/bvygO" +
+        "+t6iFl5H5QyI1IkLYUbi7x1I0L+GPzyXDt5QtA6K5Sexnh6Kd54U6q5dySOGSHUAmx3zv43PVlAHrV1jc2ZVHlOT7bAf+Q12JUKhGttQuzb1OazXsjKtllT1ZAVBsHEL+DqfnPCnpJP+yIZF8cDBVVur6JxxB92nAgMBAAECgYAghb2lcNKBGcooo2uDiLXe2SoZLT/O7iVzk8YGtEJUzr7imUJ0SZHoo639U7wYjhXtaFrHMmWWTr2cAggvMAVJi5fZYYJLbYdc8O5QCKi6PzV2J2NxYyuABL5yarvy4Ji0twnDjlqBYqrjOsxJbeMv58CHLKqduIZuxppGGOoRQQJBANTV3JEg6xJdPXsF9ztOf03BNkvpibuUSNbTssTdzEtLMQW7zd5y1qTCwUbf+e2UsRIYPn5DwOlTu8SaE97Zz8ECQQDORm7szA0WL1OTYob0U1NSSFDn8Jg7FyX5md6ndL3KNTKBDBfe3hNpauLi01lTMbO3MoriOWsFiN++6dZAdwdnAkEAq6PcwN1/Ncwj7Lae7yEa4SXUF9w6yx+GrlkDbmhAfOginLEcES0jlLPLEtFFySeEtUb//uu9A24XmzF2nN2jAQJABgL7fJ89ymW6s9LtR/WdugotgXT7ms1D6BBZ8ttuJJSEUkp975rdSfc5gY7TTZ9nM3GfppQx0El66994xQwzBQJAct1HPeCVROxyEHNwsiRH9wqR5P4B59Mo1714R7ozsdTpVx8FWmqi+OQIJt+IizYgRyQ09qORAFei9AHeQtxKiw==";
 
-    private static final byte[] publicKey = CodeUtil.b64decode(publicKeyBase64);
+    private static final byte[] publicKey1 = CodeUtil.b64decode(publicKey1Base64);
+    private static final byte[] privateKey1 = CodeUtil.b64decode(privateKey1Base64);
 
-    private static final byte[] privateKey = CodeUtil.b64decode(privateKeyBase64);
+    private static final byte[] publicKey2 = CodeUtil.b64decode(publicKey2Base64);
+    private static final byte[] privateKey2 = CodeUtil.b64decode(privateKey2Base64);
 
     private static final String jsonKey = "data";
 
@@ -45,7 +42,7 @@ public class Rsa{
         // 获取需要解密的数据
         byte[] encryptedData = getData(request.getContent());
         // 调用内置函数解密
-        byte[] data = CryptoUtil.rsaDecrypt(ALGORITHM, encryptedData, privateKey);
+        byte[] data = decrypt(encryptedData, privateKey1);
         // 更新body为已加密的数据
         request.setContent(data);
         return request;
@@ -61,7 +58,7 @@ public class Rsa{
         // 获取被解密的数据
         byte[] data = request.getContent();
         // 调用内置函数加密回去
-        byte[] encryptedData = CryptoUtil.rsaEncrypt(ALGORITHM, data, publicKey);
+        byte[] encryptedData = encrypt(data, publicKey1);
         // 将已加密的数据转换为Server可识别的格式
         byte[] body = toData(encryptedData);
         // 更新body
@@ -79,7 +76,7 @@ public class Rsa{
         // 获取需要解密的数据
         byte[] encryptedData = getData(response.getContent());
         // 调用内置函数解密
-        byte[] data = CryptoUtil.rsaDecrypt(ALGORITHM, encryptedData, privateKey);
+        byte[] data = decrypt(encryptedData, privateKey2);
         // 更新body
         response.setContent(data);
         return response;
@@ -95,7 +92,7 @@ public class Rsa{
         // 获取被解密的数据
         byte[] data = response.getContent();
         // 调用内置函数加密回去
-        byte[] encryptedData = CryptoUtil.rsaEncrypt(ALGORITHM, data, publicKey);
+        byte[] encryptedData = encrypt(data, publicKey2);
         // 更新body
         // 将已加密的数据转换为Server可识别的格式
         byte[] body = toData(encryptedData);
@@ -104,12 +101,12 @@ public class Rsa{
         return response;
     }
 
-    public byte[] decrypt(byte[] content) {
-        return CryptoUtil.rsaDecrypt(ALGORITHM, content, privateKey);
+    public byte[] decrypt(byte[] content, byte[] privateKey) {
+        return CryptoUtil.rsaDecrypt(content, privateKey);
     }
 
-    public byte[] encrypt(byte[] content) {
-        return CryptoUtil.rsaEncrypt(ALGORITHM, content, publicKey);
+    public byte[] encrypt(byte[] content, byte[] publicKey) {
+        return CryptoUtil.rsaEncrypt(content, publicKey);
     }
 
     private static byte[] getData(byte[] content) {

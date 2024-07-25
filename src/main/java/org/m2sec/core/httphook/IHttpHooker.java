@@ -34,7 +34,7 @@ public abstract class IHttpHooker {
         HttpRequest retVal = httpRequest;
         try {
             if (HttpUtil.isCorrectUrl(httpRequest.url()) && option.isHookRequest()) {
-                Request request = Request.of(httpRequest).normalize();
+                Request request = Request.of(httpRequest);
                 log.debug("[{}] before hook: {}", name, request);
                 String expression = option.getRequestCheckExpression();
                 if (expression != null && !expression.isEmpty() && (Boolean) Render.renderExpression(expression,
@@ -64,7 +64,7 @@ public abstract class IHttpHooker {
         HttpRequest retVal = httpRequest;
         try {
             if (HttpUtil.isCorrectUrl(httpRequest.url()) && httpRequest.hasHeader(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
-                Request request = Request.of(httpRequest).normalize();
+                Request request = Request.of(httpRequest);
                 log.debug("[{}] before hook: {}", name, request);
                 request.getHeaders().remove(Constants.HTTP_HEADER_HOOK_HEADER_KEY);
                 request = hookRequestToServer(request);

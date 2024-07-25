@@ -8,6 +8,9 @@ var Request = Java.type("org.m2sec.core.models.Request")
 var Response = Java.type("org.m2sec.core.models.Response")
 var String = Java.type("java.lang.String")
 
+ALGORITHM = "AES/ECB/PKCS5Padding"
+secret = "32byteslongsecretkeyforaes256!aa".getBytes()
+jsonKey = "data"
 log = void 0
 
 /**
@@ -21,6 +24,13 @@ log = void 0
  * @returns 经过处理后的request对象，返回null代表从当前节点开始流量不再需要处理
  */
 function hook_request_to_burp(request){
+    // 获取需要解密的数据
+    encryptedData = get_data(request.getContent());
+    // 调用内置函数解密
+    data = decrypt(encryptedData);
+    // 更新body为已加密的数据
+    request.setContent(data);
+    return request;
 }
 
 
@@ -30,6 +40,15 @@ function hook_request_to_burp(request){
  * @returns 经过处理后的request对象，返回null代表从当前节点开始流量不再需要处理
  */
 function hook_request_to_server(request){
+    // 获取被解密的数据
+    data = request.getContent();
+    // 调用内置函数加密回去
+    encryptedData = encrypt(data);
+    // 将已加密的数据转换为Server可识别的格式
+    body = to_data(encryptedData);
+    // 更新body
+    request.setContent(body);
+    return request;
 }
 
 
@@ -39,6 +58,13 @@ function hook_request_to_server(request){
  * @returns 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理
  */
 function hook_response_to_burp(response){
+    // 获取需要解密的数据
+    encryptedData = get_data(response.getContent());
+    // 调用内置函数解密
+    data = decrypt(encryptedData);
+    // 更新body
+    response.setContent(data);
+    return response;
 }
 
 
@@ -48,6 +74,35 @@ function hook_response_to_burp(response){
  * @returns 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理
  */
 function hook_response_to_client(response){
+    // 获取被解密的数据
+    data = response.getContent();
+    // 调用内置函数加密回去
+    encryptedData = encrypt(data);
+    // 更新body
+    // 将已加密的数据转换为Server可识别的格式
+    body = to_data(encryptedData);
+    // 更新body
+    response.setContent(body);
+    return response;
+}
+
+function decrypt(content) {
+    return CryptoUtil.aesDecrypt(ALGORITHM, content, secret, null);
+}
+
+function encrypt(content) {
+    return CryptoUtil.aesEncrypt(ALGORITHM, content, secret, null);
+}
+
+function get_data(content){
+    return CodeUtil.b64decode(JsonUtil.jsonStrToMap(new String(content)).get(jsonKey))
+}
+
+
+function to_data(content){
+    jsonBody = {}
+    jsonBody[jsonKey] = CodeUtil.b64encodeToString(content)
+    return JsonUtil.toJsonStr(jsonBody).getBytes()
 }
 
 /**

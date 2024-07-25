@@ -11,14 +11,18 @@ import org.slf4j.Logger;
  */
 public class Sm2{
 
-    private static final String publicKeyBase64 = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEJniVFlbjYdpZrWlnnWt" +
-        "/Ac9QBqIamsDL1GU9EB42Q6rVd7ArRAxtr6Ae5Xb+sSd9hc5LpIAR6jQ05v28LO8eFQ==";
-    private static final String privateKeyBase64 =
-        "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQgSBfDgcogzGLkd9lNXKnLjZvjniGORXKZWsU3ncGkcdKgCgYIKoEcz1UBgi2hRANCAAQmeJUWVuNh2lmtaWeda38Bz1AGohqawMvUZT0QHjZDqtV3sCtEDG2voB7ldv6xJ32FzkukgBHqNDTm/bws7x4V";
+    private static final String publicKey1Base64 = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEBv9Z+xbmSOH3W/V9UEpU1yUiJKNGh/I8EiENTPYxX3GujsZyKhuEUzxloKCATcNaKWi7w/yK3PxGONM4xvMlIQ==";
+    private static final String privateKey1Base64 = "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQgWmIprZ5a6TsqRUgy32J+F22AYIKl+14P4qlw/LPPCcagCgYIKoEcz1UBgi2hRANCAAQG/1n7FuZI4fdb9X1QSlTXJSIko0aH8jwSIQ1M9jFfca6OxnIqG4RTPGWgoIBNw1opaLvD/Irc/EY40zjG8yUh";
 
-    private static final byte[] publicKey = CodeUtil.b64decode(publicKeyBase64);
+    private static final String publicKey2Base64="MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAE/1kmIjlOfsqG9hN4b/O3hiSI91ErgVDeqB9YOgCFiUiFyPo32pCHh691zGnoAj0l/P132CyLgBeH6TUa/TrLUg==";
+    private static final String privateKey2Base64 =
+        "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQgP8vW9tEh0dMP5gJNsol5Gyc6jvvgK1NRqOVg8VaLYVygCgYIKoEcz1UBgi2hRANCAAT/WSYiOU5+yob2E3hv87eGJIj3USuBUN6oH1g6AIWJSIXI+jfakIeHr3XMaegCPSX8/XfYLIuAF4fpNRr9OstS";
 
-    private static final byte[] privateKey = CodeUtil.b64decode(privateKeyBase64);
+    private static final byte[] publicKey1 = CodeUtil.b64decode(publicKey1Base64);
+    private static final byte[] privateKey1 = CodeUtil.b64decode(privateKey1Base64);
+
+    private static final byte[] publicKey2 = CodeUtil.b64decode(publicKey2Base64);
+    private static final byte[] privateKey2 = CodeUtil.b64decode(privateKey2Base64);
 
     private static final String jsonKey = "data";
 
@@ -38,7 +42,7 @@ public class Sm2{
         // 获取需要解密的数据
         byte[] encryptedData = getData(request.getContent());
         // 调用内置函数解密
-        byte[] data = decrypt(encryptedData);
+        byte[] data = decrypt(encryptedData, privateKey1);
         // 更新body为已加密的数据
         request.setContent(data);
         return request;
@@ -54,7 +58,7 @@ public class Sm2{
         // 获取被解密的数据
         byte[] data = request.getContent();
         // 调用内置函数加密回去
-        byte[] encryptedData = encrypt(data);
+        byte[] encryptedData = encrypt(data, publicKey1);
         // 将已加密的数据转换为Server可识别的格式
         byte[] body = toData(encryptedData);
         // 更新body
@@ -72,7 +76,7 @@ public class Sm2{
         // 获取需要解密的数据
         byte[] encryptedData = getData(response.getContent());
         // 调用内置函数解密
-        byte[] data = decrypt(encryptedData);
+        byte[] data = decrypt(encryptedData, privateKey2);
         // 更新body
         response.setContent(data);
         return response;
@@ -88,7 +92,7 @@ public class Sm2{
         // 获取被解密的数据
         byte[] data = response.getContent();
         // 调用内置函数加密回去
-        byte[] encryptedData = encrypt(data);
+        byte[] encryptedData = encrypt(data, publicKey2);
         // 更新body
         // 将已加密的数据转换为Server可识别的格式
         byte[] body = toData(encryptedData);
@@ -101,7 +105,7 @@ public class Sm2{
      * @param content byte[] 要解密的数据
      * @return 解密结果
      */
-    public byte[] decrypt(byte[] content) {
+    public byte[] decrypt(byte[] content, byte[] privateKey) {
         return CryptoUtil.sm2Decrypt(content, privateKey);
     }
 
@@ -109,7 +113,7 @@ public class Sm2{
      * @param content byte[] 要加密的数据
      * @return 加密结果
      */
-    public byte[] encrypt(byte[] content) {
+    public byte[] encrypt(byte[] content, byte[] publicKey) {
         return CryptoUtil.sm2Encrypt(content, publicKey);
     }
 
