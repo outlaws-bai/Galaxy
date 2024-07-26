@@ -8,7 +8,7 @@ Burp插件，主要实现在 `HTTP报文二次加密 `场景下，自动解密�
 
 使用Burp新版  `Montoya API`  开发，从中提取出四个阶段，你可以使用Python、JS、Java语言或Grpc来完成四个阶段的处理逻辑以实现需求。
 
-> 项目已内置多种加解密规则，对于常规算法可以做到开箱即用。
+> 项目已内置多种加解密场景，对于常规算法可以做到开箱即用。
 
 进一步了解：[Detail](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md)
 
@@ -32,6 +32,33 @@ Burp插件，主要实现在 `HTTP报文二次加密 `场景下，自动解密�
 
 1. 项目采用Burp `Montoya API` 开发，Burp版本不低于`v2023.10.3.7`。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
 2. 项目使用JDK 17进行开发及编译，请确保启动Burp的JDK不低于17。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
+
+## 内置场景
+
+> 带*为待实现加入
+
+AesCbc: 通过AES CBC模式使用指定的密钥和IV对用户输入的数据进行加密请求，并对服务器响应的数据进行解密。
+
+AesEcb: 通过AES ECB模式使用指定的密钥对用户输入的数据进行加密请求，并对服务器响应的数据进行解密。
+
+AesGcm: 通过AES GCM模式使用指定的密钥和IV对用户输入的数据进行加密请求，并对服务器响应的数据进行解密。
+
+Sm4Cbc: 使用SM4算法在CBC模式下对数据进行加密请求，并展示解密后的结果。
+
+Rsa: 使用RSA公钥加密用户输入的数据，并将加密后的数据发送到服务器；服务器响应的加密数据使用另外一组RSA私钥解密后展示。
+
+Sm2: 使用SM2算法对用户输入的数据进行加密，并将加密后的数据发送到服务器；服务器响应的加密数据使用另外一组SM2私钥进行解密。
+
+DesCbc*: 使用DES算法在CBC模式下对数据进行加密请求，并展示解密后的结果。
+
+3DesCbc*:使用3DES算法在CBC模式下对数据进行加密请求，并展示解密后的结果。
+
+DynamicKey*: 通过从服务器获取动态生成的密钥和IV，对用户输入的数据进行AES CBC加密发送请求，并对服务器响应的数据进行解密。
+
+AesRsa*: 使用随机生成的AES密钥加密用户数据，通过RSA加密AES密钥后发送请求，并在收到响应后解密AES密钥和数据。
+
+Sm2Sm4*: 使用随机生成的SM4密钥加密用户数据，通过SM2加密SM4密钥后发送请求，并在收到响应后解密SM4密钥和数据。
+
 
 ## 优势特点
 
