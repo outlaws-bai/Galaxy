@@ -3,13 +3,12 @@ package org.m2sec.panels.httphook;
 import burp.api.montoya.MontoyaApi;
 import lombok.Getter;
 import org.m2sec.abilities.MasterHttpHandler;
-import org.m2sec.abilities.MaterProxyHandler;
+import org.m2sec.abilities.MasterProxyHandler;
 import org.m2sec.core.common.Option;
 import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.httphook.IHttpHooker;
 
 import javax.swing.*;
-import java.nio.file.attribute.AttributeView;
 
 /**
  * @author: outlaws-bai
@@ -34,7 +33,7 @@ public abstract class IHookerPanel<T extends IHttpHooker> extends JPanel {
         T hooker = newHooker();
         hooker.init(option);
         MasterHttpHandler.hooker = hooker;
-        MaterProxyHandler.hooker = hooker;
+        MasterProxyHandler.hooker = hooker;
     }
 
     public void stop(Option option){
@@ -42,7 +41,7 @@ public abstract class IHookerPanel<T extends IHttpHooker> extends JPanel {
         IHttpHooker hooker = MasterHttpHandler.hooker;
         hooker.destroy();
         MasterHttpHandler.hooker = null;
-        MaterProxyHandler.hooker = null;
+        MasterProxyHandler.hooker = null;
     }
 
     public abstract T newHooker();

@@ -11,20 +11,21 @@ import org.m2sec.core.common.SwingTools;
 import org.m2sec.core.models.Headers;
 import org.m2sec.core.models.Request;
 
+
 /**
  * @author: outlaws-bai
- * @date: 2024/7/14 21:14
+ * @date: 2024/7/14 20:53
  * @description:
  */
 
-public class EncryptItem extends IItem {
-    public EncryptItem(MontoyaApi api, Config config) {
+public class DecryptRequestItem extends IItem {
+    public DecryptRequestItem(MontoyaApi api, Config config) {
         super(api, config);
     }
 
     @Override
     public String displayName() {
-        return "Encrypt";
+        return "Decrypt Request";
     }
 
     @Override
@@ -36,16 +37,17 @@ public class EncryptItem extends IItem {
     }
 
     @Override
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public void action(ContextMenuEvent event) {
         MessageEditorHttpRequestResponse messageEditorHttpRequestResponse = event.messageEditorRequestResponse().get();
         HttpRequest httpRequest = messageEditorHttpRequestResponse.requestResponse().request();
         Request request = Request.of(httpRequest);
         Headers headers = request.getHeaders();
-        if (!headers.hasIgnoreCase(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
-            SwingTools.showInfoDialog("The request has been encrypted.");
+        if (headers.hasIgnoreCase(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
+            SwingTools.showInfoDialog("The request has been decrypted.");
             return;
         }
-        HttpRequest newRequest = MasterHttpHandler.hooker.tryHookRequestToServer(httpRequest, 0);
+        HttpRequest newRequest = MasterHttpHandler.hooker.tryHookRequestToBurp(httpRequest);
         messageEditorHttpRequestResponse.setRequest(newRequest);
     }
 }

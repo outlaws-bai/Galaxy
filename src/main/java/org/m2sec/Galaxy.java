@@ -5,7 +5,7 @@ import burp.api.montoya.MontoyaApi;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.abilities.MasterContextMenuProvider;
 import org.m2sec.abilities.MasterHttpHandler;
-import org.m2sec.abilities.MaterProxyHandler;
+import org.m2sec.abilities.MasterProxyHandler;
 import org.m2sec.abilities.payloads.MasterPayloadGeneratorProviderFactor;
 import org.m2sec.core.common.Config;
 import org.m2sec.core.common.Helper;
@@ -51,9 +51,9 @@ public class Galaxy implements BurpExtension {
     private void registerAbilities(MontoyaApi api, Config config) {
         // 注册http hook 能力
         api.http().registerHttpHandler(new MasterHttpHandler(config));
-        MaterProxyHandler materProxyHandler = new MaterProxyHandler(config);
-        api.proxy().registerRequestHandler(materProxyHandler);
-        api.proxy().registerResponseHandler(materProxyHandler);
+        MasterProxyHandler masterProxyHandler = new MasterProxyHandler(config);
+        api.proxy().registerRequestHandler(masterProxyHandler);
+        api.proxy().registerResponseHandler(masterProxyHandler);
         // 注册menu
         api.userInterface().registerContextMenuItemsProvider(new MasterContextMenuProvider(api, config));
         // 注册payload生成器
