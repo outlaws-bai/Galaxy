@@ -31,6 +31,10 @@ public class CryptoUtil {
         Security.addProvider(new BouncyCastleProvider());
     }
 
+    public static final String ALGORITHM_DES = "DES";
+    public static final String ALGORITHM_DES_DEFAULT_TRANSFORMATION = "DES/ECB/PKCS5Padding";
+    public static final String ALGORITHM_DES3 = "DESede";
+    public static final String ALGORITHM_DES3_DEFAULT_TRANSFORMATION = "DESede/ECB/PKCS5Padding";
     public static final String ALGORITHM_AES = "AES";
     public static final String ALGORITHM_AES_DEFAULT_TRANSFORMATION = "AES/ECB/PKCS5Padding";
     public static final String ALGORITHM_RSA = "RSA";
@@ -39,6 +43,27 @@ public class CryptoUtil {
     public static final String ALGORITHM_SM4 = "SM4";
     public static final String ALGORITHM_SM4_DEFAULT_TRANSFORMATION = "SM4/ECB/PKCS5Padding";
 
+    public static byte[] desEncrypt(@Nullable String transformation, byte[] data, byte[] secret,
+                                    Map<String, Object> params){
+        return symmetricKeyEncrypt(transformation, data, secret, params, ALGORITHM_DES,
+            ALGORITHM_DES_DEFAULT_TRANSFORMATION);
+    }
+    public static byte[] desDecrypt(@Nullable String transformation, byte[] data, byte[] secret,
+                                    Map<String, Object> params) {
+        return symmetricKeyDecrypt(transformation, data, secret, params, ALGORITHM_DES,
+            ALGORITHM_DES_DEFAULT_TRANSFORMATION);
+    }
+
+    public static byte[] des3Encrypt(@Nullable String transformation, byte[] data, byte[] secret,
+                                    Map<String, Object> params) {
+        return symmetricKeyEncrypt(transformation, data, secret, params, ALGORITHM_DES3,
+            ALGORITHM_DES3_DEFAULT_TRANSFORMATION);
+    }
+    public static byte[] des3Decrypt(@Nullable String transformation, byte[] data, byte[] secret,
+                                    Map<String, Object> params) {
+        return symmetricKeyDecrypt(transformation, data, secret, params, ALGORITHM_DES3,
+            ALGORITHM_DES3_DEFAULT_TRANSFORMATION);
+    }
     public static byte[] aesEncrypt(@Nullable String transformation, byte[] data, byte[] secret,
                                     Map<String, Object> params) {
         return symmetricKeyEncrypt(transformation, data, secret, params, ALGORITHM_AES,

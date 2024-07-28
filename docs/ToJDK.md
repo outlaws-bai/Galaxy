@@ -41,5 +41,17 @@ https://docs.aws.amazon.com/corretto/latest/corretto-21-ug/downloads-list.html
 
 ![image-20240728131634209](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240728131634209.png)
 
+mac 将jre替换为jdk
+
+应用程序-> 显示包内容
+
+![image-20240728225224470](https://raw.githubusercontent.com/tdyj/picture/main/img/202407282310431.png)
+
+备份jre.bundle为jre.bundle.bk，选择jre对应版本的jdk（一般安装在`/Library/Java/JavaVirtualMachines`目录下），复制到该目录下，并重命名为jre.bundle即可。
+
+![image-20240728225422084](https://raw.githubusercontent.com/tdyj/picture/main/img/202407282310506.png)
+
+
+
 完成，祝好。
 

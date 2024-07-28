@@ -8,17 +8,16 @@ import org.slf4j.Logger;
  * 内置示例，需要自定义代码文件时查看该文档：https://github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md
  * 按 Tab 可查看内置函数
  */
-public class AesGcm{
-
-    private static final String ALGORITHM = "AES/GCM/NoPadding";
-    private static final byte[] secret = "32byteslongsecretkeyforaes256!aa".getBytes();
-    private static final byte[] iv = "16byteslongiv456".getBytes();
-    private static final Map<String, Object> paramMap = new HashMap<>(Map.of("iv", iv, "tLen", 128));
-    private static final String jsonKey = "data";
+public class DesCbc{
 
     private Logger log;
+    private static final String ALGORITHM = "DES/CBC/PKCS5Padding";
+    private static final byte[] secret = "12345678".getBytes();
+    private static final byte[] iv = "12345678".getBytes();
+    private static final Map<String, Object> paramMap = new HashMap<>(Map.of("iv", iv));
+    private static final String jsonKey = "data";
 
-    public AesGcm(Logger log) {
+    public DesCbc(Logger log) {
         this.log = log;
     }
 
@@ -31,7 +30,7 @@ public class AesGcm{
     public Request hookRequestToBurp(Request request) {
         // 获取需要解密的数据
         byte[] encryptedData = getData(request.getContent());
-        // 调用内置函数解密
+        // 调用函数解密
         byte[] data = decrypt(encryptedData);
         // 更新body为已加密的数据
         request.setContent(data);
@@ -47,7 +46,7 @@ public class AesGcm{
     public Request hookRequestToServer(Request request) {
         // 获取被解密的数据
         byte[] data = request.getContent();
-        // 调用内置函数加密回去
+        // 调用函数加密回去
         byte[] encryptedData = encrypt(data);
         // 将已加密的数据转换为Server可识别的格式
         byte[] body = toData(encryptedData);
@@ -65,7 +64,7 @@ public class AesGcm{
     public Response hookResponseToBurp(Response response) {
         // 获取需要解密的数据
         byte[] encryptedData = getData(response.getContent());
-        // 调用内置函数解密
+        // 调用函数解密
         byte[] data = decrypt(encryptedData);
         // 更新body
         response.setContent(data);
@@ -81,7 +80,7 @@ public class AesGcm{
     public Response hookResponseToClient(Response response) {
         // 获取被解密的数据
         byte[] data = response.getContent();
-        // 调用内置函数加密回去
+        // 调用函数加密回去
         byte[] encryptedData = encrypt(data);
         // 更新body
         // 将已加密的数据转换为Server可识别的格式
@@ -92,18 +91,18 @@ public class AesGcm{
     }
 
     public byte[] decrypt(byte[] content) {
-        return CryptoUtil.aesDecrypt(ALGORITHM, content, secret, paramMap);
+        return CryptoUtil.desDecrypt(ALGORITHM, content, secret, paramMap);
     }
 
     public byte[] encrypt(byte[] content) {
-        return CryptoUtil.aesEncrypt(ALGORITHM, content, secret, paramMap);
+        return CryptoUtil.desEncrypt(ALGORITHM, content, secret, paramMap);
     }
 
-    private static byte[] getData(byte[] content) {
+    public byte[] getData(byte[] content) {
         return CodeUtil.b64decode((String) JsonUtil.jsonStrToMap(new String(content)).get(jsonKey));
     }
 
-    private static byte[] toData(byte[] content) {
+    public byte[] toData(byte[] content) {
         HashMap<String, Object> jsonBody = new HashMap<>();
         jsonBody.put(jsonKey, CodeUtil.b64encodeToString(content));
         return JsonUtil.toJsonStr(jsonBody).getBytes();
