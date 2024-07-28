@@ -3,7 +3,6 @@ package org.m2sec.panels.httphook;
 import burp.api.montoya.MontoyaApi;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.Galaxy;
-import org.m2sec.core.common.Helper;
 import org.m2sec.core.common.Option;
 import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.enums.RunStatus;
@@ -119,19 +118,8 @@ public class HttpHookPanel extends JPanel {
         // 设置 JComboBox 的事件监听器, 选择不同的方式，展示不同方式自己的Panel
         comboBox.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                wayPanelContainer.setVisible(true);
-                requestCheckPanel.setVisible(true);
-                nextControlPanel.setVisible(true);
-                hookRequestCheckBox.setVisible(true);
-                hookResponseCheckBox.setVisible(true);
                 CardLayout cl = (CardLayout) (wayPanelContainer.getLayout());
                 cl.show(wayPanelContainer, (String) e.getItem());
-            } else {
-                wayPanelContainer.setVisible(false);
-                requestCheckPanel.setVisible(false);
-                nextControlPanel.setVisible(false);
-                hookRequestCheckBox.setVisible(false);
-                hookResponseCheckBox.setVisible(false);
             }
         });
         // 设置 switchButton 的事件监听器, 开关HttpHook功能
@@ -158,7 +146,7 @@ public class HttpHookPanel extends JPanel {
                 }
             } catch (Exception exc) {
                 log.error("Start fail!", exc);
-                SwingTools.showErrorDetailDialog(exc);
+                SwingTools.showErrorStackTraceDialog(exc);
                 return;
             }
 
@@ -176,8 +164,16 @@ public class HttpHookPanel extends JPanel {
         hookResponseCheckBox.setSelected(option.isHookResponse());
         if (option.getHookService() != null) {
             comboBox.setSelectedIndex(hookNames.indexOf(option.getHookService().name().toLowerCase()));
+            wayPanelContainer.setVisible(true);
+            nextControlPanel.setVisible(true);
+            hookRequestCheckBox.setVisible(true);
+            hookResponseCheckBox.setVisible(true);
         } else {
             comboBox.setSelectedIndex(-1);
+            wayPanelContainer.setVisible(false);
+            nextControlPanel.setVisible(false);
+            hookRequestCheckBox.setVisible(false);
+            hookResponseCheckBox.setVisible(false);
         }
 
 //        nextControlPanel.setBackground(Color.CYAN);

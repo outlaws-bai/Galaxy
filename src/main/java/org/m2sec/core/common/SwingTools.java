@@ -3,6 +3,8 @@ package org.m2sec.core.common;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * @author: outlaws-bai
@@ -35,11 +37,15 @@ public class SwingTools {
     }
 
 
-    public static void showErrorDetailDialog(Exception e) {
-        JOptionPane.showMessageDialog(null, e.getStackTrace(), "Error", JOptionPane.ERROR_MESSAGE);
+    public static void showErrorStackTraceDialog(Exception e) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        String stackTrace = sw.toString();
+        JOptionPane.showMessageDialog(null, stackTrace, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    public static void showErrorDialog(String message) {
+    public static void showErrorMessageDialog(String message) {
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 

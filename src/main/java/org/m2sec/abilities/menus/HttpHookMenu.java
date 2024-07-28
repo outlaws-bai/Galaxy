@@ -19,7 +19,7 @@ public class HttpHookMenu extends IMenu {
 
     @Override
     public String displayName() {
-        return "Http hook";
+        return "Http Hook";
     }
 
     @Override
@@ -30,8 +30,8 @@ public class HttpHookMenu extends IMenu {
     @Override
     public List<IItem> getSubItems() {
         List<IItem> items = new ArrayList<>();
-        items.add(new DecryptItem(api, config));
-        items.add(new EncryptItem(api, config));
+        items.add(new DecryptRequestItem(api, config));
+        items.add(new EncryptRequestItem(api, config));
         return items;
     }
 }

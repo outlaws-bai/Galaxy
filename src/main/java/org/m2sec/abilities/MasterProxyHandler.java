@@ -13,13 +13,13 @@ import org.m2sec.core.httphook.IHttpHooker;
  * @description:
  */
 
-public class MaterProxyHandler implements ProxyRequestHandler, ProxyResponseHandler {
+public class MasterProxyHandler implements ProxyRequestHandler, ProxyResponseHandler {
 
     public static IHttpHooker hooker;
 
     private final Config config;
 
-    public MaterProxyHandler(Config config) {
+    public MasterProxyHandler(Config config) {
         this.config = config;
     }
 

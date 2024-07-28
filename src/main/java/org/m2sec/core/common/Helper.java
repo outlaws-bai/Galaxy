@@ -12,6 +12,8 @@ import org.m2sec.Galaxy;
 import org.m2sec.core.utils.FactorUtil;
 import org.slf4j.LoggerFactory;
 
+import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -24,6 +26,7 @@ import java.nio.file.Paths;
 public class Helper {
 
     public static void init(MontoyaApi api) {
+        checkJdk();
         api.extension().setName(Constants.BURP_SUITE_EXT_NAME);
         api.logging().logToOutput(Constants.BURP_SUITE_EXT_INIT_DEF + "Version -> " + Constants.VERSION + "\r\n");
         if (checkVersion(api)) {
@@ -58,6 +61,14 @@ public class Helper {
             System.out.println(message);
         }
         return buildWorkDir;
+    }
+
+    public static void checkJdk() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        if (compiler == null) {
+            throw new UnsupportedOperationException("Please use JDK to start Burp! Reference link: https://github" +
+                ".com/outlaws-bai/Galaxy/blob/main/docs/ToJDK.md");
+        }
     }
 
     public static void initWorkDir() {

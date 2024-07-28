@@ -35,7 +35,7 @@ public abstract class IItem extends JMenuItem {
             this.action(event);
         } catch (Exception exc) {
             log.error("action execute error. {} .", exc.getMessage(), exc);
-            SwingTools.showErrorDetailDialog(exc);
+            SwingTools.showErrorStackTraceDialog(exc);
         }
     }
 
