@@ -103,7 +103,7 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             if (filename == null) return;
             String filepath = getFilePath(filename.replace(CODE_FILE_SUFFIX, ""));
             if (FileTools.isExist(filepath)) {
-                SwingTools.showErrorDialog("This already exists, please try again. ");
+                SwingTools.showErrorMessageDialog("This already exists, please try again. ");
                 return;
             }
             FileTools.createFiles(filepath);

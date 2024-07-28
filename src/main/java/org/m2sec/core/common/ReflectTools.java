@@ -28,8 +28,8 @@ public class ReflectTools {
             File javaFile = new File(javaFilePath);
 
             if (compiler == null) {
-                throw new IllegalStateException("Cannot find the system Java compiler. " + "Check that your class " +
-                    "path includes tools.jar.");
+                throw new IllegalStateException("Please use JDK to start Burp! Reference link: https://github" +
+                    ".com/outlaws-bai/Galaxy/blob/main/docs/ToJDK.md");
             }
 
             // Set up the file manager

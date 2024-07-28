@@ -16,6 +16,5 @@ import org.m2sec.core.enums.LogLevel;
 public class Setting {
     private LogLevel logLevel;
     private String staticExtensions;
-    private String jythonPath;
-    public boolean ParsedSwaggerApiDocRequestAutoSend;
+    public boolean parsedSwaggerApiDocRequestAutoSend;
 }
