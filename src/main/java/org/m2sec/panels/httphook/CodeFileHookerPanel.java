@@ -279,9 +279,9 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             "AES decrypt -> byte[]"));
         // Crypto - RSA
         provider.addCompletion(new ShorthandCompletion(provider, "rsaEncrypt",
-            "CryptoUtil.rsaEncrypt(String transformation, byte[] data, byte[] publicKey)", "RSA encrypt -> byte[]"));
+            "CryptoUtil.rsaEncrypt(byte[] data, byte[] publicKey)", "RSA encrypt -> byte[]"));
         provider.addCompletion(new ShorthandCompletion(provider, "rsaDecrypt",
-            "CryptoUtil.rsaDecrypt(String transformation, byte[] data, byte[] privateKey)", "RSA decrypt -> byte[]"));
+            "CryptoUtil.rsaDecrypt(byte[] data, byte[] privateKey)", "RSA decrypt -> byte[]"));
         // Crypto - SM2
         provider.addCompletion(new ShorthandCompletion(provider, "sm2Encrypt",
             "CryptoUtil.sm2Encrypt(byte[] data, byte[] publicKey)", "SM2 encrypt -> byte[]"));
