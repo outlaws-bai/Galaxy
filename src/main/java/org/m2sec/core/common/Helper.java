@@ -39,8 +39,8 @@ public class Helper {
         String message;
         if (Files.exists(Paths.get(Constants.WORK_DIR))) {
             if (
-                Files.exists(Paths.get(Constants.VERSION_STORAGE_FILE_PATH))
-                    && !Constants.VERSION.equalsIgnoreCase(FileTools.readFileAsString(Constants.VERSION_STORAGE_FILE_PATH))
+                !Files.exists(Paths.get(Constants.VERSION_STORAGE_FILE_PATH))
+                    || !Constants.VERSION.equalsIgnoreCase(FileTools.readFileAsString(Constants.VERSION_STORAGE_FILE_PATH))
             ) {
                 // 更新了版本
                 String randomString = FactorUtil.randomString(6);

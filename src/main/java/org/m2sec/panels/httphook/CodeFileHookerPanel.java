@@ -277,6 +277,20 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
         provider.addCompletion(new ShorthandCompletion(provider, "aesDecrypt",
             "CryptoUtil.aesDecrypt(String transformation, byte[] data, byte[] secret, Map<String, Object> params)",
             "AES decrypt -> byte[]"));
+        // Crypto DES
+        provider.addCompletion(new ShorthandCompletion(provider, "desEncrypt",
+            "CryptoUtil.desEncrypt(String transformation, byte[] data, byte[] secret, Map<String, Object> params)",
+            "AES encrypt -> byte[]"));
+        provider.addCompletion(new ShorthandCompletion(provider, "desDecrypt",
+            "CryptoUtil.desDecrypt(String transformation, byte[] data, byte[] secret, Map<String, Object> params)",
+            "AES decrypt -> byte[]"));
+        // Crypto 3DES
+        provider.addCompletion(new ShorthandCompletion(provider, "des3Encrypt",
+            "CryptoUtil.des3Encrypt(String transformation, byte[] data, byte[] secret, Map<String, Object> params)",
+            "AES encrypt -> byte[]"));
+        provider.addCompletion(new ShorthandCompletion(provider, "des3Decrypt",
+            "CryptoUtil.des3Decrypt(String transformation, byte[] data, byte[] secret, Map<String, Object> params)",
+            "AES decrypt -> byte[]"));
         // Crypto - RSA
         provider.addCompletion(new ShorthandCompletion(provider, "rsaEncrypt",
             "CryptoUtil.rsaEncrypt(byte[] data, byte[] publicKey)", "RSA encrypt -> byte[]"));
@@ -343,6 +357,10 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
         provider.addCompletion(new ShorthandCompletion(provider, "response.setHeaders",
             "response.setHeaders(Headers headers)", "Response set headers -> void"));
         // Headers
+        provider.addCompletion(new ShorthandCompletion(provider, "headers.has",
+            "headers.has(String key)", "has -> boolean"));
+        provider.addCompletion(new ShorthandCompletion(provider, "headers.hasIgnoreCase",
+            "headers.hasIgnoreCase(String key)", "has Ignore Case -> boolean"));
         provider.addCompletion(new ShorthandCompletion(provider, "headers.add",
             "headers.add(String key, String value)", "add(append) -> void"));
         provider.addCompletion(new ShorthandCompletion(provider, "headers.put",

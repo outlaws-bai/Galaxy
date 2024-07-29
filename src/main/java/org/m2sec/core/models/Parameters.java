@@ -32,6 +32,10 @@ public class Parameters<T> extends LinkedHashMap<String, List<T>> {
         return this;
     }
 
+    public boolean has(String key) {
+        return containsKey(key);
+    }
+
     @SuppressWarnings("UnusedReturnValue")
     public Parameters<T> merge(Parameters<T> p) {
         for (Map.Entry<String, List<T>> entry : p.entrySet()) {
