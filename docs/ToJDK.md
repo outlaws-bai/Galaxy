@@ -4,6 +4,8 @@
 
 一般来说，如果你的项目使用JRE，那么在Burp安装目录会有一个名为 `jre` 的文件夹，我们只需要将其修改为 JDK 即可。
 
+## Windows
+
 ![image-20240728130816351](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240728130816351.png)
 
 **1. 查看当前jre的版本**
@@ -41,7 +43,7 @@ https://docs.aws.amazon.com/corretto/latest/corretto-21-ug/downloads-list.html
 
 ![image-20240728131634209](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240728131634209.png)
 
-mac 将jre替换为jdk
+## Mac
 
 应用程序-> 显示包内容
 
