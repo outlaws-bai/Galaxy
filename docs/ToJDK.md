@@ -2,9 +2,9 @@
 
 当你在Burp官网下载了可执行文件的版本安装时，它是使用JRE启动，需要将其改为JDK，才能正常使用该项目。
 
-一般来说，如果你的项目使用JRE，那么在Burp安装目录会有一个名为 `jre` 的文件夹，我们只需要将其修改为 JDK 即可。
-
 ## Windows
+
+一般来说，如果你的项目使用JRE，那么在Burp安装目录会有一个名为 `jre` 的文件夹，我们只需要将其修改为 JDK 即可。
 
 ![image-20240728130816351](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240728130816351.png)
 
