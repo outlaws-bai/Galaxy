@@ -51,11 +51,15 @@ Burp插件，主要实现在 `HTTP报文二次加密 `场景下，自动解密�
 > 期待你的star，如果该项目对你有帮助的话 ~
 >
 
-如果你发现BUG或有好的建议，，欢迎在GitHub上提Issue或扫码添加下方微信群一起交流讨论。
+如果你发现BUG或有好的建议，欢迎在GitHub上提Issue或扫码添加下方微信群一起交流讨论。
 
 (二维码失效请添加wx号outlaws_bai，并备注 `Galaxy交流` 。)
 
 <img src="https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240714204644975.png" height="300px" width="240px" />
+
+## Stars
+
+[![Stargazers over time](https://starchart.cc/outlaws-bai/Galaxy.svg?variant=adaptive)](https://starchart.cc/outlaws-bai/Galaxy)
 
 ## 常用地址
 
