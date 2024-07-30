@@ -72,7 +72,7 @@
 
 如果你发现BUG或有好的建议，欢迎在GitHub上提Issue或扫码添加下方微信群一起交流讨论。
 
-(二维码失效请添加wx号outlaws_bai，并备注 `Galaxy交流` 。)
+(二维码失效请添加wx号outlaws_bai，并备注 `Galaxy` 。)
 
 ![image-20240730211916457](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730211916457.png)
 
