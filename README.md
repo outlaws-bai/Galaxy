@@ -72,7 +72,7 @@
 
 如果你发现BUG或有好的建议，欢迎在GitHub上提Issue或扫描左侧群二维码进群交流。
 
-> 群二维码失效添加右侧微信。
+> 群二维码失效添加右侧微信并备注 `Galaxy` 。
 
 <center class="half">    <img src="https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730211916457.png" width="300"/><img src="https://raw.githubusercontent.com/outlaws-bai/picture/main/img/image-20240731000104866.png" width="300"/> </center>
 
