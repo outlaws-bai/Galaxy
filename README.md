@@ -59,7 +59,7 @@ Burp插件，主要实现在 `HTTP报文二次加密 `场景下，自动解密�
 
 ## Stars
 
-![Stargazers over time](https://starchart.cc/outlaws-bai/Galaxy.svg?variant=adaptive)
+[![Stargazers over time](https://starchart.cc/outlaws-bai/Galaxy.svg?variant=adaptive)](https://starchart.cc/outlaws-bai/Galaxy)
 
 ## 常用地址
 
