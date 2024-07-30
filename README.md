@@ -72,11 +72,11 @@
 
 如果你发现BUG或有好的建议，欢迎在GitHub上提Issue或扫描群二维码进群交流。
 
-![q](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730211916457.png)
+<img src="https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730211916457.png" width="300" height="300"/>
 
 群二维码失效扫描添加微信并备注 `Galaxy` 。
 
-![s](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/image-20240731000104866.png)
+<img src="https://raw.githubusercontent.com/outlaws-bai/picture/main/img/image-20240731000104866.png" width="300" height="300"/>
 
 ## Stars
 
