@@ -74,7 +74,7 @@
 
 ![q](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730211916457.png)
 
-群二维码失效添加右侧微信并备注 `Galaxy` 。
+群二维码失效扫描添加微信并备注 `Galaxy` 。
 
 ![s](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/image-20240731000104866.png)
 
