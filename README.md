@@ -15,10 +15,10 @@
     <a href="https://github.com/outlaws-bai/Galaxy/issues">Issue</a>
   </p>
 
-# 功能介绍
+### 功能介绍
 
 
-## Http Hook
+#### Http Hook
 
 启用成功后有如下效果：
 
@@ -32,14 +32,14 @@
 
 ![hook](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/hook.gif)
 
-## 其他功能
+#### 其他功能
 
 1. [Parse Swagger Api Doc](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Parse-Swagger-Api-Doc):  解析swagger文档，生成所有URL的请求，并带入参数、路径、描述。
 2. [Bypass Host Check](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Bypass-Host-Check):  绕过服务端在csrf/ssrf的测试点对host做了验证。
 3. [Bypass Auth Of Path](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Bypass-Auth-Of-Path):  通过修改Path的方式绕过某些认证/鉴权/拦截。
 4. ...
 
-# 安装指引
+### 安装指引
 
 插件下载：[Download](https://github.com/outlaws-bai/Galaxy/releases)
 
@@ -53,19 +53,19 @@
 2. 项目使用JDK 17进行开发及编译，请确保启动Burp的JDK不低于17。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
 3. 项目使用了动态编译，请确保启动Burp的是JDK，而不是JRE。[Modify](https://github.com/outlaws-bai/Galaxy/blob/main/docs/ToJDK.md)
 
-# 优势特点
+### 优势特点
 
 1. 简单高效：不需要启动多余的本地服务。
 2. 上手容易：通用算法及常见加密逻辑已内置，基本能做到开箱即用。
 4. 支持面广：如加密算法组合、自定义算法、动态密钥等均可以支持。
 4. 强灵活性：可以使用python、js、Java、grpc多种方式实现加解密以满足需求。
 
-# Next
+### Next
 
 1. 支持配合桌面扫描器一起使用，使得扫描器可以扫描明文请求并得到明文响应。
 2. 提出在涉及非对称加密（不已知私钥）下的使用方法。
 
-# 交流
+### 交流
 
 > star码住，避免迷路 ~
 >
@@ -76,11 +76,11 @@
 
 ![image-20240730211916457](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730211916457.png)
 
-# Stars
+### Stars
 
 [![Stargazers over time](https://starchart.cc/outlaws-bai/Galaxy.svg?variant=adaptive)](https://starchart.cc/outlaws-bai/Galaxy)
 
-# 常用地址
+### 常用地址
 
 [BurpDownload](https://portswigger.net/burp/releases#professional)
 
