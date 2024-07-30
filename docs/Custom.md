@@ -8,7 +8,7 @@
 
 `hookRequestToBurp`，`hookRequestToServer`， `hookResponseToBurp`， `hookResponseToClient`
 
-你需要实现其中的四个函数，实现逻辑是 **使用项目提供的工具类按照你的需求修改请求/响应，以达到你的需求**。所以你必须熟悉项目中的DataObjects和Utils。
+你需要实现其中的四个函数，实现逻辑是 **在四个 hook 中，先找到加密后的数据，再调用项目解密函数，最后修改请求对象**。
 
 ## DataObjects
 
