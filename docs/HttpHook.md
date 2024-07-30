@@ -40,7 +40,7 @@
 
 ## 测试
 
-将加密加密请求发送到Repeater，并启动Http Hook服务后，右键可找到 `Decrypt Request` ，点击可测试。
+将被加密的请求发送到Repeater，并启动Http Hook服务后，右键可找到 `Decrypt Request` ，点击可测试。
 
 ## 日志
 
