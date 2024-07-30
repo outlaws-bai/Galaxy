@@ -9,9 +9,9 @@
 <a href="https://github.com/outlaws-bai/Galaxy/releases"><img alt="Downloads" src="https://img.shields.io/github/downloads/outlaws-bai/Galaxy/total?color=brightgreen"/></a>
 <br>
 <br>
-<a href="https://github.com/outlaws-bai/Galaxy/README-EN.md">English</a> | 
-    <a href="https://github.com/outlaws/Galaxy/releases">Download</a> | 
-    <a href="https://github.com/outlaws-bai/Galaxy/dosc/FAQ.md">FAQ</a> | 
+<a href="https://github.com/outlaws-bai/Galaxy/blob/main/docs/README-EN.md">English</a> | 
+    <a href="https://github.com/outlaws-bai/Galaxy/releases">Download</a> | 
+    <a href="https://github.com/outlaws-bai/Galaxy/blob/main/docs/FAQ.md">FAQ</a> | 
     <a href="https://github.com/outlaws-bai/Galaxy/issues">Issue</a>
   </p>
 
