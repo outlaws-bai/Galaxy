@@ -28,9 +28,9 @@
 
 1. 生成一个随机的32位密钥。
 2. 使用该随机密钥，通过 `aes-ecb` 加密原始请求的json。
-3. 使用公钥1，通过 `rsa` 加密随机密钥。
+3. 使用公钥1通过 `rsa` 加密随机密钥。
 4. 生成新的json并发送请求。
-5. 获取响应后，先用私钥2，使用 `rsa` 解密响应json中的key。
+5. 获取响应后，先用私钥2，通过 `rsa` 解密响应json中的key。
 6. 使用解密出的key，通过 `aes-ecb` 解密除原始的json。
 
 ![image-20240730223200709](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730223200709.png)
@@ -50,14 +50,14 @@
 
 1. 获取被 `hookRequestToBurp` 解密的数据。
 2. 用写死的32位密钥，将1中的数据进行 `aes-ecb` 加密。（这里服务端没做随机密钥检查，所以可以写死）
-3. 使用公钥2，通过内置的 `rsa` 加密函数，加密这个32位的密钥。
+3. 使用公钥1，通过内置的 `rsa` 加密函数，加密这个32位的密钥。
 4. 更新请求对象。
 
 ![image-20240730224718564](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730224718564.png)
 
 **hookResponseToBurp**：同  `hookRequestToBurp` ， 只是步骤2中的私钥1替换位私钥2。
 
-**hookResponseToClient**：同 `hookRequestToServer`，只是步骤3中的公钥2替换位公钥1。
+**hookResponseToClient**：同 `hookRequestToServer`，只是步骤3中的公钥1替换位公钥2。
 
 最终效果如图，该示例为内置的 `AesRsa`
 
