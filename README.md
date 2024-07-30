@@ -1,5 +1,5 @@
 ﻿<p align="center">
-  <h3 align="center">Galaxy</h3>
+  <h1 align="center">Galaxy</h1>
   <p align="center">
     实现在HTTP报文二次加密场景下自动解密的功能
     <br />
@@ -15,9 +15,7 @@
     <a href="https://github.com/outlaws-bai/Galaxy/issues">Issue</a>
   </p>
 
-
 # 功能介绍
-
 
 ## Http Hook
 
