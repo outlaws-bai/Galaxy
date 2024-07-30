@@ -118,6 +118,10 @@ public class HttpHookPanel extends JPanel {
         // 设置 JComboBox 的事件监听器, 选择不同的方式，展示不同方式自己的Panel
         comboBox.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
+                wayPanelContainer.setVisible(true);
+                nextControlPanel.setVisible(true);
+                hookRequestCheckBox.setVisible(true);
+                hookResponseCheckBox.setVisible(true);
                 CardLayout cl = (CardLayout) (wayPanelContainer.getLayout());
                 cl.show(wayPanelContainer, (String) e.getItem());
             }
