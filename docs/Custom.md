@@ -57,7 +57,11 @@
 
 **hookResponseToBurp**：同  `hookRequestToBurp` ， 只是步骤2中的私钥1替换位私钥2。
 
+![image-20240730230929689](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730230929689.png)
+
 **hookResponseToClient**：同 `hookRequestToServer`，只是步骤3中的公钥1替换位公钥2。
+
+![image-20240730231316189](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730231316189.png)
 
 最终效果如图，该示例为内置的 `AesRsa`
 
@@ -82,9 +86,9 @@ log.info("request: {}", request)
 
 ## 常用函数
 
-### DataObjects
+> 推荐点击链接阅读代码，也可以在代码编辑器中按 TAB 查看可用函数。
 
-> 推荐点击链接阅读代码
+### DataObjects
 
 #### Request
 
@@ -197,8 +201,6 @@ headers.remove("Host") => {}
 ```
 
 ### Utils
-
-> 推荐点击链接阅读代码
 
 #### CodeUtil
 
