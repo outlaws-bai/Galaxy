@@ -1,20 +1,92 @@
 # 自定义代码文件
 
-> 需要一定的编程能力。
+前提是，**已经逆向出了网站的加解密逻辑**，如果逆不出来可以群里求助，或者洗洗睡个好觉 ( ͡° ͜ʖ ͡°) 。
 
-如不了解Http Hook功能的基本信息，请先阅读 [Http Hook](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md)
+> 需要一定的编程能力，java/python/js。
+>
+> 不了解Http Hook的原理，请先阅读 [Http Hook](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md) 。
 
-在Burp中打开插件Tab，选择你要使用的语言，点击下方的New按钮并输入文件名，之后在编辑器会生成对应语言的模版文件，并且其中有四个函数(java为驼峰，js/python为蛇形)：
+这个[靶场](https://github.com/outlaws-bai/GalaxyDemo)实现了常见的一些加解密逻辑，对应的hook脚本在示例中都有，可以先体验一下。
 
-`hookRequestToBurp`，`hookRequestToServer`， `hookResponseToBurp`， `hookResponseToClient`
+如果你需要测试的系统加解密逻辑和靶场中的相差不大，可以修改示例中的代码，或新建再cp。
 
-你需要实现其中的四个函数，实现逻辑是 **在四个 hook 中，先在从请求/响应找到加密后的数据，再调用项目解密函数，最后修改请求/响应对象**。
+在代码文件中你需要实现/修改其中的四个Hook函数，每个函数应该有的逻辑是：
 
-## DataObjects
+1. 从请求/响应找到加密后的数据。
+2. 调用项目加密/解密函数。
+3. 修改请求/响应对象。
+
+## 示例
+
+我们以靶场中的aes+rsa为例。启用方式见 https://github.com/outlaws-bai/GalaxyDemo
+
+首先，我们看一下这一项的加解密代码：
+
+![](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730222750886.png)
+
+逻辑如下：
+
+1. 生成一个随机的32位密钥。
+2. 使用该随机密钥，通过 `aes-ecb` 加密原始请求的json。
+3. 使用公钥1，通过 `rsa` 加密随机密钥。
+4. 生成新的json并发送请求。
+5. 获取响应后，先用私钥2，使用 `rsa` 解密响应json中的key。
+6. 使用解密出的key，通过 `aes-ecb` 解密除原始的json。
+
+![image-20240730223200709](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730223200709.png)
+
+很明显，我们想要hook这个加解密逻辑，代码文件的逻辑应该如下。
+
+**hookRequestToBurp**：
+
+1. 获取被加密的数据、被加密的`aes-ecb`密钥。
+2. 使用私钥1，通过内置的  `rsa`  解密函数，解密出被加密的 `aes-ecb` 密钥。
+3. 通过内置的 `aes`  解密函数，解密出被加密的原始数据。
+4. 更新请求对象。
+
+![image-20240730224247534](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730224247534.png)
+
+**hookRequestToServer**：
+
+1. 获取被 `hookRequestToBurp` 解密的数据。
+2. 用写死的32位密钥，将1中的数据进行 `aes-ecb` 加密。（这里服务端没做随机密钥检查，所以可以写死）
+3. 使用公钥2，通过内置的 `rsa` 加密函数，加密这个32位的密钥。
+4. 更新请求对象。
+
+![image-20240730224718564](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730224718564.png)
+
+**hookResponseToBurp**：同  `hookRequestToBurp` ， 只是步骤2中的私钥1替换位私钥2。
+
+**hookResponseToClient**：同 `hookRequestToServer`，只是步骤3中的公钥2替换位公钥1。
+
+最终效果如图，该示例为内置的 `AesRsa`
+
+![hook](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/hook.gif)
+
+## 测试
+
+当启动服务后，在Repeater页面会绑定Encrypt/Decrypt按钮，可以用于测试。
+
+同时在脚本中你可以使用log对象打印日志，来判断代码逻辑是否正确。
+
+```java
+log.info("request: {}", request)
+```
+
+## 日志
+
+运行中的日志会发送到两个地方：
+
+1. `Burp -> Extensions -> Galaxy -> Output/Errors`
+2. [WorkDir](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#work-dir) / run.log
+
+## 常用函数
+
+### DataObjects
 
 > 推荐点击链接阅读代码
 
-### Request
+#### Request
 
 > HTTP请求。 [Request.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Request.java)
 
@@ -69,7 +141,7 @@ request.getBody() -> String
 request.setContent(byte[] content) -> content
 ```
 
-### Response
+#### Response
 
 > HTTP响应。 [Response.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Response.java)
 
@@ -104,9 +176,9 @@ response.getBody() -> String
 response.setContent(byte[] content) -> content
 ```
 
-### Headers Query
+#### Headers/Query
 
-> 请求头或者Query对象，均继承自Map\<String, List\<String\>\>
+> 请求头或者Query对象，均继承自Map\<String, List\<String\>\>。
 
 获取value
 
@@ -124,15 +196,15 @@ headers.put("Host", "192.168.1.4") => {"Host": ["192.168.1.4"]}
 headers.remove("Host") => {}
 ```
 
-## Utils
+### Utils
 
 > 推荐点击链接阅读代码
 
-### CodeUtil
+#### CodeUtil
 
 > hex、base64编码工具类。[CodeUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/CodeUtil.java)
 >
-> 在python中可以导入base64和binascii使用
+> 在python中可以使用自带库。
 
 base64
 
@@ -150,9 +222,11 @@ CodeUtil.hexEncode(byte[] data) -> byte[]
 CodeUtil.hexEncodeToString(byte[] data) -> String
 ```
 
-### FactorUtil
+#### FactorUtil
 
 > 因子工具类。[FactorUtil](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/FactorUtil.java)
+>
+> 在python中可以使用自带库。
 
 生成uuid
 
@@ -172,11 +246,11 @@ FactorUtil.randomString(int length)
 FactorUtil.currentDate()
 ```
 
-### JsonUtil
+#### JsonUtil
 
 > json解析工具类。[JsonUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/JsonUtil.java)
 >
-> 在python中可以导入json使用
+> 在python中可以使用自带库
 
 json字符串转Map或者说dict
 
@@ -196,7 +270,7 @@ JsonUtil.jsonStrToList(String jsonStr) -> List
 JsonUtil.toJsonStr(Object obj) -> String
 ```
 
-### CryptoUtil
+#### CryptoUtil
 
 > 加解密工具类。[CryptoUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/CryptoUtil.java)
 >
@@ -217,11 +291,11 @@ CryptoUtil.aesDecrypt(String transformation, byte[] data, byte[] secret, Map<Str
 RSA加密/解密
 
 ```java
-CryptoUtil.rsaEncrypt(String transformation, byte[] data, byte[] publicKey) -> byte[]
+CryptoUtil.rsaEncrypt(byte[] data, byte[] publicKey) -> byte[]
 ```
 
 ```java
-CryptoUtil.rsaDecrypt(String transformation, byte[] data, byte[] privateKey) -> byte[]
+CryptoUtil.rsaDecrypt(byte[] data, byte[] privateKey) -> byte[]
 ```
 
 SM2加密/解密
@@ -244,7 +318,7 @@ CryptoUtil.sm4Encrypt(String transformation, byte[] data, byte[] secret, Map<Str
 CryptoUtil.sm4Decrypt(String transformation, byte[] data, byte[] secret, Map<String, Object> params) -> byte[]
 ```
 
-### HashUtil
+#### HashUtil
 
 > hash计算工具类。[HashUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/HashUtil.java)
 >
@@ -256,7 +330,7 @@ HashUtil.calcToHex(byte[] data, String algorithm) -> String
 HashUtil.calcToBase64(byte[] data, String algorithm) -> String
 ```
 
-### MacUtil
+#### MacUtil
 
 > mac计算工具类。[MacUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/MacUtil.java)
 >
@@ -267,21 +341,3 @@ MacUtil.calc(byte[] data, byte[] secret, String algorithm) -> byte[]
 MacUtil.calcToHex(byte[] data, byte[] secret, String algorithm) -> String
 MacUtil.calcToBase64(byte[] data, byte[] secret, String algorithm) -> String
 ```
-
-## Test
-
-当启动服务后，在Repeater页面会绑定Encrypt/Decrypt按钮，可以用于测试。
-
-同时在脚本中你可以使用log对象打印日志，来判断代码逻辑是否正确。
-
-```java
-log.info("request: {}", request)
-```
-
-## Log
-
-所有日志会显示在两个地方：
-
-1. Burp Extensions，选中插件可以看到，不过这里Burp限制了显示行数
-2. work dir下有run.log文件，包含了所有日志
-
