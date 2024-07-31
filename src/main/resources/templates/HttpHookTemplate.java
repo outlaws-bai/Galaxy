@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 /**
  * 内置模版，需要自定义代码文件时查看该文档：https://github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md
  * 按 Tab 可查看内置函数
- * 局限性：必须使用JDK启动Burp
  */
 public class ${filename}{
 
