@@ -18,6 +18,7 @@ import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -148,7 +149,7 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
     private void installAutoComplete() {
         CompletionProvider provider = createCompletionProvider();
         AutoCompletion ac = new AutoCompletion(provider);
-        ac.setTriggerKey(KeyStroke.getKeyStroke("TAB"));
+        ac.setTriggerKey(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_QUOTE, KeyEvent.CTRL_DOWN_MASK));
 
         ac.setShowDescWindow(true);
         ac.setParameterAssistanceEnabled(true);
