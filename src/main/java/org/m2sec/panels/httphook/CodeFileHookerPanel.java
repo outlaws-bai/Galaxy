@@ -274,34 +274,34 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
         // Crypto - AES
         provider.addCompletion(new ShorthandCompletion(provider, "aesEncrypt",
             "CryptoUtil.aesEncrypt(String transformation, byte[] data, byte[] secret, Map<String, Object> params)",
-            "AES encrypt -> byte[]"));
+            "AES encrypt -> byte[]", "transformation: AES (=AES/ECB/PKCS5Padding) or AES/ECB/PKCS5Padding or AES/CBC/PKCS5Padding or AES/GCM/NoPadding"));
         provider.addCompletion(new ShorthandCompletion(provider, "aesDecrypt",
             "CryptoUtil.aesDecrypt(String transformation, byte[] data, byte[] secret, Map<String, Object> params)",
-            "AES decrypt -> byte[]"));
+            "AES decrypt -> byte[]", "transformation: AES (=AES/ECB/PKCS5Padding) or AES/ECB/PKCS5Padding or AES/CBC/PKCS5Padding or AES/GCM/NoPadding"));
         // Crypto DES
         provider.addCompletion(new ShorthandCompletion(provider, "desEncrypt",
             "CryptoUtil.desEncrypt(String transformation, byte[] data, byte[] secret, Map<String, Object> params)",
-            "AES encrypt -> byte[]"));
+            "AES encrypt -> byte[]", "transformation: DES (=DES/ECB/PKCS5Padding) or DES/ECB/PKCS5Padding or DES/CBC/PKCS5Padding or DES/GCM/NoPadding"));
         provider.addCompletion(new ShorthandCompletion(provider, "desDecrypt",
             "CryptoUtil.desDecrypt(String transformation, byte[] data, byte[] secret, Map<String, Object> params)",
-            "AES decrypt -> byte[]"));
+            "AES decrypt -> byte[]", "transformation: DES (=DES/ECB/PKCS5Padding) or DES/ECB/PKCS5Padding or DES/CBC/PKCS5Padding or DES/GCM/NoPadding"));
         // Crypto 3DES
         provider.addCompletion(new ShorthandCompletion(provider, "des3Encrypt",
             "CryptoUtil.des3Encrypt(String transformation, byte[] data, byte[] secret, Map<String, Object> params)",
-            "AES encrypt -> byte[]"));
+            "AES encrypt -> byte[]", "transformation: DESede (=DESede/ECB/PKCS5Padding) or DESede/ECB/PKCS5Padding or DESede/CBC/PKCS5Padding or DESede/GCM/NoPadding"));
         provider.addCompletion(new ShorthandCompletion(provider, "des3Decrypt",
             "CryptoUtil.des3Decrypt(String transformation, byte[] data, byte[] secret, Map<String, Object> params)",
-            "AES decrypt -> byte[]"));
+            "AES decrypt -> byte[]", "transformation: DESede (=DESede/ECB/PKCS5Padding) or DESede/ECB/PKCS5Padding or DESede/CBC/PKCS5Padding or DESede/GCM/NoPadding"));
         // Crypto - RSA
         provider.addCompletion(new ShorthandCompletion(provider, "rsaEncrypt",
-            "CryptoUtil.rsaEncrypt(byte[] data, byte[] publicKey)", "RSA encrypt -> byte[]"));
+            "CryptoUtil.rsaEncrypt(String transformation, byte[] data, byte[] publicKey)", "RSA encrypt -> byte[]", "transformation: RSA (=RSA/ECB/PKCS1Padding) or RSA/ECB/PKCS1Padding or RSA/ECB/OAEPWithSHA-1AndMGF1Padding or RSA/ECB/OAEPWithSHA-256AndMGF1Padding or RSA/ECB/NoPadding or RSA/ECB/ISO9796-1Padding"));
         provider.addCompletion(new ShorthandCompletion(provider, "rsaDecrypt",
-            "CryptoUtil.rsaDecrypt(byte[] data, byte[] privateKey)", "RSA decrypt -> byte[]"));
+            "CryptoUtil.rsaDecrypt(String transformation, byte[] data, byte[] privateKey)", "RSA decrypt -> byte[]", "transformation: RSA (=RSA/ECB/PKCS1Padding) or RSA/ECB/PKCS1Padding or RSA/ECB/OAEPWithSHA-1AndMGF1Padding or RSA/ECB/OAEPWithSHA-256AndMGF1Padding or RSA/ECB/NoPadding or RSA/ECB/ISO9796-1Padding"));
         // Crypto - SM2
         provider.addCompletion(new ShorthandCompletion(provider, "sm2Encrypt",
-            "CryptoUtil.sm2Encrypt(byte[] data, byte[] publicKey)", "SM2 encrypt -> byte[]"));
+            "CryptoUtil.sm2Encrypt(String mode, byte[] data, byte[] publicKey)", "SM2 encrypt -> byte[]", "mode: c1c2c3 or c1c3c2"));
         provider.addCompletion(new ShorthandCompletion(provider, "sm2Decrypt",
-            "CryptoUtil.sm2Decrypt(byte[] data, byte[] privateKey)", "SM2 decrypt -> byte[]"));
+            "CryptoUtil.sm2Decrypt(String mode, byte[] data, byte[] privateKey)", "SM2 decrypt -> byte[]", "mode: c1c2c3 or c1c3c2"));
         // Crypto - SM4
         provider.addCompletion(new ShorthandCompletion(provider, "sm4Encrypt",
             "CryptoUtil.sm4Encrypt(String transformation, byte[] data, byte[] secret, Map<String, Object> params)",

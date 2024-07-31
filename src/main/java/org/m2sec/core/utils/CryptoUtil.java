@@ -1,7 +1,17 @@
 package org.m2sec.core.utils;
 
 
+import org.bouncycastle.crypto.CipherParameters;
+import org.bouncycastle.crypto.InvalidCipherTextException;
+import org.bouncycastle.crypto.engines.SM2Engine;
+import org.bouncycastle.crypto.params.ECDomainParameters;
+import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
+import org.bouncycastle.crypto.params.ECPublicKeyParameters;
+import org.bouncycastle.crypto.params.ParametersWithRandom;
+import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
+import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.math.ec.ECPoint;
 import org.m2sec.core.enums.SymmetricKeyMode;
 
 import javax.annotation.Nullable;
@@ -12,6 +22,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.math.BigInteger;
 import java.security.*;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidKeySpecException;
@@ -43,45 +54,57 @@ public class CryptoUtil {
     public static final String ALGORITHM_SM4 = "SM4";
     public static final String ALGORITHM_SM4_DEFAULT_TRANSFORMATION = "SM4/ECB/PKCS5Padding";
 
-    public static byte[] desEncrypt(@Nullable String transformation, byte[] data, byte[] secret,
-                                    Map<String, Object> params){
+    public static byte[] desEncrypt(String transformation, byte[] data, byte[] secret,
+                                    Map<String, Object> params) {
         return symmetricKeyEncrypt(transformation, data, secret, params, ALGORITHM_DES,
             ALGORITHM_DES_DEFAULT_TRANSFORMATION);
     }
-    public static byte[] desDecrypt(@Nullable String transformation, byte[] data, byte[] secret,
+
+    public static byte[] desDecrypt(String transformation, byte[] data, byte[] secret,
                                     Map<String, Object> params) {
         return symmetricKeyDecrypt(transformation, data, secret, params, ALGORITHM_DES,
             ALGORITHM_DES_DEFAULT_TRANSFORMATION);
     }
 
-    public static byte[] des3Encrypt(@Nullable String transformation, byte[] data, byte[] secret,
-                                    Map<String, Object> params) {
+    public static byte[] des3Encrypt(String transformation, byte[] data, byte[] secret,
+                                     Map<String, Object> params) {
         return symmetricKeyEncrypt(transformation, data, secret, params, ALGORITHM_DES3,
             ALGORITHM_DES3_DEFAULT_TRANSFORMATION);
     }
-    public static byte[] des3Decrypt(@Nullable String transformation, byte[] data, byte[] secret,
-                                    Map<String, Object> params) {
+
+    public static byte[] des3Decrypt(String transformation, byte[] data, byte[] secret,
+                                     Map<String, Object> params) {
         return symmetricKeyDecrypt(transformation, data, secret, params, ALGORITHM_DES3,
             ALGORITHM_DES3_DEFAULT_TRANSFORMATION);
     }
-    public static byte[] aesEncrypt(@Nullable String transformation, byte[] data, byte[] secret,
+
+    public static byte[] aesEncrypt(String transformation, byte[] data, byte[] secret,
                                     Map<String, Object> params) {
         return symmetricKeyEncrypt(transformation, data, secret, params, ALGORITHM_AES,
             ALGORITHM_AES_DEFAULT_TRANSFORMATION);
     }
 
 
-    public static byte[] aesDecrypt(@Nullable String transformation, byte[] data, byte[] secret,
+    public static byte[] aesDecrypt(String transformation, byte[] data, byte[] secret,
                                     Map<String, Object> params) {
         return symmetricKeyDecrypt(transformation, data, secret, params, ALGORITHM_AES,
             ALGORITHM_AES_DEFAULT_TRANSFORMATION);
     }
 
-
+    @Deprecated
     public static byte[] rsaEncrypt(byte[] data, byte[] publicKey) {
+        return rsaEncrypt(ALGORITHM_RSA, data, publicKey);
+    }
+
+    @Deprecated
+    public static byte[] rsaDecrypt(byte[] data, byte[] privateKey) {
+        return rsaDecrypt(ALGORITHM_RSA, data, privateKey);
+    }
+
+    public static byte[] rsaEncrypt(String transformation, byte[] data, byte[] publicKey) {
         try {
             PublicKey pubKey = KeyFactory.getInstance(ALGORITHM_RSA).generatePublic(new X509EncodedKeySpec(publicKey));
-            Cipher cipher = Cipher.getInstance(ALGORITHM_RSA);
+            Cipher cipher = Cipher.getInstance(transformation);
             cipher.init(Cipher.ENCRYPT_MODE, pubKey);
             return cipher.doFinal(data);
         } catch (InvalidKeySpecException | NoSuchPaddingException | NoSuchAlgorithmException |
@@ -90,12 +113,11 @@ public class CryptoUtil {
         }
     }
 
-
-    public static byte[] rsaDecrypt(byte[] data, byte[] privateKey) {
+    public static byte[] rsaDecrypt(String transformation, byte[] data, byte[] privateKey) {
         try {
             PrivateKey priKey =
                 KeyFactory.getInstance(ALGORITHM_RSA).generatePrivate(new PKCS8EncodedKeySpec(privateKey));
-            Cipher cipher = Cipher.getInstance(ALGORITHM_RSA);
+            Cipher cipher = Cipher.getInstance(transformation);
             cipher.init(Cipher.DECRYPT_MODE, priKey);
             return cipher.doFinal(data);
         } catch (InvalidKeySpecException | NoSuchPaddingException | NoSuchAlgorithmException |
@@ -104,29 +126,60 @@ public class CryptoUtil {
         }
     }
 
-
+    @Deprecated
     public static byte[] sm2Encrypt(byte[] data, byte[] publicKey) {
-        try {
-            PublicKey pubKey = KeyFactory.getInstance(ALGORITHM_EC).generatePublic(new X509EncodedKeySpec(publicKey));
-            Cipher cipher = Cipher.getInstance(ALGORITHM_SM2);
-            cipher.init(Cipher.ENCRYPT_MODE, pubKey);
-            return cipher.doFinal(data);
-        } catch (InvalidKeySpecException | NoSuchPaddingException | NoSuchAlgorithmException |
-                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException e) {
-            throw new RuntimeException(e);
-        }
+        return sm2Crypt(data, publicKey, "c1c2c3", true);
+    }
+
+    @Deprecated
+    public static byte[] sm2Decrypt(byte[] data, byte[] privateKey) {
+        return sm2Crypt(data, privateKey, "c1c2c3", false);
+    }
+
+    public static byte[] sm2Encrypt(String mode, byte[] data, byte[] publicKey) {
+        return sm2Crypt(data, publicKey, mode, true);
     }
 
 
-    public static byte[] sm2Decrypt(byte[] data, byte[] privateKey) {
+    public static byte[] sm2Decrypt(String mode, byte[] data, byte[] privateKey) {
+        return sm2Crypt(data, privateKey, mode, false);
+    }
+
+    private static byte[] sm2Crypt(byte[] data, byte[] key, String modeString, boolean isEncrypt) {
         try {
-            PrivateKey priKey =
-                KeyFactory.getInstance(ALGORITHM_EC).generatePrivate(new PKCS8EncodedKeySpec(privateKey));
-            Cipher cipher = Cipher.getInstance(ALGORITHM_SM2);
-            cipher.init(Cipher.DECRYPT_MODE, priKey);
-            return cipher.doFinal(data);
-        } catch (InvalidKeySpecException | NoSuchPaddingException | NoSuchAlgorithmException |
-                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException e) {
+            SM2Engine.Mode mode;
+            if (modeString.equalsIgnoreCase(SM2Engine.Mode.C1C3C2.name())) {
+                mode = SM2Engine.Mode.C1C3C2;
+            } else {
+                mode = SM2Engine.Mode.C1C2C3;
+            }
+            CipherParameters param;
+            if (isEncrypt) {
+                KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_EC);
+                X509EncodedKeySpec keySpec = new X509EncodedKeySpec(key);
+                BCECPublicKey publicKey = (BCECPublicKey) keyFactory.generatePublic(keySpec);
+                ECPoint q = publicKey.getQ();
+                ECDomainParameters domainParameters = new ECDomainParameters(
+                    publicKey.getParameters().getCurve(),
+                    publicKey.getParameters().getG(),
+                    publicKey.getParameters().getN(),
+                    publicKey.getParameters().getH());
+                param = new ParametersWithRandom(new ECPublicKeyParameters(q, domainParameters), new SecureRandom());
+            } else {
+                BCECPrivateKey priKey =
+                    (BCECPrivateKey) KeyFactory.getInstance(ALGORITHM_EC).generatePrivate(new PKCS8EncodedKeySpec(key));
+                BigInteger d = priKey.getD();
+                ECDomainParameters domainParameters = new ECDomainParameters(
+                    priKey.getParameters().getCurve(),
+                    priKey.getParameters().getG(),
+                    priKey.getParameters().getN(),
+                    priKey.getParameters().getH());
+                param = new ECPrivateKeyParameters(d, domainParameters);
+            }
+            SM2Engine sm2Engine = new SM2Engine(mode);
+            sm2Engine.init(isEncrypt, param);
+            return sm2Engine.processBlock(data, 0, data.length);
+        } catch (InvalidCipherTextException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }
     }
