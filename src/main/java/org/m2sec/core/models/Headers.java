@@ -23,7 +23,8 @@ public class Headers extends Parameters<String> {
     }
 
     public static Headers of(String str) {
-        return HttpUtil.strToParameters(str, Constants.HTTP_HEADERS_SEP, Constants.HTTP_HEADER_CONN, Headers.class);
+        return HttpUtil.strToParameters(str, Constants.HTTP_HEADERS_SEP, Constants.HTTP_HEADER_CONN, Headers.class,
+            false);
     }
 
     public static Headers of(List<HttpHeader> headers) {

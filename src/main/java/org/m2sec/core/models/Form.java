@@ -20,7 +20,8 @@ public class Form extends Parameters<String> {
     }
 
     public static Form of(String str) {
-        return HttpUtil.strToParameters(str, Constants.HTTP_QUERY_FORM_SEP, Constants.HTTP_H_C_Q_F_CONN, Form.class);
+        return HttpUtil.strToParameters(str, Constants.HTTP_QUERY_FORM_SEP, Constants.HTTP_H_C_Q_F_CONN, Form.class,
+            true);
     }
 
     public String toRawString() {
