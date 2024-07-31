@@ -18,11 +18,11 @@ Bypass server-side validation on CSRF/SSRF testing points for the host.
 
 > If you want to customize bypassing the template, you can modify the `${Work Dir}/templates/bypassHostCheckTemplate.txt` file.
 >
-> [Work Dir](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Work-Dir), [Template](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Tempalte)
+> [Work Dir](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic_EN.md#Work-Dir), [Template](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic_EN.md#Tempalte)
 
 **Instructions for Use**:
 
-Enter the URL to be attacked at the test point, right-click on it, select `Send To Intruder`, then in `Intruder` select `Payload type -> Extension-generated
+Enter the URL to be attacked at the test point, right-click on it, select `Send To Intruder`, then in `Intruder` select `Payload type -> Extension-generated`, `Selected generator -> Bypass Host Check`,afterwards, click on "Start attack" to proceed.
 
 ## Bypass Auth Of Path
 

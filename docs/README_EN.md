@@ -1,16 +1,35 @@
 # Galaxy
 
-Burp plugin, mainly to achieve automatic decryption in the `HTTP message secondary encryption` scenario, in order to display plaintext message in Burp.
+<p align="center">
+  <h3 align="center">Galaxy</h3>
+  <p align="center">
+    Automatically decrypt in the scenario of double encryption in HTTP messages.
+    <br />
+          <br />
+<a href="https://github.com/outlaws-bai/Galaxy/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/outlaws-bai/Galaxy"/></a>
+<a href="https://github.com/outlaws-bai/Galaxy/releases"><img alt="GitHub releases" src="https://img.shields.io/github/release/outlaws-bai/Galaxy"/></a>
+<a href="https://github.com/outlaws-bai/Galaxy/releases"><img alt="Downloads" src="https://img.shields.io/github/downloads/outlaws-bai/Galaxy/total?color=brightgreen"/></a>
+<br>
+<br>
+<a href="https://github.com/outlaws-bai/Galaxy/blob/main/README.md">中文</a> | 
+    <a href="https://github.com/outlaws-bai/Galaxy/releases">Download</a> | 
+    <a href="https://github.com/outlaws-bai/Galaxy/blob/main/docs/FAQ-EN.md">FAQ</a> | 
+    <a href="https://github.com/outlaws-bai/Galaxy/issues">Issue</a>
+  </p>
 
 ## Function Introduction
 
 ### Http Hook
 
-Use the new version of Burp `Montoya API` for development, extract four stages from it, and use Python, JS, Java, or Grpc to implement the processing logic for the four stages to meet the requirements.
+After successful activation, the following effects will occur:
 
-> The project has built-in multiple encryption and decryption rules, which can be used out of the box for common algorithms.
+1. All subsequent requests and responses from the agent are automatically decrypted.
+2. Once decrypted, the request should be forwarded to the Repeater and the response received will also be decrypted.。
+3. Intruder, Scanner, and other modules also support:。
 
-Further understanding：[Detail](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md)
+> Multiple encryption and decryption scenario examples are already included, making it ready to use for common algorithms and logic.
+
+Further understanding：[Http Hook](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook-EN.md)
 
 ![hook](https://raw.githubusercontent.com/outlaws-bai/picture/main/hook.gif)
 
@@ -32,6 +51,7 @@ Build your own:：`build.gradle -> shadowJar`
 
 1. The project is developed using Burp `Montoya API`, with a minimum required version of Burp.`v2023.10.3.7`。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
 2. Develop and compile the project using JDK 17, please ensure that the JDK used to start Burp is not lower than 17.。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
+3. The project uses dynamic compilation, please make sure to start Burp with JDK instead of JRE.[Modify](https://github.com/outlaws-bai/Galaxy/blob/main/docs/ToJDK-EN.md)
 
 ## Advantages and characteristics:
 
@@ -40,20 +60,22 @@ Build your own:：`build.gradle -> shadowJar`
 3. Flexible: can be implemented in multiple ways such as Python, JS, Java, and Grpc to meet the requirements.
 4. Support a wide range: such as encryption algorithm combination, custom algorithms, dynamic keys, etc. can all be supported.。
 
-## Next
+## Development Plan:
+
+> At this stage, only about half of the project development has been completed. Make sure to **star** the code to avoid getting lost.
 
 1. Supports use with desktop scanners, allowing the scanner to scan plaintext requests and receive plaintext responses.。
 2. Propose the method of using in the case of asymmetric encryption (unknown private key)。
 
 ## Communication
 
-> Looking forward to your **star** if this project is helpful to you. ~
-
 If you find bugs or have good suggestions, please feel free to raise an issue on GitHub or scan the QR code to join the WeChat group below for discussion.
 
-(If the QR code is invalid, please add the WeChat ID outlaws_bai and note "Galaxy交流". )
+<img src="https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730211916457.png" width="300" height="300"/>
 
-<img src="https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240714204644975.png" height="300px" width="240px" />
+## Stars
+
+[![Stargazers over time](https://starchart.cc/outlaws-bai/Galaxy.svg?variant=adaptive)](https://starchart.cc/outlaws-bai/Galaxy)
 
 ## Commonly used addresses:
 

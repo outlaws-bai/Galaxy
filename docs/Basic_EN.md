@@ -20,5 +20,5 @@ The content in ${xxx} will be treated as an `Expression` and the result of the e
 
 All logs will be displayed in two places:
 
-1. Burp Extensions，Once the plugin is selected, you can see that Burp has limited the number of displayed lines.
-2. In the work directory, there is a file named run.log, which contains all the logs.
+1. `Burp -> Extensions -> Galaxy -> Output/Errors`
+2. [WorkDir](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic_EN.md#work-dir) / run.log

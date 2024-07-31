@@ -1,20 +1,103 @@
-# Custom code file:
+# Custom 
 
-> Requires a certain level of programming ability.。
+The premise is that the encryption and decryption logic of the website has been reverse engineered. If you can't reverse engineer it, you can ask for help in the group, or just go to bed ( ͡° ͜ʖ ͡°).
 
-If you do not understand the basic information of the Http Hook function, please read: [Http Hook](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md)
+> Requires a certain level of programming ability,java/pyhthon/js.。
+>
+> If you do not understand the basic information of the Http Hook function, please read: [Http Hook](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook_EN.md)
+>
 
-Open the plugin tab in Burp, select the language you want to use, click the "New" button below, and enter the file name. Then, a template file in the corresponding language will be generated in the editor, including four functions (in camel case for Java, and in snake case for JavaScript/Python).：
+This [target field](https://github.com/outlaws-bai/GalaxyDemo) implements some common encryption and decryption logic, and the corresponding hook scripts are available in the examples. You can try it out and also try writing corresponding hook scripts to increase proficiency by comparing them with the built-in examples.
 
-`hookRequestToBurp`，`hookRequestToServer`， `hookResponseToBurp`， `hookResponseToClient`
 
-You need to implement four of the functions, and the implementation logic is to **use the provided project tools to modify requests/responses according to your needs**. So you must be familiar with the DataObjects and Utils in the project.
 
-## DataObjects
+If you need to customize the hook script, you can modify the code in the example or create a new one.
 
-> Recommended to click the link to read the code:
 
-### Request
+
+In the hook script, you need to implement/modify four Hook functions, and each function should accomplish the following:
+
+1. Find the encrypted data from the request/response.
+2. Call the project encryption/decryption function.
+3. Modify request/response object.
+
+
+
+## Example
+
+We take the aes+rsa in the target field as an example. The method of enabling can be found at https://github.com/outlaws-bai/GalaxyDemo
+
+First, let's take a look at the encryption and decryption code for this item:
+
+![j](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730222750886.png)
+
+The logic is as follows:
+
+1. Generate a random 32-bit key.
+2. Use this random key to encrypt the original request's JSON through `aes-ecb`.
+3. Encrypt the random key through `rsa` using public key 1.
+4. Generate a new JSON and send the request.
+5. After receiving the response, decrypt the key in the response JSON using private key 2 through `rsa`.
+6. Use the decrypted key to decrypt the original JSON through `aes-ecb`.
+
+![image-20240730223200709](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730223200709.png)
+
+Obviously, we want to hook this encryption and decryption logic. The logic of the hook script should be as follows.
+
+**hookRequestToBurp**：
+
+1. Get the encrypted data and the encrypted `aes-ecb` key.
+2. Use private key 1 to decrypt the encrypted `aes-ecb` key through the built-in `rsa` decryption function.
+3. Decrypt the original data using the built-in `aes` decryption function.
+4. Update the request object.
+
+![image-20240730224247534](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730224247534.png)
+
+**hookRequestToServer**：
+
+1. Get the data decrypted by `hookRequestToBurp`.
+2. Encrypt the data from step 1 using a hardcoded 32-bit key through `aes-ecb`. (The server does not check for random key, so it can be hardcoded)
+3. Encrypt this 32-bit key using public key 1 through the built-in `rsa` encryption function.
+4. Update the request object.
+
+![image-20240730224718564](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730224718564.png)
+
+**hookResponseToBurp**: Same as `hookRequestToBurp`, but replace private key 1 with private key 2 in step 2.
+
+![image-20240730230929689](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730230929689.png)
+
+**hookResponseToClient**: Same as `hookRequestToServer`, but replace public key 1 with public key 2 in step 3.
+
+![image-20240730231316189](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730231316189.png)
+
+The final effect is as shown in the figure, this example is the built-in `AesRsa`.
+
+![hook](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/hook.gif)
+
+## Test
+
+When the service is started, the Encrypt/Decrypt button will be bound on the Repeater page, which can be used for testing:。
+
+At the same time, you can use the log object in the script to print logs to determine if the code logic is correct.。
+
+```java
+log.info("request: {}", request)
+```
+
+## Log
+
+All logs will be displayed in two places:：
+
+1. Burp Extensions，When you select the plug-in, you can see that Burp limits the number of displayed lines here.
+2. There is a run.log file in the work directory, which contains all the logs.
+
+## Commonly used functions:
+
+> Recommend clicking on the link to read the code, or you can press TAB in the code editor to view available functions.
+
+### DataObjects
+
+#### Request
 
 > HTTP request. [Request.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Request.java)
 
@@ -69,7 +152,7 @@ request.getBody() -> String
 request.setContent(byte[] content) -> content
 ```
 
-### Response
+#### Response
 
 > HTTP Response:。 [Response.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Response.java)
 
@@ -104,7 +187,7 @@ response.getBody() -> String
 response.setContent(byte[] content) -> content
 ```
 
-### Headers Query
+#### Headers Query
 
 > Request headers or Query objects both inherit from Map<String, List<String>>.
 
@@ -124,11 +207,11 @@ headers.put("Host", "192.168.1.4") => {"Host": ["192.168.1.4"]}
 headers.remove("Host") => {}
 ```
 
-## Utils
+### Utils
 
 > Recommended to click the link to read the code:
 
-### CodeUtil
+#### CodeUtil
 
 > hex, base64 encoding tool class:[CodeUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/CodeUtil.java)
 >
@@ -150,7 +233,7 @@ CodeUtil.hexEncode(byte[] data) -> byte[]
 CodeUtil.hexEncodeToString(byte[] data) -> String
 ```
 
-### FactorUtil
+#### FactorUtil
 
 > Factor Tool Class:[FactorUtil](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/FactorUtil.java)
 
@@ -172,7 +255,7 @@ Get current time:
 FactorUtil.currentDate()
 ```
 
-### JsonUtil
+#### JsonUtil
 
 > JSON parsing tool class:。[JsonUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/JsonUtil.java)
 >
@@ -196,7 +279,7 @@ Convert object to JSON string:
 JsonUtil.toJsonStr(Object obj) -> String
 ```
 
-### CryptoUtil
+#### CryptoUtil
 
 > Encryption and decryption tool class:[CryptoUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/CryptoUtil.java)
 >
@@ -244,7 +327,7 @@ CryptoUtil.sm4Encrypt(String transformation, byte[] data, byte[] secret, Map<Str
 CryptoUtil.sm4Decrypt(String transformation, byte[] data, byte[] secret, Map<String, Object> params) -> byte[]
 ```
 
-### HashUtil
+#### HashUtil
 
 > Hash calculation tool class:[HashUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/HashUtil.java)
 >
@@ -256,7 +339,7 @@ HashUtil.calcToHex(byte[] data, String algorithm) -> String
 HashUtil.calcToBase64(byte[] data, String algorithm) -> String
 ```
 
-### MacUtil
+#### MacUtil
 
 > Mac calculator class:[MacUtil.java](https://github1s.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/MacUtil.java)
 >
@@ -267,21 +350,4 @@ MacUtil.calc(byte[] data, byte[] secret, String algorithm) -> byte[]
 MacUtil.calcToHex(byte[] data, byte[] secret, String algorithm) -> String
 MacUtil.calcToBase64(byte[] data, byte[] secret, String algorithm) -> String
 ```
-
-## Test
-
-When the service is started, the Encrypt/Decrypt button will be bound on the Repeater page, which can be used for testing:。
-
-At the same time, you can use the log object in the script to print logs to determine if the code logic is correct.。
-
-```java
-log.info("request: {}", request)
-```
-
-## Log
-
-All logs will be displayed in two places:：
-
-1. Burp Extensions，When you select the plug-in, you can see that Burp limits the number of displayed lines here.
-2. There is a run.log file in the work directory, which contains all the logs.
 
