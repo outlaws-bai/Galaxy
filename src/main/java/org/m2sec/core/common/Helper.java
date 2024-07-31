@@ -74,7 +74,7 @@ public class Helper {
 
     public static void checkJython(MontoyaApi api) {
         if (!ReflectTools.canLoadClass("org.python.util.PythonInterpreter")) {
-            api.logging().logToOutput("Warning! Cannot load jython, some features cannot be used, please read the README on GitHub.\r\n");
+            api.logging().logToOutput("Warning! Cannot load jython, some features cannot be used, please read the README on GitHub.");
         }
     }
 
