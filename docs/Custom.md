@@ -14,7 +14,7 @@
 
 1. 从请求/响应找到加密[后的数据。
 2. 调用项目加密/解密函数。
-3. 修改请求/响应对象。](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md)
+3. 修改请求/响应对象。
 
 ## 示例
 
