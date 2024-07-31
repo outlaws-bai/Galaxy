@@ -2,7 +2,8 @@
 
 ## Under release
 
-1. ...
+1. 提供不包含jython的jar包，并在启动时检查
+2. ...
 
 ## 2024-07-29 Release 2.2.8
 

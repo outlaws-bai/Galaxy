@@ -29,6 +29,7 @@ public class Helper {
         checkJdk();
         api.extension().setName(Constants.BURP_SUITE_EXT_NAME);
         api.logging().logToOutput(Constants.BURP_SUITE_EXT_INIT_DEF + "Version -> " + Constants.VERSION + "\r\n");
+        checkJython(api);
         if (checkVersion(api)) {
             initWorkDir();
         }
@@ -68,6 +69,12 @@ public class Helper {
         if (compiler == null) {
             throw new UnsupportedOperationException("Please use JDK to start Burp! Reference link: https://github" +
                 ".com/outlaws-bai/Galaxy/blob/main/docs/ToJDK.md");
+        }
+    }
+
+    public static void checkJython(MontoyaApi api) {
+        if (!ReflectTools.canLoadClass("org.python.util.PythonInterpreter")) {
+            api.logging().logToOutput("Warning! Cannot load jython, some features cannot be used, please read the README on GitHub.\r\n");
         }
     }
 

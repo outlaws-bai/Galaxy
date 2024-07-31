@@ -90,6 +90,15 @@ public class ReflectTools {
         }
     }
 
+    public static boolean canLoadClass(String className) {
+        try {
+            ReflectTools.class.getClassLoader().loadClass(className);
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
     public static Object newInstance(Class<?> clazz, Class<?> parameterType, Object object) {
         return newInstance(clazz, new Class[]{parameterType}, new Object[]{object});
     }

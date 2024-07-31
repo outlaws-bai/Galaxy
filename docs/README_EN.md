@@ -21,8 +21,8 @@ Automatically decrypt in the scenario of secondary encryption in HTTP messages.
 After successful activation, the following effects will occur:
 
 1. All subsequent requests and responses from the agent are automatically decrypted.
-2. Once decrypted, the request should be forwarded to the Repeater and the response received will also be decrypted.。
-3. Intruder, Scanner, and other modules also support:。
+2. Once decrypted, the request should be forwarded to the Repeater and the response received will also be decrypted.
+3. Intruder, Scanner, and other modules also support.
 
 > Multiple encryption and decryption scenario examples are already included, making it ready to use for common algorithms and logic.
 Further understanding：[Http Hook](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook_EN.md)
@@ -31,15 +31,16 @@ Further understanding：[Http Hook](https://github.com/outlaws-bai/Galaxy/blob/m
 
 ### Other functions:
 
-1. [Parse Swagger Api Doc](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other_EN.md#Parse-Swagger-Api-Doc):  Analyze the swagger document, generate requests for all URLs, including parameters, paths, and descriptions. Optionally, automatically send:。
-2. [Bypass Host Check](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other_EN.md#Bypass-Host-Check):  Bypass the server's validation of the host in csrf/ssrf test points.。
-3. [Bypass Auth Of Path](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other_EN.md#Bypass-Auth-Of-Path):  Bypass certain authentication/authorization/interception by modifying the Path.。
+1. [Parse Swagger Api Doc](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other_EN.md#Parse-Swagger-Api-Doc):  Analyze the swagger document, generate requests for all URLs, including parameters, paths, and descriptions. Optionally, automatically send:
+2. [Bypass Host Check](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other_EN.md#Bypass-Host-Check):  Bypass the server's validation of the host in csrf/ssrf test points.
+3. [Bypass Auth Of Path](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other_EN.md#Bypass-Auth-Of-Path):  Bypass certain authentication/authorization/interception by modifying the Path.
+4. ...
 
 ## Installation guide:
 
 Plugin Download:：[Download](https://github.com/outlaws-bai/Galaxy/releases)
 
-Plugin installation:：`Extender -> Extensions -> Add - Select File -> Next`
+Plugin installation:：`Extensions -> Add - Select File -> Next`
 
 Build your own:：`build.gradle -> shadowJar`
 
@@ -48,13 +49,14 @@ Build your own:：`build.gradle -> shadowJar`
 1. The project is developed using Burp `Montoya API`, with a minimum required version of Burp.`v2023.10.3.7`。 [Update](https://github.com/outlaws-bai/Galaxy/blob/main/docs/README_EN.md#commonly-used-addresses)
 2. Develop and compile the project using JDK 17, please ensure that the JDK used to start Burp is not lower than 17.。 [Update](https://github.com/outlaws-bai/Galaxy/blob/main/docs/README_EN.md#commonly-used-addresses)
 3. The project uses dynamic compilation, please make sure to start Burp with JDK instead of JRE.[Modify](https://github.com/outlaws-bai/Galaxy/blob/main/docs/ToJDK_EN.md)
+4. If the downloaded or packaged jar contains the words' without jython ', please configure a folder in Burp's Java environment (Settings ->Extensions) and place `jython-standalone-xxx.jar` in that folder.
 
 ## Advantages and characteristics:
 
 1. Simple and efficient: Users do not need to start unnecessary local services. After successful configuration, message encryption and decryption can be done automatically.。
 2. Easy to get started: Universal algorithms have examples available, making it easy to use out of the box.。
 3. Flexible: can be implemented in multiple ways such as Python, JS, Java, and Grpc to meet the requirements.
-4. Support a wide range: such as encryption algorithm combination, custom algorithms, dynamic keys, etc. can all be supported.。
+4. Support a wide range: such as encryption algorithm combination, custom algorithms, dynamic keys, etc. can all be supported.
 
 ## Development Plan:
 

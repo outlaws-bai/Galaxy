@@ -11,6 +11,7 @@ version = '2.2.8'
 def grpcVersion = '1.54.1'
 def protobufVersion = '3.24.0'
 def protocVersion = protobufVersion
+def versionFile = file("${projectDir}/src/main/resources/version.txt") as Object
 
 repositories {
 //    mavenCentral()
@@ -75,7 +76,6 @@ protobuf {
     }
 }
 
-// Inform IDEs like IntelliJ IDEA, Eclipse or NetBeans about the generated code.
 sourceSets {
     main {
         java {
@@ -93,8 +93,14 @@ jar {
 }
 
 shadowJar {
-    // 写入版本
-    def versionFile = file("${projectDir}/src/main/resources/version.txt")
+    // Not commenting means entering jython into a jar package
+    //archiveClassifier.set('without-jython')
     versionFile.text = version
+    if (archiveClassifier.get() == 'without-jython') {
+        dependencies {
+            exclude(dependency('org.python:jython-standalone:2.7.3'))
+        }
+    }
     mergeServiceFiles()
 }
+
