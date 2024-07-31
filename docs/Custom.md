@@ -31,7 +31,7 @@
 3. 使用公钥1通过 `rsa` 加密随机密钥。
 4. 生成新的json并发送请求。
 5. 获取响应后，先用私钥2，通过 `rsa` 解密响应json中的key。
-6. 使用解密出的key，通过 `aes-ecb` 解密除原始的json。
+6. 使用解密出的key，通过 `aes-ecb` 解密出原始的json。
 
 ![image-20240730223200709](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730223200709.png)
 
