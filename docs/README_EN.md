@@ -1,20 +1,18 @@
+<h3 align="center">Galaxy</h3>
 <p align="center">
-  <h3 align="center">Galaxy</h3>
-  <p align="center">
-    Automatically decrypt in the scenario of double encryption in HTTP messages.
-    <br />
-          <br />
+Automatically decrypt in the scenario of secondary encryption in HTTP messages.
+<br>
+<br>
 <a href="https://github.com/outlaws-bai/Galaxy/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/outlaws-bai/Galaxy"/></a>
 <a href="https://github.com/outlaws-bai/Galaxy/releases"><img alt="GitHub releases" src="https://img.shields.io/github/release/outlaws-bai/Galaxy"/></a>
 <a href="https://github.com/outlaws-bai/Galaxy/releases"><img alt="Downloads" src="https://img.shields.io/github/downloads/outlaws-bai/Galaxy/total?color=brightgreen"/></a>
 <br>
 <br>
 <a href="https://github.com/outlaws-bai/Galaxy/blob/main/README.md">中文</a> | 
-    <a href="https://github.com/outlaws-bai/Galaxy/releases">Download</a> | 
-    <a href="https://github.com/outlaws-bai/Galaxy/blob/main/docs/FAQ.md">FAQ</a> | 
-    <a href="https://github.com/outlaws-bai/Galaxy/issues">Issue</a>
-  </p>
-
+<a href="https://github.com/outlaws-bai/Galaxy/releases">Download</a> | 
+<a href="https://github.com/outlaws-bai/Galaxy/blob/main/docs/FAQ.md">FAQ</a> | 
+<a href="https://github.com/outlaws-bai/Galaxy/issues">Issue</a>
+</p>
 
 ## Function Introduction
 

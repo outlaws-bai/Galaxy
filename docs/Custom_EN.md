@@ -2,13 +2,12 @@
 
 The premise is that the encryption and decryption logic of the website has been reverse engineered. If you can't reverse engineer it, you can ask for help in the group, or just go to bed ( ͡° ͜ʖ ͡°).
 
-> Requires a certain level of programming ability,java/pyhthon/js.。
+> Requires a certain level of programming ability,java/python/js.。
 >
 > If you do not understand the basic information of the Http Hook function, please read: [Http Hook](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook_EN.md)
 >
 
 This [target field](https://github.com/outlaws-bai/GalaxyDemo) implements some common encryption and decryption logic, and the corresponding hook scripts are available in the examples. You can try it out and also try writing corresponding hook scripts to increase proficiency by comparing them with the built-in examples.
-
 
 
 If you need to customize the hook script, you can modify the code in the example or create a new one.
@@ -20,8 +19,6 @@ In the hook script, you need to implement/modify four Hook functions, and each f
 1. Find the encrypted data from the request/response.
 2. Call the project encryption/decryption function.
 3. Modify request/response object.
-
-
 
 ## Example
 

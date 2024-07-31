@@ -1,22 +1,20 @@
-﻿<p align="center">
-  <h3 align="center">Galaxy</h3>
-  <p align="center">
-    实现在HTTP报文二次加密场景下自动解密的功能
-    <br />
-          <br />
+<h3 align="center">Galaxy</h3>
+<p align="center">
+实现在HTTP报文二次加密场景下自动解密的功能
+<br>
+<br>
 <a href="https://github.com/outlaws-bai/Galaxy/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/outlaws-bai/Galaxy"/></a>
 <a href="https://github.com/outlaws-bai/Galaxy/releases"><img alt="GitHub releases" src="https://img.shields.io/github/release/outlaws-bai/Galaxy"/></a>
 <a href="https://github.com/outlaws-bai/Galaxy/releases"><img alt="Downloads" src="https://img.shields.io/github/downloads/outlaws-bai/Galaxy/total?color=brightgreen"/></a>
 <br>
 <br>
 <a href="https://github.com/outlaws-bai/Galaxy/blob/main/docs/README_EN.md">English</a> | 
-    <a href="https://github.com/outlaws-bai/Galaxy/releases">Download</a> | 
-    <a href="https://github.com/outlaws-bai/Galaxy/blob/main/docs/FAQ.md">FAQ</a> | 
-    <a href="https://github.com/outlaws-bai/Galaxy/issues">Issue</a>
-  </p>
+<a href="https://github.com/outlaws-bai/Galaxy/releases">Download</a> | 
+<a href="https://github.com/outlaws-bai/Galaxy/blob/main/docs/FAQ.md">FAQ</a> | 
+<a href="https://github.com/outlaws-bai/Galaxy/issues">Issue</a>
+</p>
 
 ## 功能介绍
-
 
 ### Http Hook
 
