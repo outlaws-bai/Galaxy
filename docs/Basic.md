@@ -18,7 +18,7 @@ ${xxx} 中的内容会被当作 `Expression` 执行，执行结果通过 `common
 
 ## Log
 
-所有日志会显示在两个地方：
+运行中的日志会发送到两个地方：
 
-1. Burp Extensions，选中插件可以看到，不过这里Burp限制了显示行数
-2. work dir下有run.log文件，包含了所有日志
+1. `Burp -> Extensions -> Galaxy -> Output/Errors`
+2. [WorkDir](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#work-dir) / run.log

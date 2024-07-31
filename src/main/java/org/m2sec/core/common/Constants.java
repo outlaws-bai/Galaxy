@@ -104,7 +104,7 @@ public class Constants {
     public static final String HOOK_FUNC_4 = "hookResponseToClient";
 
     public static final String HOOK_BY_GRPC_IMPL_DEF = "Please start a GRPC server and enter its address below.";
-    public static final String HOOK_BY_CODE_IMPL_DEF = "Select the appropriate file and modify it until" +
+    public static final String HOOK_BY_CODE_IMPL_DEF = "Select the appropriate script and modify it until" +
         " it meets your needs.";
 
     // file suffix

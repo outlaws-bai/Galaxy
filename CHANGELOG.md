@@ -4,7 +4,15 @@
 
 1. ...
 
-## 2024-07-20 Release 2.2.7
+## 2024-07-29 Release 2.2.8
+
+1. 增加更多示例：des、3des、aes+rsa、sm2+sm4
+2. 编辑器中代码提示增加headers.has、headers.hasIgnoreCase、des加解密、3des加解密等可用函数
+3. 修复展示堆栈信息时，没有展示出message的问题
+4. 安装时增加JDK启动检查
+5. 修复选项为JS时，重新加载panel无法正确显示的问题
+
+## 2024-07-26 Release 2.2.7
 
 1. fix some bugs
 2. 完成py、js的部分示例

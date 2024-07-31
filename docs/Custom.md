@@ -6,15 +6,15 @@
 >
 > 不了解Http Hook的原理，请先阅读 [Http Hook](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md) 。
 
-这个[靶场](https://github.com/outlaws-bai/GalaxyDemo)实现了常见的一些加解密逻辑，对应的hook脚本在示例中都有，可以先体验一下。
+这个[靶场](https://github.com/outlaws-bai/GalaxyDemo)实现了常见的一些加解密逻辑，对应的hook脚本在示例中都有，可以体验一下，也可以尝试写对应的hook脚本，与内置示例对照增加熟练度。
 
-你可以修改示例中的代码，或新建再cp。
+需要自定义hook脚本时你可以修改示例中的代码，或新建再cp。
 
-在代码文件中你需要实现/修改其中的四个Hook函数，每个函数应该有的逻辑是：
+在hook脚本中你需要实现/修改其中的四个Hook函数，每个函数应该完成的是：
 
-1. 从请求/响应找到加密后的数据。
+1. 从请求/响应找到加密[后的数据。
 2. 调用项目加密/解密函数。
-3. 修改请求/响应对象。
+3. 修改请求/响应对象。](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md)
 
 ## 示例
 
@@ -22,7 +22,7 @@
 
 首先，我们看一下这一项的加解密代码：
 
-![](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730222750886.png)
+![j](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730222750886.png)
 
 逻辑如下：
 
@@ -35,7 +35,7 @@
 
 ![image-20240730223200709](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730223200709.png)
 
-很明显，我们想要hook这个加解密逻辑，代码文件的逻辑应该如下。
+很明显，我们想要hook这个加解密逻辑，hook脚本的逻辑应该如下。
 
 **hookRequestToBurp**：
 
