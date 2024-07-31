@@ -49,7 +49,7 @@ Build your own:：`build.gradle -> shadowJar`
 1. The project is developed using Burp `Montoya API`, with a minimum required version of Burp.`v2023.10.3.7`。 [Update](https://github.com/outlaws-bai/Galaxy/blob/main/docs/README_EN.md#commonly-used-addresses)
 2. Develop and compile the project using JDK 17, please ensure that the JDK used to start Burp is not lower than 17.。 [Update](https://github.com/outlaws-bai/Galaxy/blob/main/docs/README_EN.md#commonly-used-addresses)
 3. The project uses dynamic compilation, please make sure to start Burp with JDK instead of JRE.[Modify](https://github.com/outlaws-bai/Galaxy/blob/main/docs/ToJDK_EN.md)
-4. If the downloaded or packaged jar contains the words' without jython ', please configure a folder in Burp's Java environment (Settings ->Extensions) and place `jython-standalone-xxx.jar` in that folder.
+4. If the downloaded or packaged jar contains the words' without jython ', please configure a folder in Burp's Java environment(`Settings ->Extensions`) and place `jython-standalone-xxx.jar` in that folder.
 
 ## Advantages and characteristics:
 
