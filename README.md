@@ -3,9 +3,11 @@
 实现在HTTP报文二次加密场景下自动解密的功能
 <br>
 <br>
+<a href="https://github.com/outlaws-bai/Galaxy/releases"><img alt="releases" src="https://img.shields.io/github/release/outlaws-bai/Galaxy"/></a>
+<a href="https://github.com/outlaws-bai/Galaxy/releases"><img alt="downloads" src="https://img.shields.io/github/downloads/outlaws-bai/Galaxy/total?color=orange"/></a>
+<img alt="begin" src="https://img.shields.io/badge/begin-20240607-green"/>
+<img alt="last commit" src="https://img.shields.io/github/last-commit/outlaws-bai/Galaxy"/>
 <a href="https://github.com/outlaws-bai/Galaxy/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/outlaws-bai/Galaxy"/></a>
-<a href="https://github.com/outlaws-bai/Galaxy/releases"><img alt="GitHub releases" src="https://img.shields.io/github/release/outlaws-bai/Galaxy"/></a>
-<a href="https://github.com/outlaws-bai/Galaxy/releases"><img alt="Downloads" src="https://img.shields.io/github/downloads/outlaws-bai/Galaxy/total?color=brightgreen"/></a>
 <br>
 <br>
 <a href="https://github.com/outlaws-bai/Galaxy/blob/main/docs/README_EN.md">English</a> | 
