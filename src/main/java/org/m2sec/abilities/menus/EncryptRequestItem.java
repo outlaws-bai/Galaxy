@@ -1,6 +1,7 @@
 package org.m2sec.abilities.menus;
 
 import burp.api.montoya.MontoyaApi;
+import burp.api.montoya.core.ToolType;
 import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.ui.contextmenu.ContextMenuEvent;
 import burp.api.montoya.ui.contextmenu.MessageEditorHttpRequestResponse;
@@ -29,13 +30,15 @@ public class EncryptRequestItem extends IItem {
 
     @Override
     public boolean isDisplay(ContextMenuEvent event) {
-        return event.invocationType().containsHttpMessage()
+        return event.isFromTool(ToolType.REPEATER)
+            && event.invocationType().containsHttpMessage()
             && event.messageEditorRequestResponse().isPresent()
             && event.messageEditorRequestResponse().get().selectionContext() == MessageEditorHttpRequestResponse.SelectionContext.REQUEST
             && config.getOption().isHookStart();
     }
 
     @Override
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public void action(ContextMenuEvent event) {
         MessageEditorHttpRequestResponse messageEditorHttpRequestResponse = event.messageEditorRequestResponse().get();
         HttpRequest httpRequest = messageEditorHttpRequestResponse.requestResponse().request();
