@@ -50,7 +50,7 @@
 1. 项目采用Burp `Montoya API` 开发，Burp版本不低于 `v2023.10.3.7` 。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
 2. 项目使用JDK 17进行开发及编译，请确保启动Burp的JDK不低于17。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
 3. 项目使用了动态编译，请确保启动Burp的是JDK，而不是JRE。[Modify](https://github.com/outlaws-bai/Galaxy/blob/main/docs/ToJDK.md)
-4. 如果你下载或打包后的jar包含 `without-jython` 字样，请在Burp的Java environment(`Settings -> Extensions`)配置一个文件夹，并将 `jython-standalone-xxx.jar` 放在该文件夹
+4. 如果你下载或打包后的jar包含 `without-jython` 字样，请在Burp的Java environment(`Settings -> Extensions`)配置一个文件夹，并将 `jython-standalone-xxx.jar` 放在该文件夹。[Download](https://www.jython.org/download)
 
 ## 优势特点
 
@@ -62,12 +62,13 @@
 ## 开发计划
 
 > 现阶段项目开发仅完成一半左右，一定star码住，避免迷路 ~ 
-> 
 
 1. 支持配合桌面扫描器一起使用，使得扫描器可以扫描明文请求并得到明文响应。
 2. 提出在涉及非对称加密（不已知私钥）下的使用方法。
 
 ## 交流
+
+> 进群前请star，谢谢。
 
 如果你发现BUG或有好的建议，欢迎在GitHub上提Issue或扫描群二维码进群交流。
 
