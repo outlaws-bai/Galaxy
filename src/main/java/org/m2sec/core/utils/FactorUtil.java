@@ -37,4 +37,8 @@ public class FactorUtil {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return now.format(formatter);
     }
+
+    public static Long currentTime() {
+        return System.currentTimeMillis();
+    }
 }

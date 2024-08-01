@@ -17,7 +17,12 @@ public class MacUtil {
 
     public static final String HMAC_SHA_256 = "HmacSHA256";
 
+    @Deprecated
     public static byte[] calc(byte[] data, byte[] secret, String algorithm) {
+        return calc(algorithm, data, secret);
+    }
+
+    public static byte[] calc(String algorithm, byte[] data, byte[] secret) {
         try {
             Mac mac = Mac.getInstance(algorithm);
             SecretKeySpec keySpec = new SecretKeySpec(secret, algorithm);
@@ -26,13 +31,5 @@ public class MacUtil {
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static String calcToHex(byte[] data, byte[] secret, String algorithm) {
-        return ByteUtil.toHexString(calc(data, secret, algorithm));
-    }
-
-    public static String calcToBase64(byte[] data, byte[] secret, String algorithm) {
-        return Base64.getEncoder().encodeToString(calc(data, secret, algorithm));
     }
 }

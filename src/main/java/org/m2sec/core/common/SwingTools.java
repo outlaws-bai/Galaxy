@@ -1,6 +1,8 @@
 package org.m2sec.core.common;
 
 
+import org.apache.commons.text.StringEscapeUtils;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.PrintWriter;
@@ -61,6 +63,21 @@ public class SwingTools {
 
     public static String showInputDialog(String message) {
         return JOptionPane.showInputDialog(null, message);
+    }
+
+    public static String renderSummary(String funcDesc, String link, String returnDocs, String... paramDescs) {
+        StringBuilder retVal = new StringBuilder();
+        retVal.append(funcDesc).append(String.format("<br><a href=\"%s\">code</a>", link)).append("<br><br>");
+        for (String paramDesc : paramDescs) {
+            retVal.append("@param ").append(StringEscapeUtils.escapeHtml4(paramDesc)).append("<br>");
+        }
+        retVal.append("<br>").append("@return ").append(StringEscapeUtils.escapeHtml4(returnDocs));
+        return retVal.toString();
+    }
+
+
+    public static String renderLink(String funcDesc, String link) {
+        return funcDesc + String.format("<br><a href=\"%s\">code</a>", link);
     }
 
 
