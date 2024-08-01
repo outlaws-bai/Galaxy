@@ -251,6 +251,24 @@ public class Request {
         content = body.getBytes();
     }
 
+    public Form getForm() {
+        return Form.of(getBody());
+    }
+
+    public void setForm(Form form) {
+        setBody(form.toRawString());
+    }
+
+    public FormData<String> getFormData() {
+        // 待实现
+        return null;
+    }
+
+    public FormData<UploadFile> getFiles() {
+        // 待实现
+        return null;
+    }
+
     public boolean isStaticExtension() {
         return isStaticExtension(Constants.HTTP_STATIC_EXTENSIONS);
     }

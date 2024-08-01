@@ -21,7 +21,7 @@ public class Cookies extends Parameters<String> {
 
     public static Cookies of(String str) {
         return HttpUtil.strToParameters(str, Constants.HTTP_COOKIE_CONN, Constants.HTTP_H_C_Q_F_CONN,
-            Cookies.class);
+            Cookies.class, true);
     }
 
     public String toRawString() {

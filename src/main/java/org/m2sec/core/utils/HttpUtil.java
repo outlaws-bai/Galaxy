@@ -147,7 +147,7 @@ public class HttpUtil {
     }
 
     public static <T extends Parameters<String>> T strToParameters(String str, String sep, String conn, Class<?
-        extends T> clazz) {
+        extends T> clazz, boolean urlDecode) {
         try {
             T retVal = clazz.getDeclaredConstructor().newInstance();
             if (str != null && !str.isEmpty()) {
@@ -155,7 +155,16 @@ public class HttpUtil {
                 for (String pair : pairs) {
                     String[] keyValue = pair.split(conn, 2);
                     String key = URLDecoder.decode(keyValue[0], StandardCharsets.UTF_8);
-                    String value = (keyValue.length > 1) ? URLDecoder.decode(keyValue[1], StandardCharsets.UTF_8) : "";
+                    String value;
+                    if (keyValue.length > 1) {
+                        if (urlDecode) {
+                            value = URLDecoder.decode(keyValue[1], StandardCharsets.UTF_8);
+                        } else {
+                            value = keyValue[1];
+                        }
+                    } else {
+                        value = "";
+                    }
                     retVal.add(key, value);
                 }
             }

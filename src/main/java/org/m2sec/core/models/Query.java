@@ -20,7 +20,8 @@ public class Query extends Parameters<String> {
     }
 
     public static Query of(String str) {
-        return HttpUtil.strToParameters(str, Constants.HTTP_QUERY_FORM_SEP, Constants.HTTP_H_C_Q_F_CONN, Query.class);
+        return HttpUtil.strToParameters(str, Constants.HTTP_QUERY_FORM_SEP, Constants.HTTP_H_C_Q_F_CONN, Query.class,
+            true);
     }
 
 
