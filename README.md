@@ -20,11 +20,16 @@
 
 ### Http Hook
 
-启用成功后有如下效果：
+**场景**
 
-1. 后续代理的所有请求和响应自动解密。
-2. 已解密请求转到Repeater后Send，得到的响应也会被解密。
-3. Intruder、Scanner等模块同样支持。
+- 越来越多的网站对HTTP请求&响应做了加密/加签，这导致想要修改明文请求/响应非常不方便
+- 已有项目在面对加密&加签同时存在、加密算法组合等情况时不够用，自行编写hook脚本难度大、效率低
+
+**效果**
+
+- 启用成功后，后续代理的所有请求和响应自动解密
+- 已解密请求转到Repeater后Send，得到的响应也会被解密
+- Intruder、Scanner等模块同样支持
 
 > 已包含多种加解密场景示例，对于常规算法及逻辑可以做到开箱即用。
 
@@ -49,24 +54,24 @@
 
 **注意事项**:
 
-1. 项目采用Burp `Montoya API` 开发，Burp版本不低于 `v2023.10.3.7` 。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
-2. 项目使用JDK 17进行开发及编译，请确保启动Burp的JDK不低于17。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
-3. 项目使用了动态编译，请确保启动Burp的是JDK，而不是JRE。[Modify](https://github.com/outlaws-bai/Galaxy/blob/main/docs/ToJDK.md)
-4. 如果你下载或打包后的jar包含 `without-jython` 字样，请在Burp的Java environment(`Settings -> Extensions`)配置一个文件夹，并将 `jython-standalone-xxx.jar` 放在该文件夹。[Download](https://www.jython.org/download)
+- 项目采用Burp `Montoya API` 开发，Burp版本不低于 `v2023.10.3.7` 。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
+- 项目使用JDK 17进行开发及编译，请确保启动Burp的JDK不低于17。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
+- 项目使用了动态编译，请确保启动Burp的是JDK，而不是JRE。[Modify](https://github.com/outlaws-bai/Galaxy/blob/main/docs/ToJDK.md)
+- 如果你下载或打包后的jar包含 `without-jython` 字样，请在Burp的Java environment(`Settings -> Extensions`)配置一个文件夹，并将 `jython-standalone-xxx.jar` 放在该文件夹。[Download](https://www.jython.org/download)
 
 ## 优势特点
 
-1. 简单高效：不需要启动多余的本地服务。
-2. 上手容易：通用算法及常见加密逻辑已内置，基本能做到开箱即用。
-3. 支持面广：如加密算法组合、自定义算法、动态密钥等均可以支持。
-4. 强灵活性：可以使用python、js、Java、grpc多种方式实现加解密以满足需求。
+- 简单高效：不需要启动多余的本地服务。
+- 上手容易：通用算法及常见加密逻辑已内置，基本能做到开箱即用。
+- 支持面广：如加密算法组合、自定义算法、动态密钥等均可以支持。
+- 强灵活性：可以使用python、js、Java、grpc多种方式实现加解密以满足需求。
 
 ## 开发计划
 
 > 目前仅开发一半左右，你的star是该项目继续开发的动力。
 
-1. 支持配合桌面扫描器一起使用，使得扫描器可以扫描明文请求并得到明文响应。
-2. 提出在涉及非对称加密（不已知私钥）下的使用方法。
+- 支持配合桌面扫描器一起使用，使得扫描器可以扫描明文请求并得到明文响应。
+- 提出在涉及非对称加密（不已知私钥）下的使用方法。
 
 ## 交流
 
