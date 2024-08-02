@@ -29,7 +29,7 @@ public abstract class IHttpHooker {
 
     public abstract void destroy();
 
-    public HttpRequest tryHookRequestToBurp(HttpRequest httpRequest) {
+    public HttpRequest tryHookRequestToBurp(HttpRequest httpRequest, boolean isCheckExpression) {
         String name = Constants.HOOK_FUNC_1;
         HttpRequest retVal = httpRequest;
         try {
@@ -37,8 +37,8 @@ public abstract class IHttpHooker {
                 Request request = Request.of(httpRequest);
                 log.debug("[{}] before hook: {}", name, request);
                 String expression = option.getRequestCheckExpression();
-                if (expression != null && !expression.isEmpty() && (Boolean) Render.renderExpression(expression,
-                    new HashMap<>(Map.of("request", request)))) {
+                if (!isCheckExpression || (expression != null && !expression.isEmpty() && (Boolean) Render.renderExpression(expression,
+                    new HashMap<>(Map.of("request", request))))) {
                     request = hookRequestToBurp(request);
                     log.debug("[{}] after hook: {}", name, request);
                     if (request == null) {
@@ -70,7 +70,7 @@ public abstract class IHttpHooker {
                 request = hookRequestToServer(request);
                 log.debug("[{}] after hook: {}", name, request);
                 // 添加标记头
-                if (option.isHookResponse() && messageId!=0) {
+                if (option.isHookResponse() && messageId != 0) {
                     hookedIds.add(messageId);
                 }
                 if (request == null) {
@@ -91,8 +91,8 @@ public abstract class IHttpHooker {
     public HttpResponse tryHookResponseToBurp(HttpResponse httpResponse, int messageId) {
         String name = Constants.HOOK_FUNC_3;
         try {
-            if (option.isHookResponse() && hookedIds.contains(messageId)) {
-                hookedIds.remove(messageId);
+            if (option.isHookResponse() && (messageId == 0 || hookedIds.contains(messageId))) {
+                if (messageId != 0) hookedIds.remove(messageId);
                 Response response = Response.of(httpResponse);
                 log.debug("[{}] before hook: {}", name, response);
                 response.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "HttpHook");

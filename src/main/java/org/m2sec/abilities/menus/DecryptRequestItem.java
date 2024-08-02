@@ -8,9 +8,13 @@ import burp.api.montoya.ui.contextmenu.MessageEditorHttpRequestResponse;
 import org.m2sec.abilities.MasterHttpHandler;
 import org.m2sec.core.common.Config;
 import org.m2sec.core.common.Constants;
+import org.m2sec.core.common.Render;
 import org.m2sec.core.common.SwingTools;
 import org.m2sec.core.models.Headers;
 import org.m2sec.core.models.Request;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -31,8 +35,7 @@ public class DecryptRequestItem extends IItem {
 
     @Override
     public boolean isDisplay(ContextMenuEvent event) {
-        return event.isFromTool(ToolType.REPEATER)
-            && event.invocationType().containsHttpMessage()
+        return event.invocationType().containsHttpMessage()
             && event.messageEditorRequestResponse().isPresent()
             && event.messageEditorRequestResponse().get().selectionContext() == MessageEditorHttpRequestResponse.SelectionContext.REQUEST
             && config.getOption().isHookStart();
@@ -49,7 +52,13 @@ public class DecryptRequestItem extends IItem {
             SwingTools.showInfoDialog("The request has been decrypted.");
             return;
         }
-        HttpRequest newRequest = MasterHttpHandler.hooker.tryHookRequestToBurp(httpRequest);
-        messageEditorHttpRequestResponse.setRequest(newRequest);
+        String expression = config.getOption().getRequestCheckExpression();
+        if (expression == null || expression.isBlank() || !(Boolean) Render.renderExpression(expression,
+            new HashMap<>(Map.of("request", request)))) {
+            SwingTools.showInfoDialog("The result of using this request to execute the check expression is false. Please check.");
+            return;
+        }
+        HttpRequest newRequest = MasterHttpHandler.hooker.tryHookRequestToBurp(httpRequest, false);
+        SwingTools.showRequest(api, newRequest, false);
     }
 }

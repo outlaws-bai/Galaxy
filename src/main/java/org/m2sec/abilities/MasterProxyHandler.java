@@ -31,7 +31,7 @@ public class MasterProxyHandler implements ProxyRequestHandler, ProxyResponseHan
     public ProxyRequestReceivedAction handleRequestReceived(InterceptedRequest interceptedRequest) {
         HttpRequest request;
         if (config.getOption().isHookStart()) {
-            request = hooker.tryHookRequestToBurp(interceptedRequest);
+            request = hooker.tryHookRequestToBurp(interceptedRequest, true);
         } else {
             request = interceptedRequest;
         }

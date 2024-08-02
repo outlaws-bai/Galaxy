@@ -32,6 +32,8 @@ public class HttpHookMenu extends IMenu {
         List<IItem> items = new ArrayList<>();
         items.add(new DecryptRequestItem(api, config));
         items.add(new EncryptRequestItem(api, config));
+        items.add(new DecryptResponseItem(api, config));
+        items.add(new EncryptResponseItem(api, config));
         return items;
     }
 }

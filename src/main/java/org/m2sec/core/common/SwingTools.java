@@ -1,6 +1,11 @@
 package org.m2sec.core.common;
 
 
+import burp.api.montoya.MontoyaApi;
+import burp.api.montoya.http.message.requests.HttpRequest;
+import burp.api.montoya.http.message.responses.HttpResponse;
+import burp.api.montoya.ui.editor.HttpRequestEditor;
+import burp.api.montoya.ui.editor.HttpResponseEditor;
 import org.apache.commons.text.StringEscapeUtils;
 
 import javax.swing.*;
@@ -63,6 +68,32 @@ public class SwingTools {
 
     public static String showInputDialog(String message) {
         return JOptionPane.showInputDialog(null, message);
+    }
+
+    public static void showRequest(MontoyaApi api, HttpRequest request, boolean isEncrypt) {
+        String temp = isEncrypt ? "Encrypted" : "Decrypted";
+        HttpRequestEditor requestEditor = api.userInterface().createHttpRequestEditor();
+        requestEditor.setRequest(request);
+        JDialog dialog = new JDialog();
+        dialog.setTitle(Constants.BURP_SUITE_EXT_NAME + " - " + temp + " Request");
+        api.userInterface().applyThemeToComponent(dialog);
+        dialog.getContentPane().add(requestEditor.uiComponent());
+        dialog.setSize(888, 888);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+    }
+
+    public static void showResponse(MontoyaApi api, HttpResponse response, boolean isEncrypt) {
+        String temp = isEncrypt ? "Encrypted" : "Decrypted";
+        HttpResponseEditor responseEditor = api.userInterface().createHttpResponseEditor();
+        responseEditor.setResponse(response);
+        JDialog dialog = new JDialog();
+        dialog.setTitle(Constants.BURP_SUITE_EXT_NAME + " - " + temp + " Response");
+        api.userInterface().applyThemeToComponent(dialog);
+        dialog.getContentPane().add(responseEditor.uiComponent());
+        dialog.setSize(888, 888);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
     }
 
     public static String renderSummary(String funcDesc, String link, String returnDocs, String... paramDescs) {
