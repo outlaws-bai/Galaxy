@@ -1,6 +1,5 @@
 package org.m2sec.core.outer;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.enums.Protocol;
@@ -12,8 +11,14 @@ import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 
 /**
  * @author: outlaws-bai
@@ -23,7 +28,7 @@ import java.net.Proxy;
 @Slf4j
 public class HttpClient {
 
-    public Response send(Request request) {
+    public static Response send(Request request) {
         return send(request, 5, false, null);
     }
 
@@ -31,19 +36,19 @@ public class HttpClient {
      * @param proxyConn 代理连接串
      * @return 响应对象
      */
-    public Response send(Request request, String proxyConn) {
+    public static Response send(Request request, String proxyConn) {
         return send(request, 5, false, proxyConn);
     }
 
-    public Response send(Request request, boolean followRedirect) {
+    public static Response send(Request request, boolean followRedirect) {
         return send(request, 5, followRedirect, null);
     }
 
-    public Response send(Request request, int timeoutSeconds) {
+    public static Response send(Request request, int timeoutSeconds) {
         return send(request, 5, false, null);
     }
 
-    public Response send(Request request, int timeoutSeconds, boolean followRedirect, String proxyConn) {
+    public static Response send(Request request, int timeoutSeconds, boolean followRedirect, String proxyConn) {
         // 构建URL
         String protocol = Protocol.of(request.isSecure()).toRaw();
         String url = protocol + "://" + request.getHost() + ":" + request.getPort() + request.getPath();
@@ -51,8 +56,9 @@ public class HttpClient {
             url += "?" + request.getQuery().toRawString();
         }
 
+
         // 构建HttpRequest
-        HttpRequest httpRequest = HttpUtil.createRequest(Method.valueOf(request.getMethod()), url)
+        HttpRequest httpRequest = HttpUtil.createRequest(Method.valueOf(request.getMethod()), url).setSSLSocketFactory(getIgnoreSSLSocketFactory())
             .keepAlive(true)
             .header(request.getHeaders())
             .body(request.getContent());
@@ -107,5 +113,37 @@ public class HttpClient {
             throw e;
         }
 
+    }
+
+    private static SSLSocketFactory getIgnoreSSLSocketFactory() {
+        try {
+            SSLContext sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, getTrustManager(), new SecureRandom());
+            return sslContext.getSocketFactory();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static TrustManager[] getTrustManager() {
+        return new TrustManager[]{
+            new X509TrustManager() {
+                //检查客户端证书，若不信任该证书抛出异常，咱们自己就是客户端不用检查
+                @Override
+                public void checkClientTrusted(X509Certificate[] chain, String authType) {
+                }
+
+                //检查服务器的证书，若不信任该证书抛出异常，可以不检查默认都信任
+                @Override
+                public void checkServerTrusted(X509Certificate[] chain, String authType) {
+                }
+
+                //返回受信任的X509证书数组
+                @Override
+                public X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[]{};
+                }
+            }
+        };
     }
 }
