@@ -160,6 +160,10 @@ public class Request {
         else return of(str.getBytes());
     }
 
+    public static Request of(String urlStr, String method) {
+        return of(urlStr, Method.valueOf(method));
+    }
+
     public static Request of(String urlStr, Method method) {
         URL url = HttpUtil.parseUrl(urlStr);
         Headers headers = new Headers();
@@ -267,6 +271,10 @@ public class Request {
     public FormData<UploadFile> getFiles() {
         // 待实现
         return null;
+    }
+
+    public Object getJson() {
+        return HttpUtil.bodyToJson(getBody());
     }
 
     public boolean isStaticExtension() {

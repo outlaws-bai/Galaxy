@@ -1,8 +1,7 @@
 package org.m2sec.core.utils;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -42,5 +41,21 @@ public class JsonUtil {
     public static List<?> jsonStrToList(String jsonStr) {
         if (jsonStr == null || jsonStr.isBlank()) return new ArrayList<>();
         return fromJsonStr(jsonStr, ArrayList.class);
+    }
+
+    public static JsonElement toJson(String jsonStr) {
+        return JsonParser.parseString(jsonStr);
+    }
+
+    public static Map<String, Object> toMap(JsonElement jsonElement) {
+        Type mapType = new TypeToken<Map<String, Object>>() {
+        }.getType();
+        return gson.fromJson(jsonElement, mapType);
+    }
+
+    public static List<Object> toList(JsonElement jsonElement) {
+        Type listType = new TypeToken<List<Object>>() {
+        }.getType();
+        return gson.fromJson(jsonElement, listType);
     }
 }

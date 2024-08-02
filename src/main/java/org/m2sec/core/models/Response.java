@@ -139,6 +139,9 @@ public class Response {
         content = body.getBytes();
     }
 
+    public Object getJson() {
+        return HttpUtil.bodyToJson(getBody());
+    }
 
     @Override
     public String toString() {

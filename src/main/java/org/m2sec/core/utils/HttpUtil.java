@@ -307,4 +307,17 @@ public class HttpUtil {
         }
     }
 
+    public static Object bodyToJson(String body) {
+        try {
+            JsonElement jsonElement = JsonUtil.toJson(body);
+            if (jsonElement.isJsonObject()) {
+                return JsonUtil.toMap(jsonElement);
+            } else if (jsonElement.isJsonArray()) {
+                return JsonUtil.toList(jsonElement);
+            }
+        } catch (Exception ignored) {
+        }
+        throw new UnsupportedOperationException("Body must be json");
+    }
+
 }

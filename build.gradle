@@ -50,6 +50,8 @@ dependencies {
     // cross-language
     implementation 'org.openjdk.nashorn:nashorn-core:15.4'
     implementation 'org.python:jython-standalone:2.7.3'
+    // client
+    implementation 'cn.hutool:hutool-http:5.8.29'
     // test
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
     testImplementation platform('org.junit:junit-bom:5.9.1')
