@@ -68,6 +68,7 @@ Build your own:：`build.gradle -> shadowJar`
 > At this stage, only about half of the project development has been completed. Make sure to **star** the code to avoid getting lost.
 1. Supports use with desktop scanners, allowing the scanner to scan plaintext requests and receive plaintext responses.。
 2. Propose the method of using in the case of asymmetric encryption (unknown private key)。
+3. Collaborate with tools such as jsrpc and Frida
 
 ## Communication
 
