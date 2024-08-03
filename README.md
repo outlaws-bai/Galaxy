@@ -31,7 +31,7 @@
 - 已解密请求转到Repeater后Send，得到的响应也会被解密
 - Intruder、Scanner等模块同样支持
 
-> 已包含多种加解密场景示例，对于常规算法及逻辑可以做到开箱即用。
+> 已包含多种加解密场景的hook脚本，对于常规算法及逻辑可以做到开箱即用。
 
 进一步了解：[Http Hook](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md)
 
@@ -64,7 +64,7 @@
 - 简单高效：不需要启动多余的本地服务。
 - 上手容易：通用算法及常见加密逻辑已内置，基本能做到开箱即用。
 - 支持面广：如加密算法组合、自定义算法、动态密钥等均可以支持。
-- 强灵活性：可以使用python、js、Java、grpc多种方式实现加解密以满足需求。
+- 强灵活性：可以使用python、js、Java、grpc多种方式实现hook脚本以满足需求。
 
 ## 开发计划
 

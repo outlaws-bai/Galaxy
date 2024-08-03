@@ -18,11 +18,16 @@ Automatically decrypt in the scenario of secondary encryption in HTTP messages.
 
 ### Http Hook
 
-After successful activation, the following effects will occur:
+**Scene**
 
-1. All subsequent requests and responses from the agent are automatically decrypted.
-2. Once decrypted, the request should be forwarded to the Repeater and the response received will also be decrypted.
-3. Intruder, Scanner, and other modules also support.
+- More and more websites are encrypting/signing HTTP requests and responses, which makes it very inconvenient to modify plaintext requests/responses
+- Existing projects are not sufficient when facing situations such as simultaneous encryption and signing, encryption algorithm combinations, etc. Writing hook scripts on their own is difficult and inefficient
+
+**Effect**
+
+- All subsequent requests and responses from the agent are automatically decrypted.
+- Once decrypted, the request should be forwarded to the Repeater and the response received will also be decrypted.
+- Intruder, Scanner, and other modules also support.
 
 > Multiple encryption and decryption scenario examples are already included, making it ready to use for common algorithms and logic.
 Further understanding：[Http Hook](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook_EN.md)

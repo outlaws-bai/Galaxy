@@ -2,6 +2,12 @@
 
 Automatically decrypt in the scenario of double encryption in HTTP messages. [Design concept](https://xz.aliyun.com/t/15051).
 
+## Introduction
+
+The idea of this project is to hand over the request/response object to you. You only need to retrieve the encrypted data from the request/response, call the decryption function provided by the project, and modify the request/response.
+
+> We need some programming foundation, and the project has built-in hook scripts for various encryption scenarios, which can be used as a reference
+
 ## Flowchart:
 
 ![流程图](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/image-20240621105543574.png)
@@ -40,7 +46,7 @@ These four can be divided into two categories: grpc (grpc), and code (java, pyth
 
 ## Test
 
-After sending the encrypted request to Repeater and starting the Http Hook service, right-click to find "Decrypt Request" and click to test.
+After starting the HTTP Hook service, right-click in any HTTP request/response editor to find the corresponding button.
 
 ## Logs
 
