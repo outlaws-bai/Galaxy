@@ -18,6 +18,7 @@ from java.lang import String
 """
 
 ALGORITHM = "SM2"
+MODE = "c1c2c3"
 publicKey1Base64 = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEBv9Z+xbmSOH3W/V9UEpU1yUiJKNGh/I8EiENTPYxX3GujsZyKhuEUzxloKCATcNaKWi7w/yK3PxGONM4xvMlIQ=="
 privateKey1Base64 = "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQgWmIprZ5a6TsqRUgy32J+F22AYIKl+14P4qlw/LPPCcagCgYIKoEcz1UBgi2hRANCAAQG/1n7FuZI4fdb9X1QSlTXJSIko0aH8jwSIQ1M9jFfca6OxnIqG4RTPGWgoIBNw1opaLvD/Irc/EY40zjG8yUh"
 
@@ -109,10 +110,10 @@ def hook_response_to_client(response):
     return response
 
 def decrypt(content, secret):
-    return CryptoUtil.sm2Decrypt(content, secret)
+    return CryptoUtil.sm2Decrypt(MODE, content, secret)
 
 def encrypt(content, secret):
-    return CryptoUtil.sm2Encrypt(content, secret)
+    return CryptoUtil.sm2Encrypt(MODE, content, secret)
 
 def get_data(content):
     return CodeUtil.b64decode(JsonUtil.jsonStrToMap(String(content)).get(jsonKey))

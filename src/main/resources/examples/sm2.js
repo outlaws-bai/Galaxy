@@ -9,10 +9,11 @@ var Response = Java.type("org.m2sec.core.models.Response")
 var String = Java.type("java.lang.String")
 
 ALGORITHM = "SM2"
+MODE = "c1c2c3"
 publicKey1Base64 = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEBv9Z+xbmSOH3W/V9UEpU1yUiJKNGh/I8EiENTPYxX3GujsZyKhuEUzxloKCATcNaKWi7w/yK3PxGONM4xvMlIQ==";
 privateKey1Base64 = "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQgWmIprZ5a6TsqRUgy32J+F22AYIKl+14P4qlw/LPPCcagCgYIKoEcz1UBgi2hRANCAAQG/1n7FuZI4fdb9X1QSlTXJSIko0aH8jwSIQ1M9jFfca6OxnIqG4RTPGWgoIBNw1opaLvD/Irc/EY40zjG8yUh";
 
-publicKey2Base64="MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAE/1kmIjlOfsqG9hN4b/O3hiSI91ErgVDeqB9YOgCFiUiFyPo32pCHh691zGnoAj0l/P132CyLgBeH6TUa/TrLUg==";
+publicKey2Base64 = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAE/1kmIjlOfsqG9hN4b/O3hiSI91ErgVDeqB9YOgCFiUiFyPo32pCHh691zGnoAj0l/P132CyLgBeH6TUa/TrLUg==";
 privateKey2Base64 =
     "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQgP8vW9tEh0dMP5gJNsol5Gyc6jvvgK1NRqOVg8VaLYVygCgYIKoEcz1UBgi2hRANCAAT/WSYiOU5+yob2E3hv87eGJIj3USuBUN6oH1g6AIWJSIXI+jfakIeHr3XMaegCPSX8/XfYLIuAF4fpNRr9OstS";
 
@@ -34,7 +35,7 @@ log = void 0
  * @param {Request} request 请求对象
  * @returns 经过处理后的request对象，返回null代表从当前节点开始流量不再需要处理
  */
-function hook_request_to_burp(request){
+function hook_request_to_burp(request) {
     // 获取需要解密的数据
     encryptedData = get_data(request.getContent());
     // 调用内置函数解密
@@ -50,7 +51,7 @@ function hook_request_to_burp(request){
  * @param {Request} request 请求对象
  * @returns 经过处理后的request对象，返回null代表从当前节点开始流量不再需要处理
  */
-function hook_request_to_server(request){
+function hook_request_to_server(request) {
     // 获取被解密的数据
     data = request.getContent();
     // 调用内置函数加密回去
@@ -68,7 +69,7 @@ function hook_request_to_server(request){
  * @param {Response} response 响应对象
  * @returns 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理
  */
-function hook_response_to_burp(response){
+function hook_response_to_burp(response) {
     // 获取需要解密的数据
     encryptedData = get_data(response.getContent());
     // 调用内置函数解密
@@ -84,7 +85,7 @@ function hook_response_to_burp(response){
  * @param {Response} response 响应对象
  * @returns 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理
  */
-function hook_response_to_client(response){
+function hook_response_to_client(response) {
     // 获取被解密的数据
     adata = response.getContent();
     // 调用内置函数加密回去
@@ -98,19 +99,19 @@ function hook_response_to_client(response){
 }
 
 function decrypt(content, secret) {
-    return CryptoUtil.sm2Decrypt(content, secret);
+    return CryptoUtil.sm2Decrypt(MODE, content, secret);
 }
 
 function encrypt(content, secret) {
-    return CryptoUtil.sm2Encrypt(content, secret);
+    return CryptoUtil.sm2Encrypt(MODE, content, secret);
 }
 
-function get_data(content){
+function get_data(content) {
     return CodeUtil.b64decode(JsonUtil.jsonStrToMap(new String(content)).get(jsonKey))
 }
 
 
-function to_data(content){
+function to_data(content) {
     jsonBody = {}
     jsonBody[jsonKey] = CodeUtil.b64encodeToString(content)
     return JsonUtil.toJsonStr(jsonBody).getBytes()
@@ -119,6 +120,6 @@ function to_data(content){
 /**
  * 程序在最开始会自动调用该函数，在上方函数可以放心使用log对象
  */
-function set_log(log1){
+function set_log(log1) {
     log = log1
 }

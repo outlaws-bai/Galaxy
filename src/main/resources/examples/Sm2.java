@@ -1,19 +1,27 @@
 import org.m2sec.core.utils.*;
 import org.m2sec.core.models.*;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import org.slf4j.Logger;
 
 /**
  * 内置示例，需要自定义代码文件时查看该文档：https://github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md
  * 按 Ctrl（control） + ` 可查看内置函数
  */
-public class Sm2{
+public class Sm2 {
 
-    private static final String publicKey1Base64 = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEBv9Z+xbmSOH3W/V9UEpU1yUiJKNGh/I8EiENTPYxX3GujsZyKhuEUzxloKCATcNaKWi7w/yK3PxGONM4xvMlIQ==";
-    private static final String privateKey1Base64 = "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQgWmIprZ5a6TsqRUgy32J+F22AYIKl+14P4qlw/LPPCcagCgYIKoEcz1UBgi2hRANCAAQG/1n7FuZI4fdb9X1QSlTXJSIko0aH8jwSIQ1M9jFfca6OxnIqG4RTPGWgoIBNw1opaLvD/Irc/EY40zjG8yUh";
+    private static final String MODE = "c1c2c3";
+    private static final String publicKey1Base64 = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEBv9Z+xbmSOH3W/V9UEpU1yUiJKNGh" +
+        "/I8EiENTPYxX3GujsZyKhuEUzxloKCATcNaKWi7w/yK3PxGONM4xvMlIQ==";
+    private static final String privateKey1Base64 =
+        "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQgWmIprZ5a6TsqRUgy32J+F22AYIKl+14P4qlw" +
+            "/LPPCcagCgYIKoEcz1UBgi2hRANCAAQG/1n7FuZI4fdb9X1QSlTXJSIko0aH8jwSIQ1M9jFfca6OxnIqG4RTPGWgoIBNw1opaLvD/Irc" +
+            "/EY40zjG8yUh";
 
-    private static final String publicKey2Base64="MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAE/1kmIjlOfsqG9hN4b/O3hiSI91ErgVDeqB9YOgCFiUiFyPo32pCHh691zGnoAj0l/P132CyLgBeH6TUa/TrLUg==";
+    private static final String publicKey2Base64 = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAE/1kmIjlOfsqG9hN4b" +
+        "/O3hiSI91ErgVDeqB9YOgCFiUiFyPo32pCHh691zGnoAj0l/P132CyLgBeH6TUa/TrLUg==";
     private static final String privateKey2Base64 =
         "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQgP8vW9tEh0dMP5gJNsol5Gyc6jvvgK1NRqOVg8VaLYVygCgYIKoEcz1UBgi2hRANCAAT/WSYiOU5+yob2E3hv87eGJIj3USuBUN6oH1g6AIWJSIXI+jfakIeHr3XMaegCPSX8/XfYLIuAF4fpNRr9OstS";
 
@@ -105,7 +113,7 @@ public class Sm2{
      * @return 解密结果
      */
     public byte[] decrypt(byte[] content, byte[] privateKey) {
-        return CryptoUtil.sm2Decrypt(content, privateKey);
+        return CryptoUtil.sm2Decrypt(MODE, content, privateKey);
     }
 
     /**
@@ -113,7 +121,7 @@ public class Sm2{
      * @return 加密结果
      */
     public byte[] encrypt(byte[] content, byte[] publicKey) {
-        return CryptoUtil.sm2Encrypt(content, publicKey);
+        return CryptoUtil.sm2Encrypt(MODE, content, publicKey);
     }
 
     private static byte[] getData(byte[] content) {

@@ -37,7 +37,7 @@ log = void 0
  * @param {Request} request 请求对象
  * @returns 经过处理后的request对象，返回null代表从当前节点开始流量不再需要处理
  */
-function hook_request_to_burp(request){
+function hook_request_to_burp(request) {
     // 获取需要解密的数据
     encryptedData = get_data(request.getContent());
     // 获取用来解密的密钥，该密钥已使用publicKey1进行rsa加密
@@ -57,7 +57,7 @@ function hook_request_to_burp(request){
  * @param {Request} request 请求对象
  * @returns 经过处理后的request对象，返回null代表从当前节点开始流量不再需要处理
  */
-function hook_request_to_server(request){
+function hook_request_to_server(request) {
     // 获取被解密的数据
     data = request.getContent();
     // 调用内置函数加密回去，这里使用设置的aesSecret进行加密
@@ -77,7 +77,7 @@ function hook_request_to_server(request){
  * @param {Response} response 响应对象
  * @returns 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理
  */
-function hook_response_to_burp(response){
+function hook_response_to_burp(response) {
     // 获取需要解密的数据
     encryptedData = get_data(response.getContent());
     // 获取用来解密的密钥，该密钥已使用publicKey2进行rsa加密
@@ -97,7 +97,7 @@ function hook_response_to_burp(response){
  * @param {Response} response 响应对象
  * @returns 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理
  */
-function hook_response_to_client(response){
+function hook_response_to_client(response) {
     // 获取被解密的数据
     data = response.getContent();
     // 调用内置函数加密回去，这里使用设置的aesSecret进行加密
@@ -111,12 +111,12 @@ function hook_response_to_client(response){
     return response;
 }
 
-function asymmetric_decrypt(content, secret){
-    return CryptoUtil.rsaDecrypt(content, secret);
+function asymmetric_decrypt(content, secret) {
+    return CryptoUtil.rsaDecrypt(ASYMMETRIC_ALGORITHM, content, secret);
 }
 
-function asymmetric_encrypt(content, secret){
-    return CryptoUtil.rsaEncrypt(content, secret);
+function asymmetric_encrypt(content, secret) {
+    return CryptoUtil.rsaEncrypt(ASYMMETRIC_ALGORITHM, content, secret);
 }
 
 function symmetric_decrypt(content, secret) {
@@ -127,15 +127,16 @@ function symmetric_encrypt(content, secret) {
     return CryptoUtil.aesEncrypt(SYMMETRIC_ALGORITHM, content, secret, null);
 }
 
-function get_data(content){
+function get_data(content) {
     return CodeUtil.b64decode(JsonUtil.jsonStrToMap(new String(content)).get(jsonKey1))
 }
-function get_key(content){
+
+function get_key(content) {
     return CodeUtil.b64decode(JsonUtil.jsonStrToMap(new String(content)).get(jsonKey2))
 }
 
 
-function to_data(content, secret){
+function to_data(content, secret) {
     jsonBody = {}
     jsonBody[jsonKey1] = CodeUtil.b64encodeToString(content)
     jsonBody[jsonKey2] = CodeUtil.b64encodeToString(secret)
@@ -145,6 +146,6 @@ function to_data(content, secret){
 /**
  * 程序在最开始会自动调用该函数，在上方函数可以放心使用log对象
  */
-function set_log(log1){
+function set_log(log1) {
     log = log1
 }

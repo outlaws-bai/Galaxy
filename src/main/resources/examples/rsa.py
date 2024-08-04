@@ -106,10 +106,10 @@ def hook_response_to_client(response):
     return response
 
 def decrypt(content, secret):
-    return CryptoUtil.rsaDecrypt(content, secret)
+    return CryptoUtil.rsaDecrypt(ALGORITHM, content, secret)
 
 def encrypt(content, secret):
-    return CryptoUtil.rsaEncrypt(content, secret)
+    return CryptoUtil.rsaEncrypt(ALGORITHM, content, secret)
 
 def get_data(content):
     return CodeUtil.b64decode(JsonUtil.jsonStrToMap(String(content)).get(jsonKey))

@@ -1,25 +1,34 @@
 import org.m2sec.core.utils.*;
 import org.m2sec.core.models.*;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import org.slf4j.Logger;
 
 /**
  * 内置示例，需要自定义代码文件时查看该文档：https://github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md
  * 按 Ctrl（control） + ` 可查看内置函数
  */
-public class Sm2Sm4{
+public class Sm2Sm4 {
 
     private static final String SYMMERTIC_ALGORITHM = "SM4/ECB/PKCS5Padding";
     private static final byte[] sm4Secret = "16byteslongkey12".getBytes();
 
     private static final String ASYMMETRIC_ALGORITHM = "SM2";
-    private static final String publicKey1Base64 = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEBv9Z+xbmSOH3W/V9UEpU1yUiJKNGh/I8EiENTPYxX3GujsZyKhuEUzxloKCATcNaKWi7w/yK3PxGONM4xvMlIQ==";
-    private static final String privateKey1Base64 = "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQgWmIprZ5a6TsqRUgy32J+F22AYIKl+14P4qlw/LPPCcagCgYIKoEcz1UBgi2hRANCAAQG/1n7FuZI4fdb9X1QSlTXJSIko0aH8jwSIQ1M9jFfca6OxnIqG4RTPGWgoIBNw1opaLvD/Irc/EY40zjG8yUh";
 
-    private static final String publicKey2Base64="MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAE/1kmIjlOfsqG9hN4b/O3hiSI91ErgVDeqB9YOgCFiUiFyPo32pCHh691zGnoAj0l/P132CyLgBeH6TUa/TrLUg==";
+    private static final String SM2_MODE = "c1c2c3";
+    private static final String publicKey1Base64 = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEBv9Z+xbmSOH3W/V9UEpU1yUiJKNGh" +
+        "/I8EiENTPYxX3GujsZyKhuEUzxloKCATcNaKWi7w/yK3PxGONM4xvMlIQ==";
+    private static final String privateKey1Base64 =
+        "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQgWmIprZ5a6TsqRUgy32J+F22AYIKl+14P4qlw" +
+            "/LPPCcagCgYIKoEcz1UBgi2hRANCAAQG/1n7FuZI4fdb9X1QSlTXJSIko0aH8jwSIQ1M9jFfca6OxnIqG4RTPGWgoIBNw1opaLvD/Irc" +
+            "/EY40zjG8yUh";
+
+    private static final String publicKey2Base64 = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAE/1kmIjlOfsqG9hN4b" +
+        "/O3hiSI91ErgVDeqB9YOgCFiUiFyPo32pCHh691zGnoAj0l/P132CyLgBeH6TUa/TrLUg==";
     private static final String privateKey2Base64 =
-            "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQgP8vW9tEh0dMP5gJNsol5Gyc6jvvgK1NRqOVg8VaLYVygCgYIKoEcz1UBgi2hRANCAAT/WSYiOU5+yob2E3hv87eGJIj3USuBUN6oH1g6AIWJSIXI+jfakIeHr3XMaegCPSX8/XfYLIuAF4fpNRr9OstS";
+        "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQgP8vW9tEh0dMP5gJNsol5Gyc6jvvgK1NRqOVg8VaLYVygCgYIKoEcz1UBgi2hRANCAAT/WSYiOU5+yob2E3hv87eGJIj3USuBUN6oH1g6AIWJSIXI+jfakIeHr3XMaegCPSX8/XfYLIuAF4fpNRr9OstS";
 
     private static final byte[] publicKey1 = CodeUtil.b64decode(publicKey1Base64);
     private static final byte[] privateKey1 = CodeUtil.b64decode(privateKey1Base64);
@@ -118,12 +127,13 @@ public class Sm2Sm4{
     }
 
     public byte[] asymmetricDecrypt(byte[] content, byte[] secret) {
-        return CryptoUtil.sm2Decrypt(content, secret);
+        return CryptoUtil.sm2Decrypt(SM2_MODE, content, secret);
     }
 
     public byte[] asymmetricEncrypt(byte[] content, byte[] secret) {
-        return CryptoUtil.sm2Encrypt(content, secret);
+        return CryptoUtil.sm2Encrypt(SM2_MODE, content, secret);
     }
+
     public byte[] symmetricDecrypt(byte[] content, byte[] secret) {
         return CryptoUtil.sm4Decrypt(SYMMERTIC_ALGORITHM, content, secret, null);
     }

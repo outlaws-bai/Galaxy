@@ -27,7 +27,7 @@ log = void 0
  * @param {Request} request 请求对象
  * @returns 经过处理后的request对象，返回null代表从当前节点开始流量不再需要处理
  */
-function hook_request_to_burp(request){
+function hook_request_to_burp(request) {
     // 获取需要解密的数据
     encryptedData = get_data(request.getContent())
     // 调用函数解密
@@ -43,7 +43,7 @@ function hook_request_to_burp(request){
  * @param {Request} request 请求对象
  * @returns 经过处理后的request对象，返回null代表从当前节点开始流量不再需要处理
  */
-function hook_request_to_server(request){
+function hook_request_to_server(request) {
     // 获取被解密的数据
     data = request.content
     // 调用函数加密回去
@@ -61,7 +61,7 @@ function hook_request_to_server(request){
  * @param {Response} response 响应对象
  * @returns 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理
  */
-function hook_response_to_burp(response){
+function hook_response_to_burp(response) {
     // 获取需要解密的数据
     encryptedData = get_data(response.content)
     // 调用函数解密
@@ -77,7 +77,7 @@ function hook_response_to_burp(response){
  * @param {Response} response 响应对象
  * @returns 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理
  */
-function hook_response_to_client(response){
+function hook_response_to_client(response) {
     data = response.content
     // 调用函数加密回去
     encryptedData = encrypt(data)
@@ -90,22 +90,22 @@ function hook_response_to_client(response){
 }
 
 
-function decrypt(content){
+function decrypt(content) {
     return CryptoUtil.des3Decrypt(ALGORITHM, content, secret, paramMap)
 }
 
 
-function encrypt(content){
+function encrypt(content) {
     return CryptoUtil.des3Encrypt(ALGORITHM, content, secret, paramMap)
 }
 
 
-function get_data(content){
+function get_data(content) {
     return CodeUtil.b64decode(JsonUtil.jsonStrToMap(new String(content)).get(jsonKey))
 }
 
 
-function to_data(content){
+function to_data(content) {
     jsonBody = {}
     jsonBody[jsonKey] = CodeUtil.b64encodeToString(content)
     return JsonUtil.toJsonStr(jsonBody).getBytes()
@@ -114,6 +114,6 @@ function to_data(content){
 /**
  * 程序在最开始会自动调用该函数，在上方函数可以放心使用log对象
  */
-function set_log(log1){
+function set_log(log1) {
     log = log1
 }

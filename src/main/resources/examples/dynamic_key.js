@@ -7,23 +7,19 @@ var FactorUtil = Java.type("org.m2sec.core.utils.FactorUtil")
 var Request = Java.type("org.m2sec.core.models.Request")
 var Response = Java.type("org.m2sec.core.models.Response")
 var String = Java.type("java.lang.String")
+var ThreadLocal = Java.type("java.lang.ThreadLocal")
 
-SYMMETRIC_ALGORITHM = "SM4/ECB/PKCS5Padding"
-sm4Secret = "16byteslongkey12".getBytes()
+SYMMETRIC_ALGORITHM = "AES/ECB/PKCS5Padding"
+aesSecret = new ThreadLocal()
+aesSecret.set("32byteslongsecretkeyforaes256!aa".getBytes())
 
-ASYMMETRIC_ALGORITHM = "SM2"
-SM2_MODE = "c1c2c3"
-publicKey1Base64 = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEBv9Z+xbmSOH3W/V9UEpU1yUiJKNGh/I8EiENTPYxX3GujsZyKhuEUzxloKCATcNaKWi7w/yK3PxGONM4xvMlIQ=="
-privateKey1Base64 = "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQgWmIprZ5a6TsqRUgy32J+F22AYIKl+14P4qlw/LPPCcagCgYIKoEcz1UBgi2hRANCAAQG/1n7FuZI4fdb9X1QSlTXJSIko0aH8jwSIQ1M9jFfca6OxnIqG4RTPGWgoIBNw1opaLvD/Irc/EY40zjG8yUh"
+ASYMMETRIC_ALGORITHM = "RSA"
 
-publicKey2Base64 = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAE/1kmIjlOfsqG9hN4b/O3hiSI91ErgVDeqB9YOgCFiUiFyPo32pCHh691zGnoAj0l/P132CyLgBeH6TUa/TrLUg=="
-privateKey2Base64 = "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQgP8vW9tEh0dMP5gJNsol5Gyc6jvvgK1NRqOVg8VaLYVygCgYIKoEcz1UBgi2hRANCAAT/WSYiOU5+yob2E3hv87eGJIj3USuBUN6oH1g6AIWJSIXI+jfakIeHr3XMaegCPSX8/XfYLIuAF4fpNRr9OstS"
+publicKeyBase64 = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC7JoQAWLsovzHjaUMZg2lwO4LCuP97mitUc4chqRlQD3NgyCWLqEnYyM+OJ7i6cyMuWLwGtMi29DoKLjpE/xRZR0OUk46PDCAtyDgIyejK7c7KlZTbiqb4PtiJNLZgg0UP62kLMycnpY/wg/R2G9g+7MiJWUV5SR+Lhryv8CWezQIDAQAB";
+privateKeyBase64 = "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBALsmhABYuyi/MeNpQxmDaXA7gsK4/3uaK1RzhyGpGVAPc2DIJYuoSdjIz44nuLpzIy5YvAa0yLb0OgouOkT/FFlHQ5STjo8MIC3IOAjJ6MrtzsqVlNuKpvg+2Ik0tmCDRQ/raQszJyelj/CD9HYb2D7syIlZRXlJH4uGvK/wJZ7NAgMBAAECgYAhgbhRbZF4rp6Kdh6e00HN58G2BjQrl4MZeCOh+aoABPwlwD/EnMk36GAMtfzjWNjcI+PqGXT0GI7JotQo5ThpoweXX/uoeGOW+UkYLA6a67lmxfoZsDtY2+jnaWIs2c7Itz3ClRxo4tYwCoPNjtaBpMfPgZaYg2QN8/wLQPI66wJBAM0xpjb2OlLDs75lVxbm6v6Dx3YBS20GSqJqvf+14a/k7mrZ3PmAHOfqTqKOwbVQJmLbeOpU+sUBpeLpILKOCLcCQQDpfSsDhdosC6qTL9XnF2jS49iws2RBKw5YjDkClwA6VMNj5uzL1Rl7/AimLRMnB4BwrD95ksuOJsqNXW6wRGibAkAkk28PaQCodB38GFBX0r2ctJy/Wie5vV9caC6KAD/EfMhK357WEpIUfN2beFrrGOhewsRg8NjqeQq60dd0PIEtAkBYAm03O7n8Bj26kzpejA1gCLBCEqyEf/U9XUWT+1UDp7Wqr32sa1vaxyp/cNgaSxKX5eVbLwD5SRfqZ0B0wqRnAkATpUNiCqjQVS+OI5dwjoI1Rx3oI8pyKWOg3+QIHIRgL3pc8HLdZ2BkX4Vf6ANb4+noQnD/di1Mj+0pUL8RhIJE";
 
-publicKey1 = CodeUtil.b64decode(publicKey1Base64)
-privateKey1 = CodeUtil.b64decode(privateKey1Base64)
-
-publicKey2 = CodeUtil.b64decode(publicKey2Base64)
-privateKey2 = CodeUtil.b64decode(privateKey2Base64)
+publicKey = CodeUtil.b64decode(publicKeyBase64);
+privateKey = CodeUtil.b64decode(privateKeyBase64);
 jsonKey1 = "data"
 jsonKey2 = "key"
 log = void 0
@@ -41,10 +37,11 @@ log = void 0
 function hook_request_to_burp(request) {
     // 获取需要解密的数据
     encryptedData = get_data(request.getContent());
-    // 获取用来解密的密钥，该密钥已使用publicKey1进行sm2加密
+    // 获取用来解密的密钥，该密钥已使用publicKey进行rsa加密
     encryptedKey = get_key(request.getContent())
-    // 调用内置函数解密，拿到sm4密钥
-    key = asymmetric_decrypt(encryptedKey, privateKey1)
+    // 调用内置函数解密，拿到aes密钥
+    key = asymmetric_decrypt(encryptedKey, privateKey)
+    aesSecret.set(key)
     // 调用内置函数解密报文
     data = symmetric_decrypt(encryptedData, key)
     // 更新body为已解密的数据
@@ -61,10 +58,10 @@ function hook_request_to_burp(request) {
 function hook_request_to_server(request) {
     // 获取被解密的数据
     data = request.getContent();
-    // 调用内置函数加密回去，这里使用设置的sm4Secret进行加密
-    encryptedData = symmetric_encrypt(data, sm4Secret)
-    // 调用内置函数加密sm4Secret
-    encryptedKey = asymmetric_encrypt(sm4Secret, publicKey1)
+    // 调用内置函数加密回去，这里使用设置的aesSecret进行加密
+    encryptedData = symmetric_encrypt(data, aesSecret.get())
+    // 调用内置函数加密aesSecret
+    encryptedKey = asymmetric_encrypt(aesSecret.get(), publicKey)
     // 将已加密的数据转换为Server可识别的格式
     body = to_data(encryptedData, encryptedKey)
     // 更新body
@@ -81,12 +78,8 @@ function hook_request_to_server(request) {
 function hook_response_to_burp(response) {
     // 获取需要解密的数据
     encryptedData = get_data(response.getContent());
-    // 获取用来解密的密钥，该密钥已使用publicKey2进行sm2加密
-    encryptedKey = get_key(response.getContent())
-    // 调用内置函数解密，拿到sm4密钥
-    key = asymmetric_decrypt(encryptedKey, privateKey2)
-    // 调用内置函数解密报文
-    data = symmetric_decrypt(encryptedData, key)
+    // 调用内置函数解密
+    data = symmetric_decrypt(encryptedData, aesSecret.get());
     // 更新body
     response.setContent(data);
     return response;
@@ -101,31 +94,30 @@ function hook_response_to_burp(response) {
 function hook_response_to_client(response) {
     // 获取被解密的数据
     data = response.getContent();
-    // 调用内置函数加密回去，这里使用设置的sm4Secret进行加密
-    encryptedData = symmetric_encrypt(data, sm4Secret)
-    // 调用内置函数加密sm4Secret
-    encryptedKey = asymmetric_encrypt(sm4Secret, publicKey2)
+    // 调用内置函数加密回去
+    encryptedData = symmetric_encrypt(data, aesSecret.get());
+    // 更新body
     // 将已加密的数据转换为Server可识别的格式
-    body = to_data(encryptedData, encryptedKey)
+    body = to_data(encryptedData, null);
     // 更新body
     response.setContent(body);
     return response;
 }
 
 function asymmetric_decrypt(content, secret) {
-    return CryptoUtil.sm2Decrypt(SM2_MODE, content, secret);
+    return CryptoUtil.rsaDecrypt(ASYMMETRIC_ALGORITHM, content, secret);
 }
 
 function asymmetric_encrypt(content, secret) {
-    return CryptoUtil.sm2Encrypt(SM2_MODE, content, secret);
+    return CryptoUtil.rsaEncrypt(ASYMMETRIC_ALGORITHM, content, secret);
 }
 
 function symmetric_decrypt(content, secret) {
-    return CryptoUtil.sm4Decrypt(SYMMETRIC_ALGORITHM, content, secret, null);
+    return CryptoUtil.aesDecrypt(SYMMETRIC_ALGORITHM, content, secret, null);
 }
 
 function symmetric_encrypt(content, secret) {
-    return CryptoUtil.sm4Encrypt(SYMMETRIC_ALGORITHM, content, secret, null);
+    return CryptoUtil.aesEncrypt(SYMMETRIC_ALGORITHM, content, secret, null);
 }
 
 function get_data(content) {
@@ -140,7 +132,9 @@ function get_key(content) {
 function to_data(content, secret) {
     jsonBody = {}
     jsonBody[jsonKey1] = CodeUtil.b64encodeToString(content)
-    jsonBody[jsonKey2] = CodeUtil.b64encodeToString(secret)
+    if (secret != null) {
+        jsonBody[jsonKey2] = CodeUtil.b64encodeToString(secret)
+    }
     return JsonUtil.toJsonStr(jsonBody).getBytes()
 }
 

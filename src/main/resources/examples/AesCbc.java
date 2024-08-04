@@ -1,14 +1,16 @@
 import org.m2sec.core.utils.*;
 import org.m2sec.core.models.*;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import org.slf4j.Logger;
 
 /**
  * 内置示例，需要自定义代码文件时查看该文档：https://github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md
  * 按 Ctrl（control） + ` 可查看内置函数
  */
-public class AesCbc{
+public class AesCbc {
 
     private Logger log;
     private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
