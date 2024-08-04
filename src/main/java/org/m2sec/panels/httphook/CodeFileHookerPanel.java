@@ -177,7 +177,6 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
         codeTextArea.setTabsEmulated(true);
         codeTextArea.setHighlightCurrentLine(true);
         if (Galaxy.isInBurp()) {
-            codeTextArea.setFont(api.userInterface().currentEditorFont());
             if (api.userInterface().currentTheme().equals(Theme.DARK)) {
                 try {
                     org.fife.ui.rsyntaxtextarea.Theme.load(getClass().getResourceAsStream("/org/fife/ui" + "/rsyntaxtextarea/themes/dark.xml")).apply(codeTextArea);
@@ -185,6 +184,7 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
                     throw new RuntimeException(e);
                 }
             }
+            codeTextArea.setFont(api.userInterface().currentEditorFont());
         }
     }
 
