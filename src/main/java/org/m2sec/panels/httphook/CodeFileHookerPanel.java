@@ -317,6 +317,30 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             "Mac calc -> byte[]",
             SwingTools.renderSummary("mac calc", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/MacUtil.java", "byte[]", "algorithm(String) HmacMD5 | HmacSHA1 | HmacSHA224 | HmacSHA256|...", "data(byte[]) origin data")
         ));
+        // Crypto TEA
+        provider.addCompletion(new ShorthandCompletion(
+            provider,
+            "teaEncrypt",
+            "CryptoUtil.teaEncrypt(String transformation, byte[] data, byte[] secret)",
+            "TEA encrypt -> byte[]",
+            SwingTools.renderSummary("DES encrypt",
+                "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/CryptoUtil.java",
+                "byte[]",
+                "transformation(String) TEA | XTEA | XXTEA",
+                "data(byte[]) origin data",
+                "secret(byte[]) secret"
+            )
+        ));
+        provider.addCompletion(new ShorthandCompletion
+            (provider,
+            "teaDecrypt",
+            "CryptoUtil.teaDecrypt(String transformation, byte[] data, byte[] secret)",
+            "TEA decrypt -> byte[]",
+            SwingTools.renderSummary("DES decrypt", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java" +
+                "/org/m2sec/core/utils/CryptoUtil.java", "byte[]", "transformation(String) TEA | " +
+                "XTEA | XXTEA", "data(byte[]) encrypted data", "secret(byte[]) secret"
+            )
+        ));
         // Crypto - AES
         provider.addCompletion(new ShorthandCompletion(
             provider,

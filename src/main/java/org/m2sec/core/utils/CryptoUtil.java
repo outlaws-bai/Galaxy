@@ -12,6 +12,7 @@ import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.math.ec.ECPoint;
+import org.m2sec.core.common.XXTEATools;
 import org.m2sec.core.enums.SymmetricKeyMode;
 
 import javax.annotation.Nullable;
@@ -53,6 +54,8 @@ public class CryptoUtil {
     public static final String ALGORITHM_SM2 = "SM2";
     public static final String ALGORITHM_SM4 = "SM4";
     public static final String ALGORITHM_SM4_DEFAULT_TRANSFORMATION = "SM4/ECB/PKCS5Padding";
+
+    public static final String ALGORITHM_XXTEA = "XXTEA";
 
     public static byte[] desEncrypt(String transformation, byte[] data, byte[] secret,
                                     Map<String, Object> params) {
@@ -184,6 +187,21 @@ public class CryptoUtil {
         }
     }
 
+    public static byte[] teaEncrypt(String transformation, byte[] data, byte[] secret) {
+        if (transformation != null && !transformation.isBlank() && transformation.equalsIgnoreCase(ALGORITHM_XXTEA))
+            return XXTEATools.encrypt(data, secret);
+        return symmetricKeyEncrypt(transformation, data, secret, null, transformation,
+            transformation);
+    }
+
+
+    public static byte[] teaDecrypt(String transformation, byte[] data, byte[] secret) {
+        if (transformation != null && !transformation.isBlank() && transformation.equalsIgnoreCase(ALGORITHM_XXTEA))
+            return XXTEATools.decrypt(data, secret);
+        return symmetricKeyDecrypt(transformation, data, secret, null, transformation,
+            transformation);
+    }
+
 
     public static byte[] sm4Encrypt(@Nullable String transformation, byte[] data, byte[] secret,
                                     Map<String, Object> params) {
@@ -233,6 +251,7 @@ public class CryptoUtil {
 
     private static AlgorithmParameterSpec getSymmetricKeyEncryptParameterSpec(String transformation, Map<String,
         Object> params) {
+        if (!transformation.contains("/")) return null;
         String modeStr = transformation.split("/")[1];
         SymmetricKeyMode symmetricKeyMode = SymmetricKeyMode.valueOf(modeStr);
         if (symmetricKeyMode == SymmetricKeyMode.ECB) {
