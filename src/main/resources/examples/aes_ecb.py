@@ -14,7 +14,7 @@ from java.lang import String
 
 """
 内置模版，需要自定义代码文件时查看该文档：https://github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md
-按 Ctrl（control） + ` 可查看内置函数
+按 Ctrl（command） + ` 可查看内置函数
 """
 ALGORITHM = "AES/ECB/PKCS5Padding"
 secret = b"32byteslongsecretkeyforaes256!aa"

@@ -14,7 +14,7 @@ from java.lang import String
 
 """
 内置模版，需要自定义代码文件时查看该文档：https:#github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md
-按 Ctrl（control） + ` 可查看内置函数
+按 Ctrl（command） + ` 可查看内置函数
 """
 ALGORITHM = "RSA"
 publicKey1Base64 = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC7JoQAWLsovzHjaUMZg2lwO4LCuP97mitUc4chqRlQD3NgyCWLqEnYyM+OJ7i6cyMuWLwGtMi29DoKLjpE/xRZR0OUk46PDCAtyDgIyejK7c7KlZTbiqb4PtiJNLZgg0UP62kLMycnpY/wg/R2G9g+7MiJWUV5SR+Lhryv8CWezQIDAQAB"
