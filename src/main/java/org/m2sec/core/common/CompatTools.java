@@ -23,6 +23,11 @@ import java.util.Map;
 @Slf4j
 public class CompatTools {
 
+    public static boolean isMac() {
+        String os = System.getProperty("os.name").toLowerCase();
+        return os.contains("mac");
+    }
+
 
     public static Map<String, List<String>> mapToMultiMap(Map<String, Object> map) {
         HashMap<String, List<String>> retVal = new HashMap<>();

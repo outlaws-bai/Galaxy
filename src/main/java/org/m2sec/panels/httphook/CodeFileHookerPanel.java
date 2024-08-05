@@ -145,8 +145,11 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
     private void installAutoComplete() {
         CompletionProvider provider = createCompletionProvider();
         AutoCompletion ac = new AutoCompletion(provider);
-        ac.setTriggerKey(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_QUOTE, KeyEvent.CTRL_DOWN_MASK));
-
+        if (CompatTools.isMac()) {
+            ac.setTriggerKey(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_QUOTE, KeyEvent.META_DOWN_MASK));
+        } else {
+            ac.setTriggerKey(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_QUOTE, KeyEvent.CTRL_DOWN_MASK));
+        }
         ac.setShowDescWindow(true);
         ac.setParameterAssistanceEnabled(true);
         ac.setChoicesWindowSize(640, 360);
@@ -168,7 +171,6 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
         } else {
             throw new InputMismatchException(service.name());
         }
-        installAutoComplete();
         codeTextArea.setAntiAliasingEnabled(true);
         codeTextArea.setAutoIndentEnabled(true);
         codeTextArea.setPaintTabLines(true);
@@ -186,6 +188,7 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             }
             codeTextArea.setFont(api.userInterface().currentEditorFont());
         }
+        installAutoComplete();
     }
 
 
@@ -333,14 +336,14 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
         ));
         provider.addCompletion(new ShorthandCompletion
             (provider,
-            "teaDecrypt",
-            "CryptoUtil.teaDecrypt(String transformation, byte[] data, byte[] secret)",
-            "TEA decrypt -> byte[]",
-            SwingTools.renderSummary("DES decrypt", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java" +
-                "/org/m2sec/core/utils/CryptoUtil.java", "byte[]", "transformation(String) TEA | " +
-                "XTEA | XXTEA", "data(byte[]) encrypted data", "secret(byte[]) secret"
-            )
-        ));
+                "teaDecrypt",
+                "CryptoUtil.teaDecrypt(String transformation, byte[] data, byte[] secret)",
+                "TEA decrypt -> byte[]",
+                SwingTools.renderSummary("DES decrypt", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java" +
+                    "/org/m2sec/core/utils/CryptoUtil.java", "byte[]", "transformation(String) TEA | " +
+                    "XTEA | XXTEA", "data(byte[]) encrypted data", "secret(byte[]) secret"
+                )
+            ));
         // Crypto - AES
         provider.addCompletion(new ShorthandCompletion(
             provider,
