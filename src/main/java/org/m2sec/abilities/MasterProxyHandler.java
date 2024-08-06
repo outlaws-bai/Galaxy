@@ -31,7 +31,7 @@ public class MasterProxyHandler implements ProxyRequestHandler, ProxyResponseHan
     public ProxyRequestReceivedAction handleRequestReceived(InterceptedRequest interceptedRequest) {
         HttpRequest request;
         if (config.getOption().isHookStart()) {
-            request = hooker.tryHookRequestToBurp(interceptedRequest, true);
+            request = hooker.tryHookRequestToBurp(interceptedRequest, true, false);
         } else {
             request = interceptedRequest;
         }
@@ -45,7 +45,7 @@ public class MasterProxyHandler implements ProxyRequestHandler, ProxyResponseHan
     public ProxyResponseToBeSentAction handleResponseToBeSent(InterceptedResponse interceptedResponse) {
         HttpResponse response;
         if (config.getOption().isHookStart()) {
-            response = hooker.tryHookResponseToClient(interceptedResponse);
+            response = hooker.tryHookResponseToClient(interceptedResponse, false);
         } else {
             response = interceptedResponse;
         }

@@ -58,7 +58,7 @@ public class DecryptRequestItem extends IItem {
             SwingTools.showInfoDialog("The result of using this request to execute the check expression is false. Please check.");
             return;
         }
-        HttpRequest newRequest = MasterHttpHandler.hooker.tryHookRequestToBurp(httpRequest, false);
+        HttpRequest newRequest = MasterHttpHandler.hooker.tryHookRequestToBurp(httpRequest, false, true);
         SwingTools.showRequest(api, newRequest, false);
     }
 }

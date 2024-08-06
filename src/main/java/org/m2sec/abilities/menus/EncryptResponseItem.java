@@ -46,7 +46,7 @@ public class EncryptResponseItem extends IItem {
             SwingTools.showInfoDialog("The response has been encrypted.");
             return;
         }
-        HttpResponse newResponse = MasterHttpHandler.hooker.tryHookResponseToClient(httpResponse);
+        HttpResponse newResponse = MasterHttpHandler.hooker.tryHookResponseToClient(httpResponse, true);
         SwingTools.showResponse(api, newResponse, true);
     }
 }

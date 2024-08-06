@@ -47,7 +47,7 @@ public class EncryptRequestItem extends IItem {
             SwingTools.showInfoDialog("The request has been encrypted.");
             return;
         }
-        HttpRequest newRequest = MasterHttpHandler.hooker.tryHookRequestToServer(httpRequest, 0);
+        HttpRequest newRequest = MasterHttpHandler.hooker.tryHookRequestToServer(httpRequest, 0, true);
         SwingTools.showRequest(api, newRequest, true);
     }
 }

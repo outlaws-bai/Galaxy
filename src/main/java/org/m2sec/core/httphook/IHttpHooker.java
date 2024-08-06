@@ -29,7 +29,7 @@ public abstract class IHttpHooker {
 
     public abstract void destroy();
 
-    public HttpRequest tryHookRequestToBurp(HttpRequest httpRequest, boolean isCheckExpression) {
+    public HttpRequest tryHookRequestToBurp(HttpRequest httpRequest, boolean isCheckExpression, boolean throwException) {
         String name = Constants.HOOK_FUNC_1;
         HttpRequest retVal = httpRequest;
         try {
@@ -52,6 +52,7 @@ public abstract class IHttpHooker {
             }
         } catch (Exception e) {
             log.error("{} execute error.", name, e);
+            if (throwException) throw e;
         }
         return retVal;
     }
@@ -59,7 +60,7 @@ public abstract class IHttpHooker {
     /**
      * 该函数在请求从Burp发送到服务端时被调用
      */
-    public HttpRequest tryHookRequestToServer(HttpRequest httpRequest, int messageId) {
+    public HttpRequest tryHookRequestToServer(HttpRequest httpRequest, int messageId, boolean throwException) {
         String name = Constants.HOOK_FUNC_2;
         HttpRequest retVal = httpRequest;
         try {
@@ -81,6 +82,7 @@ public abstract class IHttpHooker {
             }
         } catch (Exception e) {
             log.error("{} execute error.", name, e);
+            if (throwException) throw e;
         }
         return retVal;
     }
@@ -88,7 +90,7 @@ public abstract class IHttpHooker {
     /**
      * 该函数在响应从服务端刚到达Burp时被调用
      */
-    public HttpResponse tryHookResponseToBurp(HttpResponse httpResponse, int messageId) {
+    public HttpResponse tryHookResponseToBurp(HttpResponse httpResponse, int messageId, boolean throwException) {
         String name = Constants.HOOK_FUNC_3;
         try {
             if (option.isHookResponse() && (messageId == 0 || hookedIds.contains(messageId))) {
@@ -108,6 +110,7 @@ public abstract class IHttpHooker {
 
         } catch (Exception e) {
             log.error("{} execute error.", name, e);
+            if (throwException) throw e;
         }
         return httpResponse;
     }
@@ -115,7 +118,7 @@ public abstract class IHttpHooker {
     /**
      * 该函数在响应从Burp发送到客户端时被调用
      */
-    public HttpResponse tryHookResponseToClient(HttpResponse httpResponse) {
+    public HttpResponse tryHookResponseToClient(HttpResponse httpResponse, boolean throwException) {
         String name = Constants.HOOK_FUNC_4;
         try {
             if (httpResponse.hasHeader(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
@@ -132,6 +135,7 @@ public abstract class IHttpHooker {
             }
         } catch (Exception e) {
             log.error("{} execute error.", name, e);
+            if (throwException) throw e;
         }
         return httpResponse;
     }

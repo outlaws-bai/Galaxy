@@ -46,7 +46,7 @@ public class DecryptResponseItem extends IItem {
             SwingTools.showInfoDialog("The response has been decrypted.");
             return;
         }
-        HttpResponse newResponse = MasterHttpHandler.hooker.tryHookResponseToBurp(httpResponse, 0);
+        HttpResponse newResponse = MasterHttpHandler.hooker.tryHookResponseToBurp(httpResponse, 0, true);
         SwingTools.showResponse(api, newResponse, false);
     }
 }
