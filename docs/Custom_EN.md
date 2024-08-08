@@ -73,7 +73,7 @@ The final effect is as shown in the figure, this example is the built-in `AesRsa
 
 ## Test
 
-When the service is started, the Encrypt/Decrypt button will be bound on the Repeater page, which can be used for testing:。
+When the service is started, the Encrypt/Decrypt button will be bound on the Repeater/Response editor, which can be used for testing:。
 
 At the same time, you can use the log object in the script to print logs to determine if the code logic is correct.。
 
