@@ -1,6 +1,6 @@
 <h3 align="center">Galaxy</h3>
 <p align="center">
-实现在HTTP报文二次加密场景下自动解密的功能
+自动解密被加密的报文，让你像测试明文一样简单
 <br>
 <br>
 <a href="https://github.com/outlaws-bai/Galaxy/releases"><img alt="releases" src="https://img.shields.io/github/release/outlaws-bai/Galaxy"/></a>
@@ -68,7 +68,7 @@
 
 ## 开发计划
 
-> 目前仅开发一半左右，你的star是该项目继续开发的动力。
+> star越多，更新越快。
 
 - 支持配合桌面扫描器一起使用，使得扫描器可以扫描明文请求并得到明文响应。
 - 提出在涉及非对称加密（不已知私钥）下的使用方法。
