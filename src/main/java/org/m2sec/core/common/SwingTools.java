@@ -9,6 +9,7 @@ import burp.api.montoya.ui.editor.HttpResponseEditor;
 import org.apache.commons.text.StringEscapeUtils;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -109,6 +110,14 @@ public class SwingTools {
 
     public static String renderLink(String funcDesc, String link) {
         return funcDesc + String.format("<br><a href=\"%s\">code</a>", link);
+    }
+
+    public static void patchSwingEnv() {
+        JTextComponent.removeKeymap("RTextAreaKeymap");
+        UIManager.put("RTextAreaUI.inputMap", null);
+        UIManager.put("RTextAreaUI.actionMap", null);
+        UIManager.put("RSyntaxTextAreaUI.inputMap", null);
+        UIManager.put("RSyntaxTextAreaUI.actionMap", null);
     }
 
 

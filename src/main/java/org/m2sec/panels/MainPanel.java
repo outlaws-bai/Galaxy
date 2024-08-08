@@ -4,6 +4,7 @@ package org.m2sec.panels;
 import burp.api.montoya.MontoyaApi;
 import org.m2sec.Galaxy;
 import org.m2sec.core.common.Config;
+import org.m2sec.core.common.SwingTools;
 import org.m2sec.panels.httphook.HttpHookPanel;
 import org.m2sec.panels.setting.SettingPanel;
 
@@ -19,6 +20,7 @@ import java.awt.*;
 public class MainPanel extends JPanel {
 
     public MainPanel(MontoyaApi api, Config config) {
+        SwingTools.patchSwingEnv();
         HttpHookPanel httpHookPanel = new HttpHookPanel(api, config.getOption());
         SettingPanel settingPanel = new SettingPanel(api, config.getSetting());
         if (Galaxy.isInBurp()) {

@@ -15,7 +15,6 @@ import org.m2sec.core.httphook.JsHookerFactor;
 import org.m2sec.core.httphook.PythonHookerFactor;
 
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
@@ -54,11 +53,6 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
 
     private void initPanel() {
         codeCombo = new JComboBox<>();
-        JTextComponent.removeKeymap("RTextAreaKeymap");
-        UIManager.put("RTextAreaUI.inputMap", null);
-        UIManager.put("RTextAreaUI.actionMap", null);
-        UIManager.put("RSyntaxTextAreaUI.inputMap", null);
-        UIManager.put("RSyntaxTextAreaUI.actionMap", null);
 //        setBackground(Color.red);
         setLayout(new BorderLayout());
         // 创建顶部下拉框的面板
