@@ -79,6 +79,9 @@ public class HttpHookPanel extends JPanel {
         nextControlPanel.setVisible(false);
         JPanel switchAndCheckBoxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton switchButton = new JButton(RunStatus.START.getDisplay());
+        switchButton.setFont(new Font(switchButton.getFont().getName(), Font.BOLD, switchButton.getFont().getSize()));
+        switchButton.setForeground(new Color(255, 255, 255));
+        switchButton.setBackground(new Color(255, 121, 76));
         switchButton.setToolTipText("Start hook...");
         JCheckBox hookRequestCheckBox = new JCheckBox("Hook request");
         hookRequestCheckBox.setToolTipText("HTTP requests need to be hook?");
