@@ -50,8 +50,7 @@ public class HttpClient {
 
     public static Response send(Request request, int timeoutSeconds, boolean followRedirect, String proxyConn) {
         // 构建URL
-        String protocol = Protocol.of(request.isSecure()).toRaw();
-        String url = protocol + "://" + request.getHost() + ":" + request.getPort() + request.getPath();
+        String url = org.m2sec.core.utils.HttpUtil.getCleanUrl(request);
         if (!request.getQuery().isEmpty()) {
             url += "?" + request.getQuery().toRawString();
         }

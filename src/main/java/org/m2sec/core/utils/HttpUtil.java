@@ -126,6 +126,12 @@ public class HttpUtil {
         return prefix + String.join("/", normalizedPathParts) + suffix;
     }
 
+    public static String getCleanUrl(Request request){
+        if(request.getPath().startsWith(Protocol.HTTP.toRaw())) return request.getPath();
+        String protocol = Protocol.of(request.isSecure()).toRaw();
+        return protocol + "://" + request.getHost() + ":" + request.getPort() + request.getPath();
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     private static ArrayList<String> normalizePathParts(String[] pathParts) {
         ArrayList<String> normalizedPathParts = new ArrayList<>();
