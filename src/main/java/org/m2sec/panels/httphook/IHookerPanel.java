@@ -36,8 +36,7 @@ public abstract class IHookerPanel<T extends IHttpHooker> extends JPanel {
         MasterProxyHandler.hooker = hooker;
     }
 
-    public void stop(Option option){
-        option.setHookStart(false);
+    public void stop(){
         IHttpHooker hooker = MasterHttpHandler.hooker;
         hooker.destroy();
         MasterHttpHandler.hooker = null;

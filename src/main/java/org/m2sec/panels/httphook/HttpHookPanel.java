@@ -133,11 +133,11 @@ public class HttpHookPanel extends JPanel {
         switchButton.addActionListener(e -> {
             String selectItem = (String) comboBox.getSelectedItem();
             IHookerPanel<?> hookerPanel = serviceMap.get(selectItem);
-            boolean isStop = switchButton.getText().equalsIgnoreCase(RunStatus.STOP.name().toLowerCase());
-            RunStatus status = isStop ? RunStatus.START : RunStatus.STOP;
+            boolean toStop = option.isHookStart();
+            RunStatus status = toStop ? RunStatus.START : RunStatus.STOP;
 
             try {
-                if (!isStop) {
+                if (!toStop) {
                     HttpHookService service = hookerPanel.getService();
                     // 设置本次所选择的配置
                     option.setHookStart(true)
@@ -149,7 +149,8 @@ public class HttpHookPanel extends JPanel {
                         .setCodeSelectItem(hookerPanel.getInput());
                     hookerPanel.start(option);
                 } else {
-                    hookerPanel.stop(option);
+                    option.setHookStart(false);
+                    hookerPanel.stop();
                 }
             } catch (Exception exc) {
                 log.error("Start fail!", exc);
@@ -158,11 +159,11 @@ public class HttpHookPanel extends JPanel {
             }
 
             switchButton.setText(status.getDisplay());
-            SwingTools.changePanelStatus(hookerPanel, isStop);
-            SwingTools.changeComponentStatus(comboBox, isStop);
-            SwingTools.changePanelStatus(requestCheckPanel, isStop);
-            SwingTools.changeComponentStatus(hookRequestCheckBox, isStop);
-            SwingTools.changeComponentStatus(hookResponseCheckBox, isStop);
+            SwingTools.changePanelStatus(hookerPanel, toStop);
+            SwingTools.changeComponentStatus(comboBox, toStop);
+            SwingTools.changePanelStatus(requestCheckPanel, toStop);
+            SwingTools.changeComponentStatus(hookRequestCheckBox, toStop);
+            SwingTools.changeComponentStatus(hookResponseCheckBox, toStop);
         });
 
         // set data

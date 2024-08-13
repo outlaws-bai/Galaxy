@@ -30,4 +30,12 @@ public class HashUtil {
             throw new RuntimeException(e);
         }
     }
+
+    public static String calcToHex(String algorithm, byte[] data, byte[] secret) {
+        return CodeUtil.hexEncodeToString(calc(algorithm, data));
+    }
+
+    public static String calcToBase64(String algorithm, byte[] data, byte[] secret) {
+        return CodeUtil.b64encodeToString(calc(algorithm, data));
+    }
 }

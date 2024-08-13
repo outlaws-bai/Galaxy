@@ -23,6 +23,4 @@ public class Option {
     private String grpcConn;
     private String codeSelectItem;
     private boolean hookStart;
-
-
 }
