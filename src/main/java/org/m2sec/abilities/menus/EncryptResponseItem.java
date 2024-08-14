@@ -33,6 +33,7 @@ public class EncryptResponseItem extends IItem {
             && event.messageEditorRequestResponse().isPresent()
             && event.messageEditorRequestResponse().get().selectionContext() == MessageEditorHttpRequestResponse.SelectionContext.RESPONSE
             && config.getOption().isHookStart()
+            && config.getOption().isHookResponse()
             && MasterHttpHandler.hooker != null;
     }
 
