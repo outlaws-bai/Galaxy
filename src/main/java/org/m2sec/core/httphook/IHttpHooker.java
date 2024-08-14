@@ -29,7 +29,8 @@ public abstract class IHttpHooker {
 
     public abstract void destroy();
 
-    public HttpRequest tryHookRequestToBurp(HttpRequest httpRequest, boolean isCheckExpression, boolean throwException) {
+    public HttpRequest tryHookRequestToBurp(HttpRequest httpRequest, boolean isCheckExpression,
+                                            boolean throwException) {
         String name = Constants.HOOK_FUNC_1;
         HttpRequest retVal = httpRequest;
         try {
@@ -37,8 +38,7 @@ public abstract class IHttpHooker {
                 Request request = Request.of(httpRequest);
                 log.debug("[{}] before hook: {}", name, request);
                 String expression = option.getRequestCheckExpression();
-                if (!isCheckExpression || (expression != null && !expression.isEmpty() && (Boolean) Render.renderExpression(expression,
-                    new HashMap<>(Map.of("request", request))))) {
+                if (!isCheckExpression || (expression != null && !expression.isEmpty() && (Boolean) Render.renderExpression(expression, new HashMap<>(Map.of("request", request))))) {
                     request = hookRequestToBurp(request);
                     log.debug("[{}] after hook: {}", name, request);
                     if (request == null) {
@@ -93,7 +93,7 @@ public abstract class IHttpHooker {
     public HttpResponse tryHookResponseToBurp(HttpResponse httpResponse, int messageId, boolean throwException) {
         String name = Constants.HOOK_FUNC_3;
         try {
-            if (option.isHookResponse() && (messageId == 0 || hookedIds.contains(messageId))) {
+            if (option.isHookResponse() && (messageId == 0 || hookedIds.contains(messageId) || !option.isHookRequest())) {
                 if (messageId != 0) hookedIds.remove(messageId);
                 Response response = Response.of(httpResponse);
                 log.debug("[{}] before hook: {}", name, response);
