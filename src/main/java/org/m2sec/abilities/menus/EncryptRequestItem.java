@@ -50,6 +50,10 @@ public class EncryptRequestItem extends IItem {
             return;
         }
         HttpRequest newRequest = MasterHttpHandler.hooker.tryHookRequestToServer(httpRequest, 0, true);
-        SwingTools.showRequest(api, newRequest, true);
+        if (event.isFromTool(ToolType.REPEATER)) {
+            messageEditorHttpRequestResponse.setRequest(newRequest);
+        } else {
+            SwingTools.showRequest(api, newRequest, true);
+        }
     }
 }

@@ -57,10 +57,15 @@ public class DecryptRequestItem extends IItem {
         String expression = config.getOption().getRequestCheckExpression();
         if (expression == null || expression.isBlank() || !(Boolean) Render.renderExpression(expression,
             new HashMap<>(Map.of("request", request)))) {
-            SwingTools.showInfoDialog("The result of using this request to execute the check expression is false. Please check.");
+            SwingTools.showInfoDialog("The result of using this request to execute the check expression is false. " +
+                "Please check.");
             return;
         }
         HttpRequest newRequest = MasterHttpHandler.hooker.tryHookRequestToBurp(httpRequest, false, true);
-        SwingTools.showRequest(api, newRequest, false);
+        if (event.isFromTool(ToolType.REPEATER)) {
+            messageEditorHttpRequestResponse.setRequest(newRequest);
+        } else {
+            SwingTools.showRequest(api, newRequest, false);
+        }
     }
 }
