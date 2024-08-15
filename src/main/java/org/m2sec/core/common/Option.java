@@ -18,9 +18,10 @@ import org.m2sec.core.enums.HttpHookService;
 public class Option {
     private HttpHookService hookService;
     private String requestCheckExpression;
-    private boolean hookRequest;
     private boolean hookResponse;
+    private boolean linkageScanner;
     private String grpcConn;
+    private String scannerConn;
     private String codeSelectItem;
     private boolean hookStart;
 }

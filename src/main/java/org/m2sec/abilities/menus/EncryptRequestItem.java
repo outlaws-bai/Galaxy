@@ -34,7 +34,6 @@ public class EncryptRequestItem extends IItem {
             && event.messageEditorRequestResponse().isPresent()
             && event.messageEditorRequestResponse().get().selectionContext() == MessageEditorHttpRequestResponse.SelectionContext.REQUEST
             && config.getOption().isHookStart()
-            && config.getOption().isHookRequest()
             && MasterHttpHandler.hooker != null;
     }
 

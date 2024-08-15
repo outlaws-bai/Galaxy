@@ -34,7 +34,7 @@ public abstract class IHttpHooker {
         String name = Constants.HOOK_FUNC_1;
         HttpRequest retVal = httpRequest;
         try {
-            if (HttpUtil.isCorrectUrl(httpRequest.url()) && option.isHookRequest()) {
+            if (HttpUtil.isCorrectUrl(httpRequest.url())) {
                 Request request = Request.of(httpRequest);
                 log.debug("[{}] before hook: {}", name, request);
                 String expression = option.getRequestCheckExpression();
@@ -93,7 +93,7 @@ public abstract class IHttpHooker {
     public HttpResponse tryHookResponseToBurp(HttpResponse httpResponse, int messageId, boolean throwException) {
         String name = Constants.HOOK_FUNC_3;
         try {
-            if (option.isHookResponse() && (messageId == 0 || hookedIds.contains(messageId) || !option.isHookRequest())) {
+            if (option.isHookResponse() && (messageId == 0 || hookedIds.contains(messageId))) {
                 if (messageId != 0) hookedIds.remove(messageId);
                 Response response = Response.of(httpResponse);
                 log.debug("[{}] before hook: {}", name, response);

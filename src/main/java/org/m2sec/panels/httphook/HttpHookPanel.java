@@ -59,11 +59,11 @@ public class HttpHookPanel extends JPanel {
         serviceMap.put(HttpHookService.JAVA.name().toLowerCase(), javaFileHookerPanel);
 
         // 创建一个容器(卡片)用于放置不同方式的JPanel
-        JPanel wayPanelContainer = new JPanel(new CardLayout());
-        serviceMap.forEach((k, v) -> wayPanelContainer.add(v, k));
+        JPanel hookerPanelContainer = new JPanel(new CardLayout());
+        serviceMap.forEach((k, v) -> hookerPanelContainer.add(v, k));
 
-        // 创建一个控制面板，放置选择哪种方式Hook的JComboBox
-        JPanel wayControlPanel = new JPanel(new BorderLayout());
+        // 创建一个hook方式选择的面板，放置选择哪种方式Hook的JComboBox及描述
+        JPanel hookerChoosePanel = new JPanel(new BorderLayout());
         JPanel descAndComboBox = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel selectDesc = new JLabel("Hooker: ");
         selectDesc.setToolTipText("Choose a hooker.");
@@ -71,64 +71,71 @@ public class HttpHookPanel extends JPanel {
         JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
         descAndComboBox.add(selectDesc);
         descAndComboBox.add(comboBox);
-        wayControlPanel.add(descAndComboBox, BorderLayout.NORTH);
-        wayControlPanel.add(separator, BorderLayout.CENTER);
+        hookerChoosePanel.add(descAndComboBox, BorderLayout.NORTH);
+        hookerChoosePanel.add(separator, BorderLayout.CENTER);
 
-        // 创建一个控制面板，放置启动开关、检查表达式，checkboxes
-        JPanel nextControlPanel = new JPanel(new BorderLayout());
-        nextControlPanel.setVisible(false);
-        JPanel switchAndCheckBoxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        // 创建一个控制面板，放置启动开关，两个hook的checkbox
+        JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton switchButton = new JButton(RunStatus.START.getDisplay());
         switchButton.setFont(new Font(switchButton.getFont().getName(), Font.BOLD, switchButton.getFont().getSize()));
         switchButton.setForeground(new Color(255, 255, 255));
         switchButton.setBackground(new Color(255, 121, 76));
         switchButton.setToolTipText("Start hook...");
-        JCheckBox hookRequestCheckBox = new JCheckBox("Hook request");
-        hookRequestCheckBox.setToolTipText("HTTP requests need to be hook?");
-        JCheckBox hookResponseCheckBox = new JCheckBox("Hook response");
+        JCheckBox hookResponseCheckBox = new JCheckBox("Hook Response");
         hookResponseCheckBox.setToolTipText("HTTP responses need to be hook?");
-        switchAndCheckBoxPanel.add(switchButton);
-        switchAndCheckBoxPanel.add(hookRequestCheckBox);
-        switchAndCheckBoxPanel.add(hookResponseCheckBox);
-        JPanel wayDescAndSwitchAndCheckBox = new JPanel(new BorderLayout());
-        wayDescAndSwitchAndCheckBox.add(switchAndCheckBoxPanel, BorderLayout.WEST);
-        nextControlPanel.add(wayDescAndSwitchAndCheckBox, BorderLayout.NORTH);
+        JCheckBox linkScannerCheckBox = new JCheckBox("Linkage passive scanner");
+        linkScannerCheckBox.setToolTipText("Forward hooked request to scanner?");
+        controlPanel.add(switchButton);
+        controlPanel.add(hookResponseCheckBox);
+        controlPanel.add(linkScannerCheckBox);
 
-
-        // 创建面板，用于输入检查当前请求是否需要被Hook的表达式
-        JPanel requestCheckPanel = new JPanel(new BorderLayout());
-        JTextField checkELTextField = new JTextField();
-        JPanel checkELPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel elLabel = new JLabel("Expression: ");
+        // 创建一个输入面板，放置表达式的输入框
+        JPanel inputPanel = new JPanel(new BorderLayout());
+        JPanel expressionInputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel elLabel = new JLabel("Expression:");
+        elLabel.setPreferredSize(new Dimension(75, elLabel.getPreferredSize().height));
         elLabel.setToolTipText("Enter an javascript expression that will be used to determine which requests need to " +
-            "be processed.");
+                "be processed.");
+        JTextField checkELTextField = new JTextField();
+        checkELTextField.setPreferredSize(new Dimension(400, checkELTextField.getPreferredSize().height));
+        expressionInputPanel.add(elLabel);
+        expressionInputPanel.add(checkELTextField);
+        JPanel passiveProxyConnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        passiveProxyConnPanel.setVisible(false);
+        JLabel scannerConnLabel = new JLabel("Scanner:");
+        scannerConnLabel.setPreferredSize(new Dimension(75, scannerConnLabel.getPreferredSize().height));
+        scannerConnLabel.setToolTipText("Enter the connection string of a passive proxy scanner.");
+        JTextField scannerConnTextField = new JTextField();
+        scannerConnTextField.setPreferredSize(new Dimension(400, scannerConnTextField.getPreferredSize().height));
+        passiveProxyConnPanel.add(scannerConnLabel);
+        passiveProxyConnPanel.add(scannerConnTextField);
+        inputPanel.add(expressionInputPanel, BorderLayout.CENTER);
+        inputPanel.add(passiveProxyConnPanel, BorderLayout.NORTH);
 
-        checkELPanel.add(elLabel);
-        checkELPanel.add(checkELTextField);
-        requestCheckPanel.add(checkELPanel, BorderLayout.CENTER);
-        nextControlPanel.add(requestCheckPanel, BorderLayout.CENTER);
-
-        // 创建面板，组合wayPanelContainer和requestIsHookPanel
-        JPanel blendPanel = new JPanel(new BorderLayout());
-        blendPanel.add(wayPanelContainer, BorderLayout.CENTER);
-
-        JPanel wayAndNextPanel = new JPanel(new BorderLayout());
-        wayAndNextPanel.add(wayControlPanel, BorderLayout.NORTH);
-        wayAndNextPanel.add(nextControlPanel, BorderLayout.CENTER);
-        add(wayAndNextPanel, BorderLayout.NORTH);
-        add(blendPanel, BorderLayout.CENTER);
+        // 创建一个汇总面板，组合上方的面板
+        JPanel gatherPanel = new JPanel(new BorderLayout());
+        JPanel hookerAndControlPanel = new JPanel(new BorderLayout());
+        hookerAndControlPanel.add(hookerChoosePanel, BorderLayout.NORTH);
+        hookerAndControlPanel.add(controlPanel, BorderLayout.CENTER);
+        JPanel inputAndCodePanel = new JPanel(new BorderLayout());
+        inputAndCodePanel.add(inputPanel, BorderLayout.NORTH);
+        inputAndCodePanel.add(hookerPanelContainer, BorderLayout.CENTER);
+        gatherPanel.add(hookerAndControlPanel, BorderLayout.NORTH);
+        gatherPanel.add(inputAndCodePanel, BorderLayout.CENTER);
+        add(gatherPanel);
 
         // 设置 JComboBox 的事件监听器, 选择不同的方式，展示不同方式自己的Panel
         comboBox.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                wayPanelContainer.setVisible(true);
-                nextControlPanel.setVisible(true);
-                hookRequestCheckBox.setVisible(true);
-                hookResponseCheckBox.setVisible(true);
-                CardLayout cl = (CardLayout) (wayPanelContainer.getLayout());
-                cl.show(wayPanelContainer, (String) e.getItem());
+                controlPanel.setVisible(true);
+                inputPanel.setVisible(true);
+                hookerPanelContainer.setVisible(true);
+                CardLayout cl = (CardLayout) (hookerPanelContainer.getLayout());
+                cl.show(hookerPanelContainer, (String) e.getItem());
             }
         });
+        // 设置 linkScannerCheckBox 的事件监听器
+        linkScannerCheckBox.addItemListener(e -> passiveProxyConnPanel.setVisible(e.getStateChange() == ItemEvent.SELECTED));
         // 设置 switchButton 的事件监听器, 开关HttpHook功能
         switchButton.addActionListener(e -> {
             String selectItem = (String) comboBox.getSelectedItem();
@@ -138,15 +145,22 @@ public class HttpHookPanel extends JPanel {
 
             try {
                 if (!toStop) {
+                    // check input
+                    if (checkELTextField.getText().isBlank()) {
+                        throw new Exception("Please input request check expression!");
+                    }
+                    if (linkScannerCheckBox.isSelected() && scannerConnTextField.getText().isBlank()) {
+                        throw new Exception("Please input passive proxy scanner connection!");
+                    }
+
                     HttpHookService service = hookerPanel.getService();
                     // 设置本次所选择的配置
                     option.setHookStart(true)
-                        .setHookService(service)
-                        .setRequestCheckExpression(checkELTextField.getText())
-                        .setHookRequest(hookRequestCheckBox.isSelected())
-                        .setHookResponse(hookResponseCheckBox.isSelected())
-                        .setGrpcConn(rpcImpl.getInput())
-                        .setCodeSelectItem(hookerPanel.getInput());
+                            .setHookService(service)
+                            .setRequestCheckExpression(checkELTextField.getText())
+                            .setHookResponse(hookResponseCheckBox.isSelected())
+                            .setGrpcConn(rpcImpl.getInput())
+                            .setCodeSelectItem(hookerPanel.getInput());
                     hookerPanel.start(option);
                 } else {
                     option.setHookStart(false);
@@ -159,35 +173,29 @@ public class HttpHookPanel extends JPanel {
             }
 
             switchButton.setText(status.getDisplay());
-            SwingTools.changePanelStatus(hookerPanel, toStop);
-            SwingTools.changeComponentStatus(comboBox, toStop);
-            SwingTools.changePanelStatus(requestCheckPanel, toStop);
-            SwingTools.changeComponentStatus(hookRequestCheckBox, toStop);
-            SwingTools.changeComponentStatus(hookResponseCheckBox, toStop);
+            SwingTools.changePanelStatus(gatherPanel, toStop);
+            switchButton.setEnabled(true);
         });
 
         // set data
         checkELTextField.setText(option.getRequestCheckExpression());
-        hookRequestCheckBox.setSelected(option.isHookRequest());
         hookResponseCheckBox.setSelected(option.isHookResponse());
+        linkScannerCheckBox.setSelected(option.isLinkageScanner());
+        scannerConnTextField.setText(option.getScannerConn());
         if (option.getHookService() != null) {
             comboBox.setSelectedIndex(hookNames.indexOf(option.getHookService().name().toLowerCase()));
-            wayPanelContainer.setVisible(true);
-            nextControlPanel.setVisible(true);
-            hookRequestCheckBox.setVisible(true);
-            hookResponseCheckBox.setVisible(true);
         } else {
             comboBox.setSelectedIndex(-1);
-            wayPanelContainer.setVisible(false);
-            nextControlPanel.setVisible(false);
-            hookRequestCheckBox.setVisible(false);
-            hookResponseCheckBox.setVisible(false);
+            controlPanel.setVisible(false);
+            inputPanel.setVisible(false);
+            hookerPanelContainer.setVisible(false);
         }
+
 
 //        nextControlPanel.setBackground(Color.CYAN);
 //        wayDescAndSwitchAndCheckBox.setBackground(Color.green);
 //        requestCheckPanel.setBackground(Color.gray);
-//        wayControlPanel.setBackground(Color.green);
+//        hookerChoosePanel.setBackground(Color.green);
 
     }
 

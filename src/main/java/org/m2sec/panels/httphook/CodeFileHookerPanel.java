@@ -57,7 +57,8 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
         setLayout(new BorderLayout());
         // 创建顶部下拉框的面板
         JPanel topPanel = new JPanel(new BorderLayout());
-        JLabel selectLabel = new JLabel("Hook script: ");
+        JLabel selectLabel = new JLabel("Hook Script:");
+        selectLabel.setPreferredSize(new Dimension(75, selectLabel.getPreferredSize().height));
         selectLabel.setToolTipText(Constants.HOOK_BY_CODE_IMPL_DEF);
         JPanel rightPanel = new JPanel();
         JButton saveButton = new JButton("Save");
