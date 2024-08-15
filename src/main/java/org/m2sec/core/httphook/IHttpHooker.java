@@ -6,8 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.m2sec.core.common.Option;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Render;
+import org.m2sec.core.common.WorkExecutor;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
+import org.m2sec.core.outer.HttpClient;
 import org.m2sec.core.utils.HttpUtil;
 
 import java.util.HashMap;
@@ -29,13 +31,22 @@ public abstract class IHttpHooker {
 
     public abstract void destroy();
 
+    private final ThreadLocal<Boolean> isScanner = ThreadLocal.withInitial(() -> false);
+
     public HttpRequest tryHookRequestToBurp(HttpRequest httpRequest, boolean isCheckExpression,
                                             boolean throwException) {
+        isScanner.set(false);
         String name = Constants.HOOK_FUNC_1;
         HttpRequest retVal = httpRequest;
         try {
             if (HttpUtil.isCorrectUrl(httpRequest.url())) {
                 Request request = Request.of(httpRequest);
+                // 如果请求已经带有标记头，认为是从扫描器过来的流量，不需要解密
+                isScanner.set(request.getHeaders().hasIgnoreCase(Constants.HTTP_HEADER_HOOK_HEADER_KEY));
+                if (isScanner.get()) {
+                    log.debug("[{}] This is hooked request: {}. pass hookRequestToBurp", name, request);
+                    return retVal;
+                }
                 log.debug("[{}] before hook: {}", name, request);
                 String expression = option.getRequestCheckExpression();
                 if (!isCheckExpression || (expression != null && !expression.isEmpty() && (Boolean) Render.renderExpression(expression, new HashMap<>(Map.of("request", request))))) {
@@ -47,6 +58,12 @@ public abstract class IHttpHooker {
                     // 添加标记头
                     request.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "HttpHook");
                     log.debug("exec method: {} with {} success.", name, this.getClass().getSimpleName());
+                    // 当前线程中的请求不是来自扫描器 && 开启了联动扫描器
+                    if (option.isLinkageScanner() && !isScanner.get()) {
+                        log.debug("[{}] Send request and proxy by scanner. request: {}", name, request);
+                        Request finalRequest = request;
+                        WorkExecutor.INSTANCE.execute(() -> HttpClient.send(finalRequest, option.getScannerConn()));
+                    }
                     retVal = request.toBurp();
                 }
             }
@@ -121,8 +138,12 @@ public abstract class IHttpHooker {
     public HttpResponse tryHookResponseToClient(HttpResponse httpResponse, boolean throwException) {
         String name = Constants.HOOK_FUNC_4;
         try {
-            if (httpResponse.hasHeader(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
-                Response response = Response.of(httpResponse);
+            Response response = Response.of(httpResponse);
+            if (response.getHeaders().hasIgnoreCase(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
+                if (isScanner.get()) {
+                    log.debug("[{}] This is in Scanner. return decrypted response. response: {}", name, response);
+                    return httpResponse;
+                }
                 log.debug("[{}] before hook: {}", name, response);
                 response.getHeaders().remove(Constants.HTTP_HEADER_HOOK_HEADER_KEY);
                 Response result = hookResponseToClient(response);

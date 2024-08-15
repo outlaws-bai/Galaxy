@@ -162,7 +162,9 @@ public class HttpHookPanel extends JPanel {
                         .setRequestCheckExpression(checkELTextField.getText())
                         .setHookResponse(hookResponseCheckBox.isSelected())
                         .setGrpcConn(rpcImpl.getInput())
-                        .setCodeSelectItem(hookerPanel.getInput());
+                        .setCodeSelectItem(hookerPanel.getInput())
+                        .setLinkageScanner(linkScannerCheckBox.isSelected())
+                        .setScannerConn(scannerConnTextField.getText());
                     hookerPanel.start(option);
                     log.info("Start http hook success. service: {}", service.name().toLowerCase());
                 } else {
