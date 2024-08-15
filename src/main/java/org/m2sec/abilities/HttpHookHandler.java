@@ -1,10 +1,7 @@
 package org.m2sec.abilities;
 
 import burp.api.montoya.http.handler.*;
-import burp.api.montoya.http.message.requests.HttpRequest;
-import burp.api.montoya.http.message.responses.HttpResponse;
 import burp.api.montoya.proxy.http.*;
-import org.m2sec.core.common.Config;
 import org.m2sec.core.httphook.IHttpHooker;
 
 /**
@@ -17,24 +14,14 @@ public class HttpHookHandler implements HttpHandler, ProxyRequestHandler, ProxyR
 
     public static IHttpHooker hooker;
 
-    private final Config config;
-
-    public HttpHookHandler(Config config) {
-        this.config = config;
-    }
 
     /**
      * 在客户端请求到达Burp时被调用
      */
     @Override
     public ProxyRequestReceivedAction handleRequestReceived(InterceptedRequest interceptedRequest) {
-        HttpRequest request;
-        if (config.getOption().isHookStart()) {
-            request = hooker.tryHookRequestToBurp(interceptedRequest, true, false);
-        } else {
-            request = interceptedRequest;
-        }
-        return ProxyRequestReceivedAction.continueWith(request, interceptedRequest.annotations());
+        return ProxyRequestReceivedAction.continueWith(hooker.tryHookRequestToBurp(interceptedRequest, true, false),
+            interceptedRequest.annotations());
     }
 
     /**
@@ -42,13 +29,8 @@ public class HttpHookHandler implements HttpHandler, ProxyRequestHandler, ProxyR
      */
     @Override
     public RequestToBeSentAction handleHttpRequestToBeSent(HttpRequestToBeSent requestToBeSent) {
-        HttpRequest request;
-        if (config.getOption().isHookStart()) {
-            request = hooker.tryHookRequestToServer(requestToBeSent, requestToBeSent.messageId(), false);
-        } else {
-            request = requestToBeSent;
-        }
-        return RequestToBeSentAction.continueWith(request, requestToBeSent.annotations());
+        return RequestToBeSentAction.continueWith(hooker.tryHookRequestToServer(requestToBeSent,
+            requestToBeSent.messageId(), false), requestToBeSent.annotations());
     }
 
     /**
@@ -56,13 +38,8 @@ public class HttpHookHandler implements HttpHandler, ProxyRequestHandler, ProxyR
      */
     @Override
     public ResponseReceivedAction handleHttpResponseReceived(HttpResponseReceived responseReceived) {
-        HttpResponse response;
-        if (config.getOption().isHookStart()) {
-            response = hooker.tryHookResponseToBurp(responseReceived, responseReceived.messageId(), false);
-        } else {
-            response = responseReceived;
-        }
-        return ResponseReceivedAction.continueWith(response, responseReceived.annotations());
+        return ResponseReceivedAction.continueWith(hooker.tryHookResponseToBurp(responseReceived,
+            responseReceived.messageId(), false), responseReceived.annotations());
     }
 
     /**
@@ -70,13 +47,8 @@ public class HttpHookHandler implements HttpHandler, ProxyRequestHandler, ProxyR
      */
     @Override
     public ProxyResponseToBeSentAction handleResponseToBeSent(InterceptedResponse interceptedResponse) {
-        HttpResponse response;
-        if (config.getOption().isHookStart()) {
-            response = hooker.tryHookResponseToClient(interceptedResponse, false);
-        } else {
-            response = interceptedResponse;
-        }
-        return ProxyResponseToBeSentAction.continueWith(response, interceptedResponse.annotations());
+        return ProxyResponseToBeSentAction.continueWith(hooker.tryHookResponseToClient(interceptedResponse, false),
+            interceptedResponse.annotations());
     }
 
     @Override

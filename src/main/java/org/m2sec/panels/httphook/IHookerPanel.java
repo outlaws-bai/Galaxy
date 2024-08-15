@@ -37,7 +37,7 @@ public abstract class IHookerPanel<T extends IHttpHooker> extends JPanel {
         T hooker = newHooker();
         hooker.init(option);
         HttpHookHandler.hooker = hooker;
-        HttpHookHandler handler = new HttpHookHandler(config);
+        HttpHookHandler handler = new HttpHookHandler();
         Registration registration0 = api.proxy().registerRequestHandler(handler);
         Registration registration1 = api.proxy().registerResponseHandler(handler);
         Registration registration2 = api.http().registerHttpHandler(handler);
