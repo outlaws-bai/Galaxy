@@ -10,7 +10,6 @@
 <a href="https://github.com/outlaws-bai/Galaxy/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/outlaws-bai/Galaxy"/></a>
 <br>
 <br>
-<a href="https://github.com/outlaws-bai/Galaxy/blob/main/docs/README_EN.md">English</a> | 
 <a href="https://github.com/outlaws-bai/Galaxy/releases">Download</a> | 
 <a href="https://github.com/outlaws-bai/Galaxy/blob/main/docs/FAQ.md">FAQ</a> | 
 <a href="https://github.com/outlaws-bai/Galaxy/issues">Issue</a>
