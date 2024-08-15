@@ -50,11 +50,11 @@ public class Helper {
                 message = Constants.UPDATE_VERSION_DEF + bakDir + ". \r\nGood luck.";
                 buildWorkDir = true;
             } else { // reload
-                message = "Good luck.";
+                message = "Good luck.\r\n";
             }
         } else { // 第一次使用
             buildWorkDir = true;
-            message = "You seem to be using this plugin for the first time. \r\nGood luck.";
+            message = "You seem to be using this plugin for the first time. \r\nGood luck.\r\n";
         }
         if (Galaxy.isInBurp()) {
             api.logging().logToOutput(message);

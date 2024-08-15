@@ -21,7 +21,7 @@ public class MainPanel extends JPanel {
 
     public MainPanel(MontoyaApi api, Config config) {
         SwingTools.patchSwingEnv();
-        HttpHookPanel httpHookPanel = new HttpHookPanel(api, config.getOption());
+        HttpHookPanel httpHookPanel = new HttpHookPanel(api, config);
         SettingPanel settingPanel = new SettingPanel(api, config.getSetting());
         if (Galaxy.isInBurp()) {
             api.userInterface().applyThemeToComponent(settingPanel);

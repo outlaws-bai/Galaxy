@@ -5,7 +5,7 @@ import burp.api.montoya.core.ToolType;
 import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.ui.contextmenu.ContextMenuEvent;
 import burp.api.montoya.ui.contextmenu.MessageEditorHttpRequestResponse;
-import org.m2sec.abilities.MasterHttpHandler;
+import org.m2sec.abilities.HttpHookHandler;
 import org.m2sec.core.common.Config;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Render;
@@ -39,7 +39,7 @@ public class DecryptRequestItem extends IItem {
             && event.messageEditorRequestResponse().isPresent()
             && event.messageEditorRequestResponse().get().selectionContext() == MessageEditorHttpRequestResponse.SelectionContext.REQUEST
             && config.getOption().isHookStart()
-            && MasterHttpHandler.hooker != null;
+            && HttpHookHandler.hooker != null;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class DecryptRequestItem extends IItem {
                 "Please check.");
             return;
         }
-        HttpRequest newRequest = MasterHttpHandler.hooker.tryHookRequestToBurp(httpRequest, false, true);
+        HttpRequest newRequest = HttpHookHandler.hooker.tryHookRequestToBurp(httpRequest, false, true);
         if (event.isFromTool(ToolType.REPEATER)) {
             messageEditorHttpRequestResponse.setRequest(newRequest);
         } else {

@@ -1,9 +1,10 @@
 package org.m2sec.panels.httphook;
 
 import burp.api.montoya.MontoyaApi;
+import burp.api.montoya.core.Registration;
 import lombok.Getter;
-import org.m2sec.abilities.MasterHttpHandler;
-import org.m2sec.abilities.MasterProxyHandler;
+import org.m2sec.abilities.HttpHookHandler;
+import org.m2sec.core.common.Config;
 import org.m2sec.core.common.Option;
 import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.httphook.IHttpHooker;
@@ -17,30 +18,39 @@ import javax.swing.*;
  */
 public abstract class IHookerPanel<T extends IHttpHooker> extends JPanel {
 
-    protected final Option option;
+
+    protected final Config config;
 
     protected final MontoyaApi api;
     @Getter
     protected final HttpHookService service;
 
-    public IHookerPanel(Option option, MontoyaApi api, HttpHookService service) {
-        this.option = option;
+    private Registration[] registrations;
+
+    public IHookerPanel(Config config, MontoyaApi api, HttpHookService service) {
+        this.config = config;
         this.api = api;
         this.service = service;
     }
 
-    public void start(Option option){
+    public void start(Option option) {
         T hooker = newHooker();
         hooker.init(option);
-        MasterHttpHandler.hooker = hooker;
-        MasterProxyHandler.hooker = hooker;
+        HttpHookHandler.hooker = hooker;
+        HttpHookHandler handler = new HttpHookHandler(config);
+        Registration registration0 = api.proxy().registerRequestHandler(handler);
+        Registration registration1 = api.proxy().registerResponseHandler(handler);
+        Registration registration2 = api.http().registerHttpHandler(handler);
+        registrations = new Registration[]{registration0, registration1, registration2};
     }
 
-    public void stop(){
-        IHttpHooker hooker = MasterHttpHandler.hooker;
+    public void stop() {
+        IHttpHooker hooker = HttpHookHandler.hooker;
         hooker.destroy();
-        MasterHttpHandler.hooker = null;
-        MasterProxyHandler.hooker = null;
+        for (Registration registration : registrations) {
+            registration.deregister();
+        }
+        registrations = null;
     }
 
     public abstract T newHooker();

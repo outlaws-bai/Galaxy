@@ -3,6 +3,7 @@ package org.m2sec.panels.httphook;
 import burp.api.montoya.MontoyaApi;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.Galaxy;
+import org.m2sec.core.common.Config;
 import org.m2sec.core.common.Option;
 import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.enums.RunStatus;
@@ -25,10 +26,12 @@ import java.util.Map;
 public class HttpHookPanel extends JPanel {
 
     private final Option option;
+    private final Config config;
     private final MontoyaApi api;
 
-    public HttpHookPanel(MontoyaApi api, Option option) {
-        this.option = option;
+    public HttpHookPanel(MontoyaApi api, Config config) {
+        this.config = config;
+        this.option = config.getOption();
         this.api = api;
         setName("Http Hook");
         initPanel();
@@ -41,12 +44,12 @@ public class HttpHookPanel extends JPanel {
         Map<String, IHookerPanel<?>> serviceMap = new LinkedHashMap<>();
         List<String> hookNames = new ArrayList<>();
 
-        GrpcHookerPanel rpcImpl = new GrpcHookerPanel(option, api, HttpHookService.GRPC);
-        CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(option, api, HttpHookService.JAVA);
+        GrpcHookerPanel rpcImpl = new GrpcHookerPanel(config, api, HttpHookService.GRPC);
+        CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JAVA);
         javaFileHookerPanel.resetCodeTheme();
-        CodeFileHookerPanel pythonFileHookerPanel = new CodeFileHookerPanel(option, api, HttpHookService.PYTHON);
+        CodeFileHookerPanel pythonFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.PYTHON);
         pythonFileHookerPanel.resetCodeTheme();
-        CodeFileHookerPanel jsFileHookerPanel = new CodeFileHookerPanel(option, api, HttpHookService.JS);
+        CodeFileHookerPanel jsFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JS);
         jsFileHookerPanel.resetCodeTheme();
 
         hookNames.add(HttpHookService.JS.name().toLowerCase());
@@ -93,20 +96,19 @@ public class HttpHookPanel extends JPanel {
         JPanel inputPanel = new JPanel(new BorderLayout());
         JPanel expressionInputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel elLabel = new JLabel("Expression:");
-        elLabel.setPreferredSize(new Dimension(75, elLabel.getPreferredSize().height));
+        elLabel.setPreferredSize(new Dimension(CodeFileHookerPanel.getDescWidth(), elLabel.getPreferredSize().height));
         elLabel.setToolTipText("Enter an javascript expression that will be used to determine which requests need to " +
-                "be processed.");
+            "be processed.");
         JTextField checkELTextField = new JTextField();
-        checkELTextField.setPreferredSize(new Dimension(400, checkELTextField.getPreferredSize().height));
         expressionInputPanel.add(elLabel);
         expressionInputPanel.add(checkELTextField);
         JPanel passiveProxyConnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         passiveProxyConnPanel.setVisible(false);
         JLabel scannerConnLabel = new JLabel("Scanner:");
-        scannerConnLabel.setPreferredSize(new Dimension(75, scannerConnLabel.getPreferredSize().height));
+        scannerConnLabel.setPreferredSize(new Dimension(CodeFileHookerPanel.getDescWidth(),
+            scannerConnLabel.getPreferredSize().height));
         scannerConnLabel.setToolTipText("Enter the connection string of a passive proxy scanner.");
         JTextField scannerConnTextField = new JTextField();
-        scannerConnTextField.setPreferredSize(new Dimension(400, scannerConnTextField.getPreferredSize().height));
         passiveProxyConnPanel.add(scannerConnLabel);
         passiveProxyConnPanel.add(scannerConnTextField);
         inputPanel.add(expressionInputPanel, BorderLayout.CENTER);
@@ -156,15 +158,17 @@ public class HttpHookPanel extends JPanel {
                     HttpHookService service = hookerPanel.getService();
                     // 设置本次所选择的配置
                     option.setHookStart(true)
-                            .setHookService(service)
-                            .setRequestCheckExpression(checkELTextField.getText())
-                            .setHookResponse(hookResponseCheckBox.isSelected())
-                            .setGrpcConn(rpcImpl.getInput())
-                            .setCodeSelectItem(hookerPanel.getInput());
+                        .setHookService(service)
+                        .setRequestCheckExpression(checkELTextField.getText())
+                        .setHookResponse(hookResponseCheckBox.isSelected())
+                        .setGrpcConn(rpcImpl.getInput())
+                        .setCodeSelectItem(hookerPanel.getInput());
                     hookerPanel.start(option);
+                    log.info("Start http hook success. service: {}", service.name().toLowerCase());
                 } else {
                     option.setHookStart(false);
                     hookerPanel.stop();
+                    log.info("Stop http hook success.");
                 }
             } catch (Exception exc) {
                 log.error("Start fail!", exc);
@@ -182,6 +186,11 @@ public class HttpHookPanel extends JPanel {
         hookResponseCheckBox.setSelected(option.isHookResponse());
         linkScannerCheckBox.setSelected(option.isLinkageScanner());
         scannerConnTextField.setText(option.getScannerConn());
+        int width = ((checkELTextField.getPreferredSize().width + 99) / 100) * 100;
+        checkELTextField.setPreferredSize(new Dimension(width, checkELTextField.getPreferredSize().height));
+        scannerConnTextField.setPreferredSize(new Dimension(width, scannerConnTextField.getPreferredSize().height));
+        rpcImpl.grpcConnTextField.setPreferredSize(new Dimension(width,
+            rpcImpl.grpcConnTextField.getPreferredSize().height));
         if (option.getHookService() != null) {
             comboBox.setSelectedIndex(hookNames.indexOf(option.getHookService().name().toLowerCase()));
         } else {
@@ -190,12 +199,6 @@ public class HttpHookPanel extends JPanel {
             inputPanel.setVisible(false);
             hookerPanelContainer.setVisible(false);
         }
-
-
-//        nextControlPanel.setBackground(Color.CYAN);
-//        wayDescAndSwitchAndCheckBox.setBackground(Color.green);
-//        requestCheckPanel.setBackground(Color.gray);
-//        hookerChoosePanel.setBackground(Color.green);
 
     }
 

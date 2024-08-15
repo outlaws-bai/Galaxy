@@ -1,7 +1,7 @@
 package org.m2sec.panels.httphook;
 
 import burp.api.montoya.MontoyaApi;
-import org.m2sec.core.common.Option;
+import org.m2sec.core.common.Config;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.httphook.GRpcHooker;
@@ -17,20 +17,19 @@ import java.awt.*;
 
 public class GrpcHookerPanel extends IHookerPanel<GRpcHooker> {
 
-    private final JTextField grpcConnTextField = new JTextField(20);
+    public final JTextField grpcConnTextField = new JTextField();
 
-    public GrpcHookerPanel(Option option, MontoyaApi api, HttpHookService service) {
-        super(option, api, service);
+    public GrpcHookerPanel(Config config, MontoyaApi api, HttpHookService service) {
+        super(config, api, service);
         initPanel();
     }
 
 
     private void initPanel() {
-//        setBackground(Color.red);
         setLayout(new BorderLayout());
         JPanel grpcConnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel label = new JLabel("GRPC Conn:");
-        label.setPreferredSize(new Dimension(75, label.getPreferredSize().height));
+        label.setPreferredSize(new Dimension(CodeFileHookerPanel.getDescWidth(), label.getPreferredSize().height));
         label.setToolTipText(Constants.HOOK_BY_GRPC_IMPL_DEF);
         grpcConnPanel.add(label);
         grpcConnPanel.add(grpcConnTextField);
@@ -52,6 +51,6 @@ public class GrpcHookerPanel extends IHookerPanel<GRpcHooker> {
 
     @Override
     public void resetInput() {
-        grpcConnTextField.setText(option.getGrpcConn());
+        grpcConnTextField.setText(config.getOption().getGrpcConn());
     }
 }

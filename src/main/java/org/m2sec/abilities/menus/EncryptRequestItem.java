@@ -5,7 +5,7 @@ import burp.api.montoya.core.ToolType;
 import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.ui.contextmenu.ContextMenuEvent;
 import burp.api.montoya.ui.contextmenu.MessageEditorHttpRequestResponse;
-import org.m2sec.abilities.MasterHttpHandler;
+import org.m2sec.abilities.HttpHookHandler;
 import org.m2sec.core.common.Config;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.SwingTools;
@@ -34,7 +34,7 @@ public class EncryptRequestItem extends IItem {
             && event.messageEditorRequestResponse().isPresent()
             && event.messageEditorRequestResponse().get().selectionContext() == MessageEditorHttpRequestResponse.SelectionContext.REQUEST
             && config.getOption().isHookStart()
-            && MasterHttpHandler.hooker != null;
+            && HttpHookHandler.hooker != null;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class EncryptRequestItem extends IItem {
             SwingTools.showInfoDialog("The request has been encrypted.");
             return;
         }
-        HttpRequest newRequest = MasterHttpHandler.hooker.tryHookRequestToServer(httpRequest, 0, true);
+        HttpRequest newRequest = HttpHookHandler.hooker.tryHookRequestToServer(httpRequest, 0, true);
         if (event.isFromTool(ToolType.REPEATER)) {
             messageEditorHttpRequestResponse.setRequest(newRequest);
         } else {
