@@ -2,6 +2,7 @@ package org.m2sec.core.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.m2sec.core.enums.LogLevel;
 
@@ -11,10 +12,13 @@ import org.m2sec.core.enums.LogLevel;
  * @description:
  */
 @Getter
+@Setter
 @ToString
 @AllArgsConstructor
 public class Setting {
     private LogLevel logLevel;
     private String staticExtensions;
-    public boolean parsedSwaggerApiDocRequestAutoSend;
+    private boolean parsedSwaggerApiDocRequestAutoSend;
+    private String sqlmapExecutePath;
+    private String sqlmapExecuteArgs;
 }

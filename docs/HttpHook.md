@@ -61,10 +61,10 @@
 
 ## 工具联动
 
-- 联动xray：启动Http Hook时选中 **Linkage Passive Scanner**，并配置xray通过Burp代理。（其它被动代理扫描器类似，since 3.0.0）
-- 联动jsrpc：xz.aliyun.com/t/15252。（since 2.2.9）
-- 联动frida：待更新。（since 2.2.9）
-- 联动sqlmap：sqlmap对明文请求进行扫描并通过Burp代理。（其它可以直接对报文进行扫描的工具类似，since 3.0.0）
+- 联动xray：启动Http Hook时选中 **Linkage Passive Scanner**，并配置xray通过Burp代理
+- 联动jsrpc：xz.aliyun.com/t/15252
+- 联动frida：以 [Grida](https://github.com/outlaws-bai/Grida) 作为中介，其自身为一个Web服务，可以通过它的接口连接frida rpc，以实现galaxy和frida的联动
+- 联动sqlmap：sqlmap对明文请求进行扫描并通过Burp代理
 
 > 当在联动sqlmap、xray或与它们相似的工具时，由于流量会再次经过Burp，Burp的Proxy中势必会多出扫描流量，可以添加下方代码片段到bambda不显示这些流量
 >

@@ -419,6 +419,25 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
                 "/m2sec/core/utils/HashUtil.java", "byte[]", "algorithm(String) MD2 | MD4 | MD5 | SM3 | SHA-1 | " +
                 "SHA-224 | SHA-256 | ...", "data(byte[]) origin data")
         ));
+        provider.addCompletion(new ShorthandCompletion(
+            provider,
+            "hash",
+            "HashUtil.calcToHex(String algorithm, byte[] data)",
+            "Hash calcToHex -> String",
+            SwingTools.renderSummary("hash calcToHex", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main" +
+                "/java/org" +
+                "/m2sec/core/utils/HashUtil.java", "byte[]", "algorithm(String) MD2 | MD4 | MD5 | SM3 | SHA-1 | " +
+                "SHA-224 | SHA-256 | ...", "data(byte[]) origin data")
+        ));
+        provider.addCompletion(new ShorthandCompletion(
+            provider,
+            "hash",
+            "HashUtil.calcToBase64(String algorithm, byte[] data)",
+            "Hash calcToBase64 -> String",
+            SwingTools.renderSummary("hash calcToBase64", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org" +
+                "/m2sec/core/utils/HashUtil.java", "byte[]", "algorithm(String) MD2 | MD4 | MD5 | SM3 | SHA-1 | " +
+                "SHA-224 | SHA-256 | ...", "data(byte[]) origin data")
+        ));
         // MacUtil
         provider.addCompletion(new ShorthandCompletion(
             provider,
@@ -426,6 +445,24 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             "MacUtil.calc(String algorithm, byte[] data, byte[] secret)",
             "Mac calc -> byte[]",
             SwingTools.renderSummary("mac calc", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org" +
+                "/m2sec/core/utils/MacUtil.java", "byte[]", "algorithm(String) HmacMD5 | HmacSHA1 | HmacSHA224 | " +
+                "HmacSHA256|...", "data(byte[]) origin data")
+        ));
+        provider.addCompletion(new ShorthandCompletion(
+            provider,
+            "mac",
+            "MacUtil.calcToHex(String algorithm, byte[] data, byte[] secret)",
+            "Mac calcToHex -> byte[]",
+            SwingTools.renderSummary("mac calcToHex", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org" +
+                "/m2sec/core/utils/MacUtil.java", "byte[]", "algorithm(String) HmacMD5 | HmacSHA1 | HmacSHA224 | " +
+                "HmacSHA256|...", "data(byte[]) origin data")
+        ));
+        provider.addCompletion(new ShorthandCompletion(
+            provider,
+            "mac",
+            "MacUtil.calcToBase64(String algorithm, byte[] data, byte[] secret)",
+            "Mac calcToBase64 -> byte[]",
+            SwingTools.renderSummary("mac calcToBase64", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org" +
                 "/m2sec/core/utils/MacUtil.java", "byte[]", "algorithm(String) HmacMD5 | HmacSHA1 | HmacSHA224 | " +
                 "HmacSHA256|...", "data(byte[]) origin data")
         ));

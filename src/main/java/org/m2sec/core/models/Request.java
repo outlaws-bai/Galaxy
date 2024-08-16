@@ -6,6 +6,7 @@ import burp.api.montoya.http.message.requests.HttpRequest;
 import com.google.protobuf.ByteString;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Tuple;
@@ -18,7 +19,9 @@ import org.m2sec.rpc.HttpHook;
 import javax.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
-import java.util.stream.Stream;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author: outlaws-bai
@@ -28,6 +31,7 @@ import java.util.stream.Stream;
 @Getter
 @Setter
 @Slf4j
+@Accessors(chain = true)
 public class Request {
     /**
      * is https?
@@ -282,7 +286,14 @@ public class Request {
     }
 
     public boolean isStaticExtension(String... staticExtensions) {
-        return Stream.of(staticExtensions).anyMatch(getPath()::endsWith);
+        return isStaticExtension(true, staticExtensions);
+    }
+
+    public boolean isStaticExtension(boolean merge, String... staticExtensions) {
+        Set<String> unionSet = new HashSet<>(Arrays.asList(staticExtensions));
+        if (merge)
+            unionSet.addAll(Arrays.asList(Constants.HTTP_STATIC_EXTENSIONS));
+        return unionSet.stream().anyMatch(getPath()::endsWith);
     }
 
     @Override

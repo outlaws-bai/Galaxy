@@ -32,6 +32,10 @@ public class OtherMenu extends IMenu {
     public List<IItem> getSubItems() {
         List<IItem> items = new ArrayList<>();
         items.add(new ParseSwaggerApiDocItem(api, config));
+        items.add(new CopyBodyMenuItem(api, config));
+        items.add(new JsonToQueryMenuItem(api, config));
+        items.add(new QueryToJsonMenuItem(api, config));
+        items.add(new SendToSqlmapMenuItem(api, config));
         return items;
     }
 }
