@@ -59,6 +59,17 @@
 1. `Burp -> Extensions -> Galaxy -> Output/Errors`
 2. [WorkDir](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#work-dir) / run.log
 
+## 工具联动
+
+- 联动xray：启动Http Hook时选中 **Linkage Passive Scanner**，并配置xray通过Burp代理。（其它被动代理扫描器类似，since 3.0.0）
+- 联动jsrpc：xz.aliyun.com/t/15252。（since 2.2.9）
+- 联动frida：待更新。（since 2.2.9）
+- 联动sqlmap：sqlmap对明文请求进行扫描并通过Burp代理。（其它可以直接对报文进行扫描的工具类似，since 3.0.0）
+
+> 当在联动sqlmap、xray或与它们相似的工具时，由于流量会再次经过Burp，Burp的Proxy中势必会多出扫描流量，可以添加下方代码片段到bambda不显示这些流量
+>
+> !requestResponse.annotations().notes().contains("galaxy")
+
 ## 示例
 
 **grpc**
