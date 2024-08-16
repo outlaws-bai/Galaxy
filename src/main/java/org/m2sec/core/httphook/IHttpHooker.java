@@ -3,10 +3,7 @@ package org.m2sec.core.httphook;
 import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.http.message.responses.HttpResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.m2sec.core.common.Option;
-import org.m2sec.core.common.Constants;
-import org.m2sec.core.common.Render;
-import org.m2sec.core.common.WorkExecutor;
+import org.m2sec.core.common.*;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
 import org.m2sec.core.outer.HttpClient;
@@ -31,19 +28,17 @@ public abstract class IHttpHooker {
 
     public abstract void destroy();
 
-    private final ThreadLocal<Boolean> isScanner = ThreadLocal.withInitial(() -> false);
 
     public HttpRequest tryHookRequestToBurp(HttpRequest httpRequest, boolean isCheckExpression,
                                             boolean throwException) {
-        isScanner.set(false);
         String name = Constants.HOOK_FUNC_1;
         HttpRequest retVal = httpRequest;
         try {
             if (HttpUtil.isCorrectUrl(httpRequest.url())) {
                 Request request = Request.of(httpRequest);
                 // 如果请求已经带有标记头，认为是从扫描器过来的流量，不需要解密
-                isScanner.set(request.getHeaders().hasIgnoreCase(Constants.HTTP_HEADER_HOOK_HEADER_KEY));
-                if (isScanner.get()) {
+                HttpHookThreadData.setRequestIsFromScanner(request.getHeaders().hasIgnoreCase(Constants.HTTP_HEADER_HOOK_HEADER_KEY));
+                if (HttpHookThreadData.requestIsFromScanner()) {
                     log.debug("[{}] This is hooked request: {}. pass hookRequestToBurp", name, request);
                     return retVal;
                 }
@@ -59,7 +54,7 @@ public abstract class IHttpHooker {
                     request.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "HttpHook");
                     log.debug("exec method: {} with {} success.", name, this.getClass().getSimpleName());
                     // 当前线程中的请求不是来自扫描器 && 开启了联动扫描器
-                    if (option.isLinkageScanner() && !isScanner.get()) {
+                    if (option.isLinkageScanner() && !HttpHookThreadData.requestIsFromScanner()) {
                         log.debug("[{}] Send request and proxy by scanner. request: {}", name, request);
                         Request finalRequest = request;
                         WorkExecutor.INSTANCE.execute(() -> HttpClient.send(finalRequest, option.getScannerConn()));
@@ -140,7 +135,7 @@ public abstract class IHttpHooker {
         try {
             Response response = Response.of(httpResponse);
             if (response.getHeaders().hasIgnoreCase(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
-                if (isScanner.get()) {
+                if (HttpHookThreadData.requestIsFromScanner()) {
                     log.debug("[{}] This is in Scanner. return decrypted response. response: {}", name, response);
                     return httpResponse;
                 }

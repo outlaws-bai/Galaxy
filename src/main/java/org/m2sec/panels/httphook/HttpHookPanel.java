@@ -86,7 +86,7 @@ public class HttpHookPanel extends JPanel {
         switchButton.setToolTipText("Start hook...");
         JCheckBox hookResponseCheckBox = new JCheckBox("Hook Response");
         hookResponseCheckBox.setToolTipText("HTTP responses need to be hook?");
-        JCheckBox linkScannerCheckBox = new JCheckBox("Linkage passive scanner");
+        JCheckBox linkScannerCheckBox = new JCheckBox("Linkage Passive Scanner");
         linkScannerCheckBox.setToolTipText("Forward hooked request to scanner?");
         controlPanel.add(switchButton);
         controlPanel.add(hookResponseCheckBox);

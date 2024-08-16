@@ -65,21 +65,21 @@
 - 支持面广：如加密算法组合、自定义算法、动态密钥等均可以支持。
 - 强灵活性：可以使用python、js、Java、grpc多种方式实现hook脚本以满足需求。
 
-## 开发计划
+## 工具联动
 
-> star越多，更新越快。
+- 联动xray：启动Http Hook时选中 **Linkage Passive Scanner**，并配置xray通过Burp代理。（其它被动代理扫描器类似，since 3.0.0）
+- 联动jsrpc：xz.aliyun.com/t/15252。（since 2.2.9）
+- 联动frida：待更新。（since 2.2.9）
+- 联动sqlmap：sqlmap对明文请求进行扫描并通过Burp代理。（其它可以直接对报文进行扫描的工具类似，since 3.0.0）
 
-- 支持配合桌面扫描器一起使用，使得扫描器可以扫描明文请求并得到明文响应。
-- 提出在涉及非对称加密（不已知私钥）下的使用方法。
-- 联动jsrpc、frida等
+> 当在联动sqlmap、xray或与它们相似的工具时，由于流量会再次经过Burp，Burp的Proxy中势必会多出扫描流量，可以添加下方代码片段到bambda不显示这些流量
+> !requestResponse.annotations().notes().contains("galaxy")
 
 ## 交流
 
-如果你发现BUG或有好的建议，欢迎在GitHub上提Issue或扫描群二维码进群交流。
+> 如果项目对你有帮助，请 star
 
-<img src="https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730211916457.png" width="300" height="300"/>
-
-群二维码失效扫描添加微信并备注 `Galaxy` 。
+扫码添加微信并备注 `Galaxy` 进群。
 
 <img src="https://raw.githubusercontent.com/outlaws-bai/picture/main/img/image-20240731000104866.png" width="300" height="300"/>
 
