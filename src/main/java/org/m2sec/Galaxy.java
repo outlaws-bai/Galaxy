@@ -65,6 +65,7 @@ public class Galaxy implements BurpExtension {
      */
     private void destroy(Config config) {
         config.dumpOption();
+        config.dumpSetting();
         Helper.deleteLogFile();
         Helper.cleanTmpDir();
         WorkExecutor.INSTANCE.shutdown();

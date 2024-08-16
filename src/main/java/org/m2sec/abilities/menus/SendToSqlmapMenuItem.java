@@ -4,6 +4,7 @@ import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.ui.contextmenu.ContextMenuEvent;
 import burp.api.montoya.ui.contextmenu.MessageEditorHttpRequestResponse;
 import org.m2sec.abilities.HttpHookHandler;
+import org.m2sec.core.common.CompatTools;
 import org.m2sec.core.common.Config;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.SwingTools;
@@ -32,7 +33,7 @@ public class SendToSqlmapMenuItem extends IItem {
     }
 
     public String displayName() {
-        return "Send Decrypted Request To sqlmap";
+        return "Send Decrypted Request To Sqlmap";
     }
 
     @Override
@@ -61,12 +62,15 @@ public class SendToSqlmapMenuItem extends IItem {
         }
         String cmd = command.formatted(config.getSetting().getSqlmapExecutePath(), tmpFilePath,
             config.getSetting().getSqlmapExecuteArgs());
-        try {
-            ProcessBuilder processBuilder = getProcessBuilder(cmd);
-            processBuilder.start();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        CompatTools.copyToClipboard(cmd.getBytes());
+        SwingTools.showInfoDialog("The command has been copied to the clipboard. Please open the command line to " +
+            "execute it");
+//        try {
+//            ProcessBuilder processBuilder = getProcessBuilder(cmd);
+//            processBuilder.start();
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     private static ProcessBuilder getProcessBuilder(String cmd) {
@@ -75,9 +79,10 @@ public class SendToSqlmapMenuItem extends IItem {
         if (os.contains("win")) {
             // Windows
             processBuilder = new ProcessBuilder("cmd", "/c", "start", "cmd", "/k", winCommand.formatted(cmd, cmd));
-        } else if (os.contains("nix") || os.contains("nux") || os.contains("mac")) {
+        } else if (os.contains("mac")) {
             // Linux or macOS
-            processBuilder = new ProcessBuilder("xterm", "-e", "sh", "-c", unWinCommand.formatted(cmd, cmd));
+            processBuilder = new ProcessBuilder("open", "-a", "Terminal", "-n", "--args", "/bin/zsh", "-c",
+                unWinCommand.formatted(cmd, cmd));
         } else {
             throw new UnsupportedOperationException("Unsupported operating system");
         }

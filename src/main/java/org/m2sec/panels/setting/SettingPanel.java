@@ -1,7 +1,6 @@
 package org.m2sec.panels.setting;
 
 import burp.api.montoya.MontoyaApi;
-import org.bouncycastle.pqc.jcajce.interfaces.FalconKey;
 import org.m2sec.core.common.CompatTools;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Setting;
