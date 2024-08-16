@@ -34,6 +34,7 @@ public class HttpHookMenu extends IMenu {
         items.add(new EncryptRequestItem(api, config));
         items.add(new DecryptResponseItem(api, config));
         items.add(new EncryptResponseItem(api, config));
+        items.add(new SendToSqlmapMenuItem(api, config));
         return items;
     }
 }

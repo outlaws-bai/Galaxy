@@ -88,9 +88,9 @@ public class SettingPanel extends JPanel {
 
         Box box = Box.createVerticalBox();
         box.add(openWorkDirPanel);
-        box.add(parsedSwaggerRequestPanel);
         box.add(sqlmapPathPanel);
         box.add(sqlmapArgsPanel);
+        box.add(parsedSwaggerRequestPanel);
 
         add(box, BorderLayout.NORTH);
     }
