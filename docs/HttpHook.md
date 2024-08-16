@@ -28,13 +28,15 @@
 
 安装后，你会看到这样的页面：
 
-![image-20240730215219927](https://raw.githubusercontent.com/outlaws-bai/picture/main/image-20240730215219927.png)
+![image-20240816171047407](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/image-20240816171047407.png)
 
 `Hooker`: [实现方式](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md#%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F)，可选js、python、java、grpc。
 
-`Hook Request`: 开关，用于判断是否需要对请求Hook。
-
 `Hook Response`: 开关，用于判断是否需要对响应Hook。
+
+`Linkage Passive Scanner`: 开关，是否联动被动代理扫描器。注意联动被动代理扫描器时必须配置被动扫描器的上游代理为Burp。
+
+`Scanner`: 被动代理扫描器的监听地址。
 
 `Expression`: js bool [表达式](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Expression)，用于判断请求是否需要Hook。
 
