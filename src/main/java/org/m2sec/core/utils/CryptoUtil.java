@@ -1,6 +1,8 @@
 package org.m2sec.core.utils;
 
 
+import org.bouncycastle.asn1.gm.GMNamedCurves;
+import org.bouncycastle.asn1.x9.X9ECParameters;
 import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.engines.SM2Engine;
@@ -14,6 +16,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.math.ec.ECPoint;
 import org.m2sec.core.common.XXTEATools;
 import org.m2sec.core.enums.SymmetricKeyMode;
+import org.python.apache.commons.compress.harmony.pack200.BandSet;
 
 import javax.annotation.Nullable;
 import javax.crypto.BadPaddingException;
@@ -149,6 +152,7 @@ public class CryptoUtil {
     }
 
     private static byte[] sm2Crypt(byte[] data, byte[] key, String modeString, boolean isEncrypt) {
+        data = patchSm2Data(data, isEncrypt);
         try {
             SM2Engine.Mode mode;
             if (modeString.equalsIgnoreCase(SM2Engine.Mode.C1C3C2.name())) {
@@ -156,35 +160,76 @@ public class CryptoUtil {
             } else {
                 mode = SM2Engine.Mode.C1C2C3;
             }
-            CipherParameters param;
-            if (isEncrypt) {
-                KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_EC);
-                X509EncodedKeySpec keySpec = new X509EncodedKeySpec(key);
-                BCECPublicKey publicKey = (BCECPublicKey) keyFactory.generatePublic(keySpec);
-                ECPoint q = publicKey.getQ();
-                ECDomainParameters domainParameters = new ECDomainParameters(
-                    publicKey.getParameters().getCurve(),
-                    publicKey.getParameters().getG(),
-                    publicKey.getParameters().getN(),
-                    publicKey.getParameters().getH());
-                param = new ParametersWithRandom(new ECPublicKeyParameters(q, domainParameters), new SecureRandom());
-            } else {
-                BCECPrivateKey priKey =
-                    (BCECPrivateKey) KeyFactory.getInstance(ALGORITHM_EC).generatePrivate(new PKCS8EncodedKeySpec(key));
-                BigInteger d = priKey.getD();
-                ECDomainParameters domainParameters = new ECDomainParameters(
-                    priKey.getParameters().getCurve(),
-                    priKey.getParameters().getG(),
-                    priKey.getParameters().getN(),
-                    priKey.getParameters().getH());
-                param = new ECPrivateKeyParameters(d, domainParameters);
-            }
+            CipherParameters param = getSm2CipherParameters(key, isEncrypt);
             SM2Engine sm2Engine = new SM2Engine(mode);
             sm2Engine.init(isEncrypt, param);
             return sm2Engine.processBlock(data, 0, data.length);
-        } catch (InvalidCipherTextException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+        } catch (InvalidCipherTextException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static byte[] patchSm2Data(byte[] data, boolean isEncrypt) {
+        if (isEncrypt) {
+            return ByteUtil.removePrefixIfExists(data, (byte) 0x04);
+        } else {
+            if (data[0] == 0x04) {
+                return data;
+            } else {
+                return ByteUtil.concatenateByteArrays(new byte[]{0x04}, data);
+            }
+        }
+    }
+
+    private static CipherParameters getSm2CipherParameters(byte[] key, boolean isEncrypt) {
+        CipherParameters param;
+        try {
+            if (isEncrypt) {
+                if (key.length == 64 || key.length == 65) {
+                    if (key.length == 64) key = ByteUtil.concatenateByteArrays(new byte[]{0x04}, key);
+                    X9ECParameters sm2ECParameters = GMNamedCurves.getByName("sm2p256v1");
+                    ECDomainParameters domainParameters = new ECDomainParameters(sm2ECParameters.getCurve(),
+                        sm2ECParameters.getG(), sm2ECParameters.getN());
+                    ECPoint pukPoint = sm2ECParameters.getCurve().decodePoint(key);
+                    param = new ParametersWithRandom(new ECPublicKeyParameters(pukPoint, domainParameters),
+                        new SecureRandom());
+                } else {
+                    KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_EC);
+                    X509EncodedKeySpec keySpec = new X509EncodedKeySpec(key);
+                    BCECPublicKey publicKey = (BCECPublicKey) keyFactory.generatePublic(keySpec);
+                    ECPoint q = publicKey.getQ();
+                    ECDomainParameters domainParameters = new ECDomainParameters(
+                        publicKey.getParameters().getCurve(),
+                        publicKey.getParameters().getG(),
+                        publicKey.getParameters().getN(),
+                        publicKey.getParameters().getH());
+                    param = new ParametersWithRandom(new ECPublicKeyParameters(q, domainParameters),
+                        new SecureRandom());
+                }
+            } else {
+                if (key.length == 32 || key.length == 33) {
+                    if (key.length == 33) key = ByteUtil.removePrefixIfExists(key, (byte) 0x04);
+                    X9ECParameters sm2ECParameters = GMNamedCurves.getByName("sm2p256v1");
+                    ECDomainParameters domainParameters = new ECDomainParameters(sm2ECParameters.getCurve(),
+                        sm2ECParameters.getG(), sm2ECParameters.getN());
+                    param = new ECPrivateKeyParameters(new BigInteger(key), domainParameters);
+                } else {
+                    BCECPrivateKey priKey =
+                        (BCECPrivateKey) KeyFactory.getInstance(ALGORITHM_EC).generatePrivate(new PKCS8EncodedKeySpec(key));
+                    BigInteger d = priKey.getD();
+                    ECDomainParameters domainParameters = new ECDomainParameters(
+                        priKey.getParameters().getCurve(),
+                        priKey.getParameters().getG(),
+                        priKey.getParameters().getN(),
+                        priKey.getParameters().getH());
+                    param = new ECPrivateKeyParameters(d, domainParameters);
+                }
+            }
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new RuntimeException(e);
+        }
+        return param;
+
     }
 
     public static byte[] teaEncrypt(String transformation, byte[] data, byte[] secret) {

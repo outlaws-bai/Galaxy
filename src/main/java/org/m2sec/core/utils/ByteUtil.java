@@ -124,6 +124,34 @@ public class ByteUtil {
         return new String(ByteUtil.subBytes(data, startIndex + 1, endIndex));
     }
 
+    public static byte[] concatenateByteArrays(byte[] array1, byte[] array2) {
+        byte[] result = new byte[array1.length + array2.length];
+
+        // 复制第一个数组到结果数组的前半部分
+        System.arraycopy(array1, 0, result, 0, array1.length);
+
+        // 复制第二个数组到结果数组的后半部分
+        System.arraycopy(array2, 0, result, array1.length, array2.length);
+
+        return result;
+    }
+
+    public static byte[] removePrefixIfExists(byte[] array, byte prefix) {
+        // 检查数组是否以指定前缀开始
+        if (array.length > 0 && array[0] == prefix) {
+            // 创建一个新的数组，长度比原数组短一位
+            byte[] result = new byte[array.length - 1];
+
+            // 将原数组的剩余部分复制到新数组
+            System.arraycopy(array, 1, result, 0, result.length);
+
+            return result;
+        }
+
+        // 如果没有前缀或数组为空，返回原数组
+        return array;
+    }
+
     public static String toBase64String(byte[] data) {
         return Base64.getEncoder().encodeToString(data);
     }
