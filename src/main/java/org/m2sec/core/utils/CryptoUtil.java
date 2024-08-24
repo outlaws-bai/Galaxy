@@ -1,6 +1,7 @@
 package org.m2sec.core.utils;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.asn1.gm.GMNamedCurves;
 import org.bouncycastle.asn1.x9.X9ECParameters;
 import org.bouncycastle.crypto.CipherParameters;
@@ -16,7 +17,6 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.math.ec.ECPoint;
 import org.m2sec.core.common.XXTEATools;
 import org.m2sec.core.enums.SymmetricKeyMode;
-import org.python.apache.commons.compress.harmony.pack200.BandSet;
 
 import javax.annotation.Nullable;
 import javax.crypto.BadPaddingException;
@@ -39,7 +39,6 @@ import java.util.Map;
  * @date: 2024/6/21 20:23
  * @description:
  */
-
 public class CryptoUtil {
 
     static {
@@ -152,7 +151,7 @@ public class CryptoUtil {
     }
 
     private static byte[] sm2Crypt(byte[] data, byte[] key, String modeString, boolean isEncrypt) {
-        data = patchSm2Data(data, isEncrypt);
+        if (!isEncrypt) data = data[0] == 0x04 ? data : ByteUtil.concatenateByteArrays(new byte[]{0x04}, data);
         try {
             SM2Engine.Mode mode;
             if (modeString.equalsIgnoreCase(SM2Engine.Mode.C1C3C2.name())) {
@@ -169,17 +168,6 @@ public class CryptoUtil {
         }
     }
 
-    private static byte[] patchSm2Data(byte[] data, boolean isEncrypt) {
-        if (isEncrypt) {
-            return ByteUtil.removePrefixIfExists(data, (byte) 0x04);
-        } else {
-            if (data[0] == 0x04) {
-                return data;
-            } else {
-                return ByteUtil.concatenateByteArrays(new byte[]{0x04}, data);
-            }
-        }
-    }
 
     private static CipherParameters getSm2CipherParameters(byte[] key, boolean isEncrypt) {
         CipherParameters param;
@@ -193,7 +181,11 @@ public class CryptoUtil {
                     ECPoint pukPoint = sm2ECParameters.getCurve().decodePoint(key);
                     param = new ParametersWithRandom(new ECPublicKeyParameters(pukPoint, domainParameters),
                         new SecureRandom());
-                } else {
+                }
+//                else if (key.length ==) { // 待补充
+//
+//                }
+                else if (key.length == 91) {
                     KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_EC);
                     X509EncodedKeySpec keySpec = new X509EncodedKeySpec(key);
                     BCECPublicKey publicKey = (BCECPublicKey) keyFactory.generatePublic(keySpec);
@@ -205,6 +197,9 @@ public class CryptoUtil {
                         publicKey.getParameters().getH());
                     param = new ParametersWithRandom(new ECPublicKeyParameters(q, domainParameters),
                         new SecureRandom());
+                } else {
+                    throw new InvalidParameterException("Unknown public key, please try extracting the original " +
+                        "public key from it and then try again.");
                 }
             } else {
                 if (key.length == 32 || key.length == 33) {
@@ -213,7 +208,10 @@ public class CryptoUtil {
                     ECDomainParameters domainParameters = new ECDomainParameters(sm2ECParameters.getCurve(),
                         sm2ECParameters.getG(), sm2ECParameters.getN());
                     param = new ECPrivateKeyParameters(new BigInteger(key), domainParameters);
-                } else {
+                } else if (key.length == 121) {
+                    key = ByteUtil.subBytes(key, 14, 14 + 32);
+                    param = getSm2CipherParameters(key, false);
+                } else if (key.length == 150) {
                     BCECPrivateKey priKey =
                         (BCECPrivateKey) KeyFactory.getInstance(ALGORITHM_EC).generatePrivate(new PKCS8EncodedKeySpec(key));
                     BigInteger d = priKey.getD();
@@ -223,6 +221,9 @@ public class CryptoUtil {
                         priKey.getParameters().getN(),
                         priKey.getParameters().getH());
                     param = new ECPrivateKeyParameters(d, domainParameters);
+                } else {
+                    throw new InvalidParameterException("Unknown private key, please try extracting the original " +
+                        "private key from it and then try again.");
                 }
             }
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
