@@ -209,7 +209,7 @@ public class CryptoUtil {
                         sm2ECParameters.getG(), sm2ECParameters.getN());
                     param = new ECPrivateKeyParameters(new BigInteger(key), domainParameters);
                 } else if (key.length == 121) {
-                    key = ByteUtil.subBytes(key, 14, 14 + 32);
+                    key = ByteUtil.subBytes(key, 7, 7 + 32);
                     param = getSm2CipherParameters(key, false);
                 } else if (key.length == 150) {
                     BCECPrivateKey priKey =
