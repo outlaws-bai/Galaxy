@@ -4,6 +4,8 @@ import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.ui.contextmenu.ContextMenuEvent;
 import burp.api.montoya.ui.contextmenu.MessageEditorHttpRequestResponse;
 import org.m2sec.core.common.Config;
+import org.m2sec.core.common.Constants;
+import org.m2sec.core.common.SwingTools;
 import org.m2sec.core.common.WorkExecutor;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.outer.HttpClient;
@@ -35,6 +37,10 @@ public class SendRequestToScannerMenuItem extends IItem {
     public void action(ContextMenuEvent event) {
         MessageEditorHttpRequestResponse messageEditorHttpRequestResponse = event.messageEditorRequestResponse().get();
         Request request = Request.of(messageEditorHttpRequestResponse.requestResponse().request());
+        if (request.getHeaders().hasIgnoreCase(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
+            SwingTools.showInfoDialog("The request is decrypted.");
+            return;
+        }
         WorkExecutor.INSTANCE.execute(() -> HttpClient.send(request, config.getOption().getScannerConn()));
     }
 }

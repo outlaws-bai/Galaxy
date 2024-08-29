@@ -6,6 +6,7 @@ import burp.api.montoya.ui.contextmenu.MessageEditorHttpRequestResponse;
 import org.m2sec.core.common.CompatTools;
 import org.m2sec.core.common.Config;
 import org.m2sec.core.common.Constants;
+import org.m2sec.core.common.SwingTools;
 import org.m2sec.core.models.Request;
 
 import java.io.File;
@@ -43,6 +44,10 @@ public class SendRequestToSqlmapMenuItem extends IItem{
     public void action(ContextMenuEvent event) {
         MessageEditorHttpRequestResponse messageEditorHttpRequestResponse = event.messageEditorRequestResponse().get();
         Request request = Request.of(messageEditorHttpRequestResponse.requestResponse().request());
+        if (request.getHeaders().hasIgnoreCase(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
+            SwingTools.showInfoDialog("The request is decrypted.");
+            return;
+        }
         // 写入请求到临时文件
         String tmpFilePath = Constants.TMP_FILE_DIR + File.separator + UUID.randomUUID() + ".txt";
         try (FileWriter fileWriter = new FileWriter(tmpFilePath)) {
@@ -53,5 +58,7 @@ public class SendRequestToSqlmapMenuItem extends IItem{
         String cmd = command.formatted(config.getSetting().getSqlmapExecutePath(), tmpFilePath,
             config.getSetting().getSqlmapExecuteArgs());
         CompatTools.copyToClipboard(cmd.getBytes());
+        SwingTools.showInfoDialog("The command has been copied to the clipboard. Please open the command line to " +
+            "execute it");
     }
 }
