@@ -1,7 +1,5 @@
 package org.m2sec.core.utils;
 
-
-import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.asn1.gm.GMNamedCurves;
 import org.bouncycastle.asn1.x9.X9ECParameters;
 import org.bouncycastle.crypto.CipherParameters;
@@ -209,7 +207,7 @@ public class CryptoUtil {
                         sm2ECParameters.getG(), sm2ECParameters.getN());
                     param = new ECPrivateKeyParameters(new BigInteger(key), domainParameters);
                 } else if (key.length == 121) {
-                    key = ByteUtil.subBytes(key, 14, 14 + 32);
+                    key = ByteUtil.subBytes(key, 7, 7 + 32);
                     param = getSm2CipherParameters(key, false);
                 } else if (key.length == 150) {
                     BCECPrivateKey priKey =
