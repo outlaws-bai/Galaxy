@@ -20,15 +20,12 @@ import java.util.UUID;
  * @date: 2024/6/21 20:23
  * @description:
  */
-public class SendToSqlmapMenuItem extends IItem {
+public class SendDecryptedRequestToSqlmapMenuItem extends IItem {
 
     private static final String command = "%s -r %s %s";
 
-    private static final String winCommand = "echo command: %s && %s && pause";
 
-    private static final String unWinCommand = "echo command: %s && %s && read -p 'Press Enter to exit'";
-
-    public SendToSqlmapMenuItem(MontoyaApi api, Config config) {
+    public SendDecryptedRequestToSqlmapMenuItem(MontoyaApi api, Config config) {
         super(api, config);
     }
 
@@ -61,31 +58,10 @@ public class SendToSqlmapMenuItem extends IItem {
             throw new RuntimeException(e);
         }
         String cmd = command.formatted(config.getSetting().getSqlmapExecutePath(), tmpFilePath,
-            config.getSetting().getSqlmapExecuteArgs());
+            config.getSetting().getSqlmapExecuteArgs()) + " --proxy=http://127.0.0.1:8080";
         CompatTools.copyToClipboard(cmd.getBytes());
         SwingTools.showInfoDialog("The command has been copied to the clipboard. Please open the command line to " +
             "execute it");
-//        try {
-//            ProcessBuilder processBuilder = getProcessBuilder(cmd);
-//            processBuilder.start();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
-    private static ProcessBuilder getProcessBuilder(String cmd) {
-        String os = System.getProperty("os.name").toLowerCase();
-        ProcessBuilder processBuilder;
-        if (os.contains("win")) {
-            // Windows
-            processBuilder = new ProcessBuilder("cmd", "/c", "start", "cmd", "/k", winCommand.formatted(cmd, cmd));
-        } else if (os.contains("mac")) {
-            // Linux or macOS
-            processBuilder = new ProcessBuilder("open", "-a", "Terminal", "-n", "--args", "/bin/zsh", "-c",
-                unWinCommand.formatted(cmd, cmd));
-        } else {
-            throw new UnsupportedOperationException("Unsupported operating system");
-        }
-        return processBuilder;
-    }
 }
