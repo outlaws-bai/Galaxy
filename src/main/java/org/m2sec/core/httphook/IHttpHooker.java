@@ -51,7 +51,7 @@ public abstract class IHttpHooker {
                         return retVal;
                     }
                     // 添加标记头
-                    request.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "HttpHook");
+                    request.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "ProcessedRequest");
                     log.debug("exec method: {} with {} success.", name, this.getClass().getSimpleName());
                     // 当前线程中的请求不是来自扫描器 && 开启了联动扫描器
                     if (option.isLinkageScanner() && !HttpHookThreadData.requestIsFromScanner()) {
@@ -109,7 +109,7 @@ public abstract class IHttpHooker {
                 if (messageId != 0) hookedIds.remove(messageId);
                 Response response = Response.of(httpResponse);
                 log.debug("[{}] before hook: {}", name, response);
-                response.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "HttpHook");
+                response.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "ProcessedResponse");
                 Response result = hookResponseToBurp(response);
                 log.debug("[{}] after hook: {}", name, result);
                 if (result == null) {

@@ -41,6 +41,7 @@ public class SendDecryptedRequestToScannerMenuItem extends IItem {
             SwingTools.showInfoDialog("The request is not decrypted.");
             return;
         }
+        request.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "ProcessedRequest-LinkPassiveScanner");
         WorkExecutor.INSTANCE.execute(() -> HttpClient.send(request, config.getOption().getScannerConn()));
     }
 
