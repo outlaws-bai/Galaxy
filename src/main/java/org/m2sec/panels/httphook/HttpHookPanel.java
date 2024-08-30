@@ -92,11 +92,11 @@ public class HttpHookPanel extends JPanel {
         switchButton.setToolTipText("Start hook...");
         JCheckBox hookResponseCheckBox = new JCheckBox("Hook Response");
         hookResponseCheckBox.setToolTipText("HTTP responses need to be hook?");
-        JCheckBox linkScannerCheckBox = new JCheckBox("Linkage Passive Scanner");
-        linkScannerCheckBox.setToolTipText("Forward hooked request to scanner?");
+        JCheckBox autoForwardRequestCheckBox = new JCheckBox("Auto Forward Request");
+        autoForwardRequestCheckBox.setToolTipText("Auto Forward Request To Passive Proxy Scanner?");
         controlPanel.add(switchButton);
         controlPanel.add(hookResponseCheckBox);
-        controlPanel.add(linkScannerCheckBox);
+        controlPanel.add(autoForwardRequestCheckBox);
 
         // 创建一个输入面板，放置表达式的输入框
         JPanel inputPanel = new JPanel(new BorderLayout());
@@ -108,17 +108,7 @@ public class HttpHookPanel extends JPanel {
         JTextField checkELTextField = new JTextField();
         expressionInputPanel.add(elLabel);
         expressionInputPanel.add(checkELTextField);
-        JPanel passiveProxyConnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        passiveProxyConnPanel.setVisible(false);
-        JLabel scannerConnLabel = new JLabel("Scanner:");
-        scannerConnLabel.setPreferredSize(new Dimension(CodeFileHookerPanel.getDescWidth(),
-            scannerConnLabel.getPreferredSize().height));
-        scannerConnLabel.setToolTipText("Enter the connection string of a passive proxy scanner.");
-        JTextField scannerConnTextField = new JTextField();
-        passiveProxyConnPanel.add(scannerConnLabel);
-        passiveProxyConnPanel.add(scannerConnTextField);
         inputPanel.add(expressionInputPanel, BorderLayout.CENTER);
-        inputPanel.add(passiveProxyConnPanel, BorderLayout.NORTH);
 
         // 创建一个汇总面板，组合上方的面板
         JPanel gatherPanel = new JPanel(new BorderLayout());
@@ -142,8 +132,6 @@ public class HttpHookPanel extends JPanel {
                 cl.show(hookerPanelContainer, (String) e.getItem());
             }
         });
-        // 设置 linkScannerCheckBox 的事件监听器
-        linkScannerCheckBox.addItemListener(e -> passiveProxyConnPanel.setVisible(e.getStateChange() == ItemEvent.SELECTED));
         // 设置 switchButton 的事件监听器, 开关HttpHook功能
         switchButton.addActionListener(e -> {
             String selectItem = (String) comboBox.getSelectedItem();
@@ -157,9 +145,6 @@ public class HttpHookPanel extends JPanel {
                     if (checkELTextField.getText().isBlank()) {
                         throw new Exception("Please input request check expression!");
                     }
-                    if (linkScannerCheckBox.isSelected() && scannerConnTextField.getText().isBlank()) {
-                        throw new Exception("Please input passive proxy scanner connection!");
-                    }
 
                     HttpHookService service = hookerPanel.getService();
                     // 设置本次所选择的配置
@@ -169,9 +154,8 @@ public class HttpHookPanel extends JPanel {
                         .setHookResponse(hookResponseCheckBox.isSelected())
                         .setGrpcConn(rpcImpl.getInput())
                         .setCodeSelectItem(hookerPanel.getInput())
-                        .setLinkageScanner(linkScannerCheckBox.isSelected())
-                        .setScannerConn(scannerConnTextField.getText());
-                    hookerPanel.start(option);
+                        .setAutoForwardRequest(autoForwardRequestCheckBox.isSelected());
+                    hookerPanel.start(config);
                     log.info("Start http hook success. service: {}", service.name().toLowerCase());
                 } else {
                     option.setHookStart(false);
@@ -192,11 +176,9 @@ public class HttpHookPanel extends JPanel {
         // set data
         checkELTextField.setText(option.getRequestCheckExpression());
         hookResponseCheckBox.setSelected(option.isHookResponse());
-        linkScannerCheckBox.setSelected(option.isLinkageScanner());
-        scannerConnTextField.setText(option.getScannerConn());
+        autoForwardRequestCheckBox.setSelected(option.isAutoForwardRequest());
         int width = ((checkELTextField.getPreferredSize().width + 99) / 100) * 100;
         checkELTextField.setPreferredSize(new Dimension(width, checkELTextField.getPreferredSize().height));
-        scannerConnTextField.setPreferredSize(new Dimension(width, scannerConnTextField.getPreferredSize().height));
         rpcImpl.grpcConnTextField.setPreferredSize(new Dimension(width,
             rpcImpl.grpcConnTextField.getPreferredSize().height));
         if (option.getHookService() != null) {

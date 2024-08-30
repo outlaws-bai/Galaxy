@@ -41,6 +41,6 @@ public class SendRequestToScannerMenuItem extends IItem {
             SwingTools.showInfoDialog("The request is decrypted.");
             return;
         }
-        WorkExecutor.INSTANCE.execute(() -> HttpClient.send(request, config.getOption().getScannerConn()));
+        WorkExecutor.INSTANCE.execute(() -> HttpClient.send(request, config.getSetting().getScannerConn()));
     }
 }

@@ -19,9 +19,8 @@ public class Option {
     private HttpHookService hookService;
     private String requestCheckExpression;
     private boolean hookResponse;
-    private boolean linkageScanner;
+    private boolean autoForwardRequest;
     private String grpcConn;
-    private String scannerConn;
     private String codeSelectItem;
     private boolean hookStart;
 }

@@ -19,6 +19,7 @@ public class Setting {
     private LogLevel logLevel;
     private String staticExtensions;
     private boolean parsedSwaggerApiDocRequestAutoSend;
+    private String scannerConn;
     private String sqlmapExecutePath;
     private String sqlmapExecuteArgs;
 }

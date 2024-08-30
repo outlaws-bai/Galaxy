@@ -4,6 +4,7 @@ import burp.api.montoya.MontoyaApi;
 import org.m2sec.core.common.CompatTools;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Setting;
+import org.m2sec.panels.httphook.CodeFileHookerPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,6 +43,14 @@ public class SettingPanel extends JPanel {
         JCheckBox parsedSwaggerRequestCheckBox = new JCheckBox();
         parsedSwaggerRequestPanel.add(parsedSwaggerRequestLabel);
         parsedSwaggerRequestPanel.add(parsedSwaggerRequestCheckBox);
+        // passive proxy scanner
+        JPanel passiveProxyConnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel scannerConnLabel = new JLabel("Passive Proxy Scanner:");
+        scannerConnLabel.setToolTipText("Enter the connection string of a passive proxy scanner.");
+        JTextField scannerConnInput = new JTextField();
+        scannerConnInput.setPreferredSize(new Dimension(width, scannerConnInput.getPreferredSize().height));
+        passiveProxyConnPanel.add(scannerConnLabel);
+        passiveProxyConnPanel.add(scannerConnInput);
         // sqlmap
         JPanel sqlmapPathPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel sqlmapPathLabel = new JLabel("Sqlmap Execute Path: ");
@@ -55,10 +64,27 @@ public class SettingPanel extends JPanel {
         sqlmapArgsInput.setPreferredSize(new Dimension(width, sqlmapArgsInput.getPreferredSize().height));
         sqlmapArgsPanel.add(sqlmapArgsLabel);
         sqlmapArgsPanel.add(sqlmapArgsInput);
+        // static ext
+        JPanel staticExtensionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel staticExtensionsLabel = new JLabel("Static Extensions: ");
+        JTextField staticExtensionsInput = new JTextField();
+        staticExtensionsInput.setPreferredSize(new Dimension(1500, sqlmapArgsInput.getPreferredSize().height));
+        staticExtensionsPanel.add(staticExtensionsLabel);
+        staticExtensionsPanel.add(staticExtensionsInput);
 
 
         openWorkDirButton.addActionListener(e -> CompatTools.openFileManager(Constants.WORK_DIR));
         parsedSwaggerRequestCheckBox.addItemListener(e -> setting.setParsedSwaggerApiDocRequestAutoSend(e.getStateChange() == ItemEvent.SELECTED));
+        scannerConnInput.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                setting.setScannerConn(scannerConnInput.getText());
+            }
+        });
         sqlmapPathInput.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -79,18 +105,33 @@ public class SettingPanel extends JPanel {
                 setting.setSqlmapExecuteArgs(sqlmapArgsInput.getText());
             }
         });
+        staticExtensionsInput.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
 
+            @Override
+            public void focusLost(FocusEvent e) {
+                setting.setStaticExtensions(staticExtensionsInput.getText());
+                Constants.HTTP_STATIC_EXTENSIONS = staticExtensionsInput.getText().split("\\|");
+            }
+        });
 
         // set data
         parsedSwaggerRequestCheckBox.setSelected(setting.isParsedSwaggerApiDocRequestAutoSend());
         sqlmapPathInput.setText(setting.getSqlmapExecutePath());
         sqlmapArgsInput.setText(setting.getSqlmapExecuteArgs());
+        scannerConnInput.setText(setting.getScannerConn());
+        staticExtensionsInput.setText(setting.getStaticExtensions());
+
 
         Box box = Box.createVerticalBox();
         box.add(openWorkDirPanel);
+        box.add(parsedSwaggerRequestPanel);
         box.add(sqlmapPathPanel);
         box.add(sqlmapArgsPanel);
-        box.add(parsedSwaggerRequestPanel);
+        box.add(passiveProxyConnPanel);
+        box.add(staticExtensionsPanel);
 
         add(box, BorderLayout.NORTH);
     }

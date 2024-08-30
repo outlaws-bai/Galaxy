@@ -28,7 +28,7 @@ public class HttpHookHandler implements HttpHandler, ProxyRequestHandler, ProxyR
         Annotations annotations = interceptedRequest.annotations();
         HttpRequest request = hooker.tryHookRequestToBurp(interceptedRequest, true, false);
         if (HttpHookThreadData.requestIsFromScanner())
-            annotations.setNotes(Constants.BURP_SUITE_EXT_NAME.toLowerCase() + annotations.notes());
+            annotations.setNotes("HookedByGalaxy\r\n" + annotations.notes());
         return ProxyRequestReceivedAction.continueWith(request, annotations);
     }
 

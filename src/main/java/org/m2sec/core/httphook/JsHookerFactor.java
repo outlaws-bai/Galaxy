@@ -23,8 +23,9 @@ public class JsHookerFactor extends IHttpHooker {
     Invocable invocable;
 
     @Override
-    public void init(Option opt) {
-        option = opt;
+    public void init(Config config1) {
+        config = config1;
+        option = config1.getOption();
         String filepath = FileTools.getExampleScriptFilePath(option.getCodeSelectItem(),
             Constants.JS_FILE_SUFFIX);
         init(filepath);

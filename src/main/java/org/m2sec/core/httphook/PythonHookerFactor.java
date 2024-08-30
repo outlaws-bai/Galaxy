@@ -30,8 +30,9 @@ public class PythonHookerFactor extends IHttpHooker {
     }
 
     @Override
-    public void init(Option opt) {
-        option = opt;
+    public void init(Config config1) {
+        config = config1;
+        option = config1.getOption();
         String pyFilePath = FileTools.getExampleScriptFilePath(option.getCodeSelectItem(),
             Constants.PYTHON_FILE_SUFFIX);
         init(pyFilePath);

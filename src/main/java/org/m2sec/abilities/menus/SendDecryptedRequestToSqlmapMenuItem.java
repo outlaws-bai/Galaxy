@@ -50,7 +50,7 @@ public class SendDecryptedRequestToSqlmapMenuItem extends IItem {
             SwingTools.showInfoDialog("The request is not decrypted.");
             return;
         }
-        request.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "ProcessedRequest-LinkSqlmap");
+        request.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "HookRequest-LinkSqlmap");
         // 写入请求到临时文件
         String tmpFilePath = Constants.TMP_FILE_DIR + File.separator + UUID.randomUUID() + ".txt";
         try (FileWriter fileWriter = new FileWriter(tmpFilePath)) {

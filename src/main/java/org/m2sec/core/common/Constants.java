@@ -75,8 +75,6 @@ public class Constants {
 
     public static final String HTTP_DEFAULT_REASON = "OK";
 
-    public static final int HTTP_DEFAULT_TIMEOUT = 5;
-
     public static final String HTTP_QUERY_FORM_SEP = "&";
 
     public static final String HTTP_HEADER_CONN = ":[ ]+";
@@ -119,12 +117,5 @@ public class Constants {
     public static final String PYTHON_FILE_SUFFIX = ".py";
 
     public static final String JS_FILE_SUFFIX = ".js";
-
-    // def
-
-    public static final String INPUT_JYTHON_JAR_DEF = "If you need cross platform capabilities related to Python, " +
-        "please enter the jython jar path. On the contrary, you will not be able to use it, but the impact on you " +
-        "will not be significant.";
-
 
 }

@@ -24,7 +24,9 @@ public abstract class IHttpHooker {
 
     protected static Option option;
 
-    public abstract void init(Option opt);
+    protected static Config config;
+
+    public abstract void init(Config config1);
 
     public abstract void destroy();
 
@@ -51,13 +53,13 @@ public abstract class IHttpHooker {
                         return retVal;
                     }
                     // 添加标记头
-                    request.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "ProcessedRequest");
+                    request.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "HookedRequest");
                     log.debug("exec method: {} with {} success.", name, this.getClass().getSimpleName());
                     // 当前线程中的请求不是来自扫描器 && 开启了联动扫描器
-                    if (option.isLinkageScanner() && !HttpHookThreadData.requestIsFromScanner()) {
+                    if (option.isAutoForwardRequest() && !HttpHookThreadData.requestIsFromScanner()) {
                         log.debug("[{}] Send request and proxy by scanner. request: {}", name, request);
                         Request finalRequest = request;
-                        WorkExecutor.INSTANCE.execute(() -> HttpClient.send(finalRequest, option.getScannerConn()));
+                        WorkExecutor.INSTANCE.execute(() -> HttpClient.send(finalRequest, config.getSetting().getScannerConn()));
                     }
                     retVal = request.toBurp();
                 }
@@ -109,7 +111,7 @@ public abstract class IHttpHooker {
                 if (messageId != 0) hookedIds.remove(messageId);
                 Response response = Response.of(httpResponse);
                 log.debug("[{}] before hook: {}", name, response);
-                response.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "ProcessedResponse");
+                response.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "HookedResponse");
                 Response result = hookResponseToBurp(response);
                 log.debug("[{}] after hook: {}", name, result);
                 if (result == null) {
