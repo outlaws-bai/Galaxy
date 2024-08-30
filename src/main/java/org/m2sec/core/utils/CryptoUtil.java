@@ -4,11 +4,9 @@ import org.bouncycastle.asn1.gm.GMNamedCurves;
 import org.bouncycastle.asn1.x9.X9ECParameters;
 import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.InvalidCipherTextException;
+import org.bouncycastle.crypto.engines.RC4Engine;
 import org.bouncycastle.crypto.engines.SM2Engine;
-import org.bouncycastle.crypto.params.ECDomainParameters;
-import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
-import org.bouncycastle.crypto.params.ECPublicKeyParameters;
-import org.bouncycastle.crypto.params.ParametersWithRandom;
+import org.bouncycastle.crypto.params.*;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -92,6 +90,28 @@ public class CryptoUtil {
                                     Map<String, Object> params) {
         return symmetricKeyDecrypt(transformation, data, secret, params, ALGORITHM_AES,
             ALGORITHM_AES_DEFAULT_TRANSFORMATION);
+    }
+
+    public static byte[] rc4Encrypt(byte[] data, byte[] key) {
+        return rc4Crypt(data, key, true);
+    }
+
+    public static byte[] rc4Decrypt(byte[] data, byte[] key) {
+        return rc4Crypt(data, key, false);
+    }
+
+    private static byte[] rc4Crypt(byte[] data, byte[] key, boolean encrypt) {
+        try {
+            RC4Engine rc4Engine = new RC4Engine();
+            KeyParameter keyParam = new KeyParameter(key);
+            rc4Engine.init(encrypt, keyParam);
+
+            byte[] output = new byte[data.length];
+            rc4Engine.processBytes(data, 0, data.length, output, 0);
+            return output;
+        } catch (Exception e) {
+            throw new RuntimeException("RC4 processing error", e);
+        }
     }
 
     @Deprecated
