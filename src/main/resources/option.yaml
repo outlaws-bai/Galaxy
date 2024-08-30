@@ -1,6 +1,6 @@
 requestCheckExpression: "!request.isStaticExtension() && request.host=='192.168.1.3'"
 hookResponse: true
-linkageScanner: false
+autoForwardRequest: false
 grpcConn: 127.0.0.1:8443
 codeSelectItem: ""
 hookStart: false
