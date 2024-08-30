@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'org.m2sec'
-version = '3.0.0'
+version = '3.1.0'
 def grpcVersion = '1.54.1'
 def protobufVersion = '3.24.0'
 def protocVersion = protobufVersion
@@ -98,7 +98,7 @@ jar {
 
 shadowJar {
     // Not commenting means entering jython into a jar package
-    archiveClassifier.set('without-jython')
+    // archiveClassifier.set('without-jython')
     versionFile.text = version
     if (archiveClassifier.get() == 'without-jython') {
         dependencies {
