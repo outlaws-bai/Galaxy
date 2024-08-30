@@ -4,6 +4,7 @@ import burp.api.montoya.MontoyaApi;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.Galaxy;
 import org.m2sec.core.common.Config;
+import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Option;
 import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.enums.RunStatus;
@@ -44,22 +45,27 @@ public class HttpHookPanel extends JPanel {
         Map<String, IHookerPanel<?>> serviceMap = new LinkedHashMap<>();
         List<String> hookNames = new ArrayList<>();
 
-        GrpcHookerPanel rpcImpl = new GrpcHookerPanel(config, api, HttpHookService.GRPC);
-        CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JAVA);
-        javaFileHookerPanel.resetCodeTheme();
         CodeFileHookerPanel pythonFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.PYTHON);
         pythonFileHookerPanel.resetCodeTheme();
-        CodeFileHookerPanel jsFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JS);
-        jsFileHookerPanel.resetCodeTheme();
+        GrpcHookerPanel rpcImpl = new GrpcHookerPanel(config, api, HttpHookService.GRPC);
 
-        hookNames.add(HttpHookService.JS.name().toLowerCase());
-        hookNames.add(HttpHookService.PYTHON.name().toLowerCase());
+        if (Constants.hasJython) {
+            hookNames.add(HttpHookService.PYTHON.name().toLowerCase());
+            serviceMap.put(HttpHookService.PYTHON.name().toLowerCase(), pythonFileHookerPanel);
+        }
+        if (Constants.isUseJdk) {
+            CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JAVA);
+            javaFileHookerPanel.resetCodeTheme();
+            CodeFileHookerPanel jsFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JS);
+            jsFileHookerPanel.resetCodeTheme();
+            hookNames.add(HttpHookService.JS.name().toLowerCase());
+            hookNames.add(HttpHookService.JAVA.name().toLowerCase());
+            serviceMap.put(HttpHookService.JS.name().toLowerCase(), jsFileHookerPanel);
+            serviceMap.put(HttpHookService.JAVA.name().toLowerCase(), javaFileHookerPanel);
+        }
+
         hookNames.add(HttpHookService.GRPC.name().toLowerCase());
-        hookNames.add(HttpHookService.JAVA.name().toLowerCase());
-        serviceMap.put(HttpHookService.JS.name().toLowerCase(), jsFileHookerPanel);
-        serviceMap.put(HttpHookService.PYTHON.name().toLowerCase(), pythonFileHookerPanel);
         serviceMap.put(HttpHookService.GRPC.name().toLowerCase(), rpcImpl);
-        serviceMap.put(HttpHookService.JAVA.name().toLowerCase(), javaFileHookerPanel);
 
         // 创建一个容器(卡片)用于放置不同方式的JPanel
         JPanel hookerPanelContainer = new JPanel(new CardLayout());

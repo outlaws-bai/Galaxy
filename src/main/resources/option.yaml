@@ -1,4 +1,4 @@
-requestCheckExpression: "!request.isStaticExtension() && request.host=='192.168.1.4'"
+requestCheckExpression: "!request.isStaticExtension() && request.host=='192.168.1.3'"
 hookResponse: true
 linkageScanner: false
 grpcConn: 127.0.0.1:8443

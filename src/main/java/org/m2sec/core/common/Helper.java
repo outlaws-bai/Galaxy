@@ -26,9 +26,9 @@ import java.nio.file.Paths;
 public class Helper {
 
     public static void init(MontoyaApi api) {
-        checkJdk();
         api.extension().setName(Constants.BURP_SUITE_EXT_NAME);
         api.logging().logToOutput(Constants.BURP_SUITE_EXT_INIT_DEF + "Version -> " + Constants.VERSION + "\r\n");
+        checkJdk(api);
         checkJython(api);
         if (checkVersion(api)) {
             initWorkDir();
@@ -39,10 +39,7 @@ public class Helper {
         boolean buildWorkDir = false;
         String message;
         if (Files.exists(Paths.get(Constants.WORK_DIR))) {
-            if (
-                !Files.exists(Paths.get(Constants.VERSION_STORAGE_FILE_PATH))
-                    || !Constants.VERSION.equalsIgnoreCase(FileTools.readFileAsString(Constants.VERSION_STORAGE_FILE_PATH))
-            ) {
+            if (!Files.exists(Paths.get(Constants.VERSION_STORAGE_FILE_PATH)) || !Constants.VERSION.equalsIgnoreCase(FileTools.readFileAsString(Constants.VERSION_STORAGE_FILE_PATH))) {
                 // 更新了版本
                 String randomString = FactorUtil.randomString(6);
                 String bakDir = Constants.WORK_DIR + "." + randomString + ".bak";
@@ -50,11 +47,11 @@ public class Helper {
                 message = Constants.UPDATE_VERSION_DEF + bakDir + ". \r\nGood luck.";
                 buildWorkDir = true;
             } else { // reload
-                message = "Good luck.\r\n";
+                message = "Good luck.";
             }
         } else { // 第一次使用
             buildWorkDir = true;
-            message = "You seem to be using this plugin for the first time. \r\nGood luck.\r\n";
+            message = "You seem to be using this plugin for the first time. \r\nGood luck.";
         }
         if (Galaxy.isInBurp()) {
             api.logging().logToOutput(message);
@@ -64,17 +61,21 @@ public class Helper {
         return buildWorkDir;
     }
 
-    public static void checkJdk() {
+    public static void checkJdk(MontoyaApi api) {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         if (compiler == null) {
-            throw new UnsupportedOperationException("Please use JDK to start Burp! Reference link: https://github" +
+            Constants.isUseJdk = false;
+            api.logging().logToOutput("Warning! Detected that the burp you started using JRE. HttpHook-js, " +
+                "HttpHook-java will not be available. Please refer to the link if necessary: https://github" +
                 ".com/outlaws-bai/Galaxy/blob/main/docs/ToJDK.md");
         }
     }
 
     public static void checkJython(MontoyaApi api) {
         if (!ReflectTools.canLoadClass("org.python.util.PythonInterpreter")) {
-            api.logging().logToOutput("Warning! Cannot load jython, some features cannot be used, please read the README on GitHub.");
+            Constants.hasJython = false;
+            api.logging().logToOutput("Warning! Cannot load jython, HttpHook-python will not be available, Please " +
+                "read the precautions in GitHub README.md if necessary");
         }
     }
 
@@ -89,8 +90,7 @@ public class Helper {
         FileTools.mvResource(Constants.SETTING_FILE_NAME, Constants.WORK_DIR);
         FileTools.mvResource(Constants.OPTION_FILE_NAME, Constants.WORK_DIR);
         // mv resources
-        FileTools.mvResources(Constants.HTTP_HOOK_EXAMPLES_DIR_NAME,
-            Constants.WORK_DIR);
+        FileTools.mvResources(Constants.HTTP_HOOK_EXAMPLES_DIR_NAME, Constants.WORK_DIR);
         FileTools.mvResources(Constants.TEMPLATE_DIR_NAME, Constants.WORK_DIR);
     }
 

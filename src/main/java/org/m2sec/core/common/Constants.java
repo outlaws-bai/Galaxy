@@ -24,6 +24,10 @@ public class Constants {
 
     public static String JAR_FILE_PATH;
 
+    public static boolean isUseJdk = true;
+
+    public static boolean hasJython = true;
+
     // work file
 
     public static final String USER_HOME_DIR = System.getProperty("user.home");
