@@ -4,7 +4,6 @@ import burp.api.montoya.core.Annotations;
 import burp.api.montoya.http.handler.*;
 import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.proxy.http.*;
-import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.HttpHookThreadData;
 import org.m2sec.core.httphook.IHttpHooker;
 

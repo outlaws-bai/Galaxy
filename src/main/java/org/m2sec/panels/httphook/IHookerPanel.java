@@ -5,7 +5,6 @@ import burp.api.montoya.core.Registration;
 import lombok.Getter;
 import org.m2sec.abilities.HttpHookHandler;
 import org.m2sec.core.common.Config;
-import org.m2sec.core.common.Option;
 import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.httphook.IHttpHooker;
 

@@ -4,7 +4,6 @@ import burp.api.montoya.MontoyaApi;
 import org.m2sec.core.common.CompatTools;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Setting;
-import org.m2sec.panels.httphook.CodeFileHookerPanel;
 
 import javax.swing.*;
 import java.awt.*;

@@ -3,7 +3,6 @@ package org.m2sec.core.httphook;
 
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.core.common.Config;
-import org.m2sec.core.common.Option;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
 

@@ -57,8 +57,9 @@ public abstract class IHttpHooker {
                     log.debug("exec method: {} with {} success.", name, this.getClass().getSimpleName());
                     // 当前线程中的请求不是来自扫描器 && 开启了联动扫描器
                     if (option.isAutoForwardRequest() && !HttpHookThreadData.requestIsFromScanner()) {
-                        log.debug("[{}] Send request and proxy by scanner. request: {}", name, request);
-                        Request finalRequest = request;
+                        Request finalRequest = Request.of(request.toBurp()); // 深拷贝
+                        finalRequest.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "HookedRequest-LinkagePassiveProxyScanner");
+                        log.debug("[{}] Send request and proxy by scanner. request: {}", name, finalRequest);
                         WorkExecutor.INSTANCE.execute(() -> HttpClient.send(finalRequest, config.getSetting().getScannerConn()));
                     }
                     retVal = request.toBurp();
