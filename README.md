@@ -35,10 +35,9 @@
 - 启用成功后，后续代理的所有请求和响应自动解密
 - 已解密请求转到Repeater后Send，得到的响应也会被解密
 - Intruder、Scanner等模块同样支持
+- 支持联动sqlmap、被动代理扫描器，使得它们可以扫描明文请求，得到明文响应
 
 进一步了解：[Http Hook](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md)
-
-![hook](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/hook.gif)
 
 ### 其他功能
 
@@ -46,6 +45,19 @@
 2. [Bypass Host Check](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Bypass-Host-Check):  绕过服务端在url重定向/ssrf的测试点对host做了验证。
 3. [Bypass Auth Of Path](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Bypass-Auth-Of-Path):  通过修改Path的方式绕过某些认证/鉴权/拦截。
 4. ...
+
+## 效果展示
+
+### Http Hook
+![hook](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/hook.gif)
+
+### Http Hook 联动sqlmap
+
+![linkage-sqlmap](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/linkage-sqlmap.gif)
+
+### Http Hook 联动xray
+
+![linkage-xray](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/linkage-xray.gif)
 
 ## 安装指引
 
@@ -58,8 +70,7 @@
 **注意事项**:
 
 - 项目采用Burp `Montoya API` 开发，Burp版本不低于 `v2023.10.3.7` 。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
-- 项目使用JDK 17进行开发及编译，请确保启动Burp的JDK不低于17。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
-- 项目使用了动态编译，请确保启动Burp的是JDK，而不是JRE。[Modify](https://github.com/outlaws-bai/Galaxy/blob/main/docs/ToJDK.md)
+- 项目使用JDK 17进行开发及编译，请确保启动Burp的Java版本不低于17。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
 - 如果你下载或打包后的jar包含 `without-jython` 字样，请在Burp的Java environment(`Settings -> Extensions`)配置一个文件夹，并将 `jython-standalone-xxx.jar` 放在该文件夹。[Download](https://www.jython.org/download)
 
 ## 优势特点

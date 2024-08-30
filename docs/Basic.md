@@ -8,7 +8,7 @@ Windows: %USERPROFILE%/.galaxy
 
 ## Expression
 
-使用 `nashorn` 实现表达式的执行，可以理解就是一行JavaScript代码。
+使用 `mvel` 实现表达式的执行，可以理解就是一行代码。
 
 ## Template
 
