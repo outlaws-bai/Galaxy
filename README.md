@@ -46,7 +46,7 @@
 3. [Bypass Auth Of Path](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Bypass-Auth-Of-Path):  通过修改Path的方式绕过某些认证/鉴权/拦截。
 4. ...
 
-## 效果展示
+## :clapper: 效果展示
 
 ### 常规情况
 ![hook](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/hook.gif)
