@@ -48,14 +48,14 @@
 
 ## 效果展示
 
-### Http Hook
+### 常规情况
 ![hook](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/hook.gif)
 
-### Http Hook 联动sqlmap
+### 联动sqlmap
 
 ![linkage-sqlmap](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/linkage-sqlmap.gif)
 
-### Http Hook 联动xray
+### 联动xray
 
 ![linkage-xray](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/linkage-xray.gif)
 
@@ -90,7 +90,7 @@
 
 ## 遇到问题
 
-请先阅读 [FAQ](https://github.com/outlaws-bai/Galaxy/blob/main/docs/FAQ.md)，无法解决可以提交 [Issue](https://github.com/outlaws-bai/Galaxy/issues) 或加群。
+请先阅读 [FAQ](https://github.com/outlaws-bai/Galaxy/blob/main/docs/FAQ.md) 和 [历史Issue](https://github.com/outlaws-bai/Galaxy/issues?q=is%3Aissue+is%3Aclosed)，无法解决可以提交 [Issue](https://github.com/outlaws-bai/Galaxy/issues) 或加群。
 
 ## Stars
 
