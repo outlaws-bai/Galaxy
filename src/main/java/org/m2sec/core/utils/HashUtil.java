@@ -31,11 +31,11 @@ public class HashUtil {
         }
     }
 
-    public static String calcToHex(String algorithm, byte[] data, byte[] secret) {
+    public static String calcToHex(String algorithm, byte[] data) {
         return CodeUtil.hexEncodeToString(calc(algorithm, data));
     }
 
-    public static String calcToBase64(String algorithm, byte[] data, byte[] secret) {
+    public static String calcToBase64(String algorithm, byte[] data) {
         return CodeUtil.b64encodeToString(calc(algorithm, data));
     }
 }
