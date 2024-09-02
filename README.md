@@ -15,7 +15,7 @@
 <a href="https://github.com/outlaws-bai/Galaxy/issues">Issue</a>
 </p>
 
-## ：fire：功能介绍
+## :fire: 功能介绍
 
 ### Http Hook
 
@@ -59,7 +59,7 @@
 
 ![linkage-xray](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/linkage-xray.gif)
 
-## ：rocket：安装指引
+## :rocket: 安装指引
 
 插件下载：[Download](https://github.com/outlaws-bai/Galaxy/releases)
 
@@ -80,7 +80,7 @@
 - 支持面广：如加密算法组合、自定义算法、动态密钥等均可以支持。
 - 强灵活性：可以使用python、js、Java、grpc多种方式实现hook脚本以满足需求。
 
-## ：bug：遇到问题
+## :bug: 遇到问题
 
 请先阅读 [FAQ](https://github.com/outlaws-bai/Galaxy/blob/main/docs/FAQ.md) 和 [历史Issue](https://github.com/outlaws-bai/Galaxy/issues?q=is%3Aissue+is%3Aclosed)，无法解决可以提交 [Issue](https://github.com/outlaws-bai/Galaxy/issues) 或加群。
 
@@ -92,11 +92,11 @@
 
 <img src="https://raw.githubusercontent.com/outlaws-bai/picture/main/img/image-20240731000104866.png" width="300" height="300"/>
 
-## ：star：Stars
+## :star: Stars
 
 [![Stargazers over time](https://starchart.cc/outlaws-bai/Galaxy.svg?variant=adaptive)](https://starchart.cc/outlaws-bai/Galaxy)
 
-## ：book：常用地址
+## :book: 常用地址
 
 [BurpDownload](https://portswigger.net/burp/releases#professional)
 
