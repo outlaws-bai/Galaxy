@@ -15,7 +15,7 @@
 <a href="https://github.com/outlaws-bai/Galaxy/issues">Issue</a>
 </p>
 
-## :fire: 功能介绍
+## 🔥 功能介绍
 
 ### Http Hook
 
@@ -46,7 +46,7 @@
 3. [Bypass Auth Of Path](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Bypass-Auth-Of-Path):  通过修改Path的方式绕过某些认证/鉴权/拦截。
 4. ...
 
-## :clapper: 效果展示
+## 🎥 效果展示
 
 **常规情况**
 
@@ -60,7 +60,7 @@
 
 ![linkage-xray](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/linkage-xray.gif)
 
-## :rocket: 安装指引
+## 🚀 安装指引
 
 插件下载：[Download](https://github.com/outlaws-bai/Galaxy/releases)
 
@@ -74,14 +74,14 @@
 - 项目使用JDK 17进行开发及编译，请确保启动Burp的Java版本不低于17。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
 - 如果你下载或打包后的jar包含 `without-jython` 字样，请在Burp的Java environment(`Settings -> Extensions`)配置一个文件夹，并将 `jython-standalone-xxx.jar` 放在该文件夹。[Download](https://www.jython.org/download)
 
-## 🎡 优势特点
+## 📶 优势特点
 
 - 简单高效：不需要启动多余的本地服务。
 - 上手容易：通用算法及常见加密逻辑已内置，基本能做到开箱即用。
 - 支持面广：如加密算法组合、自定义算法、动态密钥等均可以支持。
 - 强灵活性：可以使用python、js、Java、grpc多种方式实现hook脚本以满足需求。
 
-## :bug: 遇到问题
+## 🐛 遇到问题
 
 请先阅读 [FAQ](https://github.com/outlaws-bai/Galaxy/blob/main/docs/FAQ.md) 和 [历史Issue](https://github.com/outlaws-bai/Galaxy/issues?q=is%3Aissue+is%3Aclosed)，无法解决可以提交 [Issue](https://github.com/outlaws-bai/Galaxy/issues) 或加群。
 
@@ -93,11 +93,11 @@
 
 <img src="https://raw.githubusercontent.com/outlaws-bai/picture/main/img/image-20240731000104866.png" width="300" height="300"/>
 
-## :star: Stars
+## 🔯 Stars
 
 [![Stargazers over time](https://starchart.cc/outlaws-bai/Galaxy.svg?variant=adaptive)](https://starchart.cc/outlaws-bai/Galaxy)
 
-## :book: 常用地址
+## 🔗 常用地址
 
 [BurpDownload](https://portswigger.net/burp/releases#professional)
 
