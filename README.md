@@ -1,6 +1,6 @@
 <h3 align="center">Galaxy</h3>
 <p align="center">
-自动解密被加密的报文，让你像测试明文一样简单
+通过自定义hook脚本自动解密被加密的报文，让你像测试明文一样简单。
 <br>
 <br>
 <a href="https://github.com/outlaws-bai/Galaxy/releases"><img alt="releases" src="https://img.shields.io/github/release/outlaws-bai/Galaxy"/></a>
