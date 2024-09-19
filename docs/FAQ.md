@@ -20,6 +20,6 @@
 
 # python hook 方式中怎样载入三方包
 
-> python 的 hook 方式来源于 jython 的跨语言支持，因此如果需要使用三方包，必须能通过 jython 编译，而 jython 本身只支持到 python 2.7.x
+> python 的 hook 方式来源于 jython 的跨语言支持，因此如果需要使用三方包，该三方包必须能通过 jython 解释及运行，而 jython 本身只支持到 python 2.7.x
 
 安装 python 2.7.x，再用 pip 安装必要的三方包，将三方包所在的文件夹配置到 sys path，如/Users/xxx/.pyenv/versions/2.7.x/lib/python2.7/site-packages
