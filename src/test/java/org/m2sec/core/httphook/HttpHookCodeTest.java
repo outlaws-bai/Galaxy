@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.FileTools;
+import org.m2sec.core.common.Helper;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
@@ -26,19 +27,28 @@ public class HttpHookCodeTest {
 
     @BeforeAll
     public static void setRootLoggerLevel() {
+        Helper.checkPythonAndJs();
     }
-
 
     @Test
     public void testOneCodeHooker() {
-        testCodeHooker(examplesFilePath + File.separator + "aes_cbc.py");
+        testCodeHooker(examplesFilePath + File.separator + "sm2.py");
     }
 
 
     @Test
-    public void testAllCodeHooker() {
+    public void testCodeHookers() {
+        String suffix = ".py";
+        if (suffix.equals(".js")) {
+            assert Constants.hasJs : "Due to compatibility issues, if you need to test JavaScript, please switch the " +
+                "graalService in build.gradle to js";
+        } else if (suffix.equals(".py")) {
+            assert Constants.hasPython : "Due to compatibility issues, if you need to test python, please switch the " +
+                "graalService in build.gradle to python";
+        }
         List<String> failPaths = new ArrayList<>();
         for (String filepath : FileTools.listDir(examplesFilePath)) {
+            if (!filepath.endsWith(suffix)) continue;
             try {
                 testCodeHooker(filepath);
             } catch (Exception e) {
@@ -54,6 +64,13 @@ public class HttpHookCodeTest {
     }
 
     public void testCodeHooker(String filepath) {
+        if (filepath.endsWith(".js")) {
+            assert Constants.hasJs : "Due to compatibility issues, if you need to test JavaScript, please switch the " +
+                "graalService in build.gradle to js";
+        } else if (filepath.endsWith(".py")) {
+            assert Constants.hasPython : "Due to compatibility issues, if you need to test python, please switch the " +
+                "graalService in build.gradle to python";
+        }
         String randomString1 = FactorUtil.randomString(50);
         String randomString2 = FactorUtil.randomString(50);
 
@@ -76,6 +93,7 @@ public class HttpHookCodeTest {
         log.info("encrypted response: \r\n{}", response1);
         Response response2 = hooker.hookResponseToBurp(response);
         log.info("decrypted response: \r\n{}", response2);
+        hooker.destroy();
     }
 
 

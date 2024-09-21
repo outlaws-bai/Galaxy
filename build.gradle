@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "org.m2sec"
-def hooker = "all" // all/js/python/grpc
+def hooker = "python" // js/python/grpc
 def version = "3.2.0"
 def grpcVersion = "1.54.1"
 def graalJsVersion = "23.0.5"
@@ -17,8 +17,8 @@ def protocVersion = protobufVersion
 def versionFile = file("${projectDir}/src/main/resources/version.txt") as Object
 
 repositories {
-    mavenCentral()
-//    maven { url "https://maven.aliyun.com/repository/public" }
+//    mavenCentral()
+    maven { url "https://maven.aliyun.com/repository/public" }
 }
 
 java {
@@ -40,8 +40,8 @@ dependencies {
     } else if (hooker == "python") {
         // cross-language
         compileOnly "org.graalvm.js:js:${graalJsVersion}"
-        implementation "org.graalvm.python:python-language:23.1.4"
-        implementation "org.graalvm.python:python-resources:23.1.4"
+        implementation "org.graalvm.python:python-language:${graalPythonVersion}"
+        implementation "org.graalvm.python:python-resources:${graalPythonVersion}"
         // grpc
         compileOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
         compileOnly "io.grpc:grpc-protobuf:${grpcVersion}"
@@ -52,16 +52,6 @@ dependencies {
         compileOnly "org.graalvm.js:js:${graalJsVersion}"
         compileOnly "org.graalvm.python:python-language:${graalPythonVersion}"
         compileOnly "org.graalvm.python:python-resources:${graalPythonVersion}"
-        // grpc
-        runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
-        implementation "io.grpc:grpc-protobuf:${grpcVersion}"
-        implementation "io.grpc:grpc-stub:${grpcVersion}"
-        implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
-    } else {
-        // cross-language
-        implementation "org.graalvm.js:js:${graalJsVersion}"
-        implementation "org.graalvm.python:python-language:${graalPythonVersion}"
-        implementation "org.graalvm.python:python-resources:${graalPythonVersion}"
         // grpc
         runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
         implementation "io.grpc:grpc-protobuf:${grpcVersion}"
@@ -100,6 +90,10 @@ dependencies {
     testImplementation "org.bouncycastle:bcprov-jdk18on:1.78.1"
     testImplementation "org.projectlombok:lombok:1.18.32"
     testImplementation "com.fifesoft:rsyntaxtextarea:3.4.1"
+    testRuntimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
+    testImplementation "io.grpc:grpc-protobuf:${grpcVersion}"
+    testImplementation "io.grpc:grpc-stub:${grpcVersion}"
+    testImplementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
 }
 
 test {
