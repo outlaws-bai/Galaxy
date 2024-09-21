@@ -168,6 +168,7 @@ public class HttpHookPanel extends JPanel {
                     log.info("Stop http hook success.");
                 }
             } catch (Exception exc) {
+                switchButton.setEnabled(true);
                 option.setHookStart(false);
                 log.error("Start fail!", exc);
                 SwingTools.showErrorStackTraceDialog(exc);
