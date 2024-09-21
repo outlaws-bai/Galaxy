@@ -80,6 +80,7 @@ public class PythonHookerFactor extends IHttpHooker {
         func2 = null;
         func3 = null;
         func4 = null;
+        context.getEngine().close();
         context.close();
     }
 

@@ -138,6 +138,7 @@ public class HttpHookPanel extends JPanel {
         });
         // 设置 switchButton 的事件监听器, 开关HttpHook功能
         switchButton.addActionListener(e -> {
+            switchButton.setEnabled(false);
             String selectItem = (String) comboBox.getSelectedItem();
             IHookerPanel<?> hookerPanel = serviceMap.get(selectItem);
             boolean toStop = option.isHookStart();
