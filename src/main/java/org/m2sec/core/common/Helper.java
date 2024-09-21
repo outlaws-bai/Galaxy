@@ -72,6 +72,9 @@ public class Helper {
         try (Engine engine = Engine.create()) {
             Constants.hasJs = engine.getLanguages().containsKey("js");
             Constants.hasPython = engine.getLanguages().containsKey("python");
+        } catch (Exception ignore) {
+            Constants.hasJs = false;
+            Constants.hasPython = false;
         }
     }
 

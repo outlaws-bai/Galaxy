@@ -33,27 +33,27 @@ public class Request {
     /**
      * is https?
      */
-    private boolean secure;
+    public boolean secure;
 
     /**
      * 连接目标的host, 非headers中的
      */
-    private String host;
+    public String host;
 
-    private int port;
-    private String version;
-    private String method;
+    public int port;
+    public String version;
+    public String method;
 
     /**
      * 不包含query参数, 有时因为Burp的原因，path会带上domain url
      */
-    private String path;
+    public String path;
 
-    private Query query;
+    public Query query;
 
-    private Headers headers;
+    public Headers headers;
 
-    private byte[] content;
+    public byte[] content;
 
     public Request(boolean secure, String host, int port, String version, String method, String path, Query query,
                    Headers headers, byte[] content) {

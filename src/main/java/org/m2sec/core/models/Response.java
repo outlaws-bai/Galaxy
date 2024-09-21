@@ -20,11 +20,11 @@ import java.io.ByteArrayOutputStream;
 @Setter
 @AllArgsConstructor
 public class Response {
-    private String version;
-    private int statusCode;
-    private String reason;
-    private Headers headers;
-    private byte[] content;
+    public String version;
+    public int statusCode;
+    public String reason;
+    public Headers headers;
+    public byte[] content;
 
     public static Response of(HttpResponse response) {
         return new Response(response.httpVersion(), response.statusCode(), response.reasonPhrase(),

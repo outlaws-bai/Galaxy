@@ -26,13 +26,12 @@ public class HttpHookCodeTest {
 
     @BeforeAll
     public static void setRootLoggerLevel() {
-        System.setProperty("python.import.site", "false");
     }
 
 
     @Test
     public void testOneCodeHooker() {
-        testCodeHooker(examplesFilePath + File.separator + "DynamicKey.java");
+        testCodeHooker(examplesFilePath + File.separator + "aes_cbc.py");
     }
 
 

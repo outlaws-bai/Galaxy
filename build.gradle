@@ -7,7 +7,8 @@ plugins {
 }
 
 group = "org.m2sec"
-version = "3.1.0"
+def hooker = "python" // all/js/python/grpc
+def version = "3.2.0"
 def grpcVersion = "1.54.1"
 def protobufVersion = "3.24.0"
 def protocVersion = protobufVersion
@@ -25,21 +26,56 @@ java {
 }
 
 dependencies {
-    // cross-language
-    implementation "org.graalvm.sdk:graal-sdk:${graalVersion}"
-    implementation "org.graalvm.js:js:${graalVersion}"
-    implementation "org.graalvm.python:python:${graalVersion}"
-    // grpc
-    runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
-    implementation "io.grpc:grpc-protobuf:${grpcVersion}"
-    implementation "io.grpc:grpc-stub:${grpcVersion}"
-    implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+    implementation "org.graalvm.polyglot:polyglot:${graalVersion}"
+    if (hooker == "js") {
+        // cross-language
+        implementation "org.graalvm.sdk:graal-sdk:${graalVersion}"
+        implementation "org.graalvm.js:js:${graalVersion}"
+        compileOnly "org.graalvm.python:python:${graalVersion}"
+        // grpc
+        compileOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
+        compileOnly "io.grpc:grpc-protobuf:${grpcVersion}"
+        compileOnly "io.grpc:grpc-stub:${grpcVersion}"
+        compileOnly "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+    } else if (hooker == "python"){
+        // cross-language
+        implementation "org.graalvm.sdk:graal-sdk:${graalVersion}"
+        compileOnly "org.graalvm.js:js:${graalVersion}"
+        implementation "org.graalvm.python:python:${graalVersion}"
+        // grpc
+        compileOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
+        compileOnly "io.grpc:grpc-protobuf:${grpcVersion}"
+        compileOnly "io.grpc:grpc-stub:${grpcVersion}"
+        compileOnly "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+    } else if (hooker=="grpc"){
+        // cross-language
+        compileOnly "org.graalvm.sdk:graal-sdk:${graalVersion}"
+        compileOnly "org.graalvm.js:js:${graalVersion}"
+        compileOnly "org.graalvm.python:python:${graalVersion}"
+        // grpc
+        runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
+        implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+        implementation "io.grpc:grpc-stub:${grpcVersion}"
+        implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+    } else {
+        // cross-language
+        implementation "org.graalvm.sdk:graal-sdk:${graalVersion}"
+        implementation "org.graalvm.js:js:${graalVersion}"
+        implementation "org.graalvm.python:python:${graalVersion}"
+        // grpc
+        runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
+        implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+        implementation "io.grpc:grpc-stub:${grpcVersion}"
+        implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+    }
     // annotation
     annotationProcessor "org.projectlombok:lombok:1.18.32"
     compileOnly "org.projectlombok:lombok:1.18.32"
     compileOnly "org.apache.tomcat:annotations-api:6.0.53"
     // yaml
     implementation "org.yaml:snakeyaml:2.2"
+    // gson
+    implementation 'com.google.code.gson:gson:2.9.0'
     // crypto
     compileOnly "org.bouncycastle:bcprov-jdk18on:1.78.1"
     // template
@@ -54,8 +90,6 @@ dependencies {
     implementation "org.mvel:mvel2:2.5.2.Final"
     // client
     implementation "cn.hutool:hutool-http:5.8.29"
-
-
     // burp
     compileOnly "net.portswigger.burp.extensions:montoya-api:2023.12.1"
     // test
@@ -99,14 +133,12 @@ jar {
 }
 
 shadowJar {
-    // Not commenting means entering jython into a jar package
-    // archiveClassifier.set("without-jython")
+    archiveClassifier.set(version + "-" + hooker)
+
+    // 设置版本文件
     versionFile.text = version
-    if (archiveClassifier.get() == "without-jython") {
-        dependencies {
-            exclude(dependency("org.python:jython-standalone:2.7.3"))
-        }
-    }
+
+    // 合并服务文件，避免多个 jar 文件中的 META-INF/services 冲突
     mergeServiceFiles()
 }
 

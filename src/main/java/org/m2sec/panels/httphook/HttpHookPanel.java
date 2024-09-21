@@ -45,9 +45,6 @@ public class HttpHookPanel extends JPanel {
         Map<String, IHookerPanel<?>> serviceMap = new LinkedHashMap<>();
         List<String> hookNames = new ArrayList<>();
 
-        CodeFileHookerPanel pythonFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.PYTHON);
-        pythonFileHookerPanel.resetCodeTheme();
-        GrpcHookerPanel rpcImpl = new GrpcHookerPanel(config, api, HttpHookService.GRPC);
 
         if (Constants.isUseJdk) {
             CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JAVA);
@@ -62,9 +59,12 @@ public class HttpHookPanel extends JPanel {
             serviceMap.put(HttpHookService.JS.name().toLowerCase(), jsFileHookerPanel);
         }
         if (Constants.hasPython) {
+            CodeFileHookerPanel pythonFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.PYTHON);
+            pythonFileHookerPanel.resetCodeTheme();
             hookNames.add(HttpHookService.PYTHON.name().toLowerCase());
             serviceMap.put(HttpHookService.PYTHON.name().toLowerCase(), pythonFileHookerPanel);
         }
+        GrpcHookerPanel rpcImpl = new GrpcHookerPanel(config, api, HttpHookService.GRPC);
         if (Constants.hasGrpc) {
             hookNames.add(HttpHookService.GRPC.name().toLowerCase());
             serviceMap.put(HttpHookService.GRPC.name().toLowerCase(), rpcImpl);

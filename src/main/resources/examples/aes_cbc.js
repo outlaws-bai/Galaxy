@@ -6,11 +6,10 @@ var MacUtil = Java.type("org.m2sec.core.utils.MacUtil")
 var FactorUtil = Java.type("org.m2sec.core.utils.FactorUtil")
 var Request = Java.type("org.m2sec.core.models.Request")
 var Response = Java.type("org.m2sec.core.models.Response")
-var String = Java.type("java.lang.String")
 
 ALGORITHM = "AES/CBC/PKCS5Padding"
-secret = "32byteslongsecretkeyforaes256!aa".getBytes()
-iv = "16byteslongiv456".getBytes()
+secret = stringToByteArray("32byteslongsecretkeyforaes256!aa")
+iv = "16byteslongiv456"
 paramMap = {"iv": iv}
 jsonKey = "data"
 log = void 0
@@ -33,7 +32,7 @@ function hook_request_to_burp(request) {
     // 调用函数解密
     data = decrypt(encryptedData)
     // 更新body为已加密的数据
-    request.content = data
+    request.setContent(data)
     return request
 }
 
@@ -45,13 +44,13 @@ function hook_request_to_burp(request) {
  */
 function hook_request_to_server(request) {
     // 获取被解密的数据
-    data = request.content
+    data = request.getContent()
     // 调用函数加密回去
     encryptedData = encrypt(data)
     // 将已加密的数据转换为Server可识别的格式
     body = to_data(encryptedData)
     // 更新body
-    request.content = body
+    request.setContent(body)
     return request
 }
 
@@ -63,11 +62,11 @@ function hook_request_to_server(request) {
  */
 function hook_response_to_burp(response) {
     // 获取需要解密的数据
-    encryptedData = get_data(response.content)
+    encryptedData = get_data(response.getContent())
     // 调用函数解密
     data = decrypt(encryptedData)
     // 更新body
-    response.content = data
+    response.setContent(data)
     return response
 }
 
@@ -78,14 +77,14 @@ function hook_response_to_burp(response) {
  * @returns 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理
  */
 function hook_response_to_client(response) {
-    data = response.content
+    data = response.getContent()
     // 调用函数加密回去
     encryptedData = encrypt(data)
     // 更新body
     // 将已加密的数据转换为Server可识别的格式
     body = to_data(encryptedData)
     // 更新body
-    response.content = body
+    response.setContent(body)
     return response
 }
 
@@ -101,14 +100,14 @@ function encrypt(content) {
 
 
 function get_data(content) {
-    return CodeUtil.b64decode(JsonUtil.jsonStrToMap(new String(content)).get(jsonKey))
+    return CodeUtil.b64decode(JsonUtil.jsonStrToMap(byteArrayToString(content)).get(jsonKey))
 }
 
 
 function to_data(content) {
     jsonBody = {}
     jsonBody[jsonKey] = CodeUtil.b64encodeToString(content)
-    return JsonUtil.toJsonStr(jsonBody).getBytes()
+    return stringToByteArray(JsonUtil.toJsonStr(jsonBody))
 }
 
 /**
@@ -116,4 +115,17 @@ function to_data(content) {
  */
 function set_log(log1) {
     log = log1
+}
+
+
+function stringToByteArray(str) {
+    let byteArray = new Uint8Array(str.length);
+    for (let i = 0; i < str.length; i++) {
+        byteArray[i] = str.charCodeAt(i);
+    }
+    return byteArray;
+}
+
+function byteArrayToString(byteArray) {
+    return String.fromCharCode.apply(null, byteArray);
 }

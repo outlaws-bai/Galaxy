@@ -6,11 +6,10 @@ var MacUtil = Java.type("org.m2sec.core.utils.MacUtil")
 var FactorUtil = Java.type("org.m2sec.core.utils.FactorUtil")
 var Request = Java.type("org.m2sec.core.models.Request")
 var Response = Java.type("org.m2sec.core.models.Response")
-var String = Java.type("java.lang.String")
 
 ALGORITHM = "AES/GCM/NoPadding"
-secret = "32byteslongsecretkeyforaes256!aa".getBytes()
-iv = "16byteslongiv456".getBytes()
+secret = stringToByteArray("32byteslongsecretkeyforaes256!aa")
+iv = "16byteslongiv456"
 paramMap = {"iv": iv}
 jsonKey = "data"
 log = void 0
@@ -97,14 +96,14 @@ function encrypt(content) {
 }
 
 function get_data(content) {
-    return CodeUtil.b64decode(JsonUtil.jsonStrToMap(new String(content)).get(jsonKey))
+    return CodeUtil.b64decode(JsonUtil.jsonStrToMap(byteArrayToString(content)).get(jsonKey))
 }
 
 
 function to_data(content) {
     jsonBody = {}
     jsonBody[jsonKey] = CodeUtil.b64encodeToString(content)
-    return JsonUtil.toJsonStr(jsonBody).getBytes()
+    return stringToByteArray(JsonUtil.toJsonStr(jsonBody))
 }
 
 /**
@@ -112,4 +111,16 @@ function to_data(content) {
  */
 function set_log(log1) {
     log = log1
+}
+
+function stringToByteArray(str) {
+    let byteArray = new Uint8Array(str.length);
+    for (let i = 0; i < str.length; i++) {
+        byteArray[i] = str.charCodeAt(i);
+    }
+    return byteArray;
+}
+
+function byteArrayToString(byteArray) {
+    return String.fromCharCode.apply(null, byteArray);
 }

@@ -33,20 +33,25 @@ public class PythonHookerFactor extends IHttpHooker {
     public void init(Config config1) {
         config = config1;
         option = config1.getOption();
-        String filepath = FileTools.getExampleScriptFilePath(option.getCodeSelectItem(), Constants.JS_FILE_SUFFIX);
+        String filepath = FileTools.getExampleScriptFilePath(option.getCodeSelectItem(), Constants.PYTHON_FILE_SUFFIX);
         init(filepath);
-
     }
 
     public void init(String filepath) {
-        context =
-            Context.newBuilder("python")
-                .allowExperimentalOptions(true)
+        Context.Builder builder = null;
+        try {
+            builder = Context.newBuilder("python").allowExperimentalOptions(true)
                 .allowHostAccess(HostAccess.ALL)
                 .allowAllAccess(true)
-                .hostClassLoader(getClass().getClassLoader())
-                .build();
+                .hostClassLoader(getClass().getClassLoader());
+        } catch (Exception e) {
+            builder = Context.newBuilder("python").allowExperimentalOptions(true)
+                .allowHostAccess(HostAccess.ALL)
+                .allowAllAccess(true);
+        }
+        context = builder.build();
         bind = context.getBindings("python");
+        context.eval("python", FileTools.readFileAsString(filepath));
         init();
         log.info("load python file success. {}", filepath);
     }

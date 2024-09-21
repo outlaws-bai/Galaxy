@@ -1,6 +1,6 @@
 import json
 import base64
-from org.m2sec.core.utils import (
+from java.org.m2sec.core.utils import (
     CodeUtil,
     CryptoUtil,
     HashUtil,
@@ -8,7 +8,7 @@ from org.m2sec.core.utils import (
     MacUtil,
     FactorUtil,
 )
-from org.m2sec.core.models import Request, Response
+from java.org.m2sec.core.models import Request, Response
 from java.lang import String
 
 
@@ -19,7 +19,7 @@ from java.lang import String
 
 ALGORITHM = "DESede/CBC/PKCS5Padding"
 secret = b"24byteslongKeyfordes3!aa"
-iv = b"8bytesIv"
+iv = "8bytesIv"
 paramMap = {"iv": iv}
 jsonKey = "data"
 log = None

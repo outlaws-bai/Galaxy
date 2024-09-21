@@ -1,6 +1,6 @@
 import json
 import base64
-from org.m2sec.core.utils import (
+from java.org.m2sec.core.utils import (
     CodeUtil,
     CryptoUtil,
     HashUtil,
@@ -8,7 +8,7 @@ from org.m2sec.core.utils import (
     MacUtil,
     FactorUtil,
 )
-from org.m2sec.core.models import Request, Response
+from java.org.m2sec.core.models import Request, Response
 from java.lang import String
 
 
