@@ -7,12 +7,13 @@ plugins {
 }
 
 group = "org.m2sec"
-def hooker = "js" // all/js/python/grpc
+def hooker = "all" // all/js/python/grpc
 def version = "3.2.0"
 def grpcVersion = "1.54.1"
+def graalJsVersion = "23.0.5"
+def graalPythonVersion = "24.1.0"
 def protobufVersion = "3.24.0"
 def protocVersion = protobufVersion
-def graalVersion = "24.1.0"
 def versionFile = file("${projectDir}/src/main/resources/version.txt") as Object
 
 repositories {
@@ -26,32 +27,31 @@ java {
 }
 
 dependencies {
-    implementation "org.graalvm.polyglot:polyglot:${graalVersion}"
     if (hooker == "js") {
         // cross-language
-        implementation "org.graalvm.sdk:graal-sdk:${graalVersion}"
-        implementation "org.graalvm.js:js:${graalVersion}"
-        compileOnly "org.graalvm.python:python:${graalVersion}"
+        implementation "org.graalvm.js:js:${graalJsVersion}"
+        compileOnly "org.graalvm.python:python-language:${graalPythonVersion}"
+        compileOnly "org.graalvm.python:python-resources:${graalPythonVersion}"
         // grpc
         compileOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
         compileOnly "io.grpc:grpc-protobuf:${grpcVersion}"
         compileOnly "io.grpc:grpc-stub:${grpcVersion}"
         compileOnly "com.google.protobuf:protobuf-java-util:${protobufVersion}"
-    } else if (hooker == "python"){
+    } else if (hooker == "python") {
         // cross-language
-        implementation "org.graalvm.sdk:graal-sdk:${graalVersion}"
-        compileOnly "org.graalvm.js:js:${graalVersion}"
-        implementation "org.graalvm.python:python:${graalVersion}"
+        compileOnly "org.graalvm.js:js:${graalJsVersion}"
+        implementation "org.graalvm.python:python-language:23.1.4"
+        implementation "org.graalvm.python:python-resources:23.1.4"
         // grpc
         compileOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
         compileOnly "io.grpc:grpc-protobuf:${grpcVersion}"
         compileOnly "io.grpc:grpc-stub:${grpcVersion}"
         compileOnly "com.google.protobuf:protobuf-java-util:${protobufVersion}"
-    } else if (hooker=="grpc"){
+    } else if (hooker == "grpc") {
         // cross-language
-        compileOnly "org.graalvm.sdk:graal-sdk:${graalVersion}"
-        compileOnly "org.graalvm.js:js:${graalVersion}"
-        compileOnly "org.graalvm.python:python:${graalVersion}"
+        compileOnly "org.graalvm.js:js:${graalJsVersion}"
+        compileOnly "org.graalvm.python:python-language:${graalPythonVersion}"
+        compileOnly "org.graalvm.python:python-resources:${graalPythonVersion}"
         // grpc
         runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
         implementation "io.grpc:grpc-protobuf:${grpcVersion}"
@@ -59,9 +59,9 @@ dependencies {
         implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
     } else {
         // cross-language
-        implementation "org.graalvm.sdk:graal-sdk:${graalVersion}"
-        implementation "org.graalvm.js:js:${graalVersion}"
-        implementation "org.graalvm.python:python:${graalVersion}"
+        implementation "org.graalvm.js:js:${graalJsVersion}"
+        implementation "org.graalvm.python:python-language:${graalPythonVersion}"
+        implementation "org.graalvm.python:python-resources:${graalPythonVersion}"
         // grpc
         runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
         implementation "io.grpc:grpc-protobuf:${grpcVersion}"
