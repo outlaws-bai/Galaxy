@@ -81,7 +81,7 @@ log.info("request: {}", request)
 
 运行中的日志会发送到两个地方：
 
-1. `Burp -> Extensions -> Galaxy -> Output/Errors`
+1. `Burp -> Extensions -> Galaxy -> Output/Errors` （仅显示部分）
 2. [WorkDir](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#work-dir) / run.log
 
 ## 常用函数
