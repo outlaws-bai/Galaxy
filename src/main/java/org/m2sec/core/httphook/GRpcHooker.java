@@ -1,10 +1,14 @@
 package org.m2sec.core.httphook;
 
 
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.core.common.Config;
+import org.m2sec.core.common.GrpcTools;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
+import org.m2sec.rpc.HttpHookServiceGrpc;
 
 /**
  * @author: outlaws-bai
@@ -14,7 +18,9 @@ import org.m2sec.core.models.Response;
 @Slf4j
 public class GRpcHooker extends IHttpHooker {
 
-    public GrpcClient client;
+    private ManagedChannel channel;
+
+    public HttpHookServiceGrpc.HttpHookServiceBlockingStub blockingStub;
 
 
     @Override
@@ -25,38 +31,39 @@ public class GRpcHooker extends IHttpHooker {
     }
 
     public void init(String grpcConn) {
-        this.client = new GrpcClient(grpcConn);
+        channel = ManagedChannelBuilder.forTarget(grpcConn).usePlaintext().build();
+        blockingStub = HttpHookServiceGrpc.newBlockingStub(channel);
         log.info("Start grpc client success. {}", grpcConn);
     }
 
     public void init(int port) {
-        this.client = new GrpcClient(port);
+        channel = ManagedChannelBuilder.forAddress("127.0.0.1", port).usePlaintext().build();
         log.info("Start grpc client success. {}", port);
     }
 
 
     @Override
     public void destroy() {
-        this.client.shutdown();
+        this.channel.shutdown();
     }
 
     @Override
     public Request hookRequestToBurp(Request request) {
-        return Request.of(client.blockingStub.hookRequestToBurp(request.toRpc()));
+        return GrpcTools.ofGrpc(blockingStub.hookRequestToBurp(GrpcTools.toGrpc(request)));
     }
 
     @Override
     public Request hookRequestToServer(Request request) {
-        return Request.of(client.blockingStub.hookRequestToServer(request.toRpc()));
+        return GrpcTools.ofGrpc(blockingStub.hookRequestToServer(GrpcTools.toGrpc(request)));
     }
 
     @Override
     public Response hookResponseToBurp(Response response) {
-        return Response.of(client.blockingStub.hookResponseToBurp(response.toRpc()));
+        return GrpcTools.ofGrpc(blockingStub.hookResponseToBurp(GrpcTools.toGrpc(response)));
     }
 
     @Override
     public Response hookResponseToClient(Response response) {
-        return Response.of(client.blockingStub.hookResponseToClient(response.toRpc()));
+        return GrpcTools.ofGrpc(blockingStub.hookResponseToClient(GrpcTools.toGrpc(response)));
     }
 }

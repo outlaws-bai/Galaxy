@@ -26,7 +26,11 @@ public class Constants {
 
     public static boolean isUseJdk = true;
 
-    public static boolean hasJython = true;
+    public static boolean hasPython = true;
+
+    public static boolean hasJs = true;
+
+    public static boolean hasGrpc = true;
 
     // work file
 

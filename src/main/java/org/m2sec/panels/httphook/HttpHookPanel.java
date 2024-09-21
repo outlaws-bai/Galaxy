@@ -49,23 +49,27 @@ public class HttpHookPanel extends JPanel {
         pythonFileHookerPanel.resetCodeTheme();
         GrpcHookerPanel rpcImpl = new GrpcHookerPanel(config, api, HttpHookService.GRPC);
 
-        if (Constants.hasJython) {
-            hookNames.add(HttpHookService.PYTHON.name().toLowerCase());
-            serviceMap.put(HttpHookService.PYTHON.name().toLowerCase(), pythonFileHookerPanel);
-        }
         if (Constants.isUseJdk) {
             CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JAVA);
             javaFileHookerPanel.resetCodeTheme();
+            hookNames.add(HttpHookService.JAVA.name().toLowerCase());
+            serviceMap.put(HttpHookService.JAVA.name().toLowerCase(), javaFileHookerPanel);
+        }
+        if (Constants.hasJs) {
             CodeFileHookerPanel jsFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JS);
             jsFileHookerPanel.resetCodeTheme();
             hookNames.add(HttpHookService.JS.name().toLowerCase());
-            hookNames.add(HttpHookService.JAVA.name().toLowerCase());
             serviceMap.put(HttpHookService.JS.name().toLowerCase(), jsFileHookerPanel);
-            serviceMap.put(HttpHookService.JAVA.name().toLowerCase(), javaFileHookerPanel);
+        }
+        if (Constants.hasPython) {
+            hookNames.add(HttpHookService.PYTHON.name().toLowerCase());
+            serviceMap.put(HttpHookService.PYTHON.name().toLowerCase(), pythonFileHookerPanel);
+        }
+        if (Constants.hasGrpc) {
+            hookNames.add(HttpHookService.GRPC.name().toLowerCase());
+            serviceMap.put(HttpHookService.GRPC.name().toLowerCase(), rpcImpl);
         }
 
-        hookNames.add(HttpHookService.GRPC.name().toLowerCase());
-        serviceMap.put(HttpHookService.GRPC.name().toLowerCase(), rpcImpl);
 
         // 创建一个容器(卡片)用于放置不同方式的JPanel
         JPanel hookerPanelContainer = new JPanel(new CardLayout());

@@ -2,14 +2,12 @@ package org.m2sec.core.models;
 
 import burp.api.montoya.core.ByteArray;
 import burp.api.montoya.http.message.responses.HttpResponse;
-import com.google.protobuf.ByteString;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.utils.HttpUtil;
-import org.m2sec.rpc.HttpHook;
 import java.io.ByteArrayOutputStream;
 
 
@@ -31,11 +29,6 @@ public class Response {
     public static Response of(HttpResponse response) {
         return new Response(response.httpVersion(), response.statusCode(), response.reasonPhrase(),
             Headers.of(response.headers()), response.body().getBytes());
-    }
-
-    public static Response of(HttpHook.Response response) {
-        return new Response(response.getVersion(), response.getStatusCode(), response.getReason(),
-            Headers.ofRpc(response.getHeadersList()), response.getContent().toByteArray());
     }
 
     public static Response of(String str) {
@@ -103,10 +96,6 @@ public class Response {
 
     public HttpResponse toBurp() {
         return HttpResponse.httpResponse(ByteArray.byteArray(updateContentLength().toRaw()));
-    }
-
-    public HttpHook.Response toRpc() {
-        return HttpHook.Response.newBuilder().setVersion(version).setStatusCode(statusCode).setReason(reason).addAllHeaders(headers.toRpc()).setContent(ByteString.copyFrom(content)).build();
     }
 
     public byte[] toRaw() {

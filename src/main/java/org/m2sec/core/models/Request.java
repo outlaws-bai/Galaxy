@@ -3,7 +3,6 @@ package org.m2sec.core.models;
 import burp.api.montoya.core.ByteArray;
 import burp.api.montoya.http.HttpService;
 import burp.api.montoya.http.message.requests.HttpRequest;
-import com.google.protobuf.ByteString;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -14,8 +13,6 @@ import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.enums.Protocol;
 import org.m2sec.core.utils.HttpUtil;
-import org.m2sec.rpc.HttpHook;
-
 import javax.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
@@ -77,13 +74,6 @@ public class Request {
         this.content = content;
     }
 
-    public static Request of(HttpHook.Request request) {
-        String fullPath = request.getFullPath();
-        Tuple<String, String> temp = HttpUtil.parseFullPath(fullPath);
-        return new Request(request.getSecure(), request.getHost(), request.getPort(), request.getVersion(),
-            request.getMethod(), temp.getFirst(), Query.of(temp.getSecond()),
-            Headers.ofRpc(request.getHeadersList()), request.getContent().toByteArray());
-    }
 
     public static Request of(HttpRequest request) {
         return Request.of(request.toByteArray().getBytes(), request.httpService().secure(),
@@ -207,10 +197,6 @@ public class Request {
         return HttpRequest.httpRequest(httpService, ByteArray.byteArray(requestMessage));
     }
 
-    public HttpHook.Request toRpc() {
-
-        return HttpHook.Request.newBuilder().setSecure(secure).setHost(host).setPort(port).setVersion(version).setMethod(method).setFullPath(getFullPath()).addAllHeaders(headers.toRpc()).setContent(ByteString.copyFrom(content)).build();
-    }
 
     public Request normalize() {
         path = HttpUtil.normalizePath(path);

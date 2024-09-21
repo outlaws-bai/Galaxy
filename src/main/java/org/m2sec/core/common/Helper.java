@@ -8,6 +8,7 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.FileAppender;
+import org.graalvm.polyglot.Engine;
 import org.m2sec.Galaxy;
 import org.m2sec.core.utils.FactorUtil;
 import org.slf4j.LoggerFactory;
@@ -28,8 +29,9 @@ public class Helper {
     public static void init(MontoyaApi api) {
         api.extension().setName(Constants.BURP_SUITE_EXT_NAME);
         api.logging().logToOutput(Constants.BURP_SUITE_EXT_INIT_DEF + "Version -> " + Constants.VERSION + "\r\n");
-        checkJdk(api);
-        checkJython(api);
+        checkJdk();
+        checkGrpc();
+        checkPythonAndJs();
         if (checkVersion(api)) {
             initWorkDir();
         }
@@ -61,23 +63,22 @@ public class Helper {
         return buildWorkDir;
     }
 
-    public static void checkJdk(MontoyaApi api) {
+    public static void checkJdk() {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        if (compiler == null) {
-            Constants.isUseJdk = false;
-            api.logging().logToOutput("Warning! Detected that the burp you started using JRE. HttpHook-js, " +
-                "HttpHook-java will not be available. Please refer to the link if necessary: https://github" +
-                ".com/outlaws-bai/Galaxy/blob/main/docs/ToJDK.md");
+        Constants.isUseJdk = compiler != null;
+    }
+
+    public static void checkPythonAndJs() {
+        try (Engine engine = Engine.create()) {
+            Constants.hasJs = engine.getLanguages().containsKey("js");
+            Constants.hasPython = engine.getLanguages().containsKey("python");
         }
     }
 
-    public static void checkJython(MontoyaApi api) {
-        if (!ReflectTools.canLoadClass("org.python.util.PythonInterpreter")) {
-            Constants.hasJython = false;
-            api.logging().logToOutput("Warning! Cannot load jython, HttpHook-python will not be available, Please " +
-                "read the precautions in GitHub README.md if necessary");
-        }
+    public static void checkGrpc() {
+        Constants.hasGrpc = ReflectTools.canLoadClass("io.grpc.ManagedChannel");
     }
+
 
     public static void initWorkDir() {
         // 创建必要的文件和路径
