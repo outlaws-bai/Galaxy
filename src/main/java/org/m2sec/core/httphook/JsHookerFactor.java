@@ -2,13 +2,15 @@ package org.m2sec.core.httphook;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.m2sec.core.common.*;
+import org.graalvm.polyglot.HostAccess;
+import org.graalvm.polyglot.Value;
+import org.m2sec.core.common.Config;
+import org.m2sec.core.common.Constants;
+import org.m2sec.core.common.FileTools;
+import org.m2sec.core.common.Helper;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
-import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptException;
+import org.graalvm.polyglot.Context;
 
 /**
  * @author: outlaws-bai
@@ -20,65 +22,86 @@ import javax.script.ScriptException;
 public class JsHookerFactor extends IHttpHooker {
 
 
-    Invocable invocable;
+    private Context context;
+    private Value bind;
+    private Value func1;
+    private Value func2;
+    private Value func3;
+    private Value func4;
+
 
     @Override
     public void init(Config config1) {
         config = config1;
         option = config1.getOption();
-        String filepath = FileTools.getExampleScriptFilePath(option.getCodeSelectItem(),
-            Constants.JS_FILE_SUFFIX);
+        String filepath = FileTools.getExampleScriptFilePath(option.getCodeSelectItem(), Constants.JS_FILE_SUFFIX);
         init(filepath);
 
     }
 
     public void init(String filepath) {
-        try {
-            String content = FileTools.readFileAsString(filepath);
-            ScriptEngine engine = new NashornScriptEngineFactory().getScriptEngine(this.getClass().getClassLoader());
-            engine.eval(content);
-            invocable = (Invocable) engine;
-            safeRun("set_log", log);
-        } catch (ScriptException e) {
-            throw new RuntimeException("load java script fail.", e);
-        }
+        context =
+            Context.newBuilder("js")
+                .allowExperimentalOptions(true)
+                .allowHostAccess(HostAccess.ALL)
+                .allowAllAccess(true)
+                .hostClassLoader(getClass().getClassLoader())
+                .build();
+        bind = context.getBindings("js");
+        init();
         log.info("load java script file success. {}", filepath);
     }
 
     @Override
     public Request hookRequestToBurp(Request request) {
-        return (Request) safeRun(Constants.HOOK_FUNC_1, request);
+        if (func1 == null) return null;
+        return func1.execute(request).as(Request.class);
     }
 
     @Override
     public Request hookRequestToServer(Request request) {
-        return (Request) safeRun(Constants.HOOK_FUNC_2, request);
+        if (func2 == null) return null;
+        return func2.execute(request).as(Request.class);
     }
 
     @Override
     public Response hookResponseToBurp(Response response) {
-        return (Response) safeRun(Constants.HOOK_FUNC_3, response);
+        if (func3 == null) return null;
+        return func3.execute(response).as(Response.class);
     }
 
     @Override
     public Response hookResponseToClient(Response response) {
-        return (Response) safeRun(Constants.HOOK_FUNC_4, response);
+        if (func4 == null) return null;
+        return func4.execute(response).as(Response.class);
     }
 
     @Override
     public void destroy() {
-        invocable = null;
+        bind = null;
+        func1 = null;
+        func2 = null;
+        func3 = null;
+        func4 = null;
+        context.close();
     }
 
-    public Object safeRun(String funcName, Object arg) {
-        try {
-            return invocable.invokeFunction(Helper.camelToSnake(funcName), arg);
-        } catch (NoSuchMethodException e) {
+    private void init() {
+        Value setLog = safeGetFunction("set_log");
+        if (setLog != null) setLog.execute(log);
+        func1 = safeGetFunction(Constants.HOOK_FUNC_1);
+        func2 = safeGetFunction(Constants.HOOK_FUNC_2);
+        func3 = safeGetFunction(Constants.HOOK_FUNC_3);
+        func4 = safeGetFunction(Constants.HOOK_FUNC_4);
+    }
+
+    private Value safeGetFunction(String funcName) {
+        Value value = bind.getMember(Helper.camelToSnake(funcName));
+        if (value == null) {
             log.warn("You have not implemented the {} method, which may lead to unknown issues", funcName);
             return null;
-        } catch (ScriptException e) {
-            throw new RuntimeException(e);
         }
+        return value;
     }
 
 }

@@ -33,12 +33,16 @@ public class DynamicKey {
     private static final byte[] publicKey = CodeUtil.b64decode(publicKeyBase64);
     private static final byte[] privateKey = CodeUtil.b64decode(privateKeyBase64);
 
-    private final ThreadLocal<byte[]> aesSecret = ThreadLocal.withInitial(() -> new byte[]{});
+    private static final ThreadLocal<byte[]> aesSecret = ThreadLocal.withInitial(() -> new byte[]{});
 
     private static final String jsonKey1 = "data";
     private static final String jsonKey2 = "key";
 
     private Logger log;
+
+    static {
+        aesSecret.set("32byteslongsecretkeyforaes256!aa".getBytes());
+    }
 
     public DynamicKey(Logger log) {
         this.log = log;

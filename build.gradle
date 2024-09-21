@@ -1,21 +1,22 @@
 // from https://github.com/grpc/grpc-java/blob/master/examples/build.gradle
 
 plugins {
-    id 'java'
-    id 'com.google.protobuf' version '0.9.4'
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id "java"
+    id "com.google.protobuf" version "0.9.4"
+    id "com.github.johnrengelman.shadow" version "8.1.1"
 }
 
-group = 'org.m2sec'
-version = '3.1.0'
-def grpcVersion = '1.54.1'
-def protobufVersion = '3.24.0'
+group = "org.m2sec"
+version = "3.1.0"
+def grpcVersion = "1.54.1"
+def protobufVersion = "3.24.0"
 def protocVersion = protobufVersion
+def graalVersion = "24.1.0"
 def versionFile = file("${projectDir}/src/main/resources/version.txt") as Object
 
 repositories {
-//    mavenCentral()
-    maven { url 'https://maven.aliyun.com/repository/public' }
+    mavenCentral()
+//    maven { url "https://maven.aliyun.com/repository/public" }
 }
 
 java {
@@ -24,46 +25,47 @@ java {
 }
 
 dependencies {
-    // annotation
-    annotationProcessor 'org.projectlombok:lombok:1.18.32'
-    compileOnly 'org.projectlombok:lombok:1.18.32'
-    compileOnly "org.apache.tomcat:annotations-api:6.0.53"
-    // burp
-    compileOnly 'net.portswigger.burp.extensions:montoya-api:2023.12.1'
-    // yaml
-    implementation 'org.yaml:snakeyaml:2.2'
+    // cross-language
+    implementation "org.graalvm.sdk:graal-sdk:${graalVersion}"
+    implementation "org.graalvm.js:js:${graalVersion}"
+    implementation "org.graalvm.python:python:${graalVersion}"
     // grpc
     runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
     implementation "io.grpc:grpc-protobuf:${grpcVersion}"
     implementation "io.grpc:grpc-stub:${grpcVersion}"
     implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+    // annotation
+    annotationProcessor "org.projectlombok:lombok:1.18.32"
+    compileOnly "org.projectlombok:lombok:1.18.32"
+    compileOnly "org.apache.tomcat:annotations-api:6.0.53"
+    // yaml
+    implementation "org.yaml:snakeyaml:2.2"
     // crypto
-    compileOnly 'org.bouncycastle:bcprov-jdk18on:1.78.1'
+    compileOnly "org.bouncycastle:bcprov-jdk18on:1.78.1"
     // template
-    implementation 'org.apache.commons:commons-text:1.12.0'
+    implementation "org.apache.commons:commons-text:1.12.0"
     // log
-    implementation 'org.slf4j:slf4j-api:2.0.13'
-    implementation 'ch.qos.logback:logback-classic:1.5.6'
+    implementation "org.slf4j:slf4j-api:2.0.13"
+    implementation "ch.qos.logback:logback-classic:1.5.6"
     // code text area
-    implementation 'com.fifesoft:rsyntaxtextarea:3.4.1'
-    implementation 'com.fifesoft:autocomplete:3.3.1'
-    // cross-language
-    implementation 'org.openjdk.nashorn:nashorn-core:15.4'
-    implementation 'org.python:jython-standalone:2.7.3'
+    implementation "com.fifesoft:rsyntaxtextarea:3.4.1"
+    implementation "com.fifesoft:autocomplete:3.3.1"
     // express
-    implementation 'org.mvel:mvel2:2.5.2.Final'
+    implementation "org.mvel:mvel2:2.5.2.Final"
     // client
-    implementation 'cn.hutool:hutool-http:5.8.29'
+    implementation "cn.hutool:hutool-http:5.8.29"
+
+
+    // burp
+    compileOnly "net.portswigger.burp.extensions:montoya-api:2023.12.1"
     // test
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testImplementation 'net.portswigger.burp.extensions:montoya-api:2023.12.1'
-    testImplementation 'org.bouncycastle:bcprov-jdk18on:1.78.1'
-    testImplementation 'org.projectlombok:lombok:1.18.32'
-    testImplementation 'com.fifesoft:rsyntaxtextarea:3.4.1'
-    testImplementation 'org.python:jython-standalone:2.7.3'
-    testImplementation 'org.openjdk.nashorn:nashorn-core:15.4'
+    testAnnotationProcessor "org.projectlombok:lombok:1.18.32"
+    testImplementation platform("org.junit:junit-bom:5.9.1")
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testImplementation "net.portswigger.burp.extensions:montoya-api:2023.12.1"
+    testImplementation "org.bouncycastle:bcprov-jdk18on:1.78.1"
+    testImplementation "org.projectlombok:lombok:1.18.32"
+    testImplementation "com.fifesoft:rsyntaxtextarea:3.4.1"
 }
 
 test {
@@ -83,8 +85,8 @@ protobuf {
 sourceSets {
     main {
         java {
-            srcDirs 'build/generated/source/proto/main/grpc'
-            srcDirs 'build/generated/source/proto/main/java'
+            srcDirs "build/generated/source/proto/main/grpc"
+            srcDirs "build/generated/source/proto/main/java"
         }
     }
 }
@@ -98,11 +100,11 @@ jar {
 
 shadowJar {
     // Not commenting means entering jython into a jar package
-    // archiveClassifier.set('without-jython')
+    // archiveClassifier.set("without-jython")
     versionFile.text = version
-    if (archiveClassifier.get() == 'without-jython') {
+    if (archiveClassifier.get() == "without-jython") {
         dependencies {
-            exclude(dependency('org.python:jython-standalone:2.7.3'))
+            exclude(dependency("org.python:jython-standalone:2.7.3"))
         }
     }
     mergeServiceFiles()

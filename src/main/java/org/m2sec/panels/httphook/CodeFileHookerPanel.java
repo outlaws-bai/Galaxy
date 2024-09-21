@@ -9,10 +9,7 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 import org.m2sec.Galaxy;
 import org.m2sec.core.common.*;
 import org.m2sec.core.enums.HttpHookService;
-import org.m2sec.core.httphook.IHttpHooker;
-import org.m2sec.core.httphook.JavaFileHookerFactor;
-import org.m2sec.core.httphook.JsHookerFactor;
-import org.m2sec.core.httphook.PythonHookerFactor;
+import org.m2sec.core.httphook.*;
 
 import javax.swing.*;
 import java.awt.*;

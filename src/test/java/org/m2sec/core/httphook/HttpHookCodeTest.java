@@ -32,7 +32,7 @@ public class HttpHookCodeTest {
 
     @Test
     public void testOneCodeHooker() {
-        testCodeHooker(examplesFilePath + File.separator + "dynamic_key.js");
+        testCodeHooker(examplesFilePath + File.separator + "DynamicKey.java");
     }
 
 
