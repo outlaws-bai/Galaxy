@@ -38,17 +38,10 @@ public class PythonHookerFactor extends IHttpHooker {
     }
 
     public void init(String filepath) {
-        Context.Builder builder = null;
-        try {
-            builder = Context.newBuilder("python").allowExperimentalOptions(true)
-                .allowHostAccess(HostAccess.ALL)
-                .allowAllAccess(true)
-                .hostClassLoader(getClass().getClassLoader());
-        } catch (Exception e) {
-            builder = Context.newBuilder("python").allowExperimentalOptions(true)
-                .allowHostAccess(HostAccess.ALL)
-                .allowAllAccess(true);
-        }
+        Context.Builder builder = Context.newBuilder("python").allowExperimentalOptions(true)
+            .allowHostAccess(HostAccess.ALL)
+            .allowAllAccess(true)
+            .hostClassLoader(getClass().getClassLoader());
         context = builder.build();
         bind = context.getBindings("python");
         context.eval("python", FileTools.readFileAsString(filepath));

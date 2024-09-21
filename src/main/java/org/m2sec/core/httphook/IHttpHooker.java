@@ -44,9 +44,9 @@ public abstract class IHttpHooker {
                     log.debug("[{}] This is hooked request: {}. pass hookRequestToBurp", name, request);
                     return retVal;
                 }
-                log.debug("[{}] before hook: {}", name, request);
                 String expression = option.getRequestCheckExpression();
                 if (!isCheckExpression || (expression != null && !expression.isEmpty() && (Boolean) Render.renderExpression(expression, new HashMap<>(Map.of("request", request))))) {
+                    log.debug("[{}] before hook: {}", name, request);
                     request = hookRequestToBurp(request);
                     log.debug("[{}] after hook: {}", name, request);
                     if (request == null) {

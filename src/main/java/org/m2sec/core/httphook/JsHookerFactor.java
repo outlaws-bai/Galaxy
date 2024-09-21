@@ -40,17 +40,10 @@ public class JsHookerFactor extends IHttpHooker {
     }
 
     public void init(String filepath) {
-        Context.Builder builder = null;
-        try {
-            builder = Context.newBuilder("js").allowExperimentalOptions(true)
-                .allowHostAccess(HostAccess.ALL)
-                .allowAllAccess(true)
-                .hostClassLoader(getClass().getClassLoader());
-        } catch (Exception e) {
-            builder = Context.newBuilder("js").allowExperimentalOptions(true)
-                .allowHostAccess(HostAccess.ALL)
-                .allowAllAccess(true);
-        }
+        Context.Builder builder = Context.newBuilder("js").allowExperimentalOptions(true)
+            .allowHostAccess(HostAccess.ALL)
+            .allowAllAccess(true)
+            .hostClassLoader(getClass().getClassLoader());
         context = builder.build();
         bind = context.getBindings("js");
         context.eval("js", FileTools.readFileAsString(filepath));
