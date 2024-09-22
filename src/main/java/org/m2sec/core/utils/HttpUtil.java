@@ -5,18 +5,17 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import lombok.extern.slf4j.Slf4j;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Tuple;
 import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.enums.Protocol;
 import org.m2sec.core.models.*;
+import org.python.jline.internal.Log;
 
 import javax.annotation.Nullable;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,6 +28,7 @@ import java.util.*;
  * @date: 2024/6/21 20:23
  * @description:
  */
+@Slf4j
 public class HttpUtil {
 
     public static URL parseUrl(String urlStr) {
@@ -202,6 +202,7 @@ public class HttpUtil {
         return result.toString();
     }
 
+
     public static boolean isCorrectUrl(String urlStr) {
         try {
             new URL(urlStr);
@@ -225,6 +226,164 @@ public class HttpUtil {
         }
         return ContentType.TEXT;
     }
+
+    public static String extractBoundary(String contentType) {
+        if (contentType != null && contentType.contains("multipart/form-data")) {
+            String[] parts = contentType.split(";");
+            for (String part : parts) {
+                part = part.trim();
+                if (part.startsWith("boundary=")) {
+                    return part.substring("boundary=".length()).replace("\"", "");
+                }
+            }
+        }
+        return null; // 如果没有找到 boundary，返回 null
+    }
+
+    public static FormData<Object> parseContentFormDataContent(byte[] content, String boundary) {
+        FormData<Object> formData = new FormData<>();
+
+        // 定义边界分隔符
+        String boundaryString = "--" + boundary;
+        byte[] boundaryBytes = boundaryString.getBytes(StandardCharsets.UTF_8);
+        byte[] endBoundaryBytes = (boundaryString + "--").getBytes(StandardCharsets.UTF_8);
+
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(content);
+        ByteArrayOutputStream partBuffer = new ByteArrayOutputStream();
+
+        try {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                partBuffer.write(buffer, 0, bytesRead);
+            }
+
+            byte[] allParts = partBuffer.toByteArray();
+            int startPos = 0;
+
+            while (startPos < allParts.length) {
+                // 查找边界的位置
+                int boundaryPos = findBoundary(allParts, startPos, boundaryBytes);
+                if (boundaryPos == -1) {
+                    break; // 未找到更多的边界
+                }
+
+                // 下一个边界的开始
+                int nextBoundaryPos = findBoundary(allParts, boundaryPos + boundaryBytes.length, boundaryBytes);
+                if (nextBoundaryPos == -1) {
+                    nextBoundaryPos = findBoundary(allParts, boundaryPos + boundaryBytes.length, endBoundaryBytes);
+                    if (nextBoundaryPos == -1) {
+                        break; // 最后一个边界已经处理完毕
+                    }
+                }
+
+                // 获取该部分内容
+                int partStart = boundaryPos + boundaryBytes.length + 2; // 跳过边界和换行
+                int partEnd = nextBoundaryPos - 2; // 去掉换行符
+                byte[] part = Arrays.copyOfRange(allParts, partStart, partEnd);
+
+                // 处理该部分
+                processPart(part, formData, boundary);
+
+                startPos = nextBoundaryPos;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return formData;
+    }
+
+    private static int findBoundary(byte[] content, int startPos, byte[] boundary) {
+        for (int i = startPos; i <= content.length - boundary.length; i++) {
+            boolean match = true;
+            for (int j = 0; j < boundary.length; j++) {
+                if (content[i + j] != boundary[j]) {
+                    match = false;
+                    break;
+                }
+            }
+            if (match) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private static void processPart(byte[] part, FormData<Object> formData, String boundary) {
+        ByteArrayInputStream partStream = new ByteArrayInputStream(part);
+        ByteArrayOutputStream contentBuffer = new ByteArrayOutputStream();
+        StringBuilder contentDisposition = new StringBuilder();
+        Headers headers = new Headers();  // 创建 Headers 实例
+        boolean isFile = false;
+        String name = null;
+        String filename = null;
+
+        // 读取 Content-Disposition 和其他头
+        int b;
+        while ((b = partStream.read()) != -1) {
+            contentDisposition.append((char) b);
+            if (contentDisposition.toString().endsWith("\r\n\r\n")) {
+                break;
+            }
+        }
+
+        // 解析 Content-Disposition 头
+        String[] headersArray = contentDisposition.toString().split("\r\n");
+        for (String header : headersArray) {
+            String trimmedHeader = header.trim();
+            if (trimmedHeader.startsWith("Content-Disposition:")) {
+                String[] parts = trimmedHeader.split(";");
+                for (String partHeader : parts) {
+                    partHeader = partHeader.trim();
+                    if (partHeader.startsWith("name=\"")) {
+                        name = partHeader.substring(6, partHeader.length() - 1);
+                    } else if (partHeader.startsWith("filename=\"")) {
+                        filename = partHeader.substring(10, partHeader.length() - 1);
+                        isFile = true;
+                    }
+                }
+            } else if (!trimmedHeader.equals(boundary)) {
+                String[] keyValue = trimmedHeader.split(": ", 2);
+                if (keyValue.length == 2) {
+                    headers.add(keyValue[0], keyValue[1]); // 假设 Headers 类有 add 方法
+                }
+            }
+        }
+
+        // 读取内容
+        while ((b = partStream.read()) != -1) {
+            contentBuffer.write(b);
+        }
+
+        // 将内容添加到 FormData
+        if (isFile) {
+            byte[] fileContent = contentBuffer.toByteArray();
+            UploadFile uploadFile = new UploadFile(filename, headers, fileContent);
+            uploadFile.setFilename(filename);
+            uploadFile.setContent(fileContent);
+            uploadFile.setHeaders(headers); // 设置文件头信息
+
+            formData.add(name, uploadFile);
+        } else {
+            String value = contentBuffer.toString();
+            formData.add(name, value);
+        }
+    }
+
+    private static boolean endsWith(byte[] array, byte[] suffix) {
+        if (array.length < suffix.length) {
+            return false;
+        }
+        for (int i = 0; i < suffix.length; i++) {
+            if (array[array.length - suffix.length + i] != suffix[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 
     public static String generateBoundary() {
         return UUID.randomUUID().toString().replace("-", "");

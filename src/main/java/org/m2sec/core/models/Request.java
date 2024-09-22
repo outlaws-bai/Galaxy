@@ -251,15 +251,12 @@ public class Request {
         setBody(form.toRawString());
     }
 
-    public FormData<String> getFormData() {
-        // 待实现
-        return null;
+    public FormData<Object> getFormData() {
+        String boundary = HttpUtil.extractBoundary(headers.getFirstIgnoreCase(Constants.HTTP_HEADER_CONTENT_TYPE));
+        assert boundary!=null: "boundary is null";
+        return HttpUtil.parseContentFormDataContent(content, boundary);
     }
 
-    public FormData<UploadFile> getFiles() {
-        // 待实现
-        return null;
-    }
 
     public Object getJson() {
         return HttpUtil.bodyToJson(getBody());
