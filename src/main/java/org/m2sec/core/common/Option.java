@@ -21,6 +21,7 @@ public class Option {
     private boolean hookResponse;
     private boolean autoForwardRequest;
     private String grpcConn;
+    private String httpServer;
     private String codeSelectItem;
     private boolean hookStart;
 }

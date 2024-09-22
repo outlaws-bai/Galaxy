@@ -74,6 +74,9 @@ public class HttpHookPanel extends JPanel {
             hookNames.add(HttpHookService.GRPC.name().toLowerCase());
             serviceMap.put(HttpHookService.GRPC.name().toLowerCase(), rpcImpl);
         }
+        HttpHookerPanel httpImpl = new HttpHookerPanel(config,api, HttpHookService.HTTP);
+        hookNames.add(HttpHookService.HTTP.name().toLowerCase());
+        serviceMap.put(HttpHookService.HTTP.name().toLowerCase(), httpImpl);
 
         // 创建一个容器(卡片)用于放置不同方式的JPanel
         JPanel hookerPanelContainer = new JPanel(new CardLayout());
@@ -162,6 +165,7 @@ public class HttpHookPanel extends JPanel {
                         .setRequestCheckExpression(checkELTextField.getText())
                         .setHookResponse(hookResponseCheckBox.isSelected())
                         .setGrpcConn(rpcImpl.getInput())
+                        .setHttpServer(httpImpl.getInput())
                         .setCodeSelectItem(hookerPanel.getInput())
                         .setAutoForwardRequest(autoForwardRequestCheckBox.isSelected());
                     hookerPanel.start(config);

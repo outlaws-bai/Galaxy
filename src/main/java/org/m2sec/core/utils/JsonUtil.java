@@ -58,4 +58,8 @@ public class JsonUtil {
         }.getType();
         return gson.fromJson(jsonElement, listType);
     }
+
+    public static <T> T mapToObject(Map<?, ?> map, Class<T> clazz) {
+        return gson.fromJson(gson.toJson(map), clazz);
+    }
 }

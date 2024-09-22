@@ -97,13 +97,13 @@ public class Helper {
         FileTools.mvResource(Constants.SETTING_FILE_NAME, Constants.WORK_DIR);
         FileTools.mvResource(Constants.OPTION_FILE_NAME, Constants.WORK_DIR);
         // mv resources
-        FileTools.mvResources(Constants.HTTP_HOOK_EXAMPLES_DIR_NAME + File.separator+ HttpHookService.JAVA.getDir(),
+        FileTools.mvResources(Constants.HTTP_HOOK_EXAMPLES_DIR_NAME + "/"+ HttpHookService.JAVA.getDir(),
             Constants.WORK_DIR);
-        FileTools.mvResources(Constants.HTTP_HOOK_EXAMPLES_DIR_NAME + File.separator+ HttpHookService.JS.getDir(),
+        FileTools.mvResources(Constants.HTTP_HOOK_EXAMPLES_DIR_NAME + "/"+ HttpHookService.JS.getDir(),
             Constants.WORK_DIR);
-        FileTools.mvResources(Constants.HTTP_HOOK_EXAMPLES_DIR_NAME + File.separator+ HttpHookService.GRAALPY.getDir(),
+        FileTools.mvResources(Constants.HTTP_HOOK_EXAMPLES_DIR_NAME + "/"+ HttpHookService.GRAALPY.getDir(),
             Constants.WORK_DIR);
-        FileTools.mvResources(Constants.HTTP_HOOK_EXAMPLES_DIR_NAME + File.separator+ HttpHookService.JYTHON.getDir(),
+        FileTools.mvResources(Constants.HTTP_HOOK_EXAMPLES_DIR_NAME + "/"+ HttpHookService.JYTHON.getDir(),
             Constants.WORK_DIR);
         FileTools.mvResources(Constants.TEMPLATE_DIR_NAME, Constants.WORK_DIR);
     }
