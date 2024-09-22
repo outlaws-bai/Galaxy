@@ -4,13 +4,11 @@ from java.org.m2sec.core.utils import (
     CodeUtil,
     CryptoUtil,
     HashUtil,
-    JsonUtil,
     MacUtil,
     FactorUtil,
 )
 from java.org.m2sec.core.models import Request, Response
-from java.lang import String
-
+from java.lang import Byte
 
 """
 内置模版，需要自定义代码文件时查看该文档：https:#github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md
@@ -106,17 +104,23 @@ def encrypt(content):
     return CryptoUtil.sm4Encrypt(ALGORITHM, content, secret, paramMap)
 
 def get_data(content):
-    return CodeUtil.b64decode(JsonUtil.jsonStrToMap(String(content)).get(jsonKey))
+    return CodeUtil.b64decode(json.loads(convert_bytes(content))[jsonKey])
 
 
 def to_data(content):
     jsonBody = {}
     jsonBody[jsonKey] = CodeUtil.b64encodeToString(content)
-    return JsonUtil.toJsonStr(jsonBody).encode()
+    return json.dumps(jsonBody).encode()
 
 def set_log(log1):
     """程序在最开始会自动调用该函数，在上方函数可以放心使用log对象"""
     global log
     log = log1
+    import sys
+    log.info("python version: {}", sys.version)
+
+def convert_bytes(java_byte_array):
+    """将java的字节数组转为graalpy的字节数组, java的字节数组对应到graalpy中的类型是foreign对象, 如果想要用graalpy处理java的字节数组，最好先调用该函数"""
+    return bytes([Byte.toUnsignedInt(b) for b in java_byte_array])
 
 

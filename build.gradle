@@ -8,7 +8,7 @@ plugins {
 
 group = "org.m2sec"
 def version = "3.2.0"
-def graalService = "js" // js/python/grpc
+def graalService = "python" // js/python/grpc
 def grpcVersion = "1.54.1"
 def graalJsVersion = "23.0.5"
 def graalPythonVersion = "24.1.0"

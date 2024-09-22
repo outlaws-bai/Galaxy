@@ -1,6 +1,7 @@
 package org.m2sec.core.httphook;
 
 import lombok.extern.slf4j.Slf4j;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.m2sec.core.common.Constants;
@@ -12,6 +13,7 @@ import org.m2sec.core.models.Response;
 import org.m2sec.core.utils.FactorUtil;
 
 import java.io.File;
+import java.security.Security;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,18 +30,19 @@ public class HttpHookCodeTest {
     @BeforeAll
     public static void setRootLoggerLevel() {
         System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
+        Security.addProvider(new BouncyCastleProvider());
         Helper.checkPythonAndJs();
     }
 
     @Test
     public void testOneCodeHooker() {
-        testCodeHooker(examplesFilePath + File.separator + "sm2.py");
+        testCodeHooker(examplesFilePath + File.separator + "aes_cbc.py");
     }
 
 
     @Test
     public void testCodeHookers() {
-        String suffix = ".js";
+        String suffix = ".py";
         List<String> failPaths = new ArrayList<>();
         for (String filepath : FileTools.listDir(examplesFilePath)) {
             if (!filepath.endsWith(suffix)) continue;
