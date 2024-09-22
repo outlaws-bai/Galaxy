@@ -13,7 +13,6 @@ import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.enums.Protocol;
 import org.m2sec.core.utils.HttpUtil;
-import javax.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.util.Arrays;
@@ -81,7 +80,7 @@ public class Request {
     }
 
     @SuppressWarnings("DuplicatedCode")
-    public static Request of(byte[] raw, boolean secure, @Nullable String host, int port) {
+    public static Request of(byte[] raw, boolean secure, String host, int port) {
         int index = 0;
 
         // 解析请求行
@@ -208,7 +207,6 @@ public class Request {
         return HttpUtil.getContentType(method, value);
     }
 
-    @Nullable
     public Cookies getCookies() {
         String cookieHeader = headers.getFirst(Constants.HTTP_HEADER_COOKIE);
         if (cookieHeader == null) return null;

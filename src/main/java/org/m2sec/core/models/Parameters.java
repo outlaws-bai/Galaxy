@@ -2,7 +2,6 @@ package org.m2sec.core.models;
 
 import lombok.NoArgsConstructor;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -46,7 +45,6 @@ public class Parameters<T> extends LinkedHashMap<String, List<T>> {
         return this;
     }
 
-    @Nullable
     public T getFirst(String key) {
         List<T> values = super.get(key);
         if (values == null) {
