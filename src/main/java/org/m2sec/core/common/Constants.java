@@ -83,9 +83,9 @@ public class Constants {
 
     public static final String HTTP_QUERY_FORM_SEP = "&";
 
-    public static final String HTTP_HEADER_CONN = ":[ ]+";
+    public static final String HTTP_HEADER_CONN = ":[ ]*";
 
-    public static final String HTTP_COOKIE_CONN = ";[ ]+";
+    public static final String HTTP_COOKIE_CONN = ";[ ]*";
 
     public static final String HTTP_H_C_Q_F_CONN = "=";
 

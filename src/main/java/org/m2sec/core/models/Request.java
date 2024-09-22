@@ -13,11 +13,10 @@ import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.enums.Protocol;
 import org.m2sec.core.utils.HttpUtil;
+
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author: outlaws-bai
@@ -251,9 +250,29 @@ public class Request {
         setBody(form.toRawString());
     }
 
+    public void setFormData(FormData<Object> formData) {
+        String boundary = HttpUtil.generateBoundary();
+        FormData<String> formData1 = new FormData<>();
+        FormData<UploadFile> file1 = new FormData<>();
+        for (Map.Entry<String, List<Object>> entry : formData.entrySet()) {
+            for (Object value : entry.getValue()) {
+                if (value instanceof UploadFile v) {
+                    file1.add(entry.getKey(), v);
+                } else {
+                    formData1.add(entry.getKey(), (String) value);
+                }
+            }
+        }
+        byte[] content = HttpUtil.generateContentFormDataContent(boundary, formData1, file1);
+        headers.put(Constants.HTTP_HEADER_CONTENT_TYPE, ContentType.FORM_DATA.getHeaderValuePrefix() + "; " +
+            "boundary=" + boundary);
+        setContent(content);
+    }
+
     public FormData<Object> getFormData() {
+        headers.getFirstIgnoreCase(Constants.HTTP_HEADER_CONTENT_TYPE);
         String boundary = HttpUtil.extractBoundary(headers.getFirstIgnoreCase(Constants.HTTP_HEADER_CONTENT_TYPE));
-        assert boundary!=null: "boundary is null";
+        assert boundary != null : "boundary is null";
         return HttpUtil.parseContentFormDataContent(content, boundary);
     }
 

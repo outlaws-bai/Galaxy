@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -183,24 +184,13 @@ public class HttpUtil {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, List<String>> entry : parameters.entrySet()) {
             for (String value : entry.getValue()) {
-                sb.append(entry.getKey()).append(conn).append(urlEncodeValue ? safeUrlEncode(value) : value).append(sep);
+                sb.append(entry.getKey()).append(conn).append(urlEncodeValue ? URLEncoder.encode(value, StandardCharsets.UTF_8) : value).append(sep);
             }
         }
         sb.delete(sb.length() - sep.length(), sb.length());
         return sb.toString();
     }
 
-    public static String safeUrlEncode(String data) {
-        Map<Character, String> sourceChrs = new HashMap<>();
-        sourceChrs.put(' ', "+");
-        sourceChrs.put('\\', "%5C");
-        sourceChrs.put('#', "%23");
-        StringBuilder result = new StringBuilder();
-        for (char c : data.toCharArray()) {
-            result.append(sourceChrs.getOrDefault(c, String.valueOf(c)));
-        }
-        return result.toString();
-    }
 
 
     public static boolean isCorrectUrl(String urlStr) {
@@ -229,7 +219,7 @@ public class HttpUtil {
 
     public static String extractBoundary(String contentType) {
         if (contentType != null && contentType.contains("multipart/form-data")) {
-            String[] parts = contentType.split(";");
+            String[] parts = contentType.split(";[ ]*");
             for (String part : parts) {
                 part = part.trim();
                 if (part.startsWith("boundary=")) {
