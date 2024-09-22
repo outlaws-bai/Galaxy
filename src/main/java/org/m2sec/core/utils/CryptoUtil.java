@@ -37,10 +37,6 @@ import java.util.Map;
  */
 public class CryptoUtil {
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
-
     public static final String ALGORITHM_DES = "DES";
     public static final String ALGORITHM_DES_DEFAULT_TRANSFORMATION = "DES/ECB/PKCS5Padding";
     public static final String ALGORITHM_DES3 = "DESede";

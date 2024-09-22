@@ -1,6 +1,6 @@
 import json
 import base64
-from org.m2sec.core.utils import (
+from java.org.m2sec.core.utils import (
     CodeUtil,
     CryptoUtil,
     HashUtil,
@@ -8,8 +8,7 @@ from org.m2sec.core.utils import (
     MacUtil,
     FactorUtil,
 )
-from org.m2sec.core.models import Request, Response
-from java.lang import String
+from java.org.m2sec.core.models import Request, Response
 
 
 """
@@ -28,6 +27,7 @@ def hook_request_to_burp(request):
     Returns:
         Request: 经过处理后的request对象，返回null代表从当前节点开始流量不再需要处理
     """
+    return request
 
 
 def hook_request_to_server(request):
@@ -39,6 +39,7 @@ def hook_request_to_server(request):
     Returns:
         Request: 经过处理后的request对象，返回null代表从当前节点开始流量不再需要处理
     """
+    return request
 
 
 def hook_response_to_burp(response):
@@ -50,6 +51,7 @@ def hook_response_to_burp(response):
     Returns:
         Response: 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理
     """
+    return response
 
 
 def hook_response_to_client(response):
@@ -61,6 +63,7 @@ def hook_response_to_client(response):
     Returns:
         Response: 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理
     """
+    return response
 
 def set_log(log1):
     """程序在最开始会自动调用该函数，在上方函数可以放心使用log对象"""

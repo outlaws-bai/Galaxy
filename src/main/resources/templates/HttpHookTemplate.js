@@ -20,7 +20,8 @@ log = void 0
  * @param {Request} request 请求对象
  * @returns 经过处理后的request对象，返回null代表从当前节点开始流量不再需要处理
  */
-function hook_request_to_burp(request){
+function hook_request_to_burp(request) {
+    return request
 }
 
 
@@ -29,7 +30,8 @@ function hook_request_to_burp(request){
  * @param {Request} request 请求对象
  * @returns 经过处理后的request对象，返回null代表从当前节点开始流量不再需要处理
  */
-function hook_request_to_server(request){
+function hook_request_to_server(request) {
+    return request
 }
 
 
@@ -38,7 +40,8 @@ function hook_request_to_server(request){
  * @param {Response} response 响应对象
  * @returns 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理
  */
-function hook_response_to_burp(response){
+function hook_response_to_burp(response) {
+    return response
 }
 
 
@@ -47,12 +50,31 @@ function hook_response_to_burp(response){
  * @param {Response} response 响应对象
  * @returns 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理
  */
-function hook_response_to_client(response){
+function hook_response_to_client(response) {
+    return response
 }
 
 /**
  * 程序在最开始会自动调用该函数，在上方函数可以放心使用log对象
  */
-function set_log(log1){
+function set_log(log1) {
     log = log1
+}
+
+/**
+ * 字符串转字节数组
+ */
+function stringToByteArray(str) {
+    let byteArray = new Uint8Array(str.length);
+    for (let i = 0; i < str.length; i++) {
+        byteArray[i] = str.charCodeAt(i);
+    }
+    return byteArray;
+}
+
+/**
+ * 字节数组转字符串
+ */
+function byteArrayToString(byteArray) {
+    return String.fromCharCode.apply(null, byteArray);
 }

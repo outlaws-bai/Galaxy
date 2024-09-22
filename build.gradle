@@ -7,8 +7,8 @@ plugins {
 }
 
 group = "org.m2sec"
-def hooker = "python" // js/python/grpc
 def version = "3.2.0"
+def graalService = "js" // js/python/grpc
 def grpcVersion = "1.54.1"
 def graalJsVersion = "23.0.5"
 def graalPythonVersion = "24.1.0"
@@ -27,7 +27,7 @@ java {
 }
 
 dependencies {
-    if (hooker == "js") {
+    if (graalService == "js") {
         // cross-language
         implementation "org.graalvm.js:js:${graalJsVersion}"
         compileOnly "org.graalvm.python:python-language:${graalPythonVersion}"
@@ -37,7 +37,7 @@ dependencies {
         compileOnly "io.grpc:grpc-protobuf:${grpcVersion}"
         compileOnly "io.grpc:grpc-stub:${grpcVersion}"
         compileOnly "com.google.protobuf:protobuf-java-util:${protobufVersion}"
-    } else if (hooker == "python") {
+    } else if (graalService == "python") {
         // cross-language
         compileOnly "org.graalvm.js:js:${graalJsVersion}"
         implementation "org.graalvm.python:python-language:${graalPythonVersion}"
@@ -47,7 +47,7 @@ dependencies {
         compileOnly "io.grpc:grpc-protobuf:${grpcVersion}"
         compileOnly "io.grpc:grpc-stub:${grpcVersion}"
         compileOnly "com.google.protobuf:protobuf-java-util:${protobufVersion}"
-    } else if (hooker == "grpc") {
+    } else if (graalService == "grpc") {
         // cross-language
         compileOnly "org.graalvm.js:js:${graalJsVersion}"
         compileOnly "org.graalvm.python:python-language:${graalPythonVersion}"
@@ -127,7 +127,7 @@ jar {
 }
 
 shadowJar {
-    archiveClassifier.set(version + "-" + hooker)
+    archiveClassifier.set(version + "-" + graalService)
 
     // 设置版本文件
     versionFile.text = version

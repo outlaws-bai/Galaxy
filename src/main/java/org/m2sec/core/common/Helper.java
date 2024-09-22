@@ -8,6 +8,7 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.FileAppender;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.graalvm.polyglot.Engine;
 import org.m2sec.Galaxy;
 import org.m2sec.core.utils.FactorUtil;
@@ -18,6 +19,7 @@ import javax.tools.ToolProvider;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.Security;
 
 /**
  * @author: outlaws-bai
@@ -27,6 +29,8 @@ import java.nio.file.Paths;
 public class Helper {
 
     public static void init(MontoyaApi api) {
+        System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
+        Security.addProvider(new BouncyCastleProvider());
         api.extension().setName(Constants.BURP_SUITE_EXT_NAME);
         api.logging().logToOutput(Constants.BURP_SUITE_EXT_INIT_DEF + "Version -> " + Constants.VERSION + "\r\n");
         checkJdk();

@@ -113,6 +113,9 @@ function set_log(log1) {
     log = log1
 }
 
+/**
+ * 字符串转字节数组
+ */
 function stringToByteArray(str) {
     let byteArray = new Uint8Array(str.length);
     for (let i = 0; i < str.length; i++) {
@@ -121,6 +124,9 @@ function stringToByteArray(str) {
     return byteArray;
 }
 
+/**
+ * 字节数组转字符串
+ */
 function byteArrayToString(byteArray) {
     return String.fromCharCode.apply(null, byteArray);
 }

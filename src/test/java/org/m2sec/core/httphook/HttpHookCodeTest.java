@@ -27,6 +27,7 @@ public class HttpHookCodeTest {
 
     @BeforeAll
     public static void setRootLoggerLevel() {
+        System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
         Helper.checkPythonAndJs();
     }
 
@@ -38,19 +39,15 @@ public class HttpHookCodeTest {
 
     @Test
     public void testCodeHookers() {
-        String suffix = ".py";
-        if (suffix.equals(".js")) {
-            assert Constants.hasJs : "Due to compatibility issues, if you need to test JavaScript, please switch the " +
-                "graalService in build.gradle to js";
-        } else if (suffix.equals(".py")) {
-            assert Constants.hasPython : "Due to compatibility issues, if you need to test python, please switch the " +
-                "graalService in build.gradle to python";
-        }
+        String suffix = ".js";
         List<String> failPaths = new ArrayList<>();
         for (String filepath : FileTools.listDir(examplesFilePath)) {
             if (!filepath.endsWith(suffix)) continue;
+            //noinspection CaughtExceptionImmediatelyRethrown
             try {
                 testCodeHooker(filepath);
+            } catch (AssertionError e) {
+                throw e;
             } catch (Exception e) {
                 failPaths.add(filepath);
                 log.error("test error: {}", filepath, e);
@@ -67,7 +64,8 @@ public class HttpHookCodeTest {
         if (filepath.endsWith(".js")) {
             assert Constants.hasJs : "Due to compatibility issues, if you need to test JavaScript, please switch the " +
                 "graalService in build.gradle to js";
-        } else if (filepath.endsWith(".py")) {
+        } else //noinspection RedundantIfStatement
+            if (filepath.endsWith(".py")) {
             assert Constants.hasPython : "Due to compatibility issues, if you need to test python, please switch the " +
                 "graalService in build.gradle to python";
         }
