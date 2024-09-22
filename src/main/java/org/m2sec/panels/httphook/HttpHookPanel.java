@@ -45,13 +45,6 @@ public class HttpHookPanel extends JPanel {
         Map<String, IHookerPanel<?>> serviceMap = new LinkedHashMap<>();
         List<String> hookNames = new ArrayList<>();
 
-
-        if (Constants.isUseJdk) {
-            CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JAVA);
-            javaFileHookerPanel.resetCodeTheme();
-            hookNames.add(HttpHookService.JAVA.name().toLowerCase());
-            serviceMap.put(HttpHookService.JAVA.name().toLowerCase(), javaFileHookerPanel);
-        }
         if (Constants.hasJs) {
             CodeFileHookerPanel jsFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JS);
             jsFileHookerPanel.resetCodeTheme();
@@ -64,18 +57,23 @@ public class HttpHookPanel extends JPanel {
             hookNames.add(HttpHookService.GRAALPY.name().toLowerCase());
             serviceMap.put(HttpHookService.GRAALPY.name().toLowerCase(), pythonFileHookerPanel);
         }
-        GrpcHookerPanel rpcImpl = new GrpcHookerPanel(config, api, HttpHookService.GRPC);
-        if (Constants.hasGrpc) {
-            hookNames.add(HttpHookService.GRPC.name().toLowerCase());
-            serviceMap.put(HttpHookService.GRPC.name().toLowerCase(), rpcImpl);
-        }
-        if (Constants.hasJython){
+        if (Constants.hasJython) {
             CodeFileHookerPanel pythonFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JYTHON);
             pythonFileHookerPanel.resetCodeTheme();
             hookNames.add(HttpHookService.JYTHON.name().toLowerCase());
             serviceMap.put(HttpHookService.JYTHON.name().toLowerCase(), pythonFileHookerPanel);
         }
-
+        if (Constants.isUseJdk) {
+            CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JAVA);
+            javaFileHookerPanel.resetCodeTheme();
+            hookNames.add(HttpHookService.JAVA.name().toLowerCase());
+            serviceMap.put(HttpHookService.JAVA.name().toLowerCase(), javaFileHookerPanel);
+        }
+        GrpcHookerPanel rpcImpl = new GrpcHookerPanel(config, api, HttpHookService.GRPC);
+        if (Constants.hasGrpc) {
+            hookNames.add(HttpHookService.GRPC.name().toLowerCase());
+            serviceMap.put(HttpHookService.GRPC.name().toLowerCase(), rpcImpl);
+        }
 
         // 创建一个容器(卡片)用于放置不同方式的JPanel
         JPanel hookerPanelContainer = new JPanel(new CardLayout());

@@ -28,7 +28,6 @@ import java.util.List;
 
 public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
 
-    private final String CODE_FILE_SUFFIX;
 
     private JComboBox<String> codeCombo;
 
@@ -38,17 +37,6 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
 
     public CodeFileHookerPanel(Config config, MontoyaApi api, HttpHookService service) {
         super(config, api, service);
-        if (service.equals(HttpHookService.JAVA)) {
-            CODE_FILE_SUFFIX = Constants.JAVA_FILE_SUFFIX;
-        } else if (service.equals(HttpHookService.GRAALPY)) {
-            CODE_FILE_SUFFIX = Constants.GRAALPY_FILE_SUFFIX;
-        } else if (service.equals(HttpHookService.JS)) {
-            CODE_FILE_SUFFIX = Constants.JS_FILE_SUFFIX;
-        } else if (service.equals(HttpHookService.JYTHON)) {
-            CODE_FILE_SUFFIX = Constants.JYTHON_FILE_SUFFIX;
-        } else {
-            throw new InputMismatchException(service.name());
-        }
         initPanel();
     }
 
@@ -97,17 +85,18 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
         newButton.addActionListener(e -> {
             String filename = SwingTools.showInputDialog("Please input filename: ");
             if (filename == null) return;
-            String filepath = getFilePath(filename.replace(CODE_FILE_SUFFIX, ""));
+            if (!filename.endsWith(service.getSuffix())) {
+                SwingTools.showErrorMessageDialog("The suffix must be " + service.getSuffix());
+                return;
+            }
+            String filepath = getFilePath(filename);
             if (FileTools.isExist(filepath)) {
                 SwingTools.showErrorMessageDialog("This already exists, please try again. ");
                 return;
             }
             FileTools.createFiles(filepath);
-            String content;
-            if (service.equals(HttpHookService.JAVA))
-                content =
-                    Render.renderTemplate(FileTools.readResourceAsString("templates/HttpHookTemplate" + CODE_FILE_SUFFIX), new HashMap<>(Map.of("filename", filename)));
-            else content = FileTools.readResourceAsString("templates/HttpHookTemplate" + CODE_FILE_SUFFIX);
+            String content = FileTools.readResourceAsString("templates/HttpHookTemplate" + "." + service.getDir());
+            ;
             FileTools.writeFile(filepath, content);
             reloadExamples();
             codeCombo.setSelectedItem(filename);
@@ -131,13 +120,13 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
 
     private void reloadExamples() {
         codeCombo.removeAllItems();
-        List<String> examples = FileTools.listDir(Constants.HTTP_HOOK_EXAMPLES_DIR);
-        examples.stream().filter(x -> x.endsWith(CODE_FILE_SUFFIX)).forEach(x -> codeCombo.addItem(new File(x).getName().replace(CODE_FILE_SUFFIX, "")));
+        List<String> examples = FileTools.listDir(Constants.HTTP_HOOK_EXAMPLES_DIR + File.separator + service.getDir());
+        examples.forEach(x -> codeCombo.addItem(new File(x).getName()));
         resetInput();
     }
 
-    private String getFilePath(String item) {
-        return Constants.HTTP_HOOK_EXAMPLES_DIR + File.separator + item + CODE_FILE_SUFFIX;
+    private String getFilePath(String filename) {
+        return Constants.HTTP_HOOK_EXAMPLES_DIR + File.separator + service.getDir() + File.separator + filename;
     }
 
     private void installAutoComplete() {
@@ -198,8 +187,8 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
 
     @Override
     public IHttpHooker newHooker() {
-        FileTools.writeFile(FileTools.getExampleScriptFilePath(config.getOption().getCodeSelectItem(),
-                CODE_FILE_SUFFIX),
+        FileTools.writeFile(
+            Constants.HTTP_HOOK_EXAMPLES_DIR + File.separator + service.getDir() + File.separator + config.getOption().getCodeSelectItem(),
             codeTextArea.getText());
         if (service.equals(HttpHookService.JAVA)) {
             return new JavaFileHookerFactor();

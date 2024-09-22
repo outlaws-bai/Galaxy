@@ -3,9 +3,12 @@ package org.m2sec.core.httphook;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.core.common.*;
+import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
 import org.slf4j.Logger;
+
+import java.io.File;
 
 /**
  * @author: outlaws-bai
@@ -20,13 +23,15 @@ public class JavaFileHookerFactor extends IHttpHooker {
 
     private Object hooker;
 
+    private static final HttpHookService SERVICE = HttpHookService.JAVA;
+
     @Override
     public void init(Config config1) {
         config = config1;
         option = config1.getOption();
-        String javaFilePath = FileTools.getExampleScriptFilePath(option.getCodeSelectItem(),
-            Constants.JAVA_FILE_SUFFIX);
-        init(javaFilePath);
+        String filepath =
+            Constants.HTTP_HOOK_EXAMPLES_DIR + File.separator + SERVICE.getDir() + File.separator + option.getCodeSelectItem();
+        init(filepath);
     }
 
     public void init(String javaFilePath) {

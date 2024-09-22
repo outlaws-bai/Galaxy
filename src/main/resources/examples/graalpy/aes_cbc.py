@@ -11,20 +11,20 @@ from java.org.m2sec.core.models import Request, Response
 from java.lang import Byte
 
 """
-跨语言能力来自于graalpy
+跨语言能力来自于graalpy (对应python3.11)
 按 Ctrl（command） + ` 可查看内置函数
 需要自定义代码文件时查看该文档：https://github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md
 """
 
-ALGORITHM = "DES/CBC/PKCS5Padding"
-secret = b"12345678"
-iv = "12345678"
+ALGORITHM = "AES/CBC/PKCS5Padding"
+secret = b"32byteslongsecretkeyforaes256!aa"
+iv = "16byteslongiv456"
 paramMap = {"iv": iv}
 jsonKey = "data"
 log = None
 
 
-def hook_request_to_burp(request):
+def hook_request_to_burp(request: Request) -> Request:
     """HTTP请求从客户端到达Burp时被调用。在此处完成请求解密的代码就可以在Burp中看到明文的请求报文。
 
     Args:
@@ -34,15 +34,15 @@ def hook_request_to_burp(request):
         Request: 经过处理后的request对象，返回null代表从当前节点开始流量不再需要处理
     """
     # 获取需要解密的数据
-    encryptedData = get_data(request.getContent())
+    encryptedData: bytes = get_data(request.content)
     # 调用函数解密
-    data = decrypt(encryptedData)
+    data: bytes = decrypt(encryptedData)
     # 更新body为已加密的数据
     request.content = data
     return request
 
 
-def hook_request_to_server(request):
+def hook_request_to_server(request: Request) -> Request:
     """HTTP请求从Burp将要发送到Server时被调用。在此处完成请求加密的代码就可以将加密后的请求报文发送到Server。
 
     Args:
@@ -52,17 +52,17 @@ def hook_request_to_server(request):
         Request: 经过处理后的request对象，返回null代表从当前节点开始流量不再需要处理
     """
     # 获取被解密的数据
-    data = request.content
+    data: bytes = request.content
     # 调用函数加密回去
-    encryptedData = encrypt(data)
+    encryptedData: bytes = encrypt(data)
     # 将已加密的数据转换为Server可识别的格式
-    body = to_data(encryptedData)
+    body: bytes = to_data(encryptedData)
     # 更新body
     request.content = body
     return request
 
 
-def hook_response_to_burp(response):
+def hook_response_to_burp(response: Response) -> Response:
     """HTTP请求从Server到达Burp时被调用。在此处完成响应解密的代码就可以在Burp中看到明文的响应报文。
 
     Args:
@@ -72,15 +72,15 @@ def hook_response_to_burp(response):
         Response: 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理
     """
     # 获取需要解密的数据
-    encryptedData = get_data(response.getContent())
+    encryptedData: bytes = get_data(response.content)
     # 调用函数解密
-    data = decrypt(encryptedData)
+    data: bytes = decrypt(encryptedData)
     # 更新body
     response.content = data
     return response
 
 
-def hook_response_to_client(response):
+def hook_response_to_client(response: Response) -> Response:
     """HTTP请求从Burp将要发送到Client时被调用。在此处完成响应加密的代码就可以将加密后的响应报文返回给Client。
 
     Args:
@@ -90,31 +90,31 @@ def hook_response_to_client(response):
         Response: 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理
     """
     # 获取被解密的数据
-    data = response.getContent()
+    data: bytes = response.content
     # 调用函数加密回去
-    encryptedData = encrypt(data)
+    encryptedData: bytes = encrypt(data)
     # 更新body
     # 将已加密的数据转换为Server可识别的格式
-    body = to_data(encryptedData)
+    body: bytes = to_data(encryptedData)
     # 更新body
     response.content = body
     return response
 
 
-def decrypt(content):
-    return CryptoUtil.desDecrypt(ALGORITHM, content, secret, paramMap)
+def decrypt(content: bytes) -> bytes:
+    return CryptoUtil.aesDecrypt(ALGORITHM, content, secret, paramMap)
 
 
-def encrypt(content):
-    return CryptoUtil.desEncrypt(ALGORITHM, content, secret, paramMap)
+def encrypt(content: bytes) -> bytes:
+    return CryptoUtil.aesEncrypt(ALGORITHM, content, secret, paramMap)
 
 
-def get_data(content):
-    return CodeUtil.b64decode(json.loads(convert_bytes(content))[jsonKey])
+def get_data(content: bytes) -> bytes:
+    return CodeUtil.b64decode(json.loads(convert_bytes(content)).get(jsonKey))
 
 
-def to_data(content):
-    jsonBody = {}
+def to_data(content: bytes) -> bytes:
+    jsonBody: dict = {}
     jsonBody[jsonKey] = CodeUtil.b64encodeToString(content)
     return json.dumps(jsonBody).encode()
 

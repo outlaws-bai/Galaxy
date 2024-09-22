@@ -200,11 +200,6 @@ public class FileTools {
         }
     }
 
-
-    public static String getExampleScriptFilePath(String item, String suffix) {
-        return Constants.HTTP_HOOK_EXAMPLES_DIR + File.separator + item + suffix;
-    }
-
     public static boolean isExist(String filepath) {
         return Files.exists(Paths.get(filepath));
     }

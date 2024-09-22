@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.FileTools;
 import org.m2sec.core.common.Helper;
+import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
@@ -37,19 +38,19 @@ public class HttpHookCodeTest {
 
     @Test
     public void testOneCodeHooker() {
-        testCodeHooker(examplesFilePath + File.separator + "aes_cbc.jython.py");
+        HttpHookService service = HttpHookService.JYTHON;
+        testCodeHooker(service, examplesFilePath + File.separator + service.getDir() + File.separator + "aes_cbc.py");
     }
 
 
     @Test
     public void testCodeHookers() {
-        String suffix = Constants.JYTHON_FILE_SUFFIX;
+        HttpHookService service = HttpHookService.JS;
         List<String> failPaths = new ArrayList<>();
-        for (String filepath : FileTools.listDir(examplesFilePath)) {
-            if (!filepath.endsWith(suffix)) continue;
+        for (String filepath : FileTools.listDir(examplesFilePath + File.separator + service.getDir())) {
             //noinspection CaughtExceptionImmediatelyRethrown
             try {
-                testCodeHooker(filepath);
+                testCodeHooker(service, filepath);
             } catch (AssertionError e) {
                 throw e;
             } catch (Exception e) {
@@ -64,16 +65,14 @@ public class HttpHookCodeTest {
         }
     }
 
-    public void testCodeHooker(String filepath) {
-        if (filepath.endsWith(Constants.JS_FILE_SUFFIX)) {
-            assert Constants.hasJs : "Due to compatibility issues, if you need to test JavaScript, please switch the " +
-                "graalService in build.gradle to js";
-        } else //noinspection RedundantIfStatement
-            if (filepath.endsWith(Constants.GRAALPY_FILE_SUFFIX)) {
-                assert Constants.hasGraalpy : "Due to compatibility issues, if you need to test python, please switch" +
-                    " the " +
-                    "graalService in build.gradle to python";
-            }
+    public void testCodeHooker(HttpHookService service, String filepath) {
+        assert !service.equals(HttpHookService.JS) || Constants.hasJs : "Due to compatibility issues, if you need to " +
+            "test JavaScript, please switch the " +
+            "graalService in build.gradle to js";
+        assert !service.equals(HttpHookService.GRAALPY) || Constants.hasGraalpy : "Due to compatibility issues, if " +
+            "you need to test python, please switch" +
+            " the " +
+            "graalService in build.gradle to python";
         String randomString1 = FactorUtil.randomString(50);
         String randomString2 = FactorUtil.randomString(50);
 
@@ -83,7 +82,7 @@ public class HttpHookCodeTest {
         response.setContent(("{\"data\": \"" + randomString2 + "\"}").getBytes());
         log.info("hook by java file: {}", filepath);
         log.info("randomString: {}", randomString1);
-        IHttpHooker hooker = getCodeHooker(filepath);
+        IHttpHooker hooker = getCodeHooker(service, filepath);
 
         log.info("raw request: \r\n{}", request);
         Request request1 = hooker.hookRequestToServer(request);
@@ -100,21 +99,21 @@ public class HttpHookCodeTest {
     }
 
 
-    private static IHttpHooker getCodeHooker(String filepath) {
+    private static IHttpHooker getCodeHooker(HttpHookService service, String filepath) {
         IHttpHooker hooker;
-        if (filepath.endsWith(Constants.JAVA_FILE_SUFFIX)) {
+        if (service.equals(HttpHookService.JAVA)) {
             JavaFileHookerFactor hookerFactor = new JavaFileHookerFactor();
             hookerFactor.init(filepath);
             hooker = hookerFactor;
-        } else if (filepath.endsWith(Constants.GRAALPY_FILE_SUFFIX)) {
+        } else if (service.equals(HttpHookService.GRAALPY)) {
             GraalpyHookerFactor hookerFactor = new GraalpyHookerFactor();
             hookerFactor.init(filepath);
             hooker = hookerFactor;
-        } else if (filepath.endsWith(Constants.JS_FILE_SUFFIX)) {
+        } else if (service.equals(HttpHookService.JS)) {
             JsHookerFactor hookerFactor = new JsHookerFactor();
             hookerFactor.init(filepath);
             hooker = hookerFactor;
-        } else if (filepath.endsWith(Constants.JYTHON_FILE_SUFFIX)) {
+        } else if (service.equals(HttpHookService.JYTHON)) {
             JythonHookerFactor hookerFactor = new JythonHookerFactor();
             hookerFactor.init(filepath);
             hooker = hookerFactor;

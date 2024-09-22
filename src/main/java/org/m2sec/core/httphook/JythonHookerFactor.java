@@ -3,12 +3,15 @@ package org.m2sec.core.httphook;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.core.common.*;
+import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
 import org.python.core.Py;
 import org.python.core.PyFunction;
 import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
+
+import java.io.File;
 
 /**
  * @author: outlaws-bai
@@ -25,13 +28,14 @@ public class JythonHookerFactor extends IHttpHooker {
     private PyFunction func3;
     private PyFunction func4;
 
+    private static final HttpHookService SERVICE = HttpHookService.JYTHON;
     @Override
     public void init(Config config1) {
         config = config1;
         option = config1.getOption();
-        String pyFilePath = FileTools.getExampleScriptFilePath(option.getCodeSelectItem(),
-            Constants.JYTHON_FILE_SUFFIX);
-        init(pyFilePath);
+        String filepath =
+            Constants.HTTP_HOOK_EXAMPLES_DIR + File.separator + SERVICE.getDir() + File.separator + option.getCodeSelectItem();
+        init(filepath);
     }
 
     public void init(String filepath) {

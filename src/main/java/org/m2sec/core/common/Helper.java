@@ -11,6 +11,7 @@ import ch.qos.logback.core.FileAppender;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.graalvm.polyglot.Engine;
 import org.m2sec.Galaxy;
+import org.m2sec.core.enums.HttpHookService;
 import org.m2sec.core.utils.FactorUtil;
 import org.slf4j.LoggerFactory;
 
@@ -96,7 +97,14 @@ public class Helper {
         FileTools.mvResource(Constants.SETTING_FILE_NAME, Constants.WORK_DIR);
         FileTools.mvResource(Constants.OPTION_FILE_NAME, Constants.WORK_DIR);
         // mv resources
-        FileTools.mvResources(Constants.HTTP_HOOK_EXAMPLES_DIR_NAME, Constants.WORK_DIR);
+        FileTools.mvResources(Constants.HTTP_HOOK_EXAMPLES_DIR_NAME + File.separator+ HttpHookService.JAVA.getDir(),
+            Constants.WORK_DIR);
+        FileTools.mvResources(Constants.HTTP_HOOK_EXAMPLES_DIR_NAME + File.separator+ HttpHookService.JS.getDir(),
+            Constants.WORK_DIR);
+        FileTools.mvResources(Constants.HTTP_HOOK_EXAMPLES_DIR_NAME + File.separator+ HttpHookService.GRAALPY.getDir(),
+            Constants.WORK_DIR);
+        FileTools.mvResources(Constants.HTTP_HOOK_EXAMPLES_DIR_NAME + File.separator+ HttpHookService.JYTHON.getDir(),
+            Constants.WORK_DIR);
         FileTools.mvResources(Constants.TEMPLATE_DIR_NAME, Constants.WORK_DIR);
     }
 
