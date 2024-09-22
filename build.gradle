@@ -8,8 +8,8 @@ plugins {
 
 group = "org.m2sec"
 def version = "3.2.0"
-def graalService = "python" // js/python/grpc
 def grpcVersion = "1.54.1"
+def optionalHooker = "graalpy" // js/graalpy/grpc/jython
 def graalJsVersion = "23.0.5"
 def graalPythonVersion = "24.1.0"
 def protobufVersion = "3.24.0"
@@ -27,7 +27,7 @@ java {
 }
 
 dependencies {
-    if (graalService == "js") {
+    if (optionalHooker == "js") {
         // cross-language
         implementation "org.graalvm.js:js:${graalJsVersion}"
         compileOnly "org.graalvm.python:python-language:${graalPythonVersion}"
@@ -37,7 +37,7 @@ dependencies {
         compileOnly "io.grpc:grpc-protobuf:${grpcVersion}"
         compileOnly "io.grpc:grpc-stub:${grpcVersion}"
         compileOnly "com.google.protobuf:protobuf-java-util:${protobufVersion}"
-    } else if (graalService == "python") {
+    } else if (optionalHooker == "graalpy") {
         // cross-language
         compileOnly "org.graalvm.js:js:${graalJsVersion}"
         implementation "org.graalvm.python:python-language:${graalPythonVersion}"
@@ -47,7 +47,7 @@ dependencies {
         compileOnly "io.grpc:grpc-protobuf:${grpcVersion}"
         compileOnly "io.grpc:grpc-stub:${grpcVersion}"
         compileOnly "com.google.protobuf:protobuf-java-util:${protobufVersion}"
-    } else if (graalService == "grpc") {
+    } else if (optionalHooker == "grpc") {
         // cross-language
         compileOnly "org.graalvm.js:js:${graalJsVersion}"
         compileOnly "org.graalvm.python:python-language:${graalPythonVersion}"
@@ -58,6 +58,7 @@ dependencies {
         implementation "io.grpc:grpc-stub:${grpcVersion}"
         implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
     }
+    compileOnly 'org.python:jython:2.7.3'
     // annotation
     annotationProcessor "org.projectlombok:lombok:1.18.32"
     compileOnly "org.projectlombok:lombok:1.18.32"
@@ -94,6 +95,7 @@ dependencies {
     testImplementation "io.grpc:grpc-protobuf:${grpcVersion}"
     testImplementation "io.grpc:grpc-stub:${grpcVersion}"
     testImplementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+    testImplementation 'org.python:jython:2.7.3'
 }
 
 test {
@@ -127,7 +129,7 @@ jar {
 }
 
 shadowJar {
-    archiveClassifier.set(version + "-" + graalService)
+    archiveClassifier.set(version + "-" + optionalHooker)
 
     // 设置版本文件
     versionFile.text = version

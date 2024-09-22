@@ -58,16 +58,22 @@ public class HttpHookPanel extends JPanel {
             hookNames.add(HttpHookService.JS.name().toLowerCase());
             serviceMap.put(HttpHookService.JS.name().toLowerCase(), jsFileHookerPanel);
         }
-        if (Constants.hasPython) {
-            CodeFileHookerPanel pythonFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.PYTHON);
+        if (Constants.hasGraalpy) {
+            CodeFileHookerPanel pythonFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.GRAALPY);
             pythonFileHookerPanel.resetCodeTheme();
-            hookNames.add(HttpHookService.PYTHON.name().toLowerCase());
-            serviceMap.put(HttpHookService.PYTHON.name().toLowerCase(), pythonFileHookerPanel);
+            hookNames.add(HttpHookService.GRAALPY.name().toLowerCase());
+            serviceMap.put(HttpHookService.GRAALPY.name().toLowerCase(), pythonFileHookerPanel);
         }
         GrpcHookerPanel rpcImpl = new GrpcHookerPanel(config, api, HttpHookService.GRPC);
         if (Constants.hasGrpc) {
             hookNames.add(HttpHookService.GRPC.name().toLowerCase());
             serviceMap.put(HttpHookService.GRPC.name().toLowerCase(), rpcImpl);
+        }
+        if (Constants.hasJython){
+            CodeFileHookerPanel pythonFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JYTHON);
+            pythonFileHookerPanel.resetCodeTheme();
+            hookNames.add(HttpHookService.JYTHON.name().toLowerCase());
+            serviceMap.put(HttpHookService.JYTHON.name().toLowerCase(), pythonFileHookerPanel);
         }
 
 

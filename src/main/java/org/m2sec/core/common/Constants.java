@@ -26,11 +26,13 @@ public class Constants {
 
     public static boolean isUseJdk = true;
 
-    public static boolean hasPython = true;
+    public static boolean hasGraalpy = true;
 
     public static boolean hasJs = true;
 
     public static boolean hasGrpc = true;
+
+    public static boolean hasJython = true;
 
     // work file
 
@@ -118,7 +120,9 @@ public class Constants {
 
     public static final String JAVA_COMPILED_FILE_SUFFIX = ".class";
 
-    public static final String PYTHON_FILE_SUFFIX = ".py";
+    public static final String GRAALPY_FILE_SUFFIX = ".graalpy.py";
+
+    public static final String JYTHON_FILE_SUFFIX = ".jython.py";
 
     public static final String JS_FILE_SUFFIX = ".js";
 

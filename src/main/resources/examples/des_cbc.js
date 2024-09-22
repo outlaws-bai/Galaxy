@@ -16,10 +16,10 @@ log = void 0
 
 
 /**
- * 内置模版，需要自定义代码文件时查看该文档：https://github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md
+ * 跨语言能力来自于graaljs
  * 按 Ctrl（command） + ` 可查看内置函数
+ * 内置模版，需要自定义代码文件时查看该文档：https://github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md
  */
-
 
 /**
  * HTTP请求从Burp将要发送到Server时被调用。在此处完成请求加密的代码就可以将加密后的请求报文发送到Server。

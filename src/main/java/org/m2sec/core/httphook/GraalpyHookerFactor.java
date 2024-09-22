@@ -19,7 +19,7 @@ import org.m2sec.core.models.Response;
  */
 @Slf4j
 @Getter
-public class PythonHookerFactor extends IHttpHooker {
+public class GraalpyHookerFactor extends IHttpHooker {
 
     private Context context;
     private Value bind;
@@ -33,7 +33,7 @@ public class PythonHookerFactor extends IHttpHooker {
     public void init(Config config1) {
         config = config1;
         option = config1.getOption();
-        String filepath = FileTools.getExampleScriptFilePath(option.getCodeSelectItem(), Constants.PYTHON_FILE_SUFFIX);
+        String filepath = FileTools.getExampleScriptFilePath(option.getCodeSelectItem(), Constants.GRAALPY_FILE_SUFFIX);
         init(filepath);
     }
 

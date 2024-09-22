@@ -40,10 +40,12 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
         super(config, api, service);
         if (service.equals(HttpHookService.JAVA)) {
             CODE_FILE_SUFFIX = Constants.JAVA_FILE_SUFFIX;
-        } else if (service.equals(HttpHookService.PYTHON)) {
-            CODE_FILE_SUFFIX = Constants.PYTHON_FILE_SUFFIX;
+        } else if (service.equals(HttpHookService.GRAALPY)) {
+            CODE_FILE_SUFFIX = Constants.GRAALPY_FILE_SUFFIX;
         } else if (service.equals(HttpHookService.JS)) {
             CODE_FILE_SUFFIX = Constants.JS_FILE_SUFFIX;
+        } else if (service.equals(HttpHookService.JYTHON)) {
+            CODE_FILE_SUFFIX = Constants.JYTHON_FILE_SUFFIX;
         } else {
             throw new InputMismatchException(service.name());
         }
@@ -56,7 +58,8 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
         // 创建顶部下拉框的面板
         JLabel selectLabel = new JLabel("Hook Script:");
         JPanel topPanel = new JPanel(new BorderLayout());
-        selectLabel.setPreferredSize(new Dimension(CodeFileHookerPanel.getDescWidth(), selectLabel.getPreferredSize().height));
+        selectLabel.setPreferredSize(new Dimension(CodeFileHookerPanel.getDescWidth(),
+            selectLabel.getPreferredSize().height));
         selectLabel.setToolTipText(Constants.HOOK_BY_CODE_IMPL_DEF);
         JPanel rightPanel = new JPanel();
         JButton saveButton = new JButton("Save");
@@ -164,7 +167,7 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
     public void resetCodeTheme() {
         if (service.equals(HttpHookService.JAVA)) {
             codeTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-        } else if (service.equals(HttpHookService.PYTHON)) {
+        } else if (service.equals(HttpHookService.GRAALPY) || service.equals(HttpHookService.JYTHON)) {
             codeTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_PYTHON);
         } else if (service.equals(HttpHookService.JS)) {
             codeTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
@@ -200,10 +203,12 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             codeTextArea.getText());
         if (service.equals(HttpHookService.JAVA)) {
             return new JavaFileHookerFactor();
-        } else if (service.equals(HttpHookService.PYTHON)) {
-            return new PythonHookerFactor();
+        } else if (service.equals(HttpHookService.GRAALPY)) {
+            return new GraalpyHookerFactor();
         } else if (service.equals(HttpHookService.JS)) {
             return new JsHookerFactor();
+        } else if (service.equals(HttpHookService.JYTHON)) {
+            return new JythonHookerFactor();
         } else {
             throw new InputMismatchException(service.name());
         }
@@ -431,7 +436,8 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             "hash",
             "HashUtil.calcToBase64(String algorithm, byte[] data)",
             "Hash calcToBase64 -> String",
-            SwingTools.renderSummary("hash calcToBase64", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org" +
+            SwingTools.renderSummary("hash calcToBase64", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main" +
+                "/java/org" +
                 "/m2sec/core/utils/HashUtil.java", "byte[]", "algorithm(String) MD2 | MD4 | MD5 | SM3 | SHA-1 | " +
                 "SHA-224 | SHA-256 | ...", "data(byte[]) origin data")
         ));
@@ -450,7 +456,8 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             "mac",
             "MacUtil.calcToHex(String algorithm, byte[] data, byte[] secret)",
             "Mac calcToHex -> byte[]",
-            SwingTools.renderSummary("mac calcToHex", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org" +
+            SwingTools.renderSummary("mac calcToHex", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java" +
+                "/org" +
                 "/m2sec/core/utils/MacUtil.java", "byte[]", "algorithm(String) HmacMD5 | HmacSHA1 | HmacSHA224 | " +
                 "HmacSHA256|...", "data(byte[]) origin data")
         ));
@@ -459,7 +466,8 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             "mac",
             "MacUtil.calcToBase64(String algorithm, byte[] data, byte[] secret)",
             "Mac calcToBase64 -> byte[]",
-            SwingTools.renderSummary("mac calcToBase64", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org" +
+            SwingTools.renderSummary("mac calcToBase64", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main" +
+                "/java/org" +
                 "/m2sec/core/utils/MacUtil.java", "byte[]", "algorithm(String) HmacMD5 | HmacSHA1 | HmacSHA224 | " +
                 "HmacSHA256|...", "data(byte[]) origin data")
         ));

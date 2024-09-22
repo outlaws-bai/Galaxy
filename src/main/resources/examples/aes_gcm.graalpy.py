@@ -11,11 +11,15 @@ from java.org.m2sec.core.models import Request, Response
 from java.lang import Byte
 
 """
-内置模版，需要自定义代码文件时查看该文档：https://github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md
+跨语言能力来自于graalpy
 按 Ctrl（command） + ` 可查看内置函数
+需要自定义代码文件时查看该文档：https://github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md
 """
-ALGORITHM = "DES/ECB/PKCS5Padding"
-secret = b"8bytesKy"
+
+ALGORITHM = "AES/GCM/NoPadding"
+secret = b"32byteslongsecretkeyforaes256!aa"
+iv = "16byteslongiv456"
+paramMap = {"iv": iv}
 jsonKey = "data"
 log = None
 
@@ -73,6 +77,7 @@ def hook_response_to_burp(response):
     response.setContent(data)
     return response
 
+
 def hook_response_to_client(response):
     """HTTP请求从Burp将要发送到Client时被调用。在此处完成响应加密的代码就可以将加密后的响应报文返回给Client。
 
@@ -94,10 +99,10 @@ def hook_response_to_client(response):
     return response
 
 def decrypt(content):
-    return CryptoUtil.desDecrypt(ALGORITHM, content, secret, None)
+    return CryptoUtil.aesDecrypt(ALGORITHM, content, secret, paramMap)
 
 def encrypt(content):
-    return CryptoUtil.desEncrypt(ALGORITHM, content, secret, None)
+    return CryptoUtil.aesEncrypt(ALGORITHM, content, secret, paramMap)
 
 def get_data(content):
     return CodeUtil.b64decode(json.loads(convert_bytes(content))[jsonKey])
@@ -107,8 +112,6 @@ def to_data(content):
     jsonBody = {}
     jsonBody[jsonKey] = CodeUtil.b64encodeToString(content)
     return json.dumps(jsonBody).encode()
-
-
 
 def set_log(log1):
     """程序在最开始会自动调用该函数，在上方函数可以放心使用log对象"""

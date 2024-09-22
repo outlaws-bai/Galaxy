@@ -30,19 +30,20 @@ public class HttpHookCodeTest {
     @BeforeAll
     public static void setRootLoggerLevel() {
         System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
+        System.setProperty("python.import.site", "false");
         Security.addProvider(new BouncyCastleProvider());
-        Helper.checkPythonAndJs();
+        Helper.checkDep();
     }
 
     @Test
     public void testOneCodeHooker() {
-        testCodeHooker(examplesFilePath + File.separator + "aes_cbc.py");
+        testCodeHooker(examplesFilePath + File.separator + "aes_cbc.jython.py");
     }
 
 
     @Test
     public void testCodeHookers() {
-        String suffix = ".py";
+        String suffix = Constants.JYTHON_FILE_SUFFIX;
         List<String> failPaths = new ArrayList<>();
         for (String filepath : FileTools.listDir(examplesFilePath)) {
             if (!filepath.endsWith(suffix)) continue;
@@ -64,14 +65,15 @@ public class HttpHookCodeTest {
     }
 
     public void testCodeHooker(String filepath) {
-        if (filepath.endsWith(".js")) {
+        if (filepath.endsWith(Constants.JS_FILE_SUFFIX)) {
             assert Constants.hasJs : "Due to compatibility issues, if you need to test JavaScript, please switch the " +
                 "graalService in build.gradle to js";
         } else //noinspection RedundantIfStatement
-            if (filepath.endsWith(".py")) {
-            assert Constants.hasPython : "Due to compatibility issues, if you need to test python, please switch the " +
-                "graalService in build.gradle to python";
-        }
+            if (filepath.endsWith(Constants.GRAALPY_FILE_SUFFIX)) {
+                assert Constants.hasGraalpy : "Due to compatibility issues, if you need to test python, please switch" +
+                    " the " +
+                    "graalService in build.gradle to python";
+            }
         String randomString1 = FactorUtil.randomString(50);
         String randomString2 = FactorUtil.randomString(50);
 
@@ -104,12 +106,16 @@ public class HttpHookCodeTest {
             JavaFileHookerFactor hookerFactor = new JavaFileHookerFactor();
             hookerFactor.init(filepath);
             hooker = hookerFactor;
-        } else if (filepath.endsWith(Constants.PYTHON_FILE_SUFFIX)) {
-            PythonHookerFactor hookerFactor = new PythonHookerFactor();
+        } else if (filepath.endsWith(Constants.GRAALPY_FILE_SUFFIX)) {
+            GraalpyHookerFactor hookerFactor = new GraalpyHookerFactor();
             hookerFactor.init(filepath);
             hooker = hookerFactor;
         } else if (filepath.endsWith(Constants.JS_FILE_SUFFIX)) {
             JsHookerFactor hookerFactor = new JsHookerFactor();
+            hookerFactor.init(filepath);
+            hooker = hookerFactor;
+        } else if (filepath.endsWith(Constants.JYTHON_FILE_SUFFIX)) {
+            JythonHookerFactor hookerFactor = new JythonHookerFactor();
             hookerFactor.init(filepath);
             hooker = hookerFactor;
         } else {

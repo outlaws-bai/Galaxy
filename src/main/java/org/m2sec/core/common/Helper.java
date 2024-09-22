@@ -30,12 +30,11 @@ public class Helper {
 
     public static void init(MontoyaApi api) {
         System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
+        System.setProperty("python.import.site", "false");
         Security.addProvider(new BouncyCastleProvider());
         api.extension().setName(Constants.BURP_SUITE_EXT_NAME);
         api.logging().logToOutput(Constants.BURP_SUITE_EXT_INIT_DEF + "Version -> " + Constants.VERSION + "\r\n");
-        checkJdk();
-        checkGrpc();
-        checkPythonAndJs();
+        checkDep();
         if (checkVersion(api)) {
             initWorkDir();
         }
@@ -67,23 +66,22 @@ public class Helper {
         return buildWorkDir;
     }
 
-    public static void checkJdk() {
+    public static void checkDep() {
+        // jdk
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         Constants.isUseJdk = compiler != null;
-    }
-
-    public static void checkPythonAndJs() {
+        // graal
         try (Engine engine = Engine.create()) {
             Constants.hasJs = engine.getLanguages().containsKey("js");
-            Constants.hasPython = engine.getLanguages().containsKey("python");
+            Constants.hasGraalpy = engine.getLanguages().containsKey("python");
         } catch (Exception ignore) {
             Constants.hasJs = false;
-            Constants.hasPython = false;
+            Constants.hasGraalpy = false;
         }
-    }
-
-    public static void checkGrpc() {
+        // grpc
         Constants.hasGrpc = ReflectTools.canLoadClass("io.grpc.ManagedChannel");
+        // jython
+        Constants.hasJython = ReflectTools.canLoadClass("org.python.util.PythonInterpreter");
     }
 
 
