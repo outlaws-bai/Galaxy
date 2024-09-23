@@ -72,14 +72,14 @@
 
 - 项目采用Burp `Montoya API` 开发，Burp版本不低于 `v2023.10.3.7` 。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
 - 项目使用JDK 17进行开发及编译，请确保启动Burp的Java版本不低于17。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
-- 如果你下载或打包后的jar包含 `without-jython` 字样，请在Burp的Java environment(`Settings -> Extensions`)配置一个文件夹，并将 `jython-standalone-xxx.jar` 放在该文件夹。[Download](https://www.jython.org/download)
+- [Release](https://github.com/outlaws-bai/Galaxy/releases) 中对应版本的注意事项
 
 ## 📶 优势特点
 
 - 简单高效：不需要启动多余的本地服务。
 - 上手容易：通用算法及常见加密逻辑已内置，基本能做到开箱即用。
 - 支持面广：如加密算法组合、自定义算法、动态密钥等均可以支持。
-- 强灵活性：可以使用 python、js、java、grpc、http 等多种方式实现hook脚本以满足需求。
+- 强灵活性：可以使用 python、js、java、grpc、http 等多种 语言/方式 实现hook脚本以满足需求。
 
 ## 🐛 遇到问题
 
