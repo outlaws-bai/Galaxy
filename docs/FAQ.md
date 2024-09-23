@@ -18,12 +18,24 @@
 
 > 如果有必须使用本地环境的需求，请使用 grpc/http 的方案，它们会提供更具兼容性的跨语言方案
 
-# jython/graalpy hook 方式中怎样载入三方包
+# jython/graalpy hooker 怎样载入三方包
 
 > python 的 hook 方式来源于 jython/graalpy 的跨语言支持，因此如果需要使用三方包，该三方包必须能通过 jython/graalpy 解释及运行，而 jython 只支持到 python 2.7，graalpy 支持 python3.11。但同时他们都有兼容性问题，并非所有三方包都可以导入
 
 安装对应的 python 版本，创建虚拟环境，再用 pip 安装必要的三方包，在代码编辑器中将三方包所在的文件夹配置到 sys path，如./venv/lib/python2.7/site-packages
 
-# js hook 方式怎样载入三方包
+# js hook hooker 怎样载入三方包
 
-...
+例如 `crypto-js`
+
+1. 保存https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js 为 crypto-js.js文件
+2. 在 js 引擎中执行 `load('/Users/admin/Desktop/code/my/Galaxy/src/test/java/crypto-js.js');` 即可加载该 js 文件，之后就可以使用其中的函数了
+
+```js
+// 加载
+load('/Users/admin/Desktop/code/my/Galaxy/src/test/java/crypto-js.js');              
+// 测试 crypto-js 是否可以正常工作
+var hash = CryptoJS.MD5("Message");
+console.log(hash.toString()); // 4c2a8fe7eaf24721cc7a9f0175115bd4       
+```
+
