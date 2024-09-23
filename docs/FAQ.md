@@ -24,6 +24,11 @@
 
 安装对应的 python 版本，创建虚拟环境，再用 pip 安装必要的三方包，在代码编辑器中将三方包所在的文件夹配置到 sys path，如./venv/lib/python2.7/site-packages
 
+```python
+import sys
+sys.path.append("./venv/lib/python2.7/site-packages")
+````
+
 # js hook hooker 怎样载入三方包
 
 例如 `crypto-js`
