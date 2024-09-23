@@ -33,7 +33,7 @@ sys.path.append("xxx/venv/lib/python2.7/site-packages")
 
 例如 `crypto-js`
 
-1. 保存https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js 为 crypto-js.js文件
+1. 保存 https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js 为 crypto-js.js文件
 2. 在 js 引擎中执行 `load('xxx/crypto-js.js');` 即可加载该 js 文件，之后就可以使用其中的函数了
 
 ```js
