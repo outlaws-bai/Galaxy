@@ -20,7 +20,7 @@
 
 # jython/graalpy hook 方式中怎样载入三方包
 
-> python 的 hook 方式来源于 jython/graalpy 的跨语言支持，因此如果需要使用三方包，该三方包必须能通过 jython/graalpy 解释及运行，而 jython 只支持到 python 2.7，graalpy 支持 python3.x。但同时他们都有兼容性问题，并非所有三方包都可以导入
+> python 的 hook 方式来源于 jython/graalpy 的跨语言支持，因此如果需要使用三方包，该三方包必须能通过 jython/graalpy 解释及运行，而 jython 只支持到 python 2.7，graalpy 支持 python3.11。但同时他们都有兼容性问题，并非所有三方包都可以导入
 
 安装对应的 python 版本，创建虚拟环境，再用 pip 安装必要的三方包，在代码编辑器中将三方包所在的文件夹配置到 sys path，如./venv/lib/python2.7/site-packages
 
