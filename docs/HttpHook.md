@@ -26,27 +26,21 @@
 
 ## 界面
 
-安装后，你会看到这样的页面：
+`Hooker`: 可选js、python、java、grpc、http（因不同 jar 包及客户端条件有差异，详情见 [Releases](https://github.com/outlaws-bai/Galaxy/releases) 中的注意事项）。
 
-![image-20240816171047407](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/image-20240816171047407.png)
+`Hook Response`: 开关，是否需要对响应Hook。
 
-`Hooker`: [实现方式](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md#%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F)，可选js、python、java、grpc。
+`Auto Forward Request`: 开关，是否自动将解密后的请求转发到被动代理扫描器。注意联动被动代理扫描器时必须配置被动扫描器的上游代理为Burp。
 
-`Hook Response`: 开关，用于判断是否需要对响应Hook。
-
-`Linkage Passive Scanner`: 开关，是否联动被动代理扫描器。注意联动被动代理扫描器时必须配置被动扫描器的上游代理为Burp。
-
-`Scanner`: 被动代理扫描器的监听地址。
-
-`Expression`: js bool [表达式](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Expression)，用于判断请求是否需要Hook。
+`Expression`: mvel bool [表达式](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Expression)，用于判断请求是否需要Hook。
 
 ## 实现方式
 
-支持grpc、java、python、js这四种方式实现四个Hook。
+支持grpc、java、python、js、http这四种方式实现四个Hook。
 
-这四种可分为两类，grpc（grpc），code(java、python、js)。
+这四种可分为两类，server（grpc、http），code(java、python、js)。
 
-`grpc` ：你可以用任何语言实现grpc服务端，并在其中实现四个Hook，在这里它们是四个接口，你需要自行通过三方库实现它们应有的功能。
+`server` ：你可以用任何语言实现 grpc/http 服务端，并在其中实现四个Hook，在这里它们是四个接口，你需要自行通过三方库实现它们应有的功能。
 
 `code` ：你可以用对应的语言实现hook脚本，并在其中实现四个Hook，在这里它们是四个函数，你需要在这些函数中 `找到请求/响应的加解密数据` -> `调用项目中的加解密代码` -> `修改请求/响应对象`，以实现它们应有的功能。
 
@@ -63,10 +57,10 @@
 
 ## 工具联动
 
-- 联动xray：配置xray通过Burp代理
-- 联动jsrpc：xz.aliyun.com/t/15252
+- 联动xray：配置xray的上有代理为 burp，开启 `Auto Forward Request` 或在已解密请求右键找到 `Send Decrypted Request To Scanner` 点击
+- 联动jsrpc：[jsrpc](xz.aliyun.com/t/15252)
 - 联动frida：以 [Grida](https://github.com/outlaws-bai/Grida) 作为中介，其自身为一个Web服务，可以通过它的接口连接frida rpc，以实现galaxy和frida的联动
-- 联动sqlmap：sqlmap对明文请求进行扫描并通过Burp代理
+- 联动sqlmap：在已解密请求右键找到 `Send Decrypted Request To Sqlmap` 点击后粘贴命令到终端中执行
 
 > 当在联动sqlmap、xray或与它们相似的工具时，由于流量会再次经过Burp，Burp的Proxy中势必会多出扫描流量，可以添加下方代码片段到bambda不显示这些流量
 >
@@ -78,9 +72,13 @@
 
 [java](https://github.com/outlaws-bai/Galaxy/blob/main/src/test/java/org/m2sec/core/httphook/HttpHookGrpcServer.java)
 
-[python](https://github.com/outlaws-bai/PyGRpcServer)
+[python](https://github.com/outlaws-bai/GalaxyServerHooker)
+
+**http**
+
+[python](https://github.com/outlaws-bai/GalaxyServerHooker)
 
 **code**
 
-https://github.com/outlaws-bai/Galaxy/tree/main/src/main/resources/examples
+[examples](https://github.com/outlaws-bai/Galaxy/tree/main/src/main/resources/examples)
 
