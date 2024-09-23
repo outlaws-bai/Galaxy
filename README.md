@@ -85,7 +85,7 @@
 
 ## 🐛 遇到问题
 
-请先阅读 [FAQ](https://github.com/outlaws-bai/Galaxy/blob/main/docs/FAQ.md) 和 [历史Issue](https://github.com/outlaws-bai/Galaxy/issues?q=is%3Aissue+is%3Aclosed)，无法解决可以提交 [Issue](https://github.com/outlaws-bai/Galaxy/issues) 或加群
+请先阅读 [FAQ](https://github.com/outlaws-bai/Galaxy/blob/main/docs/FAQ.md) 和 [历史Issue](https://github.com/outlaws-bai/Galaxy/issues?q=is%3Aissue)，无法解决可以提交 [Issue](https://github.com/outlaws-bai/Galaxy/issues) 或加群
 
 ## 📢 交流
 
