@@ -26,7 +26,7 @@
 
 ## 界面
 
-`Hooker`: 可选js、python、java、grpc、http（因不同 jar 包及客户端条件有差异，详情见 [Releases](https://github.com/outlaws-bai/Galaxy/releases) 中的注意事项）。
+`Hooker`: 可选js、graalpy、jython、java、grpc、http（因不同 jar 包及客户端条件有差异，详情见 [Releases](https://github.com/outlaws-bai/Galaxy/releases) 中的注意事项）。
 
 `Hook Response`: 开关，是否需要对响应Hook。
 
@@ -36,13 +36,15 @@
 
 ## 实现方式
 
-支持grpc、java、python、js、http这四种方式实现四个Hook。
+支持grpc、java、graalpy、jython、js、http这四种方式实现四个Hook。
 
 这四种可分为两类，server（grpc、http），code(java、python、js)。
 
 `server` ：你可以用任何语言实现 grpc/http 服务端，并在其中实现四个Hook，在这里它们是四个接口，你需要自行通过三方库实现它们应有的功能。
 
 `code` ：你可以用对应的语言实现hook脚本，并在其中实现四个Hook，在这里它们是四个函数，你需要在这些函数中 `找到请求/响应的加解密数据` -> `调用项目中的加解密代码` -> `修改请求/响应对象`，以实现它们应有的功能。
+
+> graalpy 语法是 python3.x，jython 语法是 python2.7
 
 ## 测试
 
