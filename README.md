@@ -78,20 +78,20 @@
 
 ## 📶 优势特点
 
-- 简单高效：不需要启动多余的本地服务。
-- 上手容易：通用算法及常见加密逻辑已内置，基本能做到开箱即用。
-- 支持面广：如加密算法组合、自定义算法、动态密钥等均可以支持。
-- 强灵活性：可以使用 python、js、java、grpc、http 等多种 语言/方式 实现hook脚本以满足需求。
+- 简单高效：不需要启动多余的本地服务
+- 上手容易：通用算法及常见加密逻辑已内置，基本能做到开箱即用
+- 支持面广：如加密算法组合、自定义算法、动态密钥等均可以支持
+- 强灵活性：可以使用 python、js、java、grpc、http 等多种 语言/方式 实现hook脚本以满足需求
 
 ## 🐛 遇到问题
 
-请先阅读 [FAQ](https://github.com/outlaws-bai/Galaxy/blob/main/docs/FAQ.md) 和 [历史Issue](https://github.com/outlaws-bai/Galaxy/issues?q=is%3Aissue+is%3Aclosed)，无法解决可以提交 [Issue](https://github.com/outlaws-bai/Galaxy/issues) 或加群。
+请先阅读 [FAQ](https://github.com/outlaws-bai/Galaxy/blob/main/docs/FAQ.md) 和 [历史Issue](https://github.com/outlaws-bai/Galaxy/issues?q=is%3Aissue+is%3Aclosed)，无法解决可以提交 [Issue](https://github.com/outlaws-bai/Galaxy/issues) 或加群
 
 ## 📢 交流
 
 > 如果项目对你有帮助，请 star
 
-扫码添加微信并备注 `Galaxy` 进群。
+扫码添加微信并备注 `Galaxy` 
 
 <img src="https://raw.githubusercontent.com/outlaws-bai/picture/main/img/image-20240731000104866.png" width="300" height="300"/>
 
