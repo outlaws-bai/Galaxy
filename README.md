@@ -26,7 +26,9 @@
 
 **本项目的解决方案**
 
-目前其它插件的做法是在用户选择好页面配置后，用被加密的数据调用对应的解密函数完成解密，这样只能满足既定请求。而我们的思路是将请求/响应对象交给你，通过少量代码解密并修改请求/响应对象，这样无论算法组合有多复杂都可以自动解密
+- 目前其它插件的做法是在用户选择好页面配置后，用被加密的数据调用对应的解密函数完成解密，这样只能满足既定情况
+
+- 而我们的思路是将请求/响应对象交给你，通过少量代码解密并修改请求/响应对象，这样无论算法组合有多复杂都可以自动解密
 
 > 已包含多种加解密场景的hook脚本，对于常规算法及逻辑可以做到开箱即用
 
@@ -41,9 +43,9 @@
 
 ### 其他功能
 
-1. [Parse Swagger Api Doc](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Parse-Swagger-Api-Doc):  解析swagger文档，生成所有URL的请求，并带入参数、路径、描述。
-2. [Bypass Host Check](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Bypass-Host-Check):  绕过服务端在url重定向/ssrf的测试点对host做了验证。
-3. [Bypass Auth Of Path](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Bypass-Auth-Of-Path):  通过修改Path的方式绕过某些认证/鉴权/拦截。
+1. [Bypass Auth Of Path](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Bypass-Auth-Of-Path):  通过修改Path的方式绕过某些认证/鉴权/拦截
+2. [Bypass Host Check](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Bypass-Host-Check):  绕过服务端在url重定向/ssrf的测试点对host做了验证
+3. [Parse Swagger Api Doc](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Parse-Swagger-Api-Doc):  解析swagger文档，生成所有URL的请求，并带入参数、路径、描述
 4. ...
 
 ## 🎥 效果展示
