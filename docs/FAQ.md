@@ -29,7 +29,7 @@ import sys
 sys.path.append("xxx/venv/lib/python2.7/site-packages")
 ````
 
-# js hook hooker 怎样载入三方包
+# js hooker 怎样载入三方包
 
 例如 `crypto-js`
 
@@ -43,4 +43,3 @@ load('xxx/crypto-js.js');
 var hash = CryptoJS.MD5("Message");
 console.log(hash.toString()); // 4c2a8fe7eaf24721cc7a9f0175115bd4       
 ```
-
