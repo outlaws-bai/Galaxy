@@ -44,7 +44,7 @@
 
 这四种可分为两类，服务类（grpc、http），跨语言类(java、graalpy、jython、js)
 
-**服务类** ：你可以用任何语言实现 grpc/http 服务端，并在其中实现四个Hook接口，并通过三方库实现它们应有的功能
+**服务类** ：你可以用任何语言实现 grpc/http 服务端，并在其中实现四个Hook接口，你需要在这些接口通过三方库实现修改请求/响应对象，它们应有的功能
 
 [grpc-java](https://github.com/outlaws-bai/Galaxy/blob/main/src/test/java/org/m2sec/core/httphook/HttpHookGrpcServer.java)
 [grpc-python](https://github.com/outlaws-bai/GalaxyServerHooker)
@@ -81,9 +81,9 @@
 ## 工具联动
 
 - 联动jsrpc调用 js 代码：[linkage-jsrpc](xz.aliyun.com/t/15252)
-- 联动frida调用客户端代码：**服务类** hook 方式自行调用即可；**跨语言类** 需要通过 [Grida](https://github.com/outlaws-bai/Grida) 暴露 frida rpc 接口为 http 接口，再在burp-galaxy 的编辑器中调用
-- 联动xray扫描明文请求：配置xray的上游代理为 burp，开启 `Auto Forward Request` 或在已解密请求右键找到 `Send Decrypted Request To Scanner` 点击
+- 联动frida调用客户端代码：**服务类** hook 方式自行调用即可；**跨语言类** 需要通过 [Grida](https://github.com/outlaws-bai/Grida) 暴露 frida rpc 接口为 http 接口，再在burp-galaxy 的编辑器中用 HttpClient 调用
 - 联动sqlmap扫描明文请求：在已解密请求右键找到 `Send Decrypted Request To Sqlmap` 点击后粘贴命令到终端中执行
+- 联动xray扫描明文请求：配置xray的上游代理为 burp，开启 `Auto Forward Request` 或在已解密请求右键找到 `Send Decrypted Request To Scanner` 点击
 
 > 当在联动sqlmap、xray或与它们相似的工具时，由于流量会再次经过Burp，Burp的Proxy中势必会多出扫描流量，可以添加下方代码片段到bambda不显示这些流量
 >
