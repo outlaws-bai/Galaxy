@@ -49,6 +49,7 @@ dependencies {
         compileOnly "com.google.protobuf:protobuf-java-util:${protobufVersion}"
     } else if (optionalHooker == "grpc") {
         // cross-language
+        implementation "org.graalvm.sdk:graal-sdk:23.0.5"
         compileOnly "org.graalvm.js:js:${graalJsVersion}"
         compileOnly "org.graalvm.python:python-language:${graalPythonVersion}"
         compileOnly "org.graalvm.python:python-resources:${graalPythonVersion}"
@@ -58,7 +59,6 @@ dependencies {
         implementation "io.grpc:grpc-stub:${grpcVersion}"
         implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
     }
-    implementation "org.graalvm.sdk:graal-sdk:23.0.5"
     compileOnly 'org.python:jython:2.7.3'
     // annotation
     annotationProcessor "org.projectlombok:lombok:1.18.32"
