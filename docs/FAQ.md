@@ -7,7 +7,7 @@
 
 # 安装后编辑器内注释乱码问题
 
-1. 修改 burp 的编码方式为 utf-8, Brup 右上角 `Settings` -> `User Interface` -> `Character sets`
+1. 修改 burp 的编码方式为 utf-8, Brup 右上角 `Settings -> User Interface -> Character sets`
 2. 删除 [work dir](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#work-dir) 后在 Burp 重新导入插件
 
 # hook方式显示不全
