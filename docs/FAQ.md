@@ -2,7 +2,7 @@
 
 - 项目采用Burp `Montoya API` 开发，Burp版本不低于 `v2023.10.3.7` 。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
 - 项目使用JDK 17进行开发及编译，请确保启动Burp的JDK不低于17。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
-- 自行构建：`build.gradle -> shadowJar`
+- 自行构建：自行构建：修改 `build.gradle` 中 的 `optionalHooker` 再使用 `shadowJar` 打包
 - [Release](https://github.com/outlaws-bai/Galaxy/releases)中对应版本的注意事项
 
 # hook方式显示不全
