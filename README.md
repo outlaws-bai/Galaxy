@@ -30,21 +30,19 @@
 
 - 而我们的思路是将请求/响应对象交给你，通过少量代码解密并修改请求/响应对象，这样无论算法组合有多复杂都可以自动解密
 
-> 已包含多种加解密场景的hook脚本，对于常规算法及逻辑可以做到开箱即用
-
 **启用后的效果**
 
-- 启用成功后，后续代理的所有请求和响应自动解密
+- 后续代理的所有请求和响应自动解密
+- Intruder、Scanner、Repeater等模块均支持
 - 已解密请求转到Repeater后Send，得到的响应也会被解密
-- Intruder、Scanner等模块同样支持
 - 支持联动sqlmap、被动代理扫描器，使得它们可以扫描明文请求，得到明文响应
 
 进一步了解：[Http Hook](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md)
 
 ### 其他功能
 
-1. [Bypass Auth Of Path](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Bypass-Auth-Of-Path):  通过修改Path的方式绕过某些认证/鉴权/拦截
-2. [Bypass Host Check](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Bypass-Host-Check):  绕过服务端在url重定向/ssrf的测试点对host做了验证
+1. [Bypass Host Check](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Bypass-Host-Check):  绕过服务端在url重定向/ssrf对host做了验证
+2. [Bypass Auth Of Path](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Bypass-Auth-Of-Path):  通过修改Path的方式绕过某些认证/鉴权/拦截
 3. [Parse Swagger Api Doc](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Parse-Swagger-Api-Doc):  解析swagger文档，生成所有URL的请求，并带入参数、路径、描述
 4. ...
 
@@ -81,7 +79,7 @@
 - 简单高效：不需要启动多余的本地服务
 - 上手容易：通用算法及常见加密逻辑已内置，基本能做到开箱即用
 - 支持面广：如加密算法组合、自定义算法、动态密钥等均可以支持
-- 强灵活性：可以使用 python、js、java、grpc、http 等多种 语言/方式 实现hook脚本以满足需求
+- 强灵活性：可以使用 python、js、java、grpc、http 等多种语言/方式来满足需求
 
 ## 🐛 遇到问题
 
