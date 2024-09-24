@@ -1,12 +1,12 @@
 # Http Hook
 
-实现在HTTP报文二次加密场景下自动解密的功能。
+支持用js/python/java实现hook脚本或任意语言实现grpc/http hook服务来自动解密报文，让你像测试明文一样简单
 
 ## 简介
 
-本项目的思路是将请求/响应对象交给你，你只需要从请求/响应中拿到被加密的数据，解密数据，并修改请求/响应即可。
+将请求/响应对象交给你，你可以通过少量代码随意修改请求/响应对象，这样无论有多复杂都可以达到目的
 
-> 需要一些编程基础，项目已内置多种加密场景的hook脚本，可以作为参考。
+> 需要一些编程基础，项目已提供多项示例，可以作为参考
 
 ## 设计思路
 
@@ -16,35 +16,47 @@
 
 ![流程图](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/image-20240621105543574.png)
 
-`hookRequestToBurp`：HTTP请求从客户端到达Burp时被调用。在此处完成请求解密的代码就可以在Burp中看到明文的请求报文。
+`hookRequestToBurp`：HTTP请求从客户端到达Burp时被调用。在此处完成请求解密的代码就可以在Burp中看到明文的请求报文
 
-`hookRequestToServer`：HTTP请求从Burp将要发送到Server时被调用。在此处完成请求加密的代码就可以将加密后的请求报文发送到Server。
+`hookRequestToServer`：HTTP请求从Burp将要发送到Server时被调用。在此处完成请求加密的代码就可以将加密后的请求报文发送到Server
 
-`hookResponseToBurp`：HTTP请求从Server到达Burp时被调用。在此处完成响应解密的代码就可以在Burp中看到明文的响应报文。
+`hookResponseToBurp`：HTTP请求从Server到达Burp时被调用。在此处完成响应解密的代码就可以在Burp中看到明文的响应报文
 
-`hookResponseToClient`：HTTP请求从Burp将要发送到Client时被调用。在此处完成响应加密的代码就可以将加密后的响应报文返回给Client。
+`hookResponseToClient`：HTTP请求从Burp将要发送到Client时被调用。在此处完成响应加密的代码就可以将加密后的响应报文返回给Client
 
 ## 界面
 
-`Hooker`: 可选js、graalpy、jython、java、grpc、http（因不同 jar 包及客户端条件有差异，详情见 [Releases](https://github.com/outlaws-bai/Galaxy/releases) 中的注意事项）。
+`Hooker`: 可选js、graalpy、jython、java、grpc、http（因不同 jar 包及客户端条件有差异，详情见 [Releases](https://github.com/outlaws-bai/Galaxy/releases) 中的注意事项）
 
-`Hook Response`: 开关，是否需要对响应Hook。
+`Hook Response`: 开关，是否需要对响应Hook
 
-`Auto Forward Request`: 开关，是否自动将解密后的请求转发到被动代理扫描器。注意联动被动代理扫描器时必须配置被动扫描器的上游代理为Burp。
+`Auto Forward Request`: 开关，是否自动将解密后的请求转发到被动代理扫描器。注意联动被动代理扫描器时必须配置被动扫描器的上游代理为Burp
 
-`Expression`: mvel bool [表达式](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Expression)，用于判断请求是否需要Hook。
+`Expression`: mvel bool [表达式](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Expression)，用于判断请求是否需要Hook
 
 ## 实现方式
 
-支持grpc、java、graalpy、jython、js、http这四种方式实现四个Hook。
+支持grpc、http、java、graalpy、jython、js等方式实现四个Hook
 
-这四种可分为两类，server（grpc、http），code(java、python、js)。
+> graalpy -> python3.11；jython -> python2.7
 
-`server` ：你可以用任何语言实现 grpc/http 服务端，并在其中实现四个Hook，在这里它们是四个接口，你需要自行通过三方库实现它们应有的功能。
+这四种可分为两类，服务类（grpc、http），跨语言类(java、graalpy、jython、js)
 
-`code` ：你可以用对应的语言实现hook脚本，并在其中实现四个Hook，在这里它们是四个函数，你需要在这些函数中 `找到请求/响应的加解密数据` -> `调用项目中的加解密代码` -> `修改请求/响应对象`，以实现它们应有的功能。
+**服务类** ：你可以用任何语言实现 grpc/http 服务端，并在其中实现四个Hook接口，并通过三方库实现它们应有的功能
 
-> graalpy 语法是 python3.11，jython 语法是 python2.7
+[grpc-java](https://github.com/outlaws-bai/Galaxy/blob/main/src/test/java/org/m2sec/core/httphook/HttpHookGrpcServer.java)
+[grpc-python](https://github.com/outlaws-bai/GalaxyServerHooker)
+[http-python](https://github.com/outlaws-bai/GalaxyServerHooker)
+
+**跨语言类** ：你可以用对应的跨语言方案实现hook脚本，并在其中实现四个Hook，在这里它们是四个函数，你需要在这些函数中修改请求/响应对，以实现它们应有的功能
+
+[examples](https://github.com/outlaws-bai/Galaxy/tree/main/src/main/resources/examples)
+
+### 优缺点对比
+
+**服务类**：优点是跨语言能力、运行兼容性强；缺点是学习成本稍高、依赖IO -> 可能存在性能问题、不同语言算法间可能存在兼容性问题，在动态密钥的情况下很难实现需求。
+
+**跨语言类**：优点是可以与JVM交互 -> 不需要自行加解密算法 + 对Java来说没有算法兼容性的问题、可以将客户端代码 copy 进去运行、在动态密钥的情况也能实现需求；缺点是需要熟悉项目自带的对象和工具类，并且存在跨语言兼容性的问题。
 
 ## 测试
 
@@ -59,28 +71,12 @@
 
 ## 工具联动
 
-- 联动xray：配置xray的上有代理为 burp，开启 `Auto Forward Request` 或在已解密请求右键找到 `Send Decrypted Request To Scanner` 点击
-- 联动jsrpc：[jsrpc](xz.aliyun.com/t/15252)
-- 联动frida：以 [Grida](https://github.com/outlaws-bai/Grida) 作为中介，其自身为一个Web服务，可以通过它的接口连接frida rpc，以实现galaxy和frida的联动
-- 联动sqlmap：在已解密请求右键找到 `Send Decrypted Request To Sqlmap` 点击后粘贴命令到终端中执行
+- 联动jsrpc调用 js 代码：[linkage-jsrpc](xz.aliyun.com/t/15252)
+- 联动frida调用客户端代码：**服务类** hook 方式自行调用即可；**跨语言类** 需要通过 [Grida](https://github.com/outlaws-bai/Grida) 暴露 frida rpc 接口为 http 接口，再在burp-galaxy 的编辑器中调用
+- 联动xray扫描明文请求：配置xray的上游代理为 burp，开启 `Auto Forward Request` 或在已解密请求右键找到 `Send Decrypted Request To Scanner` 点击
+- 联动sqlmap扫描明文请求：在已解密请求右键找到 `Send Decrypted Request To Sqlmap` 点击后粘贴命令到终端中执行
 
 > 当在联动sqlmap、xray或与它们相似的工具时，由于流量会再次经过Burp，Burp的Proxy中势必会多出扫描流量，可以添加下方代码片段到bambda不显示这些流量
 >
 > !requestResponse.annotations().notes().contains("HookedByGalaxy")
-
-## 示例
-
-**grpc**
-
-[java](https://github.com/outlaws-bai/Galaxy/blob/main/src/test/java/org/m2sec/core/httphook/HttpHookGrpcServer.java)
-
-[python](https://github.com/outlaws-bai/GalaxyServerHooker)
-
-**http**
-
-[python](https://github.com/outlaws-bai/GalaxyServerHooker)
-
-**code**
-
-[examples](https://github.com/outlaws-bai/Galaxy/tree/main/src/main/resources/examples)
 
