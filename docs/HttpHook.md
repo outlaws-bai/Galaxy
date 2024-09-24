@@ -38,7 +38,9 @@
 
 支持grpc、http、java、graalpy、jython、js等方式实现四个Hook
 
-> graalpy -> python3.11；jython -> python2.7
+> graalpy -> python3.11
+> 
+> jython -> python2.7
 
 这四种可分为两类，服务类（grpc、http），跨语言类(java、graalpy、jython、js)
 
@@ -48,7 +50,7 @@
 [grpc-python](https://github.com/outlaws-bai/GalaxyServerHooker)
 [http-python](https://github.com/outlaws-bai/GalaxyServerHooker)
 
-**跨语言类** ：你可以用对应的跨语言方案实现hook脚本，并在其中实现四个Hook，在这里它们是四个函数，你需要在这些函数中修改请求/响应对，以实现它们应有的功能
+**跨语言类** ：你可以用对应的跨语言方案实现hook脚本，并在其中实现四个Hook函数，你需要在这些函数中修改请求/响应对象，以实现它们应有的功能
 
 [examples](https://github.com/outlaws-bai/Galaxy/tree/main/src/main/resources/examples)
 
@@ -56,7 +58,7 @@
 
 **服务类**：优点是跨语言能力、运行兼容性强；缺点是学习成本稍高、依赖IO -> 可能存在性能问题、不同语言算法间可能存在兼容性问题，在动态密钥的情况下很难实现需求。
 
-**跨语言类**：优点是可以与JVM交互 -> 不需要自行加解密算法 + 对Java来说没有算法兼容性的问题、可以将客户端代码 copy 进去运行、在动态密钥的情况也能实现需求；缺点是需要熟悉项目自带的对象和工具类，并且存在跨语言兼容性的问题。
+**跨语言类**：优点是可以与JVM交互 -> 可调用项目内置的加解密工具类 + 对Java来说没有算法兼容性的问题、可以将客户端代码 copy 进去运行、在动态密钥的情况也能实现需求；缺点是需要熟悉项目自带的对象和工具类，并且存在跨语言兼容性的问题。
 
 ## 使用思路
 
