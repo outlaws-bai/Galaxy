@@ -1,6 +1,6 @@
 <h3 align="center">Galaxy</h3>
 <p align="center">
-支持通过js/python/java实现hook脚本或任意语言实现grpc/http hook服务来自动解密报文，让你像测试明文一样简单
+让你测试加密报文时像测试明文一样简单
 <br>
 <br>
 <a href="https://github.com/outlaws-bai/Galaxy/releases"><img alt="releases" src="https://img.shields.io/github/release/outlaws-bai/Galaxy"/></a>
