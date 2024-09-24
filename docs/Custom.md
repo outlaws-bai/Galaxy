@@ -1,6 +1,4 @@
-# 自定义
-
-前提是，**已经逆向出了网站的加解密逻辑**，如果逆不出来可以群里求助，或者洗洗睡个好觉 ( ͡° ͜ʖ ͡°) 。
+# 自定义 hook 脚本
 
 > 需要一定的编程能力，java/python/js。
 >
@@ -8,12 +6,10 @@
 
 这个[靶场](https://github.com/outlaws-bai/GalaxyDemo)实现了常见的一些加解密逻辑，对应的hook脚本在示例中都有，可以体验一下，也可以尝试写对应的hook脚本，与内置示例对照增加熟练度。
 
-需要自定义hook脚本时你可以修改示例中的代码，或新建再cp。
-
 在hook脚本中你需要实现/修改其中的四个Hook函数，每个函数应该完成的是：
 
 1. 从请求/响应找到加密后的数据。
-2. 调用项目加密/解密函数。
+2. 解密该数据（用项目内置加解密工具类 or jsrpc/frida调用游览器/客户端中的加解密函数）。
 3. 修改请求/响应对象。
 
 ## 示例
@@ -76,8 +72,6 @@
 ```java
 log.info("request: {}", request)
 ```
-
-## 日志
 
 运行中的日志会发送到两个地方：
 
@@ -327,9 +321,9 @@ CryptoUtil.sm4Decrypt(String transformation, byte[] data, byte[] secret, Map<Str
 > 项目中hash计算使用java中的bouncycastle，具体的algorithm可查询官方文档
 
 ```java
-HashUtil.calc(byte[] data, String algorithm) -> byte[]
-HashUtil.calcToHex(byte[] data, String algorithm) -> String
-HashUtil.calcToBase64(byte[] data, String algorithm) -> String
+HashUtil.calc(String algorithm, byte[] data) -> byte[]
+HashUtil.calcToHex(String algorithm, byte[] data) -> String
+HashUtil.calcToBase64(String algorithm, byte[] data) -> String
 ```
 
 #### MacUtil
@@ -339,7 +333,7 @@ HashUtil.calcToBase64(byte[] data, String algorithm) -> String
 > 项目中mac计算使用java中的bouncycastle，具体的algorithm可查询官方文档
 
 ```java
-MacUtil.calc(byte[] data, byte[] secret, String algorithm) -> byte[]
-MacUtil.calcToHex(byte[] data, byte[] secret, String algorithm) -> String
-MacUtil.calcToBase64(byte[] data, byte[] secret, String algorithm) -> String
+MacUtil.calc(String algorithm, byte[] data, byte[] secret) -> byte[]
+MacUtil.calcToHex(String algorithm, byte[] data, byte[] secret) -> String
+MacUtil.calcToBase64(String algorithm, byte[] data, byte[] secret) -> String
 ```
