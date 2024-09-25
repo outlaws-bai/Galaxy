@@ -33,7 +33,7 @@
 - Intruder、Scanner、Repeater等模块均支持
 - 已解密请求转到Repeater后Send，得到的响应也会被解密
 - 支持联动sqlmap、被动代理扫描器，使得它们可以扫描明文请求，得到明文响应
-- 支持 cp 游览器端代码到插件编辑器中执行、联动 jsrpc、frida 调用客户端/游览器端代码
+- 支持 cp 客户端/游览器端代码到插件编辑器中执行、联动 jsrpc、frida 调用客户端/游览器端代码
 
 进一步了解：[Http Hook](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md)
 
