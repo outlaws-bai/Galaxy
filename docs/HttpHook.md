@@ -81,7 +81,7 @@
 ## 工具联动
 
 - 联动jsrpc调用 js 代码：[linkage-jsrpc](xz.aliyun.com/t/15252)
-- 联动frida调用客户端代码：**服务类** hook 方式自行调用即可；**跨语言类** 需要通过 [Grida](https://github.com/outlaws-bai/Grida) 暴露 frida rpc 接口为 http 接口，再在burp-galaxy 的编辑器中用 HttpClient 调用
+- 联动frida调用客户端代码：**服务类** hook 方式自行调用即可；**跨语言类** 需要通过 [Grida](https://github.com/outlaws-bai/Grida) 暴露 frida rpc 接口为 http 接口，再在插件编辑器中用 HttpClient 调用
 - 联动sqlmap扫描明文请求：在已解密请求右键找到 `Send Decrypted Request To Sqlmap` 点击后粘贴命令到终端中执行
 - 联动xray扫描明文请求：配置xray的上游代理为 burp，开启 `Auto Forward Request` 或在已解密请求右键找到 `Send Decrypted Request To Scanner` 点击
 
