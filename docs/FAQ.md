@@ -10,6 +10,11 @@
 1. 修改 burp 的编码方式为 utf-8, Brup 右上角 `Settings -> User Interface -> Character sets`
 2. 删除 [work dir](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#work-dir) 后在 Burp 重新导入插件
 
+# 右键响应可以解密成功，但启动后的响应没有自动解密
+
+1. 检查表达式是否正确
+2. 右键请求找到解密按钮并点击，查看是否有报错
+
 # hook方式显示不全
 
 - 缺少jython：请在Burp的Java environment(`Settings -> Extensions`)配置一个文件夹，并将 `jython-standalone-xxx.jar` 放在该文件夹。[Download](https://www.jython.org/download)
