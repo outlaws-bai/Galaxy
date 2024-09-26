@@ -67,7 +67,7 @@ public class SettingPanel extends JPanel {
         JPanel staticExtensionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel staticExtensionsLabel = new JLabel("Static Extensions: ");
         JTextField staticExtensionsInput = new JTextField();
-        staticExtensionsInput.setPreferredSize(new Dimension(1500, sqlmapArgsInput.getPreferredSize().height));
+        staticExtensionsInput.setPreferredSize(new Dimension(width, sqlmapArgsInput.getPreferredSize().height));
         staticExtensionsPanel.add(staticExtensionsLabel);
         staticExtensionsPanel.add(staticExtensionsInput);
 
