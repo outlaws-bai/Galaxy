@@ -97,6 +97,10 @@
 
 ## 🔗 常用地址
 
+[GalaxyDemo](https://github.com/outlaws-bai/GalaxyDemo)
+
+[GalaxyServerHooker](https://github.com/outlaws-bai/GalaxyServerHooker)
+
 [BurpDownload](https://portswigger.net/burp/releases#professional)
 
 [BurpJavaDoc](https://portswigger.github.io/burp-extensions-montoya-api/javadoc/burp/api/montoya/MontoyaApi.html)
