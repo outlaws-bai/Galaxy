@@ -34,7 +34,7 @@
 
 `Auto Forward Request`: 开关，是否自动将解密后的请求转发到被动代理扫描器。注意联动被动代理扫描器时必须配置被动扫描器的上游代理为Burp
 
-`Expression`: mvel bool [表达式](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Expression)，用于判断请求是否需要Hook
+`Expression`: mvel bool [表达式](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Expression)，用请求判断经过 Proxy 模块的流量是否需要Hook
 
 ## 实现方式
 
