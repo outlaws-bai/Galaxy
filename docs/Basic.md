@@ -8,7 +8,7 @@ Windows: %USERPROFILE%/.galaxy
 
 ## Expression
 
-使用 [mvel](https://github.com/mvel/mvel) 实现表达式的执行，可以理解就是一行代码。语法参考
+使用 [mvel](https://github.com/mvel/mvel) 实现表达式的执行，可以理解就是一行代码。语法类似 js
 
 ## Template
 
