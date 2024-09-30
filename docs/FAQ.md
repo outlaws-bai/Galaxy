@@ -54,3 +54,7 @@ load('xxx/crypto-js.js');
 var hash = CryptoJS.MD5("Message");
 console.log(hash.toString()); // 4c2a8fe7eaf24721cc7a9f0175115bd4       
 ```
+
+# 关于包大小的问题
+
+项目原生 + 必须的依赖库大小为 7M 出头，某些 jar 包较大是因其可选 hook 需要的依赖项较大
