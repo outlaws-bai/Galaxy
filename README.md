@@ -99,6 +99,8 @@
 
 [设计思路](https://xz.aliyun.com/t/15051)
 
+[联动jsrpc](https://xz.aliyun.com/t/15252)
+
 [GalaxyDemo](https://github.com/outlaws-bai/GalaxyDemo)
 
 [GalaxyServerHooker](https://github.com/outlaws-bai/GalaxyServerHooker)
