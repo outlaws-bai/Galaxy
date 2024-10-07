@@ -8,8 +8,9 @@ plugins {
 
 group = "org.m2sec"
 def version = "3.2.0"
-def grpcVersion = "1.54.1"
 def optionalHooker = "all" // all/js/graalpy/grpc/none(default)
+
+def grpcVersion = "1.54.1"
 def graalVersion = "24.1.0"
 def protobufVersion = "3.24.0"
 def protocVersion = protobufVersion
