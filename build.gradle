@@ -8,7 +8,7 @@ plugins {
 
 group = "org.m2sec"
 def version = "3.2.1"
-def optionalHooker = "all" // all/js/graalpy/grpc/none(default)
+def optionalHooker = "all" // all/js/graalpy/grpc/basic(default)
 
 def grpcVersion = "1.54.1"
 def graalVersion = "24.1.0"
@@ -25,6 +25,17 @@ java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
+
+shadowJar {
+    archiveClassifier.set(version + "-" + optionalHooker)
+
+    // 设置版本文件
+    versionFile.text = version
+
+    // 合并服务文件，避免多个 jar 文件中的 META-INF/services 冲突
+    mergeServiceFiles()
+}
+
 
 dependencies {
 
@@ -104,6 +115,7 @@ dependencies {
     implementation "org.mvel:mvel2:2.5.2.Final"
     // client
     implementation "cn.hutool:hutool-http:5.8.29"
+    implementation 'org.java-websocket:Java-WebSocket:1.5.7'
     // burp
     compileOnly "net.portswigger.burp.extensions:montoya-api:2023.12.1"
     // test
@@ -151,13 +163,4 @@ jar {
     }
 }
 
-shadowJar {
-    archiveClassifier.set(version + "-" + optionalHooker)
-
-    // 设置版本文件
-    versionFile.text = version
-
-    // 合并服务文件，避免多个 jar 文件中的 META-INF/services 冲突
-    mergeServiceFiles()
-}
 
