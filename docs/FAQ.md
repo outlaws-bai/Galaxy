@@ -2,12 +2,12 @@
 
 - 项目采用Burp `Montoya API` 开发，Burp版本不低于 `v2023.10.3.7` 。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
 - 项目使用JDK 17进行开发及编译，请确保启动Burp的JDK不低于17。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
-- 自行构建：修改 `build.gradle` 中 的 `optionalHooker` 再使用 `shadowJar` 打包
+- 自行构建：修改 `build.gradle` 中 的 `optionalHooker` 再使用 `shadowJar` 打包（gradlew shadowJar）
 - [Release](https://github.com/outlaws-bai/Galaxy/releases)中对应版本的注意事项
 
 # 安装后编辑器内注释乱码问题
 
-1. 修改 burp 的编码方式为 utf-8, Brup 右上角 `Settings -> User Interface -> Character sets`
+1. 修改 burp 的编码方式为 utf-8, burp 右上角 `Settings -> User Interface -> Character sets`
 2. 删除 [work dir](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#work-dir) 后在 Burp 重新导入插件
 
 # 右键响应可以解密成功，但启动后的响应没有自动解密
@@ -15,6 +15,10 @@
 1. 检查表达式是否正确
 2. 右键请求找到解密按钮并点击，查看是否有报错
 3. 查询日志中是否有报错
+
+# org.m2sec.rpc.HttpHook 无法找到
+
+该类是通过grpc proto生成，运行gradlew generateProto即可
 
 # hook方式显示不全
 
