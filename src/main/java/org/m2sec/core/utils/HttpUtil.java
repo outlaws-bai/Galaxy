@@ -12,15 +12,10 @@ import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.enums.Protocol;
 import org.m2sec.core.models.*;
-import org.python.jline.internal.Log;
-
 import javax.annotation.Nullable;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -36,6 +31,14 @@ public class HttpUtil {
         try {
             return new URL(urlStr);
         } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static URI parseUri(String urlStr) {
+        try {
+            return new URI(urlStr);
+        } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }

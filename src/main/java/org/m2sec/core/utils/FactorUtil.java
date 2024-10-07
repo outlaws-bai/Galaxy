@@ -15,6 +15,15 @@ public class FactorUtil {
 
     public static String randomString(int length) {
         @SuppressWarnings("SpellCheckingInspection") String CHARACTERS = "abcdefghijklmnopqrstuvwxyz0123456789";
+        return random(length, CHARACTERS);
+    }
+
+    public static Integer randomInteger(int length) {
+        String CHARACTERS = "0123456789";
+        return Integer.valueOf(random(length, CHARACTERS));
+    }
+
+    private static String random(int length, String CHARACTERS) {
         SecureRandom RANDOM = new SecureRandom();
         if (length <= 0) {
             throw new IllegalArgumentException("Length must be greater than 0");
