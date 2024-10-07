@@ -9,9 +9,8 @@ plugins {
 group = "org.m2sec"
 def version = "3.2.0"
 def grpcVersion = "1.54.1"
-def optionalHooker = "js" // js/graalpy/grpc
-def graalJsVersion = "23.0.5"
-def graalPythonVersion = "24.1.0"
+def optionalHooker = "all" // all/js/graalpy/grpc/none(default)
+def graalVersion = "24.1.0"
 def protobufVersion = "3.24.0"
 def protocVersion = protobufVersion
 def versionFile = file("${projectDir}/src/main/resources/version.txt") as Object
@@ -27,11 +26,22 @@ java {
 }
 
 dependencies {
-    if (optionalHooker == "js") {
+
+    if (optionalHooker == "all") {
         // cross-language
-        implementation "org.graalvm.js:js:${graalJsVersion}"
-        compileOnly "org.graalvm.python:python-language:${graalPythonVersion}"
-        compileOnly "org.graalvm.python:python-resources:${graalPythonVersion}"
+        implementation "org.graalvm.js:js-language:${graalVersion}"
+        implementation "org.graalvm.python:python-language:${graalVersion}"
+        implementation "org.graalvm.python:python-resources:${graalVersion}"
+        // grpc
+        runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
+        implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+        implementation "io.grpc:grpc-stub:${grpcVersion}"
+        implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+    } else if (optionalHooker == "js") {
+        // cross-language
+        implementation "org.graalvm.js:js-language:${graalVersion}"
+        compileOnly "org.graalvm.python:python-language:${graalVersion}"
+        compileOnly "org.graalvm.python:python-resources:${graalVersion}"
         // grpc
         compileOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
         compileOnly "io.grpc:grpc-protobuf:${grpcVersion}"
@@ -39,9 +49,9 @@ dependencies {
         compileOnly "com.google.protobuf:protobuf-java-util:${protobufVersion}"
     } else if (optionalHooker == "graalpy") {
         // cross-language
-        compileOnly "org.graalvm.js:js:${graalJsVersion}"
-        implementation "org.graalvm.python:python-language:${graalPythonVersion}"
-        implementation "org.graalvm.python:python-resources:${graalPythonVersion}"
+        compileOnly "org.graalvm.js:js-language:${graalVersion}"
+        implementation "org.graalvm.python:python-language:${graalVersion}"
+        implementation "org.graalvm.python:python-resources:${graalVersion}"
         // grpc
         compileOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
         compileOnly "io.grpc:grpc-protobuf:${grpcVersion}"
@@ -49,15 +59,26 @@ dependencies {
         compileOnly "com.google.protobuf:protobuf-java-util:${protobufVersion}"
     } else if (optionalHooker == "grpc") {
         // cross-language
-        implementation "org.graalvm.sdk:graal-sdk:23.0.5"
-        compileOnly "org.graalvm.js:js:${graalJsVersion}"
-        compileOnly "org.graalvm.python:python-language:${graalPythonVersion}"
-        compileOnly "org.graalvm.python:python-resources:${graalPythonVersion}"
+        implementation "org.graalvm.sdk:graal-sdk:${graalVersion}"
+        compileOnly "org.graalvm.js:js-language:${graalVersion}"
+        compileOnly "org.graalvm.python:python-language:${graalVersion}"
+        compileOnly "org.graalvm.python:python-resources:${graalVersion}"
         // grpc
         runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
         implementation "io.grpc:grpc-protobuf:${grpcVersion}"
         implementation "io.grpc:grpc-stub:${grpcVersion}"
         implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+    } else {
+        // cross-language
+        implementation "org.graalvm.sdk:graal-sdk:${graalVersion}"
+        compileOnly "org.graalvm.js:js-language:${graalVersion}"
+        compileOnly "org.graalvm.python:python-language:${graalVersion}"
+        compileOnly "org.graalvm.python:python-resources:${graalVersion}"
+        // grpc
+        compileOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
+        compileOnly "io.grpc:grpc-protobuf:${grpcVersion}"
+        compileOnly "io.grpc:grpc-stub:${grpcVersion}"
+        compileOnly "com.google.protobuf:protobuf-java-util:${protobufVersion}"
     }
     compileOnly 'org.python:jython:2.7.3'
     // annotation

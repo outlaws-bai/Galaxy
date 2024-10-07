@@ -9,7 +9,6 @@ import org.bouncycastle.crypto.engines.SM2Engine;
 import org.bouncycastle.crypto.params.*;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.math.ec.ECPoint;
 import org.m2sec.core.common.XXTEATools;
 import org.m2sec.core.enums.SymmetricKeyMode;
@@ -29,6 +28,8 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author: outlaws-bai
@@ -335,5 +336,21 @@ public class CryptoUtil {
             return ivString.getBytes();
         }
         throw new IllegalArgumentException("iv type error! " + iv.getClass());
+    }
+
+    private static String patchPkcs7(String transformation) {
+        if (transformation != null && !transformation.isBlank()) {
+            return replaceIgnoreCase(transformation, "PKCS7Padding", "PKCS5Padding");
+        }
+        return transformation;
+    }
+
+    private static String replaceIgnoreCase(String text, String search, String replacement) {
+        // 创建一个不区分大小写的正则表达式
+        Pattern pattern = Pattern.compile(Pattern.quote(search), Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(text);
+
+        // 使用 matcher 的 replaceAll 方法来进行替换
+        return matcher.replaceAll(Matcher.quoteReplacement(replacement));
     }
 }
