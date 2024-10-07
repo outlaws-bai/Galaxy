@@ -22,12 +22,12 @@
 
 # ModuleNotFoundError: No module named 'org'
 
-> 将适用于 jython 的脚本用到了 graalpy 选项
+> 将适用于 jython 的脚本用到了 graalpy 选项，这两者除了 python 语法版本不同，从java中导入类的语法也不同
 
-可以用该脚本选择 jython 选项或继续使用 graalpy 但修改 import 的方式
+可以用该脚本但选择 jython 选项 或 继续使用 graalpy 但修改 import 的方式
 
 ```python
-from java.org.m2sec.core.models import Request, Response
+from java.org.m2sec.xxx import xxx
 ```
 
 # hook方式显示不全
