@@ -20,6 +20,16 @@
 
 该类是通过grpc proto生成，运行gradlew generateProto即可
 
+# ModuleNotFoundError: No module named 'org'
+
+> 将适用于 jython 的脚本用到了 graalpy 选项
+
+可以用该脚本选择 jython 选项或继续使用 graalpy 但修改 import 的方式
+
+```python
+from java.org.m2sec.core.models import Request, Response
+```
+
 # hook方式显示不全
 
 - 缺少jython：请在Burp的Java environment(`Settings -> Extensions`)配置一个文件夹，并将 `jython-standalone-xxx.jar` 放在该文件夹。[Download](https://www.jython.org/download)
