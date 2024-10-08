@@ -12,7 +12,7 @@
 
 ## 设计思路
 
-[设计思路](https://xz.aliyun.com/t/15051)。
+[设计思路及运行原理](https://xz.aliyun.com/t/15051)。
 
 ## 流程图
 
