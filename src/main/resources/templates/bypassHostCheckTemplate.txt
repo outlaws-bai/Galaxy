@@ -3,6 +3,7 @@ ${originUrl.getProtocol()}://${evilUrl.getHost()}
 ${originUrl.getProtocol()}://${originUrl.getHost()}.${evilUrl.getHost()}
 ${originUrl.getProtocol()}://${evilUrl.getHost()}?${originUrl.getHost()}
 ${originUrl.getProtocol()}://${evilUrl.getHost()}/${originUrl.getHost()}
+${originUrl.getProtocol()}://${evilUrl.getHost()}\${originUrl.getHost()}
 ${originUrl.getProtocol()}://${evilUrl.getHost()}%ff@${originUrl.getHost()}
 ${originUrl.getProtocol()}://${evilUrl.getHost()}%ff.${originUrl.getHost()}
 ${originUrl.getProtocol()}://${originUrl.getHost()}%25253F@${evilUrl.getHost()}
