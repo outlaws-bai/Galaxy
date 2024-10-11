@@ -40,7 +40,6 @@ public class JythonHookerFactor extends IHttpHooker {
 
     public void init(String filepath) {
         interpreter = new PythonInterpreter();
-        interpreter.exec(FileTools.readFileAsString(filepath));
         try {
             interpreter.exec(FileTools.readFileAsString(filepath));
             init();
