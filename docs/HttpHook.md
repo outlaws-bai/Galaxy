@@ -1,14 +1,8 @@
 # Http Hook
 
-支持用js/python/java实现hook脚本或任意语言实现grpc/http hook服务来自动解密报文，让你像测试明文一样简单
+需要一些编程基础，项目已提供多项示例，可以作为参考
 
-> 用于熟悉该插件的靶场 [GalaxyDemo](https://github.com/outlaws-bai/GalaxyDemo) ，下方实现方式中的示例均为该靶场的对应 hook 脚本/服务
-
-## 简介
-
-将请求/响应对象交给你，你可以通过少量代码随意修改请求/响应对象，这样无论有多复杂都可以达到目的
-
-> 需要一些编程基础，项目已提供多项示例，可以作为参考
+> 用于熟悉该插件的靶场： [GalaxyDemo](https://github.com/outlaws-bai/GalaxyDemo) ；下方的示例均为该靶场的对应 hook 实现
 
 ## 设计思路
 
