@@ -25,7 +25,7 @@
 
 **本项目的解决方案**
 
-在 Request/Response 在 Client/Burp/Server 流转阶段将请求/响应对象交给你，你可以通过少量代码随意修改，这样无论有多复杂都可以达到目的
+在 Request/Response 在 Client/Burp/Server 流转阶段将请求/响应对象交给你，你可以通过少量代码随意修改和还原，这样无论有多复杂都可以达到目的
 
 **启用后的效果**
 
