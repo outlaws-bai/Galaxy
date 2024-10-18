@@ -21,19 +21,20 @@
 
 **面临的问题**
 
-越来越多网站对HTTP报文加密/加签，这导致想要修改/扫描明文请求/响应很不方便，并且已有项目在面对加密&加签同时存在、加密算法组合、动态密钥等情况时不够用或不够便捷高效
+越来越多网站对HTTP报文加密/加签，这导致想要对明文修改/扫描很不方便
 
 **本项目的解决方案**
 
-在 Request/Response 在 Client/Burp/Server 流转阶段将请求/响应对象交给你，你可以通过少量代码随意修改和还原，这样无论有多复杂都可以达到目的
+当请求/响应在客户端/Burp/服务端流转阶段将请求/响应对象交给你，你可以通过少量代码随意修改和还原，无论加密方案有多复杂都支持解密和扫描
 
 **启用后的效果**
 
-- 后续代理的所有请求和响应自动解密
-- Intruder、Scanner、Repeater等模块均支持
+- 后续代理的所有请求和响应会被自动解密
+- Intruder、Scanner、Repeater等模块均支持明文查看及修改
 - 已解密请求转到Repeater后Send，得到的响应也会被解密
-- 支持联动sqlmap、被动代理扫描器，使得它们可以扫描明文请求，得到明文响应
-- 支持 cp 客户端/游览器端代码到插件编辑器中执行、联动 jsrpc、frida 调用客户端/游览器端代码
+- 支持拷贝客户端/游览器端代码到插件编辑器中执行
+- 支持联动 jsrpc、frida 调用客户端/游览器端代码
+- 可联动sqlmap、被动代理扫描器，使得它们可以扫描明文请求，得到明文响应
 
 进一步了解：[Http Hook](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md)
 
@@ -48,13 +49,19 @@
 
 **常规情况**
 
+> 启动后请求/响应自动解密，并且将解密后的请求转发到 Repeater 后发送，得到的响应也是解密后的
+
 ![hook](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/hook.gif)
 
 **联动sqlmap**
 
+> 将解密后的明文请求发送给 sqlmap，它可以扫描明文请求，并得到解密后的响应
+
 ![linkage-sqlmap](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/linkage-sqlmap.gif)
 
 **联动xray**
+
+> 将解密后的明文请求发送给 xray，它可以扫描明文请求，并得到解密后的响应
 
 ![linkage-xray](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/linkage-xray.gif)
 
@@ -75,9 +82,9 @@
 ## 📶 优势特点
 
 - 简单高效：不需要启动多余的本地服务
-- 上手容易：通用算法及常见加密逻辑已内置，基本能做到开箱即用
 - 支持面广：如加密算法组合、自定义算法、动态密钥等均可以支持
-- 强灵活性：可以使用 python、js、java、grpc、http 等多种语言/方式来满足需求
+- 上手容易：通用算法及常见加密逻辑已有示例，基本能做到开箱即用
+- 高灵活性：可以使用 python、js、java、grpc、http 等多种语言/方式来满足需求
 
 ## 🐛 遇到问题
 
