@@ -17,15 +17,17 @@
 
 ## 🔥 主要功能
 
-- **自动化解密流量**：写好自定义 hook 后，插件会自动化解密后续代理的流量。
+- **自动化解密加密请求和响应**：写好自定义 hook 后，插件会自动化解密后续代理的流量。
 - **全面支持 Burp 模块**：适用于 Burp 的所有模块，如 Intruder、Proxy、Repeater 和 Scanner。
 - **与安全工具联动**：支持与 sqlmap、xray 的联动，让你更高效地发现潜在的安全漏洞。
+- **其他小功能**：[Bypass Host Check](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Bypass-Host-Check)、[Bypass Auth Of Path](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Bypass-Auth-Of-Path)、[Parse Swagger Api Doc](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Parse-Swagger-Api-Doc)...
 
 ## 🔒 适用场景
 
 - 渗透测试中发现网站的 HTTP 报文做了加密。
 - 加密逻辑较为复杂，如加密算法组合、自定义算法和动态密钥等。
-- 想要使用扫描器，让它可以对明文请求扫描，扫描请求发出后获得明文响应。
+- 想要使用扫描器，支持其对明文请求扫描，扫描请求发出后获得明文响应。
+- ...
 
 ## 🎥 效果演示
 
