@@ -20,7 +20,7 @@
 - **自动化解密加密请求和响应**：写好自定义 hook 后，插件会自动化解密后续代理的流量。
 - **全面支持 Burp 模块**：适用于 Burp 的所有模块，如 Intruder、Proxy、Repeater 和 Scanner。
 - **与安全工具联动**：支持与 sqlmap、xray 的联动，让你更高效地发现潜在的安全漏洞。
-- **其他小功能**：[Bypass Host Check](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Bypass-Host-Check)、[Bypass Auth Of Path](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Bypass-Auth-Of-Path)、[Parse Swagger Api Doc](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Other.md#Parse-Swagger-Api-Doc)...
+- **其他小功能**：[Bypass Host Check](https://github.com/outlaws-bai/Galaxy/wiki/%E5%8A%9F%E8%83%BD%E8%AF%A6%E8%A7%A3#bypass-host-check)、[Bypass Auth Of Path](https://github.com/outlaws-bai/Galaxy/wiki/%E5%8A%9F%E8%83%BD%E8%AF%A6%E8%A7%A3#bypass-auth-of-path)、[Parse Swagger Api Doc](https://github.com/outlaws-bai/Galaxy/wiki/%E5%8A%9F%E8%83%BD%E8%AF%A6%E8%A7%A3#parse-swagger-api-doc)...
 
 ## 🔒 适用场景
 
@@ -65,7 +65,7 @@
 
 ## 🐛 遇到问题
 
-请先阅读 [FAQ](https://github.com/outlaws-bai/Galaxy/blob/main/docs/FAQ.md) 和 [历史Issue](https://github.com/outlaws-bai/Galaxy/issues?q=is%3Aissue)，无法解决可以提交 [Issue](https://github.com/outlaws-bai/Galaxy/issues) 或加群。
+请先阅读 [FAQ](https://github.com/outlaws-bai/Galaxy/wiki/FAQ) 和 [历史Issue](https://github.com/outlaws-bai/Galaxy/issues?q=is%3Aissue)，无法解决可以提交 [Issue](https://github.com/outlaws-bai/Galaxy/issues) 或加群。
 
 ## 📢 联系我们
 
