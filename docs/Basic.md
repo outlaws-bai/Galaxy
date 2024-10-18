@@ -12,7 +12,7 @@ Windows: %USERPROFILE%/.galaxy
 
 ## Template
 
-${xxx} 中的内容会被当作 `Expression` 执行，执行结果通过 `common-text` 替换模板。
+${xxx} 中的内容会被当作 `Expression` 执行，执行结果通过 `common-text` 替换。
 
 > 在Template要使用$字符时，需要双写转义。
 
