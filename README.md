@@ -59,7 +59,7 @@
 
 **注意事项**:
 
-- [首次使用必看](https://github.com/outlaws-bai/Galaxy/blob/main/docs/HttpHook.md)
+- [首次使用必看](https://github.com/outlaws-bai/Galaxy/wiki/%E5%8A%9F%E8%83%BD%E8%AF%A6%E8%A7%A3)
 - [Release](https://github.com/outlaws-bai/Galaxy/releases) 中对应版本的注意事项
 - Burp版本不低于 `v2023.10.3.7`
 
