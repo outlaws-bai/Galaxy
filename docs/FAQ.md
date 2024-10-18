@@ -1,7 +1,6 @@
 # 请先阅读下方注意事项
 
-- 项目采用Burp `Montoya API` 开发，Burp版本不低于 `v2023.10.3.7` 。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
-- 项目使用JDK 17进行开发及编译，请确保启动Burp的JDK不低于17。 [Update](https://github.com/outlaws-bai/Galaxy?tab=readme-ov-file#%E5%B8%B8%E7%94%A8%E5%9C%B0%E5%9D%80)
+- 项目采用Burp `Montoya API` 开发，Burp版本不低于 `v2023.10.3.7`
 - 自行构建：修改 `build.gradle` 中 的 `optionalHooker` 再使用 `shadowJar` 打包（gradlew shadowJar）
 - [Release](https://github.com/outlaws-bai/Galaxy/releases)中对应版本的注意事项
 
@@ -9,26 +8,6 @@
 
 1. 修改 burp 的编码方式为 utf-8, burp 右上角 `Settings -> User Interface -> Character sets`
 2. 删除 [work dir](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#work-dir) 后在 Burp 重新导入插件
-
-# 右键响应可以解密成功，但启动后的响应没有自动解密
-
-1. 检查表达式是否正确
-2. 右键请求找到解密按钮并点击，查看是否有报错
-3. 查询日志中是否有报错
-
-# org.m2sec.rpc.HttpHook 无法找到
-
-该类是通过grpc proto生成，运行gradlew generateProto即可
-
-# ModuleNotFoundError: No module named 'org'
-
-> 将适用于 jython 的脚本用到了 graalpy 选项，这两者除了 python 语法版本不同，从java中导入类的语法也不同
-
-可以用该脚本但选择 jython 选项 或 继续使用 graalpy 但修改 import 的方式
-
-```python
-from java.org.m2sec.xxx import xxx
-```
 
 # hook方式显示不全
 
@@ -67,6 +46,30 @@ load('xxx/crypto-js.js');
 // 测试 crypto-js 是否可以正常工作
 var hash = CryptoJS.MD5("Message");
 console.log(hash.toString()); // 4c2a8fe7eaf24721cc7a9f0175115bd4       
+```
+
+# The result of using this request to execute the check expression is false...
+
+表达式是用来判断一个请求是否需要被处理，如果出现该情况请检查表达式。注意 request.host 的 value 不需要带端口。
+
+# 右键响应可以解密成功，但启动后的响应没有自动解密
+
+1. 检查表达式是否正确
+2. 右键请求找到解密按钮并点击，查看是否有报错
+3. 查询日志中是否有报错
+
+# org.m2sec.rpc.HttpHook 无法找到
+
+该类是通过grpc proto生成，运行gradlew generateProto即可
+
+# ModuleNotFoundError: No module named 'org'
+
+> 将适用于 jython 的脚本用到了 graalpy 选项，这两者除了 python 语法版本不同，从java中导入类的语法也不同
+
+可以用该脚本但选择 jython 选项 或 继续使用 graalpy 但修改 import 的方式
+
+```python
+from java.org.m2sec.xxx import xxx
 ```
 
 # 关于包大小的问题
