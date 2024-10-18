@@ -1,10 +1,10 @@
 # Http Hook
 
-需要一些编程基础，项目已提供多项示例，可以作为参考
+需要一些编程基础
 
 ## 设计思路
 
-> 建议阅读
+> 必读
 
 [设计思路及运行原理](https://xz.aliyun.com/t/15051)。
 
@@ -12,21 +12,9 @@
 
 [GalaxyDemo](https://github.com/outlaws-bai/GalaxyDemo) ，项目中的示例均与该靶场的对应
 
-## 流程图
+## 界面简介
 
-![流程图](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/image-20240621105543574.png)
-
-`hookRequestToBurp`：HTTP请求从客户端到达Burp时被调用。在此处完成请求解密的代码就可以在Burp中看到明文的请求报文
-
-`hookRequestToServer`：HTTP请求从Burp将要发送到Server时被调用。在此处完成请求加密的代码就可以将加密后的请求报文发送到Server
-
-`hookResponseToBurp`：HTTP请求从Server到达Burp时被调用。在此处完成响应解密的代码就可以在Burp中看到明文的响应报文
-
-`hookResponseToClient`：HTTP请求从Burp将要发送到Client时被调用。在此处完成响应加密的代码就可以将加密后的响应报文返回给Client
-
-## 界面
-
-`Hooker`: 可选js、graalpy、jython、java、grpc、http（因不同 jar 包及客户端条件有差异，详情见 [Releases](https://github.com/outlaws-bai/Galaxy/releases) 中的注意事项）
+`Hooker`:  hook 的方式，可选js、graalpy、jython、java、grpc、http（因不同 jar 包及客户端条件有差异，详情见 [Releases](https://github.com/outlaws-bai/Galaxy/releases) 中的注意事项）
 
 `Hook Response`: 开关，是否需要对响应Hook
 
@@ -34,9 +22,9 @@
 
 `Expression`: mvel bool [表达式](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Expression)，用请求判断经过 Proxy 模块的流量是否需要Hook
 
-## 实现方式
+## hook 方式解释
 
-支持grpc、http、java、graalpy、jython、js等方式实现四个Hook
+支持grpc、http、java、graalpy、jython、js等方式
 
 > graalpy -> python3.11
 > 
@@ -44,13 +32,13 @@
 
 这四种可分为两类，服务类（grpc、http），跨语言类(java、graalpy、jython、js)
 
-**服务类** ：你可以用任何语言实现 grpc/http 服务端，并在其中实现四个Hook接口，你需要在这些接口通过三方库实现修改请求/响应对象，它们应有的功能
+**服务类** ：你可以用任何语言实现 grpc/http 服务端，并在其中实现四个Hook接口，你需要在这些接口通过三方库 修改/还原 请求/响应 对象
 
-[grpc-java](https://github.com/outlaws-bai/Galaxy/blob/main/src/test/java/org/m2sec/core/httphook/HttpHookGrpcServer.java)
-[grpc-python](https://github.com/outlaws-bai/GalaxyServerHooker)
-[http-python](https://github.com/outlaws-bai/GalaxyServerHooker)
+[grpc-java](https://github.com/outlaws-bai/Galaxy/blob/main/src/test/java/org/m2sec/core/httphook/HttpHookGrpcServer.java)：grpc 的 java 版本
+[grpc-python](https://github.com/outlaws-bai/GalaxyServerHooker)：grpc 的 python 版本
+[http-python](https://github.com/outlaws-bai/GalaxyServerHooker)：http 的 python 版本
 
-**跨语言类** ：你可以用对应的跨语言方案实现hook脚本，并在其中实现四个Hook函数，你需要在这些函数中修改请求/响应对象，以实现它们应有的功能
+**跨语言类** ：你可以用对应的跨语言方案实现 hook 脚本，并在其中实现四个Hook函数，你需要在这些函数中 修改/还原 请求/响应对象
 
 [examples](https://github.com/outlaws-bai/Galaxy/tree/main/src/main/resources/examples)
 
@@ -69,7 +57,7 @@
 
 ## 测试
 
-在启动Http Hook服务后，在任意的HTTP请求/响应编辑器中右键可找到对应的按钮。
+在启动Http Hook服务后，在任意的HTTP请求/响应编辑器中右键可找到对应的按钮，点击即可测试
 
 ## 日志
 
