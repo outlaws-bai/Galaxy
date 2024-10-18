@@ -2,11 +2,15 @@
 
 需要一些编程基础，项目已提供多项示例，可以作为参考
 
-> 用于熟悉该插件的靶场： [GalaxyDemo](https://github.com/outlaws-bai/GalaxyDemo) ；下方的示例均为该靶场的对应 hook 实现
-
 ## 设计思路
 
+> 建议阅读
+
 [设计思路及运行原理](https://xz.aliyun.com/t/15051)。
+
+## 测试靶场
+
+[GalaxyDemo](https://github.com/outlaws-bai/GalaxyDemo) ，项目中的示例均与该靶场的对应
 
 ## 流程图
 
