@@ -257,10 +257,10 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             "(byte[] data)", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils" +
             "/CodeUtil.java")));
         // JsonUtil
-        provider.addCompletion(new ShorthandCompletion(provider, "jsonStrToMap", "JsonUtil.jsonStrToMap(String " +
+        provider.addCompletion(new ShorthandCompletion(provider, "jsonStrToMap", "Map<?, ?> map = JsonUtil.jsonStrToMap(String " +
             "jsonStr)", "json string to Map -> Map", SwingTools.renderLink("JsonUtil.jsonStrToMap(String jsonStr)",
             "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/JsonUtil.java")));
-        provider.addCompletion(new ShorthandCompletion(provider, "jsonStrToList", "JsonUtil.jsonStrToList(String " +
+        provider.addCompletion(new ShorthandCompletion(provider, "jsonStrToList", "List<?> list = JsonUtil.jsonStrToList(String " +
             "jsonStr)", "json string to List -> List", SwingTools.renderLink("JsonUtil.jsonStrToList(String jsonStr)"
             , "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/JsonUtil.java")));
         provider.addCompletion(new ShorthandCompletion(provider, "toJsonStr", "JsonUtil.toJsonStr(Object obj)",
@@ -346,11 +346,11 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             ".com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Response.java")));
         // Response - Status Code
         provider.addCompletion(new ShorthandCompletion(provider, "response.getStatusCode", "response.getStatusCode()"
-            , "Response get status code -> String", SwingTools.renderLink("response.getStatusCode()", "https://github" +
+            , "Response get status code -> int", SwingTools.renderLink("response.getStatusCode()", "https://github" +
             ".com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Response.java")));
         provider.addCompletion(new ShorthandCompletion(provider, "response.setStatusCode", "response.setStatusCode" +
-            "(String body)", "Response set status code -> void", SwingTools.renderLink("response.setStatusCode(String" +
-            " body)", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Response" +
+            "(int statusCode)", "Response set status code -> void", SwingTools.renderLink("response.setStatusCode(int" +
+            " statusCode)", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Response" +
             ".java")));
         // Response - Headers
         provider.addCompletion(new ShorthandCompletion(provider, "response.getHeaders", "response.getHeaders()",
@@ -438,7 +438,7 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             "Mac calc -> byte[]",
             SwingTools.renderSummary("mac calc", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org" +
                 "/m2sec/core/utils/MacUtil.java", "byte[]", "algorithm(String) HmacMD5 | HmacSHA1 | HmacSHA224 | " +
-                "HmacSHA256|...", "data(byte[]) origin data")
+                "HmacSHA256|...", "data(byte[]) origin data", "secret(byte[]) secret")
         ));
         provider.addCompletion(new ShorthandCompletion(
             provider,
@@ -448,7 +448,7 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             SwingTools.renderSummary("mac calcToHex", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java" +
                 "/org" +
                 "/m2sec/core/utils/MacUtil.java", "byte[]", "algorithm(String) HmacMD5 | HmacSHA1 | HmacSHA224 | " +
-                "HmacSHA256|...", "data(byte[]) origin data")
+                "HmacSHA256|...", "data(byte[]) origin data", "secret(byte[]) secret")
         ));
         provider.addCompletion(new ShorthandCompletion(
             provider,
@@ -458,7 +458,7 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             SwingTools.renderSummary("mac calcToBase64", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main" +
                 "/java/org" +
                 "/m2sec/core/utils/MacUtil.java", "byte[]", "algorithm(String) HmacMD5 | HmacSHA1 | HmacSHA224 | " +
-                "HmacSHA256|...", "data(byte[]) origin data")
+                "HmacSHA256|...", "data(byte[]) origin data", "secret(byte[]) secret")
         ));
         // Crypto TEA
         provider.addCompletion(new ShorthandCompletion(
