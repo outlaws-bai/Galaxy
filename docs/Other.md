@@ -14,7 +14,7 @@
 
 ## Bypass Host Check
 
-绕过服务端在csrf/ssrf的测试点对host做了验证
+绕过服务端在ssrf/重定向的测试点对host做了验证
 
 > 如果想要自定义绕过Template，可以修改 `${Work Dir}/templates/bypassHostCheckTemplate.txt`文件。[Work Dir](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Work-Dir), [Template](https://github.com/outlaws-bai/Galaxy/blob/main/docs/Basic.md#Tempalte)
 
