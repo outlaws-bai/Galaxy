@@ -1,6 +1,6 @@
 # 使用JDK启动Burp
 
-当你在Burp官网下载了可执行文件的版本安装时，它是使用JRE启动，需要将其改为JDK，才能正常使用该项目。
+当你在Burp官网下载了可执行文件的版本安装时，它是使用JRE启动，需要将其改为JDK
 
 ## Windows
 
@@ -45,15 +45,15 @@ https://docs.aws.amazon.com/corretto/latest/corretto-21-ug/downloads-list.html
 
 ## Mac
 
-应用程序-> 显示包内容
+应用程序 -> 显示包内容
 
 ![image-20240728225224470](https://raw.githubusercontent.com/tdyj/picture/main/img/202407282310431.png)
 
-备份jre.bundle为jre.bundle.bk，选择jre对应版本的jdk（一般安装在`/Library/Java/JavaVirtualMachines`目录下），复制到该目录下，并重命名为jre.bundle即可。
+1. 备份jre.bundle为jre.bundle.bk
+2. 选择jre对应版本的jdk（一般安装在`/Library/Java/JavaVirtualMachines`目录下），复制到该目录下
+3. 重命名为jre.bundle即可
 
 ![image-20240728225422084](https://raw.githubusercontent.com/tdyj/picture/main/img/202407282310506.png)
-
-
 
 完成，祝好。
 
