@@ -11,7 +11,7 @@
 <br>
 <br>
 <a href="https://github.com/outlaws-bai/Galaxy/releases">Download</a> | 
-<a href="https://github.com/outlaws-bai/Galaxy/blob/main/docs/FAQ.md">FAQ</a> | 
+<a href="https://github.com/outlaws-bai/Galaxy/wiki/FAQ">FAQ</a> | 
 <a href="https://github.com/outlaws-bai/Galaxy/issues">Issue</a>
 </p>
 
