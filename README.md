@@ -55,13 +55,13 @@
 
 **联动sqlmap**
 
-> 将解密后的明文请求发送给 sqlmap，它可以扫描明文请求，并得到解密后的响应
+> 右键获取 sqlmap 扫描的命令，执行就可以扫描明文请求，并得到解密后的响应
 
 ![linkage-sqlmap](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/linkage-sqlmap.gif)
 
 **联动xray**
 
-> 将解密后的明文请求发送给 xray，它可以扫描明文请求，并得到解密后的响应
+> 右键将解密后的明文请求发送给 xray，它可以扫描明文请求，并得到解密后的响应
 
 ![linkage-xray](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/linkage-xray.gif)
 
