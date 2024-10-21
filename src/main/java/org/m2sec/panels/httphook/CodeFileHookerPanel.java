@@ -330,6 +330,10 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
         provider.addCompletion(new ShorthandCompletion(provider, "request.setBody", "request.setBody(String body)",
             "Request set body -> void", SwingTools.renderLink("request.setBody(String body)", "https://github" +
             ".com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Request.java")));
+        // Request - Json
+        provider.addCompletion(new ShorthandCompletion(provider, "request.getJson", "request.getJson()", "Request get" +
+                " json -> Object(Map<String, Object> or List<Object>)", SwingTools.renderLink("request.getJson()", "https://github.com/outlaws-bai/Galaxy/blob" +
+                "/main/src/main/java/org/m2sec/core/models/Request.java")));
         // Response - Body
         provider.addCompletion(new ShorthandCompletion(provider, "response.getContent", "response.getContent()",
             "Response get content(byte[] body) -> byte[]", SwingTools.renderLink("response.getContent()", "https" +
@@ -359,6 +363,11 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
         provider.addCompletion(new ShorthandCompletion(provider, "response.setHeaders", "response.setHeaders(Headers " +
             "headers)", "Response set headers -> void", SwingTools.renderLink("response.setHeaders(Headers headers)",
             "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Response.java")));
+        // Response - Json
+        provider.addCompletion(new ShorthandCompletion(provider, "response.getJson", "response.getJson()", "Response get" +
+                " json -> Object(Map<String, Object> or List<Object>)", SwingTools.renderLink("response.getJson()", "https://github.com/outlaws-bai/Galaxy/blob" +
+                "/main/src/main/java/org/m2sec/core/models/Response.java")));
+        
         // Headers
         provider.addCompletion(new ShorthandCompletion(provider, "headers.has", "headers.has(String key)", "has -> " +
             "boolean", SwingTools.renderLink("headers.has(String key)", "https://github.com/outlaws-bai/Galaxy/blob" +
