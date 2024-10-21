@@ -1,6 +1,6 @@
 <h3 align="center">Galaxy</h3>
 <p align="center">
-让你测试加密报文时像明文一样简单高效
+一个想让你测试加密流量像明文一样简单高效的 Burp 插件
 <br>
 <br>
 <a href="https://github.com/outlaws-bai/Galaxy/releases"><img alt="releases" src="https://img.shields.io/github/release/outlaws-bai/Galaxy"/></a>
