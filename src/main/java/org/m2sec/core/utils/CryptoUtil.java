@@ -111,12 +111,10 @@ public class CryptoUtil {
         }
     }
 
-    @Deprecated
     public static byte[] rsaEncrypt(byte[] data, byte[] publicKey) {
         return rsaEncrypt(ALGORITHM_RSA, data, publicKey);
     }
 
-    @Deprecated
     public static byte[] rsaDecrypt(byte[] data, byte[] privateKey) {
         return rsaDecrypt(ALGORITHM_RSA, data, privateKey);
     }
@@ -146,12 +144,10 @@ public class CryptoUtil {
         }
     }
 
-    @Deprecated
     public static byte[] sm2Encrypt(byte[] data, byte[] publicKey) {
         return sm2Crypt(data, publicKey, "c1c2c3", true);
     }
 
-    @Deprecated
     public static byte[] sm2Decrypt(byte[] data, byte[] privateKey) {
         return sm2Crypt(data, privateKey, "c1c2c3", false);
     }
