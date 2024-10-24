@@ -17,11 +17,6 @@ public class HashUtil {
 
     public static final String MD_5 = "MD5";
 
-    @Deprecated
-    public static byte[] calc(byte[] data, String algorithm) {
-        return calc(algorithm, data);
-    }
-
     public static byte[] calc(String algorithm, byte[] data) {
         try {
             MessageDigest md = MessageDigest.getInstance(algorithm);
