@@ -65,15 +65,7 @@
 
 ## 🐛 遇到问题
 
-请先阅读 [FAQ](https://github.com/outlaws-bai/Galaxy/wiki/FAQ) 和 [历史Issue](https://github.com/outlaws-bai/Galaxy/issues?q=is%3Aissue)，无法解决可以提交 [Issue](https://github.com/outlaws-bai/Galaxy/issues) 或加群。
-
-## 📢 联系我们
-
-> 如果项目对你有帮助，请 star。
-
-扫码添加微信并备注 `Galaxy` 。
-
-<img src="https://raw.githubusercontent.com/outlaws-bai/picture/main/img/image-20240731000104866.png" width="300" height="300"/>
+请先阅读 [FAQ](https://github.com/outlaws-bai/Galaxy/wiki/FAQ) 和 [历史Issue](https://github.com/outlaws-bai/Galaxy/issues?q=is%3Aissue)，无法解决可以提交 [Issue](https://github.com/outlaws-bai/Galaxy/issues)。
 
 ## 🔯 Stars
 
