@@ -51,6 +51,8 @@
 
 ## 🚀 安装指引
 
+> 如果该项目对你有帮助，请 star
+
 插件下载：[Download](https://github.com/outlaws-bai/Galaxy/releases)
 
 插件安装：`Extensions -> Add -> Select File -> Next`
