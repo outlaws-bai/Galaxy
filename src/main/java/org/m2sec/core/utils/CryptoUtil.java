@@ -10,6 +10,7 @@ import org.bouncycastle.crypto.params.*;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.bouncycastle.math.ec.ECPoint;
+import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.XXTEATools;
 import org.m2sec.core.enums.SymmetricKeyMode;
 
@@ -122,11 +123,11 @@ public class CryptoUtil {
     public static byte[] rsaEncrypt(String transformation, byte[] data, byte[] publicKey) {
         try {
             PublicKey pubKey = KeyFactory.getInstance(ALGORITHM_RSA).generatePublic(new X509EncodedKeySpec(publicKey));
-            Cipher cipher = Cipher.getInstance(transformation);
+            Cipher cipher = Cipher.getInstance(transformation, Constants.CRYPTO_PROVIDER);
             cipher.init(Cipher.ENCRYPT_MODE, pubKey);
             return cipher.doFinal(data);
         } catch (InvalidKeySpecException | NoSuchPaddingException | NoSuchAlgorithmException |
-                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException e) {
+                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException | NoSuchProviderException e) {
             throw new RuntimeException(e);
         }
     }
@@ -135,11 +136,11 @@ public class CryptoUtil {
         try {
             PrivateKey priKey =
                 KeyFactory.getInstance(ALGORITHM_RSA).generatePrivate(new PKCS8EncodedKeySpec(privateKey));
-            Cipher cipher = Cipher.getInstance(transformation);
+            Cipher cipher = Cipher.getInstance(transformation, Constants.CRYPTO_PROVIDER);
             cipher.init(Cipher.DECRYPT_MODE, priKey);
             return cipher.doFinal(data);
         } catch (InvalidKeySpecException | NoSuchPaddingException | NoSuchAlgorithmException |
-                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException e) {
+                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException | NoSuchProviderException e) {
             throw new RuntimeException(e);
         }
     }
@@ -279,13 +280,13 @@ public class CryptoUtil {
         try {
             String finalTransformation = transformation != null && !algorithm.equals(transformation) ?
                 transformation : algorithmDefaultTransformation;
-            Cipher cipher = Cipher.getInstance(finalTransformation);
+            Cipher cipher = Cipher.getInstance(finalTransformation, Constants.CRYPTO_PROVIDER);
             SecretKeySpec keySpec = new SecretKeySpec(secret, algorithm);
             AlgorithmParameterSpec paramSpec = getSymmetricKeyEncryptParameterSpec(finalTransformation, params);
             cipher.init(Cipher.ENCRYPT_MODE, keySpec, paramSpec);
             return cipher.doFinal(data);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidAlgorithmParameterException |
-                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException e) {
+                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException | NoSuchProviderException e) {
             throw new RuntimeException(e);
         }
     }
@@ -295,13 +296,13 @@ public class CryptoUtil {
         try {
             String finalTransformation = transformation != null && !algorithm.equals(transformation) ?
                 transformation : algorithmDefaultTransformation;
-            Cipher cipher = Cipher.getInstance(finalTransformation);
+            Cipher cipher = Cipher.getInstance(finalTransformation, Constants.CRYPTO_PROVIDER);
             SecretKeySpec keySpec = new SecretKeySpec(secret, algorithm);
             AlgorithmParameterSpec paramSpec = getSymmetricKeyEncryptParameterSpec(finalTransformation, params);
             cipher.init(Cipher.DECRYPT_MODE, keySpec, paramSpec);
             return cipher.doFinal(data);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidAlgorithmParameterException |
-                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException e) {
+                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException | NoSuchProviderException e) {
             throw new RuntimeException(e);
         }
     }

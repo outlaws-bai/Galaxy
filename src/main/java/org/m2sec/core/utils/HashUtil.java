@@ -1,8 +1,10 @@
 package org.m2sec.core.utils;
 
+import org.m2sec.core.common.Constants;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
+import java.security.NoSuchProviderException;
 
 /**
  * @author: outlaws-bai
@@ -19,9 +21,9 @@ public class HashUtil {
 
     public static byte[] calc(String algorithm, byte[] data) {
         try {
-            MessageDigest md = MessageDigest.getInstance(algorithm);
+            MessageDigest md = MessageDigest.getInstance(algorithm, Constants.CRYPTO_PROVIDER);
             return md.digest(data);
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
             throw new RuntimeException(e);
         }
     }

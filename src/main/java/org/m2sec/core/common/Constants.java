@@ -126,4 +126,6 @@ public class Constants {
 
     public static final String JS_FILE_SUFFIX = ".js";
 
+    public static final String CRYPTO_PROVIDER = "BC";
+
 }
