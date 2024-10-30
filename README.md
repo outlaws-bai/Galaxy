@@ -64,6 +64,7 @@
 - [首次使用必看](https://github.com/outlaws-bai/Galaxy/wiki/%E5%8A%9F%E8%83%BD%E8%AF%A6%E8%A7%A3)
 - [Release](https://github.com/outlaws-bai/Galaxy/releases) 中对应版本的注意事项
 - Burp版本不低于 `v2023.10.3.7`
+- [不要使用 orcale JDK/JRE 启动 Burp](https://github.com/outlaws-bai/Galaxy/wiki/%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E7%94%A8-orcale-JDK-JRE-%E5%90%AF%E5%8A%A8-Burp)
 
 ## 🐛 遇到问题
 
