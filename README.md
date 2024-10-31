@@ -76,8 +76,6 @@
 
 ## 🔗 常用地址
 
-[设计思路及运行原理](https://xz.aliyun.com/t/15051)
-
 [项目对应靶场](https://github.com/outlaws-bai/GalaxyDemo)
 
 [BurpDownload](https://portswigger.net/burp/releases#professional)
