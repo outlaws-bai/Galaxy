@@ -58,7 +58,7 @@
 
 插件安装：`Extensions -> Add -> Select File -> Next`
 
-自行构建：修改 `build.gradle` 中 的 `optionalHooker` 再使用 `shadowJar` 打包（gradlew shadowJar）
+自行构建： `build.gradle -> shadowJar`（gradlew shadowJar）
 
 **注意事项**:
 
