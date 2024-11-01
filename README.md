@@ -81,3 +81,8 @@
 [BurpDownload](https://portswigger.net/burp/releases#professional)
 
 [JDK21Download](https://docs.aws.amazon.com/corretto/latest/corretto-21-ug/downloads-list.html)
+
+## ☕ 参考项目
+
+- https://github.com/gh0stkey/HaE
+- https://github.com/c0ny1/sqlmap4burp-plus-plus
