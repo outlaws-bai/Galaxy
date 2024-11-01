@@ -13,7 +13,6 @@ from java.lang import Byte
 """
 跨语言能力来自于graalpy (对应python3.11)
 按 Ctrl（command） + ` 可查看内置函数
-需要自定义代码文件时查看该文档：https://github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md
 """
 
 ALGORITHM = "DESede/CBC/PKCS5Padding"

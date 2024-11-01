@@ -10,8 +10,6 @@ import org.m2sec.core.models.Headers;
 import org.m2sec.core.models.UploadFile;
 import org.m2sec.core.utils.HttpUtil;
 import org.m2sec.core.utils.JsonUtil;
-
-import javax.annotation.Nullable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -285,7 +283,7 @@ public class SwaggerParser {
         }
     }
 
-    private static Object getValueByType(@Nullable String type) {
+    private static Object getValueByType(String type) {
         if (type == null) {
             return "1";
         }

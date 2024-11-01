@@ -13,8 +13,6 @@ import org.bouncycastle.math.ec.ECPoint;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.XXTEATools;
 import org.m2sec.core.enums.SymmetricKeyMode;
-
-import javax.annotation.Nullable;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -261,21 +259,21 @@ public class CryptoUtil {
     }
 
 
-    public static byte[] sm4Encrypt(@Nullable String transformation, byte[] data, byte[] secret,
+    public static byte[] sm4Encrypt(String transformation, byte[] data, byte[] secret,
                                     Map<String, Object> params) {
         return symmetricKeyEncrypt(transformation, data, secret, params, ALGORITHM_SM4,
             ALGORITHM_SM4_DEFAULT_TRANSFORMATION);
     }
 
 
-    public static byte[] sm4Decrypt(@Nullable String transformation, byte[] data, byte[] secret,
+    public static byte[] sm4Decrypt(String transformation, byte[] data, byte[] secret,
                                     Map<String, Object> params) {
         return symmetricKeyDecrypt(transformation, data, secret, params, ALGORITHM_SM4,
             ALGORITHM_SM4_DEFAULT_TRANSFORMATION);
     }
 
 
-    private static byte[] symmetricKeyEncrypt(@Nullable String transformation, byte[] data, byte[] secret, Map<String
+    private static byte[] symmetricKeyEncrypt(String transformation, byte[] data, byte[] secret, Map<String
         , Object> params, String algorithm, String algorithmDefaultTransformation) {
         try {
             String finalTransformation = transformation != null && !algorithm.equals(transformation) ?
@@ -291,7 +289,7 @@ public class CryptoUtil {
         }
     }
 
-    private static byte[] symmetricKeyDecrypt(@Nullable String transformation, byte[] data, byte[] secret, Map<String
+    private static byte[] symmetricKeyDecrypt(String transformation, byte[] data, byte[] secret, Map<String
         , Object> params, String algorithm, String algorithmDefaultTransformation) {
         try {
             String finalTransformation = transformation != null && !algorithm.equals(transformation) ?

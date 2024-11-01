@@ -20,7 +20,6 @@ public class Option {
     private String requestCheckExpression;
     private boolean hookResponse;
     private boolean autoForwardRequest;
-    private String grpcConn;
     private String httpServer;
     private String codeSelectItem;
     private boolean hookStart;

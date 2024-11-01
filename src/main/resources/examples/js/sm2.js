@@ -27,7 +27,6 @@ log = void 0
 /**
  * 跨语言能力来自于graaljs
  * 按 Ctrl（command） + ` 可查看内置函数
- * 内置模版，需要自定义代码文件时查看该文档：https://github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md
  */
 
 /**

@@ -1,4 +1,4 @@
-logLevel: DEBUG
+logLevel: INFO
 staticExtensions: ".css|.js|.jpg|.jpeg|.png|.gif|.bmp|.svg|.ico|.html|.htm|.xml|.txt|.pdf|.zip|.rar|.tar|.gz|.7z|.mp3|.mp4|.avi|.webm|.mov|.ogg|.wav|.swf|.woff|.ttf|.eot|.otf|.webp|.m4a|.m4v|.flv|.wmv|.doc|.docx|.xls|.xlsx|.ppt|.pptx|.csv|.rtf"
 parsedSwaggerApiDocRequestAutoSend: false
 scannerConn: http://127.0.0.1:7777

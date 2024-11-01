@@ -12,9 +12,9 @@ from java.lang import String
 
 """
 跨语言能力来自于jython (对应python2.7)
-内置模版，需要自定义代码文件时查看该文档：https:#github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md
 按 Ctrl（command） + ` 可查看内置函数
 """
+
 SYMMETRIC_ALGORITHM = "SM4/ECB/PKCS5Padding"
 sm4Secret = b"16byteslongkey12"
 ASYMMETRIC_ALGORITHM = "SM2"

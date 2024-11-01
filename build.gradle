@@ -1,19 +1,12 @@
-// from https://github.com/grpc/grpc-java/blob/master/examples/build.gradle
-
 plugins {
     id "java"
-    id "com.google.protobuf" version "0.9.4"
     id "com.github.johnrengelman.shadow" version "8.1.1"
 }
 
 group = "org.m2sec"
-def version = "3.2.1"
-def optionalHooker = "basic" // all/js/graalpy/grpc/basic(default)
-
-def grpcVersion = "1.54.1"
+def version = "3.3.0"
+def optionalHooker = "basic" // all/js/graalpy/basic(default)
 def graalVersion = "24.1.0"
-def protobufVersion = "3.24.0"
-def protocVersion = protobufVersion
 def versionFile = file("${projectDir}/src/main/resources/version.txt") as Object
 
 repositories {
@@ -38,59 +31,27 @@ shadowJar {
 
 
 dependencies {
-
     if (optionalHooker == "all") {
         // cross-language
         implementation "org.graalvm.js:js-language:${graalVersion}"
         implementation "org.graalvm.python:python-language:${graalVersion}"
         implementation "org.graalvm.python:python-resources:${graalVersion}"
-        // grpc
-        runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
-        implementation "io.grpc:grpc-protobuf:${grpcVersion}"
-        implementation "io.grpc:grpc-stub:${grpcVersion}"
-        implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
     } else if (optionalHooker == "js") {
         // cross-language
         implementation "org.graalvm.js:js-language:${graalVersion}"
         compileOnly "org.graalvm.python:python-language:${graalVersion}"
         compileOnly "org.graalvm.python:python-resources:${graalVersion}"
-        // grpc
-        compileOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
-        compileOnly "io.grpc:grpc-protobuf:${grpcVersion}"
-        compileOnly "io.grpc:grpc-stub:${grpcVersion}"
-        compileOnly "com.google.protobuf:protobuf-java-util:${protobufVersion}"
     } else if (optionalHooker == "graalpy") {
         // cross-language
         compileOnly "org.graalvm.js:js-language:${graalVersion}"
         implementation "org.graalvm.python:python-language:${graalVersion}"
         implementation "org.graalvm.python:python-resources:${graalVersion}"
-        // grpc
-        compileOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
-        compileOnly "io.grpc:grpc-protobuf:${grpcVersion}"
-        compileOnly "io.grpc:grpc-stub:${grpcVersion}"
-        compileOnly "com.google.protobuf:protobuf-java-util:${protobufVersion}"
-    } else if (optionalHooker == "grpc") {
-        // cross-language
-        implementation "org.graalvm.sdk:graal-sdk:${graalVersion}"
-        compileOnly "org.graalvm.js:js-language:${graalVersion}"
-        compileOnly "org.graalvm.python:python-language:${graalVersion}"
-        compileOnly "org.graalvm.python:python-resources:${graalVersion}"
-        // grpc
-        runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
-        implementation "io.grpc:grpc-protobuf:${grpcVersion}"
-        implementation "io.grpc:grpc-stub:${grpcVersion}"
-        implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
     } else {
         // cross-language
         implementation "org.graalvm.sdk:graal-sdk:${graalVersion}"
         compileOnly "org.graalvm.js:js-language:${graalVersion}"
         compileOnly "org.graalvm.python:python-language:${graalVersion}"
         compileOnly "org.graalvm.python:python-resources:${graalVersion}"
-        // grpc
-        compileOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
-        compileOnly "io.grpc:grpc-protobuf:${grpcVersion}"
-        compileOnly "io.grpc:grpc-stub:${grpcVersion}"
-        compileOnly "com.google.protobuf:protobuf-java-util:${protobufVersion}"
     }
     compileOnly 'org.python:jython:2.7.3'
     // annotation
@@ -126,10 +87,6 @@ dependencies {
     testImplementation "org.bouncycastle:bcprov-jdk18on:1.78.1"
     testImplementation "org.projectlombok:lombok:1.18.32"
     testImplementation "com.fifesoft:rsyntaxtextarea:3.4.1"
-    testRuntimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
-    testImplementation "io.grpc:grpc-protobuf:${grpcVersion}"
-    testImplementation "io.grpc:grpc-stub:${grpcVersion}"
-    testImplementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
     testImplementation 'org.python:jython:2.7.3'
 }
 
@@ -137,24 +94,6 @@ test {
     useJUnitPlatform()
 }
 
-protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:${protocVersion}" }
-    plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
-    }
-    generateProtoTasks {
-        all()*.plugins { grpc {} }
-    }
-}
-
-sourceSets {
-    main {
-        java {
-            srcDirs "build/generated/source/proto/main/grpc"
-            srcDirs "build/generated/source/proto/main/java"
-        }
-    }
-}
 
 jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE

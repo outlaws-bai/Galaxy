@@ -7,7 +7,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 
 /**
- * 内置示例，需要自定义代码文件时查看该文档：https://github.com/outlaws-bai/Galaxy/blob/main/docs/Custom.md
  * 按 Ctrl（command） + ` 可查看内置函数
  */
 public class AesCbcFormData {

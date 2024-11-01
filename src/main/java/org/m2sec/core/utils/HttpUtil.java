@@ -12,7 +12,6 @@ import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.enums.Protocol;
 import org.m2sec.core.models.*;
-import javax.annotation.Nullable;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.*;
@@ -205,7 +204,7 @@ public class HttpUtil {
         }
     }
 
-    public static ContentType getContentType(String method, @Nullable String contentTypeHeaderValue) {
+    public static ContentType getContentType(String method, String contentTypeHeaderValue) {
         if (method != null && (Method.GET.toString().equalsIgnoreCase(method) || Method.OPTIONS.toString().equalsIgnoreCase(method) || Method.HEAD.toString().equalsIgnoreCase(method))) {
             return ContentType.NON_BODY;
         }

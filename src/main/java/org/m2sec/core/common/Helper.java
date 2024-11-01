@@ -79,8 +79,6 @@ public class Helper {
             Constants.hasJs = false;
             Constants.hasGraalpy = false;
         }
-        // grpc
-        Constants.hasGrpc = ReflectTools.canLoadClass("io.grpc.ManagedChannel");
         // jython
         Constants.hasJython = ReflectTools.canLoadClass("org.python.util.PythonInterpreter");
     }

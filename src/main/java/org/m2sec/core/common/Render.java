@@ -2,7 +2,6 @@ package org.m2sec.core.common;
 
 import org.apache.commons.text.StringSubstitutor;
 import org.mvel2.MVEL;
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,13 +12,13 @@ import java.util.Map;
  */
 public class Render {
 
-    public static String renderTemplate(String template, @Nullable Map<String, Object> env, Class<?>... classes) {
+    public static String renderTemplate(String template, Map<String, Object> env, Class<?>... classes) {
         StringSubstitutor stringSubstitutor = new StringSubstitutor(key -> (String) renderExpression(key, env,
             classes));
         return stringSubstitutor.replace(template);
     }
 
-    public static Object renderExpression(String expression, @Nullable Map<String, Object> env, Class<?>... classes) {
+    public static Object renderExpression(String expression, Map<String, Object> env, Class<?>... classes) {
         if (env == null) env = new HashMap<>();
         for (Class<?> clz : classes) {
             env.put(clz.getSimpleName(), clz);

@@ -45,6 +45,10 @@ public class HttpHookPanel extends JPanel {
         Map<String, IHookerPanel<?>> serviceMap = new LinkedHashMap<>();
         List<String> hookNames = new ArrayList<>();
 
+        HttpHookerPanel httpImpl = new HttpHookerPanel(config, api, HttpHookService.HTTP);
+        hookNames.add(HttpHookService.HTTP.name().toLowerCase());
+        serviceMap.put(HttpHookService.HTTP.name().toLowerCase(), httpImpl);
+
         if (Constants.hasJs) {
             CodeFileHookerPanel jsFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JS);
             jsFileHookerPanel.resetCodeTheme();
@@ -63,20 +67,13 @@ public class HttpHookPanel extends JPanel {
             hookNames.add(HttpHookService.JYTHON.name().toLowerCase());
             serviceMap.put(HttpHookService.JYTHON.name().toLowerCase(), pythonFileHookerPanel);
         }
-        if (Constants.isUseJdk) {
-            CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JAVA);
-            javaFileHookerPanel.resetCodeTheme();
-            hookNames.add(HttpHookService.JAVA.name().toLowerCase());
-            serviceMap.put(HttpHookService.JAVA.name().toLowerCase(), javaFileHookerPanel);
-        }
-        GrpcHookerPanel rpcImpl = new GrpcHookerPanel(config, api, HttpHookService.GRPC);
-        if (Constants.hasGrpc) {
-            hookNames.add(HttpHookService.GRPC.name().toLowerCase());
-            serviceMap.put(HttpHookService.GRPC.name().toLowerCase(), rpcImpl);
-        }
-        HttpHookerPanel httpImpl = new HttpHookerPanel(config,api, HttpHookService.HTTP);
-        hookNames.add(HttpHookService.HTTP.name().toLowerCase());
-        serviceMap.put(HttpHookService.HTTP.name().toLowerCase(), httpImpl);
+
+//        if (Constants.isUseJdk) {
+//            CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JAVA);
+//            javaFileHookerPanel.resetCodeTheme();
+//            hookNames.add(HttpHookService.JAVA.name().toLowerCase());
+//            serviceMap.put(HttpHookService.JAVA.name().toLowerCase(), javaFileHookerPanel);
+//        }
 
         // 创建一个容器(卡片)用于放置不同方式的JPanel
         JPanel hookerPanelContainer = new JPanel(new CardLayout());
@@ -103,7 +100,7 @@ public class HttpHookPanel extends JPanel {
         switchButton.setToolTipText("Start hook...");
         JCheckBox hookResponseCheckBox = new JCheckBox("Hook Response");
         hookResponseCheckBox.setToolTipText("HTTP responses need to be hook?");
-        JCheckBox autoForwardRequestCheckBox = new JCheckBox("Auto Forward Request");
+        JCheckBox autoForwardRequestCheckBox = new JCheckBox("Auto Scan Decrypted Request");
         autoForwardRequestCheckBox.setToolTipText("Auto Forward Request To Passive Proxy Scanner?");
         controlPanel.add(switchButton);
         controlPanel.add(hookResponseCheckBox);
@@ -164,7 +161,6 @@ public class HttpHookPanel extends JPanel {
                         .setHookService(service)
                         .setRequestCheckExpression(checkELTextField.getText())
                         .setHookResponse(hookResponseCheckBox.isSelected())
-                        .setGrpcConn(rpcImpl.getInput())
                         .setHttpServer(httpImpl.getInput())
                         .setCodeSelectItem(hookerPanel.getInput())
                         .setAutoForwardRequest(autoForwardRequestCheckBox.isSelected());
@@ -194,8 +190,6 @@ public class HttpHookPanel extends JPanel {
         autoForwardRequestCheckBox.setSelected(option.isAutoForwardRequest());
         int width = ((checkELTextField.getPreferredSize().width + 99) / 100) * 100;
         checkELTextField.setPreferredSize(new Dimension(width, checkELTextField.getPreferredSize().height));
-        rpcImpl.grpcConnTextField.setPreferredSize(new Dimension(width,
-            rpcImpl.grpcConnTextField.getPreferredSize().height));
         if (option.getHookService() != null) {
             comboBox.setSelectedIndex(hookNames.indexOf(option.getHookService().name().toLowerCase()));
         } else {
