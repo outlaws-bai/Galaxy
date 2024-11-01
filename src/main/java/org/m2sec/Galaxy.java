@@ -47,7 +47,6 @@ public class Galaxy implements BurpExtension {
 
 
     private void registerAbilities(MontoyaApi api, Config config) {
-        // 注册http hook 能力
         // 注册menu
         api.userInterface().registerContextMenuItemsProvider(new MasterContextMenuProvider(api, config));
         // 注册payload生成器
