@@ -60,9 +60,7 @@ public class SendDecryptedRequestToSqlmapMenuItem extends IItem {
         }
         String cmd = command.formatted(config.getSetting().getSqlmapExecutePath(), tmpFilePath,
             config.getSetting().getSqlmapExecuteArgs()) + " --proxy=http://127.0.0.1:8080";
-        CompatTools.copyToClipboard(cmd.getBytes());
-        SwingTools.showInfoDialog("The command has been copied to the clipboard. Please open the command line to " +
-            "execute it");
+        SendRequestToSqlmapMenuItem.run(cmd);
     }
 
 }
