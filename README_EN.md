@@ -10,6 +10,7 @@ A Burp plugin that wants you to test encrypted traffic as simple and efficient a
 <a href="https://github.com/outlaws-bai/Galaxy/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/outlaws-bai/Galaxy"/></a>
 <br>
 <br>
+<a href="https://github.com/outlaws-bai/Galaxy">中文</a> |
 <a href="https://github.com/outlaws-bai/Galaxy/wiki/Home%E2%80%90EN">Wiki</a> | 
 <a href="https://github.com/outlaws-bai/Galaxy/releases">Download</a> | 
 <a href="https://github.com/outlaws-bai/Galaxy/wiki/FAQ%E2%80%90EN">FAQ</a> | 
