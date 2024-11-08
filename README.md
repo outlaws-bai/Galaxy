@@ -41,13 +41,13 @@
 
 **联动sqlmap**
 
-> 右键获取 sqlmap 扫描的命令，执行 后 sqlmap 就可以扫描明文请求，并得到解密后的响应。
+> 右键将解密后的明文请求发送给 sqlmap，sqlmap就可以扫描明文请求，并得到解密后的响应。
 
 ![linkage-sqlmap](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/linkage-sqlmap.gif)
 
 **联动xray**
 
-> 右键将解密后的明文请求发送给 xray，它就可以扫描明文请求，并得到解密后的响应。
+> 右键将解密后的明文请求发送给 xray，xray就可以扫描明文请求，并得到解密后的响应。
 
 ![linkage-xray](https://raw.githubusercontent.com/outlaws-bai/picture/main/img/linkage-xray.gif)
 
