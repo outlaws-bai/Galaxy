@@ -111,7 +111,7 @@ public class HttpHookPanel extends JPanel {
         JPanel expressionInputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel elLabel = new JLabel("Expression:");
         elLabel.setPreferredSize(new Dimension(CodeFileHookerPanel.getDescWidth(), elLabel.getPreferredSize().height));
-        elLabel.setToolTipText("Enter an javascript expression that will be used to determine which requests need to " +
+        elLabel.setToolTipText("Enter an mvel expression that will be used to determine which requests need to " +
             "be processed.");
         JTextField checkELTextField = new JTextField();
         expressionInputPanel.add(elLabel);
