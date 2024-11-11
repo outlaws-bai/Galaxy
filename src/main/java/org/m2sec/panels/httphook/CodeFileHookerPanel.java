@@ -309,6 +309,13 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
         provider.addCompletion(new ShorthandCompletion(provider, "request.setForm", "request.setForm(Form form)",
             "Request set Form -> void", SwingTools.renderLink("request.setForm(Form form)", "https://github" +
             ".com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Request.java")));
+        // Request - FormData
+        provider.addCompletion(new ShorthandCompletion(provider, "request.getFormData", "request.getFormData()", "Request get" +
+                " FormData -> FormData", SwingTools.renderLink("request.getFormData()", "https://github.com/outlaws-bai/Galaxy/blob" +
+                "/main/src/main/java/org/m2sec/core/models/Request.java")));
+        provider.addCompletion(new ShorthandCompletion(provider, "request.setFormData", "request.setFormData(FormData formData)",
+                "Request set Form Data -> void", SwingTools.renderLink("request.setFormData(FormData formData)", "https://github" +
+                ".com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/models/Request.java")));
         // Request - Headers
         provider.addCompletion(new ShorthandCompletion(provider, "request.getHeaders", "request.getHeaders()",
             "Request get headers -> Headers", SwingTools.renderLink("request.getHeaders()", "https://github" +
@@ -367,7 +374,7 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
         provider.addCompletion(new ShorthandCompletion(provider, "response.getJson", "response.getJson()", "Response get" +
                 " json -> Object(Map<String, Object> or List<Object>)", SwingTools.renderLink("response.getJson()", "https://github.com/outlaws-bai/Galaxy/blob" +
                 "/main/src/main/java/org/m2sec/core/models/Response.java")));
-        
+
         // Headers
         provider.addCompletion(new ShorthandCompletion(provider, "headers.has", "headers.has(String key)", "has -> " +
             "boolean", SwingTools.renderLink("headers.has(String key)", "https://github.com/outlaws-bai/Galaxy/blob" +
@@ -407,8 +414,6 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
         // log
         provider.addCompletion(new ShorthandCompletion(provider, "log.info", "log.info(\"request: {}\", request)",
             "log info -> void"));
-
-
         // HashUtil
         provider.addCompletion(new ShorthandCompletion(
             provider,
@@ -453,7 +458,7 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             provider,
             "mac",
             "MacUtil.calcToHex(String algorithm, byte[] data, byte[] secret)",
-            "Mac calcToHex -> byte[]",
+            "Mac calcToHex -> String",
             SwingTools.renderSummary("mac calcToHex", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java" +
                 "/org" +
                 "/m2sec/core/utils/MacUtil.java", "byte[]", "algorithm(String) HmacMD5 | HmacSHA1 | HmacSHA224 | " +
@@ -463,11 +468,36 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             provider,
             "mac",
             "MacUtil.calcToBase64(String algorithm, byte[] data, byte[] secret)",
-            "Mac calcToBase64 -> byte[]",
+            "Mac calcToBase64 -> String",
             SwingTools.renderSummary("mac calcToBase64", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main" +
                 "/java/org" +
                 "/m2sec/core/utils/MacUtil.java", "byte[]", "algorithm(String) HmacMD5 | HmacSHA1 | HmacSHA224 | " +
                 "HmacSHA256|...", "data(byte[]) origin data", "secret(byte[]) secret")
+        ));
+        // SignUtil
+        provider.addCompletion(new ShorthandCompletion(
+                provider,
+                "sign",
+                "SignUtil.calc(String algorithm, byte[] data, byte[] privateKey)",
+                "Sign generate -> byte[]",
+                SwingTools.renderSummary("sign generate", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org" +
+                        "/m2sec/core/utils/SignUtil.java", "byte[]", "algorithm(String) SHA256withRSA", "data(byte[]) origin data", "secret(byte[]) privateKey")
+        ));
+        provider.addCompletion(new ShorthandCompletion(
+                provider,
+                "sign",
+                "SignUtil.signToHex(String algorithm, byte[] data, byte[] privateKey)",
+                "Sign generate -> String",
+                SwingTools.renderSummary("sign generate", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org" +
+                        "/m2sec/core/utils/SignUtil.java", "byte[]", "algorithm(String) SHA256withRSA", "data(byte[]) origin data", "secret(byte[]) privateKey")
+        ));
+        provider.addCompletion(new ShorthandCompletion(
+                provider,
+                "sign",
+                "SignUtil.signToBase64(String algorithm, byte[] data, byte[] privateKey)",
+                "Sign generate -> String",
+                SwingTools.renderSummary("sign generate", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org" +
+                        "/m2sec/core/utils/SignUtil.java", "byte[]", "algorithm(String) SHA256withRSA", "data(byte[]) origin data", "secret(byte[]) privateKey")
         ));
         // Crypto TEA
         provider.addCompletion(new ShorthandCompletion(
