@@ -75,7 +75,7 @@ public class SwingTools {
         String temp = isEncrypt ? "Encrypted" : "Decrypted";
         HttpRequestEditor requestEditor = api.userInterface().createHttpRequestEditor();
         requestEditor.setRequest(request);
-        JDialog dialog = new JDialog();
+        JDialog dialog = new JDialog(api.userInterface().swingUtils().suiteFrame());
         dialog.setTitle(Constants.BURP_SUITE_EXT_NAME + " - " + temp + " Request");
         api.userInterface().applyThemeToComponent(dialog);
         dialog.getContentPane().add(requestEditor.uiComponent());
@@ -88,7 +88,7 @@ public class SwingTools {
         String temp = isEncrypt ? "Encrypted" : "Decrypted";
         HttpResponseEditor responseEditor = api.userInterface().createHttpResponseEditor();
         responseEditor.setResponse(response);
-        JDialog dialog = new JDialog();
+        JDialog dialog = new JDialog(api.userInterface().swingUtils().suiteFrame());
         dialog.setTitle(Constants.BURP_SUITE_EXT_NAME + " - " + temp + " Response");
         api.userInterface().applyThemeToComponent(dialog);
         dialog.getContentPane().add(responseEditor.uiComponent());
