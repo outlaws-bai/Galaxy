@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class DynamicKey {
 
     private static final String SYMMERTIC_ALGORITHM = "AES/ECB/PKCS5Padding";
-    private static final String ASYMMETRIC_ALGORITHM = "RSA";
+    private static final String ASYMMETRIC_ALGORITHM = "RSA/ECB/PKCS1Padding";
     private static final String publicKeyBase64 =
         "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC7JoQAWLsovzHjaUMZg2lwO4LCuP97mitUc4chqRlQD3NgyCWLqEnYyM" +
             "+OJ7i6cyMuWLwGtMi29DoKLjpE/xRZR0OUk46PDCAtyDgIyejK7c7KlZTbiqb4PtiJNLZgg0UP62kLMycnpY/wg/R2G9g+7MiJWUV5SR" +
