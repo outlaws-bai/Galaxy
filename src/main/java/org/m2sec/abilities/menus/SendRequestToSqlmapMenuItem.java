@@ -6,8 +6,6 @@ import burp.api.montoya.ui.contextmenu.MessageEditorHttpRequestResponse;
 import org.m2sec.core.common.*;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.utils.FactorUtil;
-
-import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;

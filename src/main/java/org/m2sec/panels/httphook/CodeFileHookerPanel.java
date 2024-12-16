@@ -96,7 +96,6 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             }
             FileTools.createFiles(filepath);
             String content = FileTools.readResourceAsString("templates/HttpHookTemplate" + "." + service.getDir());
-            ;
             FileTools.writeFile(filepath, content);
             reloadExamples();
             codeCombo.setSelectedItem(filename);
