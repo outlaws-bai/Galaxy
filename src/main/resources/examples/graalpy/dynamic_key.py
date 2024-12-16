@@ -74,7 +74,7 @@ def hook_request_to_server(request: Request) -> Request:
 
 
 def hook_response_to_burp(response: Response) -> Response:
-    """HTTP请求从Server到达Burp时被调用。在此处完成响应解密的代码就可以在Burp中看到明文的响应报文。
+    """HTTP响应从Server到达Burp时被调用。在此处完成响应解密的代码就可以在Burp中看到明文的响应报文。
 
     Args:
         response (Response): 响应对象
@@ -91,7 +91,7 @@ def hook_response_to_burp(response: Response) -> Response:
     return response
 
 def hook_response_to_client(response: Response) -> Response:
-    """HTTP请求从Burp将要发送到Client时被调用。在此处完成响应加密的代码就可以将加密后的响应报文返回给Client。
+    """HTTP响应从Burp将要发送到Client时被调用。在此处完成响应加密的代码就可以将加密后的响应报文返回给Client。
 
     Args:
         response (Response): 响应对象

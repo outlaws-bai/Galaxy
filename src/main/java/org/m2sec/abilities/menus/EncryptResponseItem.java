@@ -45,7 +45,7 @@ public class EncryptResponseItem extends IItem {
         Response response = Response.of(httpResponse);
         Headers headers = response.getHeaders();
         if (!headers.hasIgnoreCase(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
-            SwingTools.showInfoDialog("The response has been encrypted.");
+            SwingTools.showInfoDialog(api, "The response has been encrypted.");
             return;
         }
         HttpResponse newResponse = HttpHookHandler.hooker.tryHookResponseToClient(httpResponse, true);

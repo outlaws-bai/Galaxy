@@ -44,9 +44,9 @@ public class ParseSwaggerApiDocItem extends IItem {
         Request originRequest = Request.of(messageEditorHttpRequestResponse.requestResponse().request());
         Response originResponse = Response.of(messageEditorHttpRequestResponse.requestResponse().response());
 
-        String userInput = SwingTools.showInputDialog("Please input url or relative path");
+        String userInput = SwingTools.showInputDialog(api, "Please input url or relative path");
         if (userInput == null || (!userInput.startsWith("/") && !userInput.startsWith(Protocol.HTTP.toRaw()))) {
-            SwingTools.showErrorMessageDialog("Please input url or relative path!");
+            SwingTools.showErrorMessageDialog(api, "Please input url or relative path!");
             return;
         }
         List<ApiInfo> apiInfoList = SwaggerParser.parseSwaggerDoc(new String(originResponse.getContent()));

@@ -47,7 +47,7 @@ public class SendDecryptedRequestToSqlmapMenuItem extends IItem {
         MessageEditorHttpRequestResponse messageEditorHttpRequestResponse = event.messageEditorRequestResponse().get();
         Request request = Request.of(messageEditorHttpRequestResponse.requestResponse().request());
         if (!request.getHeaders().hasIgnoreCase(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
-            SwingTools.showInfoDialog("The request is not decrypted.");
+            SwingTools.showInfoDialog(api, "The request is not decrypted.");
             return;
         }
         request.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "HookRequest-LinkageSqlmap");
@@ -60,7 +60,7 @@ public class SendDecryptedRequestToSqlmapMenuItem extends IItem {
         }
         String cmd = command.formatted(config.getSetting().getSqlmapExecutePath(), tmpFilePath,
             config.getSetting().getSqlmapExecuteArgs()) + " --proxy=http://127.0.0.1:8080";
-        SendRequestToSqlmapMenuItem.run(cmd);
+        SendRequestToSqlmapMenuItem.run(api, cmd);
     }
 
 }

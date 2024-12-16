@@ -38,7 +38,7 @@ public class SendDecryptedRequestToScannerMenuItem extends IItem {
         MessageEditorHttpRequestResponse messageEditorHttpRequestResponse = event.messageEditorRequestResponse().get();
         Request request = Request.of(messageEditorHttpRequestResponse.requestResponse().request());
         if (!request.getHeaders().hasIgnoreCase(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
-            SwingTools.showInfoDialog("The request is not decrypted.");
+            SwingTools.showInfoDialog(api, "The request is not decrypted.");
             return;
         }
         request.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "HookedRequest-LinkagePassiveProxyScanner");

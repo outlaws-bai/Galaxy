@@ -35,7 +35,7 @@ public class SendRequestToSqlmapMenuItem extends IItem {
     @Override
     public boolean isDisplay(ContextMenuEvent event) {
         return event.messageEditorRequestResponse().isPresent()
-                && event.messageEditorRequestResponse().get().selectionContext().equals(MessageEditorHttpRequestResponse.SelectionContext.REQUEST);
+            && event.messageEditorRequestResponse().get().selectionContext().equals(MessageEditorHttpRequestResponse.SelectionContext.REQUEST);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class SendRequestToSqlmapMenuItem extends IItem {
         MessageEditorHttpRequestResponse messageEditorHttpRequestResponse = event.messageEditorRequestResponse().get();
         Request request = Request.of(messageEditorHttpRequestResponse.requestResponse().request());
         if (request.getHeaders().hasIgnoreCase(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
-            SwingTools.showInfoDialog("The request is decrypted.");
+            SwingTools.showInfoDialog(api, "The request is decrypted.");
             return;
         }
         // 写入请求到临时文件
@@ -55,11 +55,11 @@ public class SendRequestToSqlmapMenuItem extends IItem {
             throw new RuntimeException(e);
         }
         String cmd = command.formatted(config.getSetting().getSqlmapExecutePath(), tmpFilePath,
-                config.getSetting().getSqlmapExecuteArgs());
-        run(cmd);
+            config.getSetting().getSqlmapExecuteArgs());
+        run(api, cmd);
     }
 
-    public static void run(String cmd) {
+    public static void run(MontoyaApi api, String cmd) {
         String osName = System.getProperty("os.name").toLowerCase();
         List<String> commandList = new ArrayList<>();
         if (osName.contains("windows")) {
@@ -73,18 +73,19 @@ public class SendRequestToSqlmapMenuItem extends IItem {
             commandList.add("osascript");
             commandList.add("-e");
             String macCmd = """
-                    tell application "Terminal"\s
-                            activate
-                            do script "%s"
-                    end tell""";
+                tell application "Terminal"\s
+                        activate
+                        do script "%s"
+                end tell""";
             commandList.add(String.format(macCmd, cmd));
         } else if (osName.contains("linux")) {
             commandList.add("/bin/sh");
             commandList.add("-c");
             commandList.add("gnome-terminal");
             CompatTools.copyToClipboard(cmd);
-            SwingTools.showInfoDialog("The command has been copied to the clipboard. Please open the command line to " +
-                    "execute it");
+            SwingTools.showInfoDialog(api, "The command has been copied to the clipboard. Please open the command " +
+                "line to " +
+                "execute it");
         } else {
             commandList.add("/bin/bash");
             commandList.add("-c");

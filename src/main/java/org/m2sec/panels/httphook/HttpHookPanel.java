@@ -175,7 +175,7 @@ public class HttpHookPanel extends JPanel {
                 switchButton.setEnabled(true);
                 option.setHookStart(false);
                 log.error("Start fail!", exc);
-                SwingTools.showErrorStackTraceDialog(exc);
+                SwingTools.showErrorStackTraceDialog(api, exc);
                 return;
             }
 

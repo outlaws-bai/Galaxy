@@ -49,7 +49,7 @@ public class Sm2 {
         byte[] encryptedData = getData(request.getContent());
         // 调用内置函数解密
         byte[] data = decrypt(encryptedData, privateKey1);
-        // 更新body为已加密的数据
+        // 更新body为已解密的数据
         request.setContent(data);
         return request;
     }
@@ -73,7 +73,7 @@ public class Sm2 {
     }
 
     /**
-     * HTTP请求从Server到达Burp时被调用。在此处完成响应解密的代码就可以在Burp中看到明文的响应报文。
+     * HTTP响应从Server到达Burp时被调用。在此处完成响应解密的代码就可以在Burp中看到明文的响应报文。
      *
      * @param response Response 响应对象
      * @return 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理
@@ -89,7 +89,7 @@ public class Sm2 {
     }
 
     /**
-     * HTTP请求从Burp将要发送到Client时被调用。在此处完成响应加密的代码就可以将加密后的响应报文返回给Client。
+     * HTTP响应从Burp将要发送到Client时被调用。在此处完成响应加密的代码就可以将加密后的响应报文返回给Client。
      *
      * @param response Response 响应对象
      * @return 经过处理后的response对象，返回null代表从当前节点开始流量不再需要处理

@@ -45,7 +45,7 @@ public class EncryptRequestItem extends IItem {
         Request request = Request.of(httpRequest);
         Headers headers = request.getHeaders();
         if (!headers.hasIgnoreCase(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
-            SwingTools.showInfoDialog("The request has been encrypted.");
+            SwingTools.showInfoDialog(api, "The request has been encrypted.");
             return;
         }
         HttpRequest newRequest = HttpHookHandler.hooker.tryHookRequestToServer(httpRequest, 0, true);

@@ -50,13 +50,13 @@ public class DecryptRequestItem extends IItem {
         Request request = Request.of(httpRequest);
         Headers headers = request.getHeaders();
         if (headers.hasIgnoreCase(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
-            SwingTools.showInfoDialog("The request has been decrypted.");
+            SwingTools.showInfoDialog(api, "The request has been decrypted.");
             return;
         }
         String expression = config.getOption().getRequestCheckExpression();
         if (expression == null || expression.isBlank() || !(Boolean) Render.renderExpression(expression,
             new HashMap<>(Map.of("request", request)))) {
-            SwingTools.showInfoDialog("The result of using this request to execute the check expression is false. " +
+            SwingTools.showInfoDialog(api, "The result of using this request to execute the check expression is false. " +
                 "Please check.");
             return;
         }

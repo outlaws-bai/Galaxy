@@ -83,15 +83,15 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             codeTextArea.getText()));
 
         newButton.addActionListener(e -> {
-            String filename = SwingTools.showInputDialog("Please input filename: ");
+            String filename = SwingTools.showInputDialog(api, "Please input filename: ");
             if (filename == null) return;
             if (!filename.endsWith(service.getSuffix())) {
-                SwingTools.showErrorMessageDialog("The suffix must be " + service.getSuffix());
+                SwingTools.showErrorMessageDialog(api, "The suffix must be " + service.getSuffix());
                 return;
             }
             String filepath = getFilePath(filename);
             if (FileTools.isExist(filepath)) {
-                SwingTools.showErrorMessageDialog("This already exists, please try again. ");
+                SwingTools.showErrorMessageDialog(api, "This already exists, please try again. ");
                 return;
             }
             FileTools.createFiles(filepath);
@@ -106,7 +106,7 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             if (codeCombo.getSelectedIndex() == -1) return;
             String selectItem = (String) codeCombo.getSelectedItem();
             String filepath = getFilePath(selectItem);
-            boolean res = SwingTools.showConfirmDialog(String.format("Are you sure you want to delete this: %s?",
+            boolean res = SwingTools.showConfirmDialog(api, String.format("Are you sure you want to delete this: %s?",
                 selectItem));
             if (!res) return;
             FileTools.deleteFiles(filepath);

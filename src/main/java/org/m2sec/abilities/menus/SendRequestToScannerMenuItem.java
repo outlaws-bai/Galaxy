@@ -38,7 +38,7 @@ public class SendRequestToScannerMenuItem extends IItem {
         MessageEditorHttpRequestResponse messageEditorHttpRequestResponse = event.messageEditorRequestResponse().get();
         Request request = Request.of(messageEditorHttpRequestResponse.requestResponse().request());
         if (request.getHeaders().hasIgnoreCase(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
-            SwingTools.showInfoDialog("The request is decrypted.");
+            SwingTools.showInfoDialog(api, "The request is decrypted.");
             return;
         }
         WorkExecutor.INSTANCE.execute(() -> HttpClient.send(request, config.getSetting().getScannerConn()));

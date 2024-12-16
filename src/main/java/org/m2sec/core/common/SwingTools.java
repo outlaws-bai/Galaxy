@@ -45,30 +45,34 @@ public class SwingTools {
     }
 
 
-    public static void showErrorStackTraceDialog(Exception e) {
+    public static void showErrorStackTraceDialog(MontoyaApi api, Exception e) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);
         String stackTrace = sw.toString();
-        JOptionPane.showMessageDialog(null, stackTrace, "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(api.userInterface().swingUtils().suiteFrame(), stackTrace, "Error",
+            JOptionPane.ERROR_MESSAGE);
     }
 
-    public static void showErrorMessageDialog(String message) {
-        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+    public static void showErrorMessageDialog(MontoyaApi api, String message) {
+        JOptionPane.showMessageDialog(api.userInterface().swingUtils().suiteFrame(), message, "Error",
+            JOptionPane.ERROR_MESSAGE);
     }
 
-    public static void showInfoDialog(String message) {
-        JOptionPane.showMessageDialog(null, message, "Info", JOptionPane.INFORMATION_MESSAGE);
+    public static void showInfoDialog(MontoyaApi api, String message) {
+        JOptionPane.showMessageDialog(api.userInterface().swingUtils().suiteFrame(), message, "Info",
+            JOptionPane.INFORMATION_MESSAGE);
     }
 
 
-    public static boolean showConfirmDialog(String message) {
-        int result = JOptionPane.showConfirmDialog(null, message, "Please confirm again", JOptionPane.YES_NO_OPTION);
+    public static boolean showConfirmDialog(MontoyaApi api, String message) {
+        int result = JOptionPane.showConfirmDialog(api.userInterface().swingUtils().suiteFrame(), message, "Please " +
+            "confirm again", JOptionPane.YES_NO_OPTION);
         return result == JOptionPane.YES_OPTION;
     }
 
-    public static String showInputDialog(String message) {
-        return JOptionPane.showInputDialog(null, message);
+    public static String showInputDialog(MontoyaApi api, String message) {
+        return JOptionPane.showInputDialog(api.userInterface().swingUtils().suiteFrame(), message);
     }
 
     public static void showRequest(MontoyaApi api, HttpRequest request, boolean isEncrypt) {

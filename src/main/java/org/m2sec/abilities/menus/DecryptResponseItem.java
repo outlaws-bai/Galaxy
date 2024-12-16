@@ -53,13 +53,13 @@ public class DecryptResponseItem extends IItem {
         HttpRequest httpRequest = messageEditorHttpRequestResponse.requestResponse().request();
         Request request = Request.of(httpRequest);
         if (headers.hasIgnoreCase(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
-            SwingTools.showInfoDialog("The response has been decrypted.");
+            SwingTools.showInfoDialog(api, "The response has been decrypted.");
             return;
         }
         String expression = config.getOption().getRequestCheckExpression();
         if (expression == null || expression.isBlank() || !(Boolean) Render.renderExpression(expression,
             new HashMap<>(Map.of("request", request)))) {
-            SwingTools.showInfoDialog("The result of using this response's request to execute the check expression is" +
+            SwingTools.showInfoDialog(api, "The result of using this response's request to execute the check expression is" +
                 " false. " +
                 "Please check.");
             return;
