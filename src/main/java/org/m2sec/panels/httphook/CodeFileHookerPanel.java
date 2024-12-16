@@ -246,11 +246,11 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             "String", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/CodeUtil" +
             ".java")));
         // CodeUtil - hex
-        provider.addCompletion(new ShorthandCompletion(provider, "hexDecode", "CodeUtil.hexDecode(byte[] data)", "Hex" +
-            " decode -> byte[]", SwingTools.renderLink("CodeUtil.hexDecode(byte[] data)", "https://github" +
+        provider.addCompletion(new ShorthandCompletion(provider, "hexDecode", "CodeUtil.hexDecode(String data)", "Hex" +
+            " decode -> byte[]", SwingTools.renderLink("CodeUtil.hexDecode(String data)", "https://github" +
             ".com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/CodeUtil.java")));
-        provider.addCompletion(new ShorthandCompletion(provider, "hexEncode", "CodeUtil.hexEncode(String data)", "Hex" +
-            " encode -> byte[]", SwingTools.renderLink("CodeUtil.hexEncode(String data)", "https://github" +
+        provider.addCompletion(new ShorthandCompletion(provider, "hexEncode", "CodeUtil.hexEncode(byte[] data)", "Hex" +
+            " encode -> byte[]", SwingTools.renderLink("CodeUtil.hexEncode(byte[] data)", "https://github" +
             ".com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/CodeUtil.java")));
         provider.addCompletion(new ShorthandCompletion(provider, "hexEncodeToString", "CodeUtil.hexEncodeToString" +
             "(byte[] data)", "Hex encode to string -> String", SwingTools.renderLink("CodeUtil.hexEncodeToString" +

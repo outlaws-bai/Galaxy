@@ -75,7 +75,7 @@ public class Request {
 
     public static Request of(HttpRequest request) {
         return Request.of(request.toByteArray().getBytes(), request.httpService().secure(),
-            request.httpService().host(), request.httpService().port());
+                request.httpService().host(), request.httpService().port());
     }
 
     @SuppressWarnings("DuplicatedCode")
@@ -139,7 +139,7 @@ public class Request {
         }
 
         return new Request(secure, host, port, httpVersion, method, tuple.getFirst(), Query.of(tuple.getSecond()),
-            headers, content);
+                headers, content);
     }
 
     public static Request of(byte[] raw) {
@@ -166,8 +166,8 @@ public class Request {
             content = "{}".getBytes();
         }
         return new Request(HttpUtil.urlIsSecure(url), url.getHost(), HttpUtil.getUrlPort(url),
-            Constants.HTTP_DEFAULT_VERSION, method.name(), url.getPath(),
-            Query.of(url.getQuery()), headers, content);
+                Constants.HTTP_DEFAULT_VERSION, method.name(), url.getPath(),
+                Query.of(url.getQuery()), headers, content);
     }
 
     public byte[] toRaw() {
@@ -265,7 +265,7 @@ public class Request {
         }
         byte[] content = HttpUtil.generateContentFormDataContent(boundary, formData1, file1);
         headers.put(Constants.HTTP_HEADER_CONTENT_TYPE, ContentType.FORM_DATA.getHeaderValuePrefix() + "; " +
-            "boundary=" + boundary);
+                "boundary=" + boundary);
         setContent(content);
     }
 
@@ -293,7 +293,7 @@ public class Request {
         Set<String> unionSet = new HashSet<>(Arrays.asList(staticExtensions));
         if (merge)
             unionSet.addAll(Arrays.asList(Constants.HTTP_STATIC_EXTENSIONS));
-        return unionSet.stream().anyMatch(getPath()::endsWith);
+        return unionSet.stream().anyMatch(x -> getPath().toLowerCase().endsWith(x.toLowerCase()));
     }
 
     @Override
