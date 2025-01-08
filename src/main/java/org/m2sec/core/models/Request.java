@@ -109,7 +109,7 @@ public class Request {
             }
             if (index + 1 < raw.length) {
                 String headerLine = new String(raw, start, index - start);
-                String[] headerParts = headerLine.split(Constants.HTTP_HEADER_CONN);
+                String[] headerParts = headerLine.split(Constants.HTTP_HEADER_CONN, 2);
                 if (headerParts.length == 2) headers.add(headerParts[0], headerParts[1]);
             }
 
