@@ -50,7 +50,7 @@ public class Config {
     }
 
     public void dumpSetting() {
-        FileTools.writeFile(Constants.OPTION_FILE_PATH, YamlUtil.toYamlStr(option));
+        FileTools.writeFile(Constants.SETTING_FILE_PATH, YamlUtil.toYamlStr(setting));
     }
 
 
