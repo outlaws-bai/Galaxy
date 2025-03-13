@@ -74,7 +74,7 @@
 
 ## 🛰️ 支持项目
 
-如果你觉得 Galaxy 好用，可以打赏一下作者，给作者优化的动力！
+如果你觉得 Galaxy 好用，欢迎赞助支持！
 
 <div align=center>
 <img src="https://raw.githubusercontent.com/outlaws-bai/picture/refs/heads/main/621741786094_.pic.jpg" style="width: 30%" />
