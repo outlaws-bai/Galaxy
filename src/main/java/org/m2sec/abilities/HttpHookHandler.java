@@ -6,6 +6,7 @@ import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.proxy.http.*;
 import org.m2sec.core.common.HttpHookThreadData;
 import org.m2sec.core.httphook.IHttpHooker;
+import org.m2sec.core.models.Request;
 
 /**
  * @author: outlaws-bai
@@ -23,7 +24,7 @@ public class HttpHookHandler implements HttpHandler, ProxyRequestHandler, ProxyR
      */
     @Override
     public ProxyRequestReceivedAction handleRequestReceived(InterceptedRequest interceptedRequest) {
-        HttpHookThreadData.setRequestIsFromScanner(false);
+        HttpHookThreadData.clear();
         Annotations annotations = interceptedRequest.annotations();
         HttpRequest request = hooker.tryHookRequestToBurp(interceptedRequest, true, false);
         if (HttpHookThreadData.requestIsFromScanner())
@@ -36,6 +37,8 @@ public class HttpHookHandler implements HttpHandler, ProxyRequestHandler, ProxyR
      */
     @Override
     public RequestToBeSentAction handleHttpRequestToBeSent(HttpRequestToBeSent requestToBeSent) {
+        Request decryptedRequest = Request.of(requestToBeSent);
+        HttpHookThreadData.setRequest(decryptedRequest);
         return RequestToBeSentAction.continueWith(hooker.tryHookRequestToServer(requestToBeSent,
             requestToBeSent.messageId(), false), requestToBeSent.annotations());
     }
@@ -54,8 +57,11 @@ public class HttpHookHandler implements HttpHandler, ProxyRequestHandler, ProxyR
      */
     @Override
     public ProxyResponseToBeSentAction handleResponseToBeSent(InterceptedResponse interceptedResponse) {
-        return ProxyResponseToBeSentAction.continueWith(hooker.tryHookResponseToClient(interceptedResponse, false),
+        ProxyResponseToBeSentAction result =
+            ProxyResponseToBeSentAction.continueWith(hooker.tryHookResponseToClient(interceptedResponse, false),
             interceptedResponse.annotations());
+        HttpHookThreadData.clear();
+        return result;
     }
 
     @Override
