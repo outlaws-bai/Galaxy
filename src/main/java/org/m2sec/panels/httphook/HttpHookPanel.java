@@ -68,12 +68,12 @@ public class HttpHookPanel extends JPanel {
             serviceMap.put(HttpHookService.JYTHON.name().toLowerCase(), pythonFileHookerPanel);
         }
 
-//        if (Constants.isUseJdk) {
-//            CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JAVA);
-//            javaFileHookerPanel.resetCodeTheme();
-//            hookNames.add(HttpHookService.JAVA.name().toLowerCase());
-//            serviceMap.put(HttpHookService.JAVA.name().toLowerCase(), javaFileHookerPanel);
-//        }
+        if (Constants.isUseJdk) {
+            CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JAVA);
+            javaFileHookerPanel.resetCodeTheme();
+            hookNames.add(HttpHookService.JAVA.name().toLowerCase());
+            serviceMap.put(HttpHookService.JAVA.name().toLowerCase(), javaFileHookerPanel);
+        }
 
         // 创建一个容器(卡片)用于放置不同方式的JPanel
         JPanel hookerPanelContainer = new JPanel(new CardLayout());
