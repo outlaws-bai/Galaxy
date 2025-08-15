@@ -1,9 +1,8 @@
 package org.m2sec.core.common;
 
-import burp.api.montoya.MontoyaApi;
-import org.m2sec.Galaxy;
-import org.m2sec.core.utils.ByteUtil;
-import org.m2sec.core.utils.FactorUtil;
+import burp.api.montoya.core.Range;
+import burp.api.montoya.intruder.AttackConfiguration;
+import java.util.List;
 
 /**
  * @author: outlaws-bai
@@ -11,22 +10,12 @@ import org.m2sec.core.utils.FactorUtil;
  * @description:
  */
 public class BurpTools {
-
-    public static final char BURP_INTRUDER_VAR_FLAG = '§';
-
-    private static String DNS_LOG_ROOT_DOMAIN;
-
-    public static String getIntruderWrappedText(byte[] data) {
-        return ByteUtil.getWrappedText(data, BURP_INTRUDER_VAR_FLAG);
-    }
-
-    public static String generateCollaboratorPayload(MontoyaApi api) {
-        if (Galaxy.isInBurp()) {
-            if (DNS_LOG_ROOT_DOMAIN == null) {
-                DNS_LOG_ROOT_DOMAIN = api.collaborator().defaultPayloadGenerator().generatePayload().toString();
-            }
-            return FactorUtil.randomString(8) + "." + DNS_LOG_ROOT_DOMAIN;
+    public static String getIntruderWrappedText(AttackConfiguration attackConfiguration) {
+        List<Range> ranges = attackConfiguration.requestTemplate().insertionPointOffsets();
+        if (ranges == null || ranges.isEmpty()) {
+            throw new RuntimeException("Bypass Auth Of Path request does not contain any range");
         }
-        return FactorUtil.randomString(8) + "." + "baidu.com";
+        Range range = ranges.get(0);
+        return new String(attackConfiguration.requestTemplate().content().subArray(range).getBytes());
     }
 }

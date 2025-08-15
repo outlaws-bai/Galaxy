@@ -26,8 +26,7 @@ public class BypassAuthOfPathProvider extends IPayloadProvider {
 
     @Override
     public Set<String> generatePayloadSet(AttackConfiguration attackConfiguration) {
-        byte[] message = attackConfiguration.requestTemplate().content().getBytes();
-        String currentPath = BurpTools.getIntruderWrappedText(message);
+        String currentPath = BurpTools.getIntruderWrappedText(attackConfiguration);
         return generateBypassPathPayloads(currentPath);
     }
 
@@ -108,5 +107,5 @@ public class BypassAuthOfPathProvider extends IPayloadProvider {
     }
 
     private static final String[] bypassPathStep1StringArray = new String[]{"/./", "/;/", "/.;/",
-        "//", "/health/..;/", "/%2e/", "/%0a/", "/health/%2e%2e;/", "/%20/"};
+            "//", "/health/..;/", "/%2e/", "/%0a/", "/health/%2e%2e;/", "/%20/"};
 }
