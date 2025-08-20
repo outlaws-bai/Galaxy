@@ -29,7 +29,7 @@ public class ReflectTools {
 
             if (compiler == null) {
                 throw new IllegalStateException("Please use JDK to start Burp! Reference link: https://github" +
-                    ".com/outlaws-bai/Galaxy/blob/main/docs/ToJDK.md");
+                        ".com/outlaws-bai/Galaxy/blob/main/docs/ToJDK.md");
             }
 
             // Set up the file manager
@@ -47,7 +47,7 @@ public class ReflectTools {
 
             // Get the compilation unit from the Java file
             Iterable<? extends JavaFileObject> compilationUnits =
-                fileManager.getJavaFileObjectsFromStrings(Collections.singleton(javaFilePath));
+                    fileManager.getJavaFileObjectsFromStrings(Collections.singleton(javaFilePath));
 
             // StringJoiner to collect error messages
             StringJoiner errorMessages = new StringJoiner("\n");
@@ -55,7 +55,7 @@ public class ReflectTools {
             // Compile the Java file
             JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostic -> {
                 String errorMessage =
-                    "Error on line " + diagnostic.getLineNumber() + " in " + diagnostic.getSource() + ": " + diagnostic.getMessage(Locale.ENGLISH);
+                        "Error on line " + diagnostic.getLineNumber() + " in " + diagnostic.getSource() + ": " + diagnostic.getMessage(Locale.ENGLISH);
                 errorMessages.add(errorMessage);
             }, optionList, null, compilationUnits);
 
@@ -67,8 +67,8 @@ public class ReflectTools {
             }
 
             String classFilePath =
-                Constants.TMP_FILE_DIR + File.separator + javaFile.getName().replace(Constants.JAVA_FILE_SUFFIX,
-                    Constants.JAVA_COMPILED_FILE_SUFFIX);
+                    Constants.TMP_FILE_DIR + File.separator + javaFile.getName().replace(Constants.JAVA_FILE_SUFFIX,
+                            Constants.JAVA_COMPILED_FILE_SUFFIX);
             return loadJavaClass(classFilePath);
 
         } catch (IOException e) {
@@ -107,9 +107,18 @@ public class ReflectTools {
         try {
             Constructor<?> constructor = clazz.getConstructor(parameterTypes);
             return constructor.newInstance(objects);
-        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
-                 InvocationTargetException e) {
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            // 解包，抛出真正的异常
+            Throwable target = e.getTargetException();
+            if (target instanceof RuntimeException) {
+                throw (RuntimeException) target;
+            } else if (target instanceof Error) {
+                throw (Error) target;
+            } else {
+                throw new RuntimeException("Exception in invoked method: " + target.getMessage(), target);
+            }
         }
     }
 
@@ -126,8 +135,18 @@ public class ReflectTools {
             return method.invoke(instance, objects);
         } catch (NoSuchMethodException e) {
             return null;
-        } catch (IllegalAccessException | InvocationTargetException e) {
+        } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            // 解包，抛出真正的异常
+            Throwable target = e.getTargetException();
+            if (target instanceof RuntimeException) {
+                throw (RuntimeException) target;
+            } else if (target instanceof Error) {
+                throw (Error) target;
+            } else {
+                throw new RuntimeException("Exception in invoked method: " + target.getMessage(), target);
+            }
         }
     }
 
