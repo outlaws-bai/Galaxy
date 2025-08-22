@@ -1,4 +1,4 @@
-<h3 align="center">Galaxy</h3>
+<h3 align="center">Galaxy（MITM Decryption）</h3>
 <p align="center">
 一个想让你测试加密流量像明文一样简单高效的 Burp 插件
 <br>
