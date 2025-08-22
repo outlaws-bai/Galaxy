@@ -70,7 +70,7 @@
 
 ## 🐛 遇到问题
 
-请先阅读 [FAQ](https://github.com/outlaws-bai/Galaxy/wiki/FAQ) 和 [历史Issue](https://github.com/outlaws-bai/Galaxy/issues?q=is%3Aissue)，无法解决可以提交 [Issue](https://github.com/outlaws-bai/Galaxy/issues)。
+请先阅读 [FAQ](https://github.com/outlaws-bai/Galaxy/wiki/FAQ) 和 [历史Issue](https://github.com/outlaws-bai/Galaxy/issues?q=is%3Aissue)，无法解决可以提交 [Issue](https://github.com/outlaws-bai/Galaxy/issues) 或添加微信 `outlaws_bai`。
 
 ## 🛰️ 支持项目
 
