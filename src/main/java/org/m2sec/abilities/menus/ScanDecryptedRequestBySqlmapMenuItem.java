@@ -4,24 +4,32 @@ import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.ui.contextmenu.ContextMenuEvent;
 import burp.api.montoya.ui.contextmenu.MessageEditorHttpRequestResponse;
 import org.m2sec.abilities.HttpHookHandler;
-import org.m2sec.core.common.*;
+import org.m2sec.core.common.Config;
+import org.m2sec.core.common.Constants;
+import org.m2sec.core.common.SwingTools;
 import org.m2sec.core.models.Request;
-import org.m2sec.core.outer.HttpClient;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.UUID;
 
 /**
  * @author: outlaws-bai
  * @date: 2024/6/21 20:23
  * @description:
  */
-public class SendDecryptedRequestToScannerMenuItem extends IItem {
+public class ScanDecryptedRequestBySqlmapMenuItem extends IItem {
+
+    private static final String command = "%s -r %s %s";
 
 
-    public SendDecryptedRequestToScannerMenuItem(MontoyaApi api, Config config) {
+    public ScanDecryptedRequestBySqlmapMenuItem(MontoyaApi api, Config config) {
         super(api, config);
     }
 
     public String displayName() {
-        return "Send Decrypted Request To Scanner";
+        return "Scan Decrypted Request By sqlmap";
     }
 
     @Override
@@ -41,8 +49,17 @@ public class SendDecryptedRequestToScannerMenuItem extends IItem {
             SwingTools.showInfoDialog(api, "The request is not decrypted.");
             return;
         }
-        request.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "HookedRequest-LinkagePassiveProxyScanner");
-        WorkExecutor.INSTANCE.execute(() -> HttpClient.send(request, config.getSetting().getScannerConn()));
+        request.getHeaders().put(Constants.HTTP_HEADER_HOOK_HEADER_KEY, "HookRequest-LinkageSqlmap");
+        // 写入请求到临时文件
+        String tmpFilePath = Constants.TMP_FILE_DIR + File.separator + UUID.randomUUID() + ".txt";
+        try (FileWriter fileWriter = new FileWriter(tmpFilePath)) {
+            fileWriter.write(new String(request.toRaw()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        String cmd = command.formatted(config.getSetting().getSqlmapExecutePath(), tmpFilePath,
+            config.getSetting().getSqlmapExecuteArgs()) + " --proxy=http://127.0.0.1:8080";
+        ScanRequestBySqlmapMenuItem.run(api, cmd);
     }
 
 }
