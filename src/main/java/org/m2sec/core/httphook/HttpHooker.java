@@ -1,5 +1,6 @@
 package org.m2sec.core.httphook;
 
+import burp.api.montoya.MontoyaApi;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.core.common.Config;
 import org.m2sec.core.common.Constants;
@@ -9,7 +10,6 @@ import org.m2sec.core.models.Headers;
 import org.m2sec.core.models.Query;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
-import org.m2sec.core.outer.HttpClient;
 import org.m2sec.core.utils.CodeUtil;
 import org.m2sec.core.utils.JsonUtil;
 
@@ -27,7 +27,8 @@ public class HttpHooker extends IHttpHooker {
     private String httpConn;
 
     @Override
-    public void init(Config config1) {
+    public void init(MontoyaApi api1, Config config1) {
+        api = api1;
         config = config1;
         option = config1.getOption();
         init(config1.getOption().getHttpServer());
@@ -67,14 +68,16 @@ public class HttpHooker extends IHttpHooker {
         Map<?, ?> requestJson = requestToJson(request);
         Request callRequest = Request.of(httpConn + "/" + func, Method.POST);
         callRequest.setContent(JsonUtil.toJsonStr(requestJson).getBytes());
-        return (Map<?, ?>) HttpClient.send(callRequest).getJson();
+        Response response = Response.of(api.http().sendRequest(callRequest.toBurp()).response());
+        return (Map<?, ?>) response.getJson();
     }
 
     public Map<?, ?> call(Response response, String func) {
         Map<?, ?> responseJson = responseToJson(response);
         Request callRequest = Request.of(httpConn + "/" + func, Method.POST);
         callRequest.setContent(JsonUtil.toJsonStr(responseJson).getBytes());
-        return (Map<?, ?>) HttpClient.send(callRequest).getJson();
+        Response callResponse = Response.of(api.http().sendRequest(callRequest.toBurp()).response());
+        return (Map<?, ?>) callResponse.getJson();
     }
 
     public Map<String, Object> requestToJson(Request request) {

@@ -1,5 +1,6 @@
 package org.m2sec.core.httphook;
 
+import burp.api.montoya.MontoyaApi;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.graalvm.polyglot.HostAccess;
@@ -35,7 +36,8 @@ public class JsHookerFactor extends IHttpHooker {
     private static final HttpHookService SERVICE = HttpHookService.JS;
 
     @Override
-    public void init(Config config1) {
+    public void init(MontoyaApi api1, Config config1) {
+        api = api1;
         config = config1;
         option = config1.getOption();
         String filepath =
