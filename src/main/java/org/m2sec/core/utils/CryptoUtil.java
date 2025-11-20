@@ -216,7 +216,7 @@ public class CryptoUtil {
                     X9ECParameters sm2ECParameters = GMNamedCurves.getByName("sm2p256v1");
                     ECDomainParameters domainParameters = new ECDomainParameters(sm2ECParameters.getCurve(),
                         sm2ECParameters.getG(), sm2ECParameters.getN());
-                    param = new ECPrivateKeyParameters(new BigInteger(key), domainParameters);
+                    param = new ECPrivateKeyParameters(new BigInteger(1, key), domainParameters);
                 } else if (key.length == 121) {
                     key = ByteUtil.subBytes(key, 7, 7 + 32);
                     param = getSm2CipherParameters(key, false);

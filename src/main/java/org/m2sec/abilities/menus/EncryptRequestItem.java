@@ -8,6 +8,7 @@ import burp.api.montoya.ui.contextmenu.MessageEditorHttpRequestResponse;
 import org.m2sec.abilities.HttpHookHandler;
 import org.m2sec.core.common.Config;
 import org.m2sec.core.common.Constants;
+import org.m2sec.core.common.HttpHookThreadData;
 import org.m2sec.core.common.SwingTools;
 import org.m2sec.core.models.Headers;
 import org.m2sec.core.models.Request;
@@ -54,5 +55,6 @@ public class EncryptRequestItem extends IItem {
         } else {
             SwingTools.showRequest(api, newRequest, true);
         }
+        HttpHookThreadData.clear();
     }
 }

@@ -6,10 +6,7 @@ import burp.api.montoya.http.message.responses.HttpResponse;
 import burp.api.montoya.ui.contextmenu.ContextMenuEvent;
 import burp.api.montoya.ui.contextmenu.MessageEditorHttpRequestResponse;
 import org.m2sec.abilities.HttpHookHandler;
-import org.m2sec.core.common.Config;
-import org.m2sec.core.common.Constants;
-import org.m2sec.core.common.Render;
-import org.m2sec.core.common.SwingTools;
+import org.m2sec.core.common.*;
 import org.m2sec.core.models.Headers;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
@@ -64,7 +61,9 @@ public class DecryptResponseItem extends IItem {
                 "Please check.");
             return;
         }
+        HttpHookThreadData.setRequest(request);
         HttpResponse newResponse = HttpHookHandler.hooker.tryHookResponseToBurp(httpResponse, 0, true);
         SwingTools.showResponse(api, newResponse, false);
+        HttpHookThreadData.clear();
     }
 }

@@ -84,7 +84,7 @@ public class SwingTools {
         api.userInterface().applyThemeToComponent(dialog);
         dialog.getContentPane().add(requestEditor.uiComponent());
         dialog.setSize(888, 888);
-        dialog.setLocationRelativeTo(null);
+        dialog.setLocationRelativeTo(api.userInterface().swingUtils().suiteFrame());
         dialog.setVisible(true);
     }
 
@@ -97,7 +97,7 @@ public class SwingTools {
         api.userInterface().applyThemeToComponent(dialog);
         dialog.getContentPane().add(responseEditor.uiComponent());
         dialog.setSize(888, 888);
-        dialog.setLocationRelativeTo(null);
+        dialog.setLocationRelativeTo(api.userInterface().swingUtils().suiteFrame());
         dialog.setVisible(true);
     }
 

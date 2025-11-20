@@ -16,20 +16,20 @@ import org.m2sec.core.outer.HttpClient;
  * @description:
  */
 
-public class SendRequestToScannerMenuItem extends IItem {
-    public SendRequestToScannerMenuItem(MontoyaApi api, Config config) {
+public class ProxyRequestToPassiveProxyScannerMenuItem extends IItem {
+    public ProxyRequestToPassiveProxyScannerMenuItem(MontoyaApi api, Config config) {
         super(api, config);
     }
 
     @Override
     public String displayName() {
-        return "Send Request To Scanner";
+        return "Proxy Request To Passive Proxy Scanner";
     }
 
     @Override
     public boolean isDisplay(ContextMenuEvent event) {
         return event.messageEditorRequestResponse().isPresent()
-            && event.messageEditorRequestResponse().get().selectionContext().equals(MessageEditorHttpRequestResponse.SelectionContext.REQUEST);
+                && event.messageEditorRequestResponse().get().selectionContext().equals(MessageEditorHttpRequestResponse.SelectionContext.REQUEST);
     }
 
     @Override

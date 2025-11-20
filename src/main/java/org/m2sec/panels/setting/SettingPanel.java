@@ -4,6 +4,7 @@ import burp.api.montoya.MontoyaApi;
 import org.m2sec.core.common.CompatTools;
 import org.m2sec.core.common.Constants;
 import org.m2sec.core.common.Setting;
+import org.m2sec.core.common.SwingTools;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,9 +19,12 @@ import java.awt.event.ItemEvent;
  */
 
 public class SettingPanel extends JPanel {
+
+    private final MontoyaApi api;
     private final Setting setting;
 
     public SettingPanel(MontoyaApi api, Setting setting) {
+        this.api = api;
         this.setting = setting;
         setName("Setting");
         initPanel();
@@ -30,6 +34,12 @@ public class SettingPanel extends JPanel {
         setLayout(new BorderLayout());
         int width = 500;
 
+        // save
+        JPanel savePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel saveLabel = new JLabel("Save Settings: ");
+        JButton saveButton = new JButton("Save");
+        savePanel.add(saveLabel);
+        savePanel.add(saveButton);
         // open work dir panel
         JPanel openWorkDirPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel openWorkDirLabel = new JLabel("Open Work Dir: ");
@@ -73,47 +83,16 @@ public class SettingPanel extends JPanel {
 
 
         openWorkDirButton.addActionListener(e -> CompatTools.openFileManager(Constants.WORK_DIR));
-        parsedSwaggerRequestCheckBox.addItemListener(e -> setting.setParsedSwaggerApiDocRequestAutoSend(e.getStateChange() == ItemEvent.SELECTED));
-        scannerConnInput.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-            }
 
-            @Override
-            public void focusLost(FocusEvent e) {
-                setting.setScannerConn(scannerConnInput.getText());
-            }
-        });
-        sqlmapPathInput.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-            }
 
-            @Override
-            public void focusLost(FocusEvent e) {
-                setting.setSqlmapExecutePath(sqlmapPathInput.getText());
-            }
-        });
-        sqlmapArgsInput.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                setting.setSqlmapExecuteArgs(sqlmapArgsInput.getText());
-            }
-        });
-        staticExtensionsInput.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                setting.setStaticExtensions(staticExtensionsInput.getText());
-                Constants.HTTP_STATIC_EXTENSIONS = staticExtensionsInput.getText().split("\\|");
-            }
+        saveButton.addActionListener(e -> {
+            setting.setParsedSwaggerApiDocRequestAutoSend(parsedSwaggerRequestCheckBox.isSelected());
+            setting.setScannerConn(scannerConnInput.getText());
+            setting.setSqlmapExecutePath(sqlmapPathInput.getText());
+            setting.setSqlmapExecuteArgs(sqlmapArgsInput.getText());
+            setting.setStaticExtensions(staticExtensionsInput.getText());
+            Constants.HTTP_STATIC_EXTENSIONS = staticExtensionsInput.getText().split("\\|");
+            SwingTools.showInfoDialog(api, "Save Success!");
         });
 
         // set data
@@ -125,6 +104,7 @@ public class SettingPanel extends JPanel {
 
 
         Box box = Box.createVerticalBox();
+        box.add(savePanel);
         box.add(openWorkDirPanel);
         box.add(parsedSwaggerRequestPanel);
         box.add(sqlmapPathPanel);

@@ -1,14 +1,15 @@
 package org.m2sec.core.httphook;
 
+import burp.api.montoya.MontoyaApi;
 import lombok.extern.slf4j.Slf4j;
 import org.m2sec.core.common.Config;
 import org.m2sec.core.common.Constants;
+import org.m2sec.core.common.HttpHookThreadData;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.models.Headers;
 import org.m2sec.core.models.Query;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
-import org.m2sec.core.outer.HttpClient;
 import org.m2sec.core.utils.CodeUtil;
 import org.m2sec.core.utils.JsonUtil;
 
@@ -26,7 +27,8 @@ public class HttpHooker extends IHttpHooker {
     private String httpConn;
 
     @Override
-    public void init(Config config1) {
+    public void init(MontoyaApi api1, Config config1) {
+        api = api1;
         config = config1;
         option = config1.getOption();
         init(config1.getOption().getHttpServer());
@@ -62,18 +64,20 @@ public class HttpHooker extends IHttpHooker {
         return jsonToResponse(call(response, Constants.HOOK_FUNC_4));
     }
 
-    public Map<String, Object> call(Request request, String func) {
-        Map<String, Object> requestJson = requestToJson(request);
+    public Map<?, ?> call(Request request, String func) {
+        Map<?, ?> requestJson = requestToJson(request);
         Request callRequest = Request.of(httpConn + "/" + func, Method.POST);
         callRequest.setContent(JsonUtil.toJsonStr(requestJson).getBytes());
-        return (Map<String, Object>) HttpClient.send(callRequest).getJson();
+        Response response = Response.of(api.http().sendRequest(callRequest.toBurp()).response());
+        return (Map<?, ?>) response.getJson();
     }
 
-    public Map<String, Object> call(Response response, String func) {
-        Map<String, Object> responseJson = responseToJson(response);
+    public Map<?, ?> call(Response response, String func) {
+        Map<?, ?> responseJson = responseToJson(response);
         Request callRequest = Request.of(httpConn + "/" + func, Method.POST);
         callRequest.setContent(JsonUtil.toJsonStr(responseJson).getBytes());
-        return (Map<String, Object>) HttpClient.send(callRequest).getJson();
+        Response callResponse = Response.of(api.http().sendRequest(callRequest.toBurp()).response());
+        return (Map<?, ?>) callResponse.getJson();
     }
 
     public Map<String, Object> requestToJson(Request request) {
@@ -90,7 +94,7 @@ public class HttpHooker extends IHttpHooker {
         return requestJson;
     }
 
-    public Request jsonToRequest(Map<String, Object> requestJson) {
+    public Request jsonToRequest(Map<?, ?> requestJson) {
         boolean secure = (boolean) requestJson.get("secure");
         String host = (String) requestJson.get("host");
         int port = ((Double) requestJson.get("port")).intValue();
@@ -103,17 +107,21 @@ public class HttpHooker extends IHttpHooker {
         return new Request(secure, host, port, version, method, path, query, headers, content);
     }
 
-    public Map<String, Object> responseToJson(Response response) {
+    public Map<?, ?> responseToJson(Response response) {
         Map<String, Object> requestJson = new HashMap<>();
         requestJson.put("version", response.getVersion());
         requestJson.put("statusCode", response.getStatusCode());
         requestJson.put("reason", response.getReason());
         requestJson.put("headers", response.getHeaders());
         requestJson.put("contentBase64", CodeUtil.b64encodeToString(response.getContent()));
+        Request request = HttpHookThreadData.getRequest();
+        if (request != null) {
+            requestJson.put("request", requestToJson(request));
+        }
         return requestJson;
     }
 
-    public Response jsonToResponse(Map<String, Object> responseJson) {
+    public Response jsonToResponse(Map<?, ?> responseJson) {
         String version = (String) responseJson.get("version");
         int statusCode = ((Double) responseJson.get("statusCode")).intValue();
         String reason = (String) responseJson.get("reason");

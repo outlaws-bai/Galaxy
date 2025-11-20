@@ -35,8 +35,8 @@ public class OtherMenu extends IMenu {
         items.add(new CopyBodyMenuItem(api, config));
         items.add(new JsonToQueryMenuItem(api, config));
         items.add(new QueryToJsonMenuItem(api, config));
-        items.add(new SendRequestToSqlmapMenuItem(api, config));
-        items.add(new SendRequestToScannerMenuItem(api, config));
+        items.add(new ScanRequestBySqlmapMenuItem(api, config));
+        items.add(new ProxyRequestToPassiveProxyScannerMenuItem(api, config));
         return items;
     }
 }

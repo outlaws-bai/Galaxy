@@ -68,12 +68,12 @@ public class HttpHookPanel extends JPanel {
             serviceMap.put(HttpHookService.JYTHON.name().toLowerCase(), pythonFileHookerPanel);
         }
 
-//        if (Constants.isUseJdk) {
-//            CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JAVA);
-//            javaFileHookerPanel.resetCodeTheme();
-//            hookNames.add(HttpHookService.JAVA.name().toLowerCase());
-//            serviceMap.put(HttpHookService.JAVA.name().toLowerCase(), javaFileHookerPanel);
-//        }
+        if (Constants.isUseJdk) {
+            CodeFileHookerPanel javaFileHookerPanel = new CodeFileHookerPanel(config, api, HttpHookService.JAVA);
+            javaFileHookerPanel.resetCodeTheme();
+            hookNames.add(HttpHookService.JAVA.name().toLowerCase());
+            serviceMap.put(HttpHookService.JAVA.name().toLowerCase(), javaFileHookerPanel);
+        }
 
         // 创建一个容器(卡片)用于放置不同方式的JPanel
         JPanel hookerPanelContainer = new JPanel(new CardLayout());
@@ -100,8 +100,8 @@ public class HttpHookPanel extends JPanel {
         switchButton.setToolTipText("Start hook...");
         JCheckBox hookResponseCheckBox = new JCheckBox("Hook Response");
         hookResponseCheckBox.setToolTipText("HTTP responses need to be hook?");
-        JCheckBox autoForwardRequestCheckBox = new JCheckBox("Auto Scan Decrypted Request");
-        autoForwardRequestCheckBox.setToolTipText("Auto Forward Request To Passive Proxy Scanner?");
+        JCheckBox autoForwardRequestCheckBox = new JCheckBox("Auto Proxy Decrypted Request To Passive Proxy Scanner");
+        autoForwardRequestCheckBox.setToolTipText("Auto Proxy Decrypted Request To Passive Proxy Scanner?");
         controlPanel.add(switchButton);
         controlPanel.add(hookResponseCheckBox);
         controlPanel.add(autoForwardRequestCheckBox);
@@ -112,7 +112,7 @@ public class HttpHookPanel extends JPanel {
         JLabel elLabel = new JLabel("Expression:");
         elLabel.setPreferredSize(new Dimension(CodeFileHookerPanel.getDescWidth(), elLabel.getPreferredSize().height));
         elLabel.setToolTipText("Enter an mvel expression that will be used to determine which requests need to " +
-            "be processed.");
+                "be processed.");
         JTextField checkELTextField = new JTextField();
         expressionInputPanel.add(elLabel);
         expressionInputPanel.add(checkELTextField);
@@ -158,12 +158,12 @@ public class HttpHookPanel extends JPanel {
                     HttpHookService service = hookerPanel.getService();
                     // 设置本次所选择的配置
                     option.setHookStart(true)
-                        .setHookService(service)
-                        .setRequestCheckExpression(checkELTextField.getText())
-                        .setHookResponse(hookResponseCheckBox.isSelected())
-                        .setHttpServer(httpImpl.getInput())
-                        .setCodeSelectItem(hookerPanel.getInput())
-                        .setAutoForwardRequest(autoForwardRequestCheckBox.isSelected());
+                            .setHookService(service)
+                            .setRequestCheckExpression(checkELTextField.getText())
+                            .setHookResponse(hookResponseCheckBox.isSelected())
+                            .setHttpServer(httpImpl.getInput())
+                            .setCodeSelectItem(hookerPanel.getInput())
+                            .setAutoForwardRequest(autoForwardRequestCheckBox.isSelected());
                     hookerPanel.start(config);
                     log.info("Start http hook success. service: {}", service.name().toLowerCase());
                 } else {

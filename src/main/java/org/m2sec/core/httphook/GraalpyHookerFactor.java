@@ -1,5 +1,6 @@
 package org.m2sec.core.httphook;
 
+import burp.api.montoya.MontoyaApi;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.graalvm.polyglot.Context;
@@ -23,7 +24,6 @@ import java.io.File;
 @Slf4j
 @Getter
 public class GraalpyHookerFactor extends IHttpHooker {
-
     private Context context;
     private Value bind;
     private Value func1;
@@ -33,7 +33,8 @@ public class GraalpyHookerFactor extends IHttpHooker {
     private static final HttpHookService SERVICE = HttpHookService.GRAALPY;
 
     @Override
-    public void init(Config config1) {
+    public void init(MontoyaApi api1, Config config1) {
+        api = api1;
         config = config1;
         option = config1.getOption();
         String filepath =

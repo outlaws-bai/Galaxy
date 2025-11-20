@@ -6,6 +6,7 @@ import burp.api.montoya.ui.contextmenu.MessageEditorHttpRequestResponse;
 import org.m2sec.core.common.*;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.utils.FactorUtil;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,23 +18,23 @@ import java.util.UUID;
  * @description:
  */
 
-public class SendRequestToSqlmapMenuItem extends IItem {
+public class ScanRequestBySqlmapMenuItem extends IItem {
 
     private static final String command = "%s -r %s %s";
 
-    public SendRequestToSqlmapMenuItem(MontoyaApi api, Config config) {
+    public ScanRequestBySqlmapMenuItem(MontoyaApi api, Config config) {
         super(api, config);
     }
 
     @Override
     public String displayName() {
-        return "Send Request To Sqlmap";
+        return "Scan Request By sqlmap";
     }
 
     @Override
     public boolean isDisplay(ContextMenuEvent event) {
         return event.messageEditorRequestResponse().isPresent()
-            && event.messageEditorRequestResponse().get().selectionContext().equals(MessageEditorHttpRequestResponse.SelectionContext.REQUEST);
+                && event.messageEditorRequestResponse().get().selectionContext().equals(MessageEditorHttpRequestResponse.SelectionContext.REQUEST);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class SendRequestToSqlmapMenuItem extends IItem {
             throw new RuntimeException(e);
         }
         String cmd = command.formatted(config.getSetting().getSqlmapExecutePath(), tmpFilePath,
-            config.getSetting().getSqlmapExecuteArgs());
+                config.getSetting().getSqlmapExecuteArgs());
         run(api, cmd);
     }
 
@@ -71,10 +72,10 @@ public class SendRequestToSqlmapMenuItem extends IItem {
             commandList.add("osascript");
             commandList.add("-e");
             String macCmd = """
-                tell application "Terminal"\s
-                        activate
-                        do script "%s"
-                end tell""";
+                    tell application "Terminal"\s
+                            activate
+                            do script "%s"
+                    end tell""";
             commandList.add(String.format(macCmd, cmd));
         } else if (osName.contains("linux")) {
             commandList.add("/bin/sh");
@@ -82,8 +83,8 @@ public class SendRequestToSqlmapMenuItem extends IItem {
             commandList.add("gnome-terminal");
             CompatTools.copyToClipboard(cmd);
             SwingTools.showInfoDialog(api, "The command has been copied to the clipboard. Please open the command " +
-                "line to " +
-                "execute it");
+                    "line to " +
+                    "execute it");
         } else {
             commandList.add("/bin/bash");
             commandList.add("-c");

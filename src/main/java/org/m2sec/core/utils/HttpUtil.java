@@ -12,6 +12,7 @@ import org.m2sec.core.enums.ContentType;
 import org.m2sec.core.enums.Method;
 import org.m2sec.core.enums.Protocol;
 import org.m2sec.core.models.*;
+
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.*;
@@ -152,7 +153,7 @@ public class HttpUtil {
     }
 
     public static <T extends Parameters<String>> T strToParameters(String str, String sep, String conn, Class<?
-        extends T> clazz, boolean urlDecode) {
+            extends T> clazz, boolean urlDecode) {
         try {
             T retVal = clazz.getDeclaredConstructor().newInstance();
             if (str != null && !str.isEmpty()) {
@@ -174,9 +175,19 @@ public class HttpUtil {
                 }
             }
             return retVal;
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+        } catch (InstantiationException | IllegalAccessException |
                  NoSuchMethodException e) {
             throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            // 解包，抛出真正的异常
+            Throwable target = e.getTargetException();
+            if (target instanceof RuntimeException) {
+                throw (RuntimeException) target;
+            } else if (target instanceof Error) {
+                throw (Error) target;
+            } else {
+                throw new RuntimeException("Exception in invoked method: " + target.getMessage(), target);
+            }
         }
     }
 
@@ -192,7 +203,6 @@ public class HttpUtil {
         sb.delete(sb.length() - sep.length(), sb.length());
         return sb.toString();
     }
-
 
 
     public static boolean isCorrectUrl(String urlStr) {
@@ -376,7 +386,6 @@ public class HttpUtil {
     }
 
 
-
     public static String generateBoundary() {
         return UUID.randomUUID().toString().replace("-", "");
     }
@@ -396,7 +405,7 @@ public class HttpUtil {
                 String name = entry.getKey();
                 for (String value : entry.getValue()) {
                     writer.append("--").append(boundary).append("\r\n").append("Content-Disposition: form-data; " +
-                        "name=\"").append(name).append("\"").append("\r\n").append("\r\n").append(value).append("\r\n"
+                            "name=\"").append(name).append("\"").append("\r\n").append("\r\n").append(value).append("\r\n"
                     ).flush();
                 }
             }
@@ -406,8 +415,8 @@ public class HttpUtil {
                 String name = entry.getKey();
                 for (UploadFile uploadFile : entry.getValue()) {
                     writer.append("--").append(boundary).append("\r\n").append("Content-Disposition: form-data; " +
-                        "name=\"").append(name).append("\"; filename=\"").append(uploadFile.getFilename()).append(
-                        "\"").append("\r\n").flush();
+                            "name=\"").append(name).append("\"; filename=\"").append(uploadFile.getFilename()).append(
+                            "\"").append("\r\n").flush();
                     // 处理 file header
                     for (Map.Entry<String, List<String>> header : uploadFile.getHeaders().entrySet()) {
                         for (String value : header.getValue()) {

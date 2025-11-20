@@ -6,10 +6,7 @@ import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.ui.contextmenu.ContextMenuEvent;
 import burp.api.montoya.ui.contextmenu.MessageEditorHttpRequestResponse;
 import org.m2sec.abilities.HttpHookHandler;
-import org.m2sec.core.common.Config;
-import org.m2sec.core.common.Constants;
-import org.m2sec.core.common.Render;
-import org.m2sec.core.common.SwingTools;
+import org.m2sec.core.common.*;
 import org.m2sec.core.models.Headers;
 import org.m2sec.core.models.Request;
 
@@ -66,5 +63,6 @@ public class DecryptRequestItem extends IItem {
         } else {
             SwingTools.showRequest(api, newRequest, false);
         }
+        HttpHookThreadData.clear();
     }
 }

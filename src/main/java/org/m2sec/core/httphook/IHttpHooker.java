@@ -1,5 +1,6 @@
 package org.m2sec.core.httphook;
 
+import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.http.message.responses.HttpResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +25,12 @@ public abstract class IHttpHooker {
 
     protected static Option option;
 
+    protected MontoyaApi api;
+
     protected static Config config;
 
-    public abstract void init(Config config1);
+
+    public abstract void init(MontoyaApi api1, Config config1);
 
     public abstract void destroy();
 

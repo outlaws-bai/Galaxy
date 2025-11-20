@@ -1,14 +1,17 @@
 package org.m2sec.abilities.menus;
 
 import burp.api.montoya.MontoyaApi;
+import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.http.message.responses.HttpResponse;
 import burp.api.montoya.ui.contextmenu.ContextMenuEvent;
 import burp.api.montoya.ui.contextmenu.MessageEditorHttpRequestResponse;
 import org.m2sec.abilities.HttpHookHandler;
 import org.m2sec.core.common.Config;
 import org.m2sec.core.common.Constants;
+import org.m2sec.core.common.HttpHookThreadData;
 import org.m2sec.core.common.SwingTools;
 import org.m2sec.core.models.Headers;
+import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
 
 /**
@@ -44,11 +47,15 @@ public class EncryptResponseItem extends IItem {
         HttpResponse httpResponse = messageEditorHttpRequestResponse.requestResponse().response();
         Response response = Response.of(httpResponse);
         Headers headers = response.getHeaders();
+        HttpRequest httpRequest = messageEditorHttpRequestResponse.requestResponse().request();
+        Request request = Request.of(httpRequest);
         if (!headers.hasIgnoreCase(Constants.HTTP_HEADER_HOOK_HEADER_KEY)) {
             SwingTools.showInfoDialog(api, "The response has been encrypted.");
             return;
         }
+        HttpHookThreadData.setRequest(request);
         HttpResponse newResponse = HttpHookHandler.hooker.tryHookResponseToClient(httpResponse, true);
         SwingTools.showResponse(api, newResponse, true);
+        HttpHookThreadData.clear();
     }
 }

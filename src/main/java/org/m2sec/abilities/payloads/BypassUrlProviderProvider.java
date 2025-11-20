@@ -34,8 +34,7 @@ public class BypassUrlProviderProvider extends IPayloadProvider {
 
     @Override
     public Set<String> generatePayloadSet(AttackConfiguration attackConfiguration) {
-        byte[] message = attackConfiguration.requestTemplate().content().getBytes();
-        String selectUrl = BurpTools.getIntruderWrappedText(message);
+        String selectUrl = BurpTools.getIntruderWrappedText(attackConfiguration);
         try {
             if (attackConfiguration.httpService().isPresent()) {
                 HttpService httpService = attackConfiguration.httpService().get();
