@@ -17,6 +17,9 @@ repositories {
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17) // 强制用Java 17工具链
+    }
 }
 
 shadowJar {
@@ -24,9 +27,13 @@ shadowJar {
 
     // 设置版本文件
     versionFile.text = version
+    // 1. 重定位所有日志相关包，彻底隔离 Burp 的 SLF4J
+    relocate 'org.slf4j', 'org.m2sec.shaded.slf4j'
+    relocate 'ch.qos.logback', 'org.m2sec.shaded.logback'
 
     // 合并服务文件，避免多个 jar 文件中的 META-INF/services 冲突
     mergeServiceFiles()
+
 }
 
 
@@ -67,8 +74,8 @@ dependencies {
     // template
     implementation "org.apache.commons:commons-text:1.12.0"
     // log
-    implementation "org.slf4j:slf4j-api:2.0.13"
-    implementation "ch.qos.logback:logback-classic:1.5.6"
+    implementation "org.slf4j:slf4j-api:2.0.9"
+    implementation "ch.qos.logback:logback-classic:1.4.11"
     // code text area
     implementation "com.fifesoft:rsyntaxtextarea:3.4.1"
     implementation "com.fifesoft:autocomplete:3.3.1"
