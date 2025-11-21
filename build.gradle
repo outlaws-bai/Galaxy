@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "org.m2sec"
-def version = "3.3.5"
+def version = "3.3.6"
 def optionalHooker = "basic" // all/js/graalpy/basic(default)
 def graalVersion = "24.1.0"
 def versionFile = file("${projectDir}/src/main/resources/version.txt") as Object
@@ -17,9 +17,6 @@ repositories {
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17) // 强制用Java 17工具链
-    }
 }
 
 shadowJar {

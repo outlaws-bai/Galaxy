@@ -34,7 +34,7 @@ public class Helper {
         System.setProperty("python.import.site", "false");
         Security.addProvider(new BouncyCastleProvider());
         api.extension().setName(Constants.BURP_SUITE_EXT_NAME);
-        api.logging().logToOutput(Constants.BURP_SUITE_EXT_INIT_DEF + "Version -> " + Constants.VERSION + "\r\n");
+        api.logging().logToOutput(Constants.BURP_SUITE_EXT_INIT_DEF + "Version -> " + Constants.VERSION + "\r\n" + "Burp -> " + api.burpSuite().version().toString() + "\r\n");
         checkDep();
         if (checkVersion(api)) {
             initWorkDir();
