@@ -18,7 +18,6 @@ import org.m2sec.core.models.Request;
  * @date: 2024/7/14 21:14
  * @description:
  */
-
 public class EncryptRequestItem extends IItem {
     public EncryptRequestItem(MontoyaApi api, Config config) {
         super(api, config);
@@ -32,16 +31,18 @@ public class EncryptRequestItem extends IItem {
     @Override
     public boolean isDisplay(ContextMenuEvent event) {
         return event.invocationType().containsHttpMessage()
-            && event.messageEditorRequestResponse().isPresent()
-            && event.messageEditorRequestResponse().get().selectionContext() == MessageEditorHttpRequestResponse.SelectionContext.REQUEST
-            && config.getOption().isHookStart()
-            && HttpHookHandler.hooker != null;
+                && event.messageEditorRequestResponse().isPresent()
+                && event.messageEditorRequestResponse().get().selectionContext()
+                        == MessageEditorHttpRequestResponse.SelectionContext.REQUEST
+                && config.getOption().isHookStart()
+                && HttpHookHandler.hooker != null;
     }
 
     @Override
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     public void action(ContextMenuEvent event) {
-        MessageEditorHttpRequestResponse messageEditorHttpRequestResponse = event.messageEditorRequestResponse().get();
+        MessageEditorHttpRequestResponse messageEditorHttpRequestResponse =
+                event.messageEditorRequestResponse().get();
         HttpRequest httpRequest = messageEditorHttpRequestResponse.requestResponse().request();
         Request request = Request.of(httpRequest);
         Headers headers = request.getHeaders();
@@ -49,12 +50,15 @@ public class EncryptRequestItem extends IItem {
             SwingTools.showInfoDialog(api, "The request has been encrypted.");
             return;
         }
-        HttpRequest newRequest = HttpHookHandler.hooker.tryHookRequestToServer(httpRequest, 0, true);
-        if (event.isFromTool(ToolType.REPEATER)) {
-            messageEditorHttpRequestResponse.setRequest(newRequest);
-        } else {
-            SwingTools.showRequest(api, newRequest, true);
-        }
-        HttpHookThreadData.clear();
+        runAsync(
+                () -> HttpHookHandler.hooker.tryHookRequestToServer(httpRequest, 0, true),
+                (HttpRequest newRequest) -> {
+                    if (event.isFromTool(ToolType.REPEATER)) {
+                        messageEditorHttpRequestResponse.setRequest(newRequest);
+                    } else {
+                        SwingTools.showRequest(api, newRequest, true);
+                    }
+                    HttpHookThreadData.clear();
+                });
     }
 }

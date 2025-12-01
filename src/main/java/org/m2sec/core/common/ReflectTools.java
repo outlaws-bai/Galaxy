@@ -28,8 +28,9 @@ public class ReflectTools {
             File javaFile = new File(javaFilePath);
 
             if (compiler == null) {
-                throw new IllegalStateException("Please use JDK to start Burp! Reference link: https://github" +
-                        ".com/outlaws-bai/Galaxy/blob/main/docs/ToJDK.md");
+                throw new IllegalStateException(
+                        "Please use JDK to start Burp! Reference link: https://github"
+                                + ".com/outlaws-bai/Galaxy/blob/main/docs/ToJDK.md");
             }
 
             // Set up the file manager
@@ -53,22 +54,39 @@ public class ReflectTools {
             StringJoiner errorMessages = new StringJoiner("\n");
 
             // Compile the Java file
-            JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostic -> {
-                String errorMessage =
-                        "Error on line " + diagnostic.getLineNumber() + " in " + diagnostic.getSource() + ": " + diagnostic.getMessage(Locale.ENGLISH);
-                errorMessages.add(errorMessage);
-            }, optionList, null, compilationUnits);
+            JavaCompiler.CompilationTask task =
+                    compiler.getTask(
+                            null,
+                            fileManager,
+                            diagnostic -> {
+                                String errorMessage =
+                                        "Error on line "
+                                                + diagnostic.getLineNumber()
+                                                + " in "
+                                                + diagnostic.getSource()
+                                                + ": "
+                                                + diagnostic.getMessage(Locale.ENGLISH);
+                                errorMessages.add(errorMessage);
+                            },
+                            optionList,
+                            null,
+                            compilationUnits);
 
             boolean success = task.call();
             fileManager.close();
 
             if (!success) {
-                throw new RuntimeException("Compilation failed:\n" + errorMessages);
+                throw new RuntimeException(
+                        Constants.JAR_FILE_PATH + " Compilation failed: \n" + errorMessages);
             }
 
             String classFilePath =
-                    Constants.TMP_FILE_DIR + File.separator + javaFile.getName().replace(Constants.JAVA_FILE_SUFFIX,
-                            Constants.JAVA_COMPILED_FILE_SUFFIX);
+                    Constants.TMP_FILE_DIR
+                            + File.separator
+                            + javaFile.getName()
+                                    .replace(
+                                            Constants.JAVA_FILE_SUFFIX,
+                                            Constants.JAVA_COMPILED_FILE_SUFFIX);
             return loadJavaClass(classFilePath);
 
         } catch (IOException e) {
@@ -81,8 +99,9 @@ public class ReflectTools {
             File javaFile = new File(javaClassFilePath);
             String className = javaFile.getName().replace(Constants.JAVA_COMPILED_FILE_SUFFIX, "");
 
-            URL[] urls = new URL[]{new File(javaFile.getParent()).toURI().toURL()};
-            try (URLClassLoader classLoader = new URLClassLoader(urls, ReflectTools.class.getClassLoader())) {
+            URL[] urls = new URL[] {new File(javaFile.getParent()).toURI().toURL()};
+            try (URLClassLoader classLoader =
+                    new URLClassLoader(urls, ReflectTools.class.getClassLoader())) {
                 return classLoader.loadClass(className);
             }
         } catch (IOException | ClassNotFoundException e) {
@@ -100,7 +119,7 @@ public class ReflectTools {
     }
 
     public static Object newInstance(Class<?> clazz, Class<?> parameterType, Object object) {
-        return newInstance(clazz, new Class[]{parameterType}, new Object[]{object});
+        return newInstance(clazz, new Class[] {parameterType}, new Object[] {object});
     }
 
     public static Object newInstance(Class<?> clazz, Class<?>[] parameterTypes, Object[] objects) {
@@ -117,19 +136,28 @@ public class ReflectTools {
             } else if (target instanceof Error) {
                 throw (Error) target;
             } else {
-                throw new RuntimeException("Exception in invoked method: " + target.getMessage(), target);
+                throw new RuntimeException(
+                        "Exception in invoked method: " + target.getMessage(), target);
             }
         }
     }
 
-
-    public static Object callFunc(Class<?> clazz, Object instance, String funcName, Class<?> parameterType,
-                                  Object object) {
-        return callFunc(clazz, instance, funcName, new Class[]{parameterType}, new Object[]{object});
+    public static Object callFunc(
+            Class<?> clazz,
+            Object instance,
+            String funcName,
+            Class<?> parameterType,
+            Object object) {
+        return callFunc(
+                clazz, instance, funcName, new Class[] {parameterType}, new Object[] {object});
     }
 
-    public static Object callFunc(Class<?> clazz, Object instance, String funcName, Class<?>[] parameterTypes,
-                                  Object[] objects) {
+    public static Object callFunc(
+            Class<?> clazz,
+            Object instance,
+            String funcName,
+            Class<?>[] parameterTypes,
+            Object[] objects) {
         try {
             Method method = clazz.getMethod(funcName, parameterTypes);
             return method.invoke(instance, objects);
@@ -145,10 +173,9 @@ public class ReflectTools {
             } else if (target instanceof Error) {
                 throw (Error) target;
             } else {
-                throw new RuntimeException("Exception in invoked method: " + target.getMessage(), target);
+                throw new RuntimeException(
+                        "Exception in invoked method: " + target.getMessage(), target);
             }
         }
     }
-
-
 }

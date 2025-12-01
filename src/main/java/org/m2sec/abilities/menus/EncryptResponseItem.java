@@ -19,7 +19,6 @@ import org.m2sec.core.models.Response;
  * @date: 2024/8/2 11:45
  * @description:
  */
-
 public class EncryptResponseItem extends IItem {
     public EncryptResponseItem(MontoyaApi api, Config config) {
         super(api, config);
@@ -33,17 +32,19 @@ public class EncryptResponseItem extends IItem {
     @Override
     public boolean isDisplay(ContextMenuEvent event) {
         return event.invocationType().containsHttpMessage()
-            && event.messageEditorRequestResponse().isPresent()
-            && event.messageEditorRequestResponse().get().selectionContext() == MessageEditorHttpRequestResponse.SelectionContext.RESPONSE
-            && config.getOption().isHookStart()
-            && config.getOption().isHookResponse()
-            && HttpHookHandler.hooker != null;
+                && event.messageEditorRequestResponse().isPresent()
+                && event.messageEditorRequestResponse().get().selectionContext()
+                        == MessageEditorHttpRequestResponse.SelectionContext.RESPONSE
+                && config.getOption().isHookStart()
+                && config.getOption().isHookResponse()
+                && HttpHookHandler.hooker != null;
     }
 
     @Override
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     public void action(ContextMenuEvent event) {
-        MessageEditorHttpRequestResponse messageEditorHttpRequestResponse = event.messageEditorRequestResponse().get();
+        MessageEditorHttpRequestResponse messageEditorHttpRequestResponse =
+                event.messageEditorRequestResponse().get();
         HttpResponse httpResponse = messageEditorHttpRequestResponse.requestResponse().response();
         Response response = Response.of(httpResponse);
         Headers headers = response.getHeaders();
@@ -54,8 +55,11 @@ public class EncryptResponseItem extends IItem {
             return;
         }
         HttpHookThreadData.setRequest(request);
-        HttpResponse newResponse = HttpHookHandler.hooker.tryHookResponseToClient(httpResponse, true);
-        SwingTools.showResponse(api, newResponse, true);
-        HttpHookThreadData.clear();
+        runAsync(
+                () -> HttpHookHandler.hooker.tryHookResponseToClient(httpResponse, true),
+                (HttpResponse newResponse) -> {
+                    SwingTools.showResponse(api, newResponse, true);
+                    HttpHookThreadData.clear();
+                });
     }
 }

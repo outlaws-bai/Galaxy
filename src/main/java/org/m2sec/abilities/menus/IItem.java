@@ -7,6 +7,8 @@ import org.m2sec.core.common.Config;
 import org.m2sec.core.common.SwingTools;
 
 import javax.swing.*;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 
 /**
  * @author: outlaws-bai
@@ -40,4 +42,29 @@ public abstract class IItem extends JMenuItem {
     }
 
     public abstract void action(ContextMenuEvent event);
+
+    /**
+     * 在后台线程执行任务，完成后在 EDT 更新 UI
+     *
+     * @param backgroundTask 后台任务（返回结果）
+     * @param uiUpdateTask UI 回调（接收结果）
+     * @param <T> 结果类型
+     */
+    public static <T> void runAsync(Callable<T> backgroundTask, Consumer<T> uiUpdateTask) {
+        new SwingWorker<T, Void>() {
+            @Override
+            protected T doInBackground() throws Exception {
+                return backgroundTask.call(); // 执行后台任务
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    uiUpdateTask.accept(get()); // 在 EDT 更新 UI
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }.execute(); // 自动启动
+    }
 }
