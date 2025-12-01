@@ -4,7 +4,7 @@ import org.m2sec.core.models.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
+import org.m2sec.shaded.slf4j.Logger;
 
 /**
 

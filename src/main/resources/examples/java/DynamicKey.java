@@ -3,7 +3,7 @@ import org.m2sec.core.models.Response;
 import org.m2sec.core.utils.CodeUtil;
 import org.m2sec.core.utils.CryptoUtil;
 import org.m2sec.core.utils.JsonUtil;
-import org.slf4j.Logger;
+import org.m2sec.shaded.slf4j.Logger;
 
 import java.util.HashMap;
 
