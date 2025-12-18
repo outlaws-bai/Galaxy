@@ -7,5 +7,5 @@ package org.m2sec.core.enums;
  */
 
 public enum SymmetricKeyMode {
-    ECB, CBC, GCM
+    ECB, CBC, CFB, OFB, CTR, GCM
 }
