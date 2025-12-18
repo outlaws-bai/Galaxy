@@ -38,15 +38,21 @@ public class HttpHookCodeTest {
     @Test
     public void testOneCodeHooker() { // 仅测试json的示例
         HttpHookService service = HttpHookService.JYTHON;
-        testCodeHooker(service, examplesFilePath + File.separator + service.getDir() + File.separator + "aes_cbc.py");
+        testCodeHooker(
+                service,
+                examplesFilePath
+                        + File.separator
+                        + service.getDir()
+                        + File.separator
+                        + "aes_cbc.py");
     }
-
 
     @Test
     public void testCodeHookers() { // 仅测试json的示例
-        HttpHookService service = HttpHookService.JS;
+        HttpHookService service = HttpHookService.JYTHON;
         List<String> failPaths = new ArrayList<>();
-        for (String filepath : FileTools.listDir(examplesFilePath + File.separator + service.getDir())) {
+        for (String filepath :
+                FileTools.listDir(examplesFilePath + File.separator + service.getDir())) {
             //noinspection CaughtExceptionImmediatelyRethrown
             try {
                 testCodeHooker(service, filepath);
@@ -70,21 +76,29 @@ public class HttpHookCodeTest {
         Request queryRequest = Request.of("https://www.baidu.com/a/b/c");
         queryRequest.setQuery(Query.of("username=" + randomString1));
 
-//        HttpHookService service = HttpHookService.JAVA;
-//        String filepath = examplesFilePath + File.separator + service.getDir() + File.separator + File.separator +
-//            "AesCbcForm.java";
+        //        HttpHookService service = HttpHookService.JAVA;
+        //        String filepath = examplesFilePath + File.separator + service.getDir() +
+        // File.separator + File.separator +
+        //            "AesCbcForm.java";
 
-//        HttpHookService service = HttpHookService.JS;
-//        String filepath = examplesFilePath + File.separator + service.getDir() + File.separator + File.separator +
-//            "aes_cbc_query.js";
+        //        HttpHookService service = HttpHookService.JS;
+        //        String filepath = examplesFilePath + File.separator + service.getDir() +
+        // File.separator + File.separator +
+        //            "aes_cbc_query.js";
 
-        HttpHookService service = HttpHookService.GRAALPY;
-        String filepath = examplesFilePath + File.separator + service.getDir() + File.separator + File.separator +
-            "aes_cbc_query.py";
+        HttpHookService service = HttpHookService.JYTHON;
+        String filepath =
+                examplesFilePath
+                        + File.separator
+                        + service.getDir()
+                        + File.separator
+                        + File.separator
+                        + "aes_cbc_query.py";
 
-//        HttpHookService service = HttpHookService.JYTHON;
-//        String filepath = examplesFilePath + File.separator + service.getDir() + File.separator + File.separator +
-//            "aes_cbc_query.py";
+        //        HttpHookService service = HttpHookService.JYTHON;
+        //        String filepath = examplesFilePath + File.separator + service.getDir() +
+        // File.separator + File.separator +
+        //            "aes_cbc_query.py";
 
         IHttpHooker hooker = getCodeHooker(service, filepath);
         log.info("hook by java file: {}", filepath);
@@ -102,21 +116,29 @@ public class HttpHookCodeTest {
         Request formRequest = Request.of("https://www.baidu.com/a/b/c");
         formRequest.setForm(Form.of("username=" + randomString1));
 
-//        HttpHookService service = HttpHookService.JAVA;
-//        String filepath = examplesFilePath + File.separator + service.getDir() + File.separator + File.separator +
-//            "AesCbcForm.java";
+        //        HttpHookService service = HttpHookService.JAVA;
+        //        String filepath = examplesFilePath + File.separator + service.getDir() +
+        // File.separator + File.separator +
+        //            "AesCbcForm.java";
 
-//        HttpHookService service = HttpHookService.JS;
-//        String filepath = examplesFilePath + File.separator + service.getDir() + File.separator + File.separator +
-//            "aes_cbc_form.js";
+        //        HttpHookService service = HttpHookService.JS;
+        //        String filepath = examplesFilePath + File.separator + service.getDir() +
+        // File.separator + File.separator +
+        //            "aes_cbc_form.js";
 
-        HttpHookService service = HttpHookService.GRAALPY;
-        String filepath = examplesFilePath + File.separator + service.getDir() + File.separator + File.separator +
-            "aes_cbc_form.py";
+        HttpHookService service = HttpHookService.JYTHON;
+        String filepath =
+                examplesFilePath
+                        + File.separator
+                        + service.getDir()
+                        + File.separator
+                        + File.separator
+                        + "aes_cbc_form.py";
 
-//        HttpHookService service = HttpHookService.JYTHON;
-//        String filepath = examplesFilePath + File.separator + service.getDir() + File.separator + File.separator +
-//            "aes_cbc_form.py";
+        //        HttpHookService service = HttpHookService.JYTHON;
+        //        String filepath = examplesFilePath + File.separator + service.getDir() +
+        // File.separator + File.separator +
+        //            "aes_cbc_form.py";
 
         IHttpHooker hooker = getCodeHooker(service, filepath);
         log.info("hook by java file: {}", filepath);
@@ -136,22 +158,30 @@ public class HttpHookCodeTest {
         formData.put("username", randomString1);
         formdataRequest.setFormData(formData);
 
-//        HttpHookService service = HttpHookService.JAVA;
-//        String filepath =
-//            examplesFilePath + File.separator + service.getDir() + File.separator + File.separator +
-//            "AesCbcFormData.java";
+        //        HttpHookService service = HttpHookService.JAVA;
+        //        String filepath =
+        //            examplesFilePath + File.separator + service.getDir() + File.separator +
+        // File.separator +
+        //            "AesCbcFormData.java";
 
-//        HttpHookService service = HttpHookService.JS;
-//        String filepath = examplesFilePath + File.separator + service.getDir() + File.separator + File.separator +
-//            "aes_cbc_form_data.js";
+        //        HttpHookService service = HttpHookService.JS;
+        //        String filepath = examplesFilePath + File.separator + service.getDir() +
+        // File.separator + File.separator +
+        //            "aes_cbc_form_data.js";
 
-        HttpHookService service = HttpHookService.GRAALPY;
-        String filepath = examplesFilePath + File.separator + service.getDir() + File.separator + File.separator +
-            "aes_cbc_form_data.py";
+        HttpHookService service = HttpHookService.JYTHON;
+        String filepath =
+                examplesFilePath
+                        + File.separator
+                        + service.getDir()
+                        + File.separator
+                        + File.separator
+                        + "aes_cbc_form_data.py";
 
-//        HttpHookService service = HttpHookService.JYTHON;
-//        String filepath = examplesFilePath + File.separator + service.getDir() + File.separator + File.separator +
-//            "aes_cbc_form_data.py";
+        //        HttpHookService service = HttpHookService.JYTHON;
+        //        String filepath = examplesFilePath + File.separator + service.getDir() +
+        // File.separator + File.separator +
+        //            "aes_cbc_form_data.py";
 
         IHttpHooker hooker = getCodeHooker(service, filepath);
         log.info("hook by java file: {}", filepath);
@@ -164,7 +194,8 @@ public class HttpHookCodeTest {
     }
 
     public void testCodeHooker(HttpHookService service, String filepath) {
-        if (filepath.toLowerCase().contains("form") || filepath.toLowerCase().contains("query")) return;
+        if (filepath.toLowerCase().contains("form") || filepath.toLowerCase().contains("query"))
+            return;
         IHttpHooker hooker = getCodeHooker(service, filepath);
         String randomString1 = FactorUtil.randomString(50);
         String randomString2 = FactorUtil.randomString(50);
@@ -190,15 +221,16 @@ public class HttpHookCodeTest {
         hooker.destroy();
     }
 
-
     private static IHttpHooker getCodeHooker(HttpHookService service, String filepath) {
-        assert !service.equals(HttpHookService.JS) || Constants.hasJs : "Due to compatibility issues, if you need to " +
-            "test JavaScript, please switch the " +
-            "graalService in build.gradle to js";
-        assert !service.equals(HttpHookService.GRAALPY) || Constants.hasGraalpy : "Due to compatibility issues, if " +
-            "you need to test python, please switch" +
-            " the " +
-            "graalService in build.gradle to python";
+        assert !service.equals(HttpHookService.JS) || Constants.hasJs
+                : "Due to compatibility issues, if you need to "
+                        + "test JavaScript, please switch the "
+                        + "graalService in build.gradle to js";
+        assert !service.equals(HttpHookService.GRAALPY) || Constants.hasGraalpy
+                : "Due to compatibility issues, if "
+                        + "you need to test python, please switch"
+                        + " the "
+                        + "graalService in build.gradle to python";
         IHttpHooker hooker;
         if (service.equals(HttpHookService.JAVA)) {
             JavaFileHookerFactor hookerFactor = new JavaFileHookerFactor();
@@ -221,6 +253,4 @@ public class HttpHookCodeTest {
         }
         return hooker;
     }
-
-
 }
