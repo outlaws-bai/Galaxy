@@ -15,7 +15,7 @@ import java.util.Map;
  * @description:
  */
 public class JsonUtil {
-    private static final Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+    private static final Gson gson = new GsonBuilder().setObjectToNumberStrategy(ToNumberPolicy.BIG_DECIMAL).disableHtmlEscaping().create();
 
     public static String toJsonStr(Object obj) {
         return gson.toJson(obj);
