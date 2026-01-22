@@ -72,6 +72,14 @@
 
 请先阅读 [FAQ](https://github.com/outlaws-bai/Galaxy/wiki/FAQ) 和 [历史Issue](https://github.com/outlaws-bai/Galaxy/issues?q=is%3Aissue)，无法解决可以提交 [Issue](https://github.com/outlaws-bai/Galaxy/issues) 或添加微信 `outlaws_bai` （请备注 Galaxy）。
 
+## 🛰️ 支持项目
+
+如果你觉得 Galaxy 好用，欢迎支持，让项目走得更远，功能更强！
+
+<div align=center>
+<img src="https://raw.githubusercontent.com/outlaws-bai/picture/refs/heads/main/621741786094_.pic.jpg" style="width: 30%" />
+</div>
+
 ## 🔯 Stars
 
 [![Stargazers over time](https://starchart.cc/outlaws-bai/Galaxy.svg?variant=adaptive)](https://starchart.cc/outlaws-bai/Galaxy)
