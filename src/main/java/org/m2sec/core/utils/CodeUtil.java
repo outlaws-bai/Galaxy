@@ -2,6 +2,9 @@ package org.m2sec.core.utils;
 
 import org.bouncycastle.util.encoders.Hex;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 /**
@@ -9,7 +12,6 @@ import java.util.Base64;
  * @date: 2024/7/10 20:26
  * @description:
  */
-
 public class CodeUtil {
     public static byte[] b64decode(String data) {
         return Base64.getDecoder().decode(data);
@@ -33,5 +35,13 @@ public class CodeUtil {
 
     public static String hexEncodeToString(byte[] data) {
         return Hex.toHexString(data);
+    }
+
+    public static String urlEncode(String data) {
+        return URLEncoder.encode(data, StandardCharsets.UTF_8);
+    }
+
+    public static String urlDecode(String data) {
+        return URLDecoder.decode(data, StandardCharsets.UTF_8);
     }
 }
