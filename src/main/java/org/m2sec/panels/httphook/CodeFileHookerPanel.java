@@ -255,6 +255,13 @@ public class CodeFileHookerPanel extends IHookerPanel<IHttpHooker> {
             "(byte[] data)", "Hex encode to string -> String", SwingTools.renderLink("CodeUtil.hexEncodeToString" +
             "(byte[] data)", "https://github.com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils" +
             "/CodeUtil.java")));
+        // CodeUtil - url
+        provider.addCompletion(new ShorthandCompletion(provider, "urlDecode", "CodeUtil.urlDecode(String data)", "Url" +
+                " decode -> String", SwingTools.renderLink("CodeUtil.urlDecode(String data)", "https://github" +
+                ".com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/CodeUtil.java")));
+        provider.addCompletion(new ShorthandCompletion(provider, "urlEncode", "CodeUtil.urlEncode(String data)", "Url" +
+                " encode -> String", SwingTools.renderLink("CodeUtil.urlEncode(String data)", "https://github" +
+                ".com/outlaws-bai/Galaxy/blob/main/src/main/java/org/m2sec/core/utils/CodeUtil.java")));
         // JsonUtil
         provider.addCompletion(new ShorthandCompletion(provider, "jsonStrToMap", "Map<?, ?> map = JsonUtil.jsonStrToMap(String " +
             "jsonStr)", "json string to Map -> Map", SwingTools.renderLink("JsonUtil.jsonStrToMap(String jsonStr)",
