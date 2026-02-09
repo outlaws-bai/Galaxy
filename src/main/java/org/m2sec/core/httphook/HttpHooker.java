@@ -97,7 +97,7 @@ public class HttpHooker extends IHttpHooker {
     public Request jsonToRequest(Map<?, ?> requestJson) {
         boolean secure = (boolean) requestJson.get("secure");
         String host = (String) requestJson.get("host");
-        int port = ((Double) requestJson.get("port")).intValue();
+        int port = ((Number) requestJson.get("port")).intValue();
         String version = (String) requestJson.get("version");
         String method = (String) requestJson.get("method");
         String path = (String) requestJson.get("path");
@@ -123,7 +123,7 @@ public class HttpHooker extends IHttpHooker {
 
     public Response jsonToResponse(Map<?, ?> responseJson) {
         String version = (String) responseJson.get("version");
-        int statusCode = ((Double) responseJson.get("statusCode")).intValue();
+        int statusCode = ((Number) responseJson.get("statusCode")).intValue();
         String reason = (String) responseJson.get("reason");
         Headers headers = JsonUtil.mapToObject((Map<?, ?>) responseJson.get("headers"), Headers.class);
         byte[] content = CodeUtil.b64decode((String) responseJson.get("contentBase64"));
