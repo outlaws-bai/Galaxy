@@ -10,6 +10,7 @@ import org.m2sec.core.models.Headers;
 import org.m2sec.core.models.Query;
 import org.m2sec.core.models.Request;
 import org.m2sec.core.models.Response;
+import org.m2sec.core.outer.HttpClient;
 import org.m2sec.core.utils.CodeUtil;
 import org.m2sec.core.utils.JsonUtil;
 
@@ -68,7 +69,7 @@ public class HttpHooker extends IHttpHooker {
         Map<?, ?> requestJson = requestToJson(request);
         Request callRequest = Request.of(httpConn + "/" + func, Method.POST);
         callRequest.setContent(JsonUtil.toJsonStr(requestJson).getBytes());
-        Response response = Response.of(api.http().sendRequest(callRequest.toBurp()).response());
+        Response response = HttpClient.send(callRequest);
         return (Map<?, ?>) response.getJson();
     }
 
@@ -76,7 +77,7 @@ public class HttpHooker extends IHttpHooker {
         Map<?, ?> responseJson = responseToJson(response);
         Request callRequest = Request.of(httpConn + "/" + func, Method.POST);
         callRequest.setContent(JsonUtil.toJsonStr(responseJson).getBytes());
-        Response callResponse = Response.of(api.http().sendRequest(callRequest.toBurp()).response());
+        Response callResponse = HttpClient.send(callRequest);
         return (Map<?, ?>) callResponse.getJson();
     }
 
