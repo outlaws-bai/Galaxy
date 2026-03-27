@@ -22,7 +22,6 @@
 - **自动化解密流量**：写好自定义 hook 后，插件会自动化解密后续代理的流量。
 - **与安全工具联动**：支持与 sqlmap、xray 的联动，让你更高效地发现潜在的安全漏洞。
 - **支持Burp多模块**：适用于 Burp 的多个模块，如 Intruder、Proxy、Repeater 和 Scanner。
-- **其他小功能**：[Bypass Host Check](https://github.com/outlaws-bai/Galaxy/wiki/%E5%8A%9F%E8%83%BD%E8%AF%A6%E8%A7%A3#bypass-host-check)、[Bypass Auth Of Path](https://github.com/outlaws-bai/Galaxy/wiki/%E5%8A%9F%E8%83%BD%E8%AF%A6%E8%A7%A3#bypass-auth-of-path)、[Parse Swagger Api Doc](https://github.com/outlaws-bai/Galaxy/wiki/%E5%8A%9F%E8%83%BD%E8%AF%A6%E8%A7%A3#parse-swagger-api-doc)...
 
 ## 🔒 适用场景
 
