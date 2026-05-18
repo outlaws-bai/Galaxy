@@ -7,6 +7,7 @@ import org.m2sec.core.common.Config;
 import org.m2sec.core.common.SwingTools;
 import org.m2sec.panels.httphook.HttpHookPanel;
 import org.m2sec.panels.setting.SettingPanel;
+import org.m2sec.panels.galaxysql.GalaxySqlPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,8 +29,9 @@ public class MainPanel extends JPanel {
         }
         JTabbedPane tabManager = new JTabbedPane();
         setLayout(new BorderLayout());
-        tabManager.add(httpHookPanel);
-        tabManager.add(settingPanel);
+        tabManager.addTab("HttpHook", httpHookPanel);
+        tabManager.addTab("Setting", settingPanel);
+        tabManager.addTab("galaxySql", GalaxySqlPanel.getInstance(api));
         add(tabManager);
     }
 }

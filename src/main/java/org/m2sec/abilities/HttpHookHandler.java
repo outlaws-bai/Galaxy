@@ -3,10 +3,14 @@ package org.m2sec.abilities;
 import burp.api.montoya.core.Annotations;
 import burp.api.montoya.http.handler.*;
 import burp.api.montoya.http.message.requests.HttpRequest;
+import burp.api.montoya.http.message.responses.HttpResponse;
 import burp.api.montoya.proxy.http.*;
 import org.m2sec.core.common.HttpHookThreadData;
 import org.m2sec.core.httphook.IHttpHooker;
 import org.m2sec.core.models.Request;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author: outlaws-bai
@@ -18,6 +22,7 @@ public class HttpHookHandler implements HttpHandler, ProxyRequestHandler, ProxyR
 
     public static IHttpHooker hooker;
 
+    private static final Map<Integer, HttpRequest> requestCache = new ConcurrentHashMap<>();
 
     /**
      * 在客户端请求到达Burp时被调用
@@ -39,6 +44,7 @@ public class HttpHookHandler implements HttpHandler, ProxyRequestHandler, ProxyR
     public RequestToBeSentAction handleHttpRequestToBeSent(HttpRequestToBeSent requestToBeSent) {
         Request decryptedRequest = Request.of(requestToBeSent);
         HttpHookThreadData.setRequest(decryptedRequest);
+        requestCache.put(requestToBeSent.messageId(), requestToBeSent);
         return RequestToBeSentAction.continueWith(hooker.tryHookRequestToServer(requestToBeSent,
             requestToBeSent.messageId(), false), requestToBeSent.annotations());
     }
@@ -48,8 +54,14 @@ public class HttpHookHandler implements HttpHandler, ProxyRequestHandler, ProxyR
      */
     @Override
     public ResponseReceivedAction handleHttpResponseReceived(HttpResponseReceived responseReceived) {
-        return ResponseReceivedAction.continueWith(hooker.tryHookResponseToBurp(responseReceived,
-            responseReceived.messageId(), false), responseReceived.annotations());
+        HttpResponse decryptedResponse = hooker.tryHookResponseToBurp(responseReceived, responseReceived.messageId(), false);
+        HttpRequest decryptedRequest = requestCache.remove(responseReceived.messageId());
+        
+        if (decryptedRequest != null && org.m2sec.panels.galaxysql.GalaxySqlPanel.getInstance() != null) {
+            org.m2sec.panels.galaxysql.GalaxySqlPanel.getInstance().checkVul(decryptedRequest, decryptedResponse, responseReceived.toolSource().toolType());
+        }
+
+        return ResponseReceivedAction.continueWith(decryptedResponse, responseReceived.annotations());
     }
 
     /**
