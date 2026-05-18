@@ -11,8 +11,9 @@ import org.m2sec.core.outer.HttpClient;
 import org.m2sec.core.utils.HttpUtil;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author: outlaws-bai
@@ -21,7 +22,7 @@ import java.util.Map;
  */
 @Slf4j
 public abstract class IHttpHooker {
-    static final HashSet<Integer> hookedIds = new HashSet<>();
+    static final Set<Integer> hookedIds = ConcurrentHashMap.newKeySet();
 
     protected static Option option;
 
