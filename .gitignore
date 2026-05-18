@@ -28,3 +28,4 @@ build/**
 
 src/main/resources/version.txt
 .jython_cache/**.DS_Store
+WIKI.md
