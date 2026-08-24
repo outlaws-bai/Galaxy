@@ -407,9 +407,6 @@ public class CryptoUtil {
         String modeStr = parts[1];
         SymmetricKeyMode symmetricKeyMode = SymmetricKeyMode.valueOf(modeStr);
 
-        // 获取IV参数
-        byte[] ivBytes = getSymmetricKeyEncryptIv(params);
-
         switch (symmetricKeyMode) {
             case ECB:
                 return null;
@@ -418,11 +415,11 @@ public class CryptoUtil {
             case OFB:
             case CTR:
                 // 这些模式都使用IV参数
-                return new IvParameterSpec(ivBytes);
+                return new IvParameterSpec(getSymmetricKeyEncryptIv(params));
             case GCM:
                 Integer tLen = (Integer) params.get("tLen");
                 tLen = tLen == null ? 128 : tLen;
-                return new GCMParameterSpec(tLen, ivBytes);
+                return new GCMParameterSpec(tLen, getSymmetricKeyEncryptIv(params));
             default:
                 throw new IllegalArgumentException("Unsupported mode: " + modeStr);
         }
